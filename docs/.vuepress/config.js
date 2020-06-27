@@ -1,5 +1,5 @@
 module.exports = {
-    title: 'vue',
+    title: 'zghIvan',
     description: 'Blog',
     base: '/blog/',
     head: [
@@ -8,60 +8,80 @@ module.exports = {
     themeConfig: {
         lastUpdated: 'Last Updated',
         nav: [
-            { text: '求索', link: '/FAQ/' },
-            { text: '随笔', link: '/Thought/' },
             {
-                text: 'Contact',
+                text: '前端',
                 items: [
-                    { text: 'Segmentfault', link: 'https://segmentfault.com/u/mulander' },
+                    { text: '基础', link: '/web/js/' },
+                    { text: 'Vue', link: '/web/vue/' },
+                    { text: 'React', link: '/web/react/' },
+                    { text: 'Node', link: '/web/node/' },
+                    { text: '微信小程序', link: '/web/applet/' },
                 ]
             },
             {
-                text: 'GitHub',
+                text: '后端',
                 items: [
-                    { text: 'github', link: 'https://github.com/Ivanzgh' },
+                    { text: 'Docker', link: '/be/docker/' },
+                    { text: 'ElasticSearch', link: '/be/elastic/' },
+                    { text: 'OpenStack', link: '/be/openstack/' },
                 ]
-            }
+            },
+            {
+                text: '计算机基础',
+                items: [
+                    { text: '网络', link: '/base/network/' },
+                    { text: '数据结构', link: '/base/data/' },
+                    { text: '算法', link: '/base/algorithm/' },
+                    { text: '操作系统', link: '/base/os/' }
+                ]
+            },
+            { text: '随笔', link: '/thought/' },
+            { text: 'GitHub', link: 'https://github.com/Ivanzgh' }
         ],
         sidebar: {
-            '/FAQ/': [
-                ['/FAQ/','百科首页'],
+            '/web/vue/': [
+                ['/web/vue/','vue首页'],
                 {
-                    // 菜单名
-                    title: 'Vue',
-                    // 子菜单
+                    title: 'vue',
                     children: [
-                        // ['','']=>[路径,标题]
+                        // ['',''] => [路径,标题]
                         // 或者写成 '路径',标题自动识别为该地址的文件中的h1标题
                         // 不以 '/' 结尾的就是指向.md文件
-                        ['/FAQ/Vue/','vue首页'],
-                        ['/FAQ/Vue/Index2','子菜单2']
+                        ['/web/vue/vuex/','vuex'],
+                        ['/web/vue/vue-router/','vue-router']
                     ]
                 },
                 {
-                    title: 'React',
+                    title: 'vuex',
                     children: [
-                        ['/FAQ/React/','react首页'],
-                        ['/FAQ/React/Index2','子菜单4']
+                        ['/web/vue/vuex/','vuex']
+                    ]
+                },
+                {
+                    title: 'vue-router',
+                    children: [
+                        ['/web/vue/vue-router/','vue-router']
                     ]
                 },
             ],
-            // '/Thought/': [
-            //     ['/Thought/', '随笔首页'],
-            //     {
-            //         title: '游记',
-            //         children: [
-            //             ['/Thought/Travels/beiPing','北平游记'],
-            //         ]
-            //     },
-            //     {
-            //         title: '年终回顾',
-            //         children: [
-            //             ['/Thought/YearReview/2018','2018年'],
-            //             ['/Thought/YearReview/2019','2019年']
-            //         ]
-            //     },
-            // ],
+            '/thought/': [
+                ['/thought/', '随笔首页']
+            ],
+            '/web/js/': [
+                {
+                    title: 'js',
+                    children: [
+                        ['/web/js/object/','面向对象'],
+                        ['/web/js/array/','数组']
+                    ]
+                },
+                {
+                    title: 'css',
+                    children: [
+                        ['/web/css/','css']
+                    ]
+                },
+            ],
         }
     }
 }
