@@ -6,12 +6,16 @@ module.exports = {
         ['link', {rel: 'icon', href: '/img/logo.png'}]
     ],
     themeConfig: {
+        logo: '/img/logo.png',
         lastUpdated: 'Last Updated',
+        sidebarDepth: 2,
         nav: [
             {
                 text: '前端',
                 items: [
-                    { text: '基础', link: '/web/js/' },
+                    { text: 'html', link: '/web/html/' },
+                    { text: 'css', link: '/web/css/' },
+                    { text: 'js', link: '/web/js/' },
                     { text: 'Vue', link: '/web/vue/' },
                     { text: 'React', link: '/web/react/' },
                     { text: 'Node', link: '/web/node/' },
@@ -22,8 +26,18 @@ module.exports = {
                 text: '后端',
                 items: [
                     { text: 'Docker', link: '/be/docker/' },
+                    { text: 'Nginx', link: '/be/nginx/' },
                     { text: 'ElasticSearch', link: '/be/elastic/' },
                     { text: 'OpenStack', link: '/be/openstack/' },
+                ]
+            },
+            {
+                text: '可视化',
+                items: [
+                    { text: 'OpenLayers', link: '/vis/openlayers/' },
+                    { text: 'Leaflet', link: '/vis/leaflet/' },
+                    { text: 'GeoServer', link: '/vis/geoserver/' },
+                    { text: 'Cesium', link: '/vis/cesium/' },
                 ]
             },
             {
@@ -39,48 +53,79 @@ module.exports = {
             { text: 'GitHub', link: 'https://github.com/Ivanzgh' }
         ],
         sidebar: {
+            '/thought/': [
+                ''
+            ],
             '/web/vue/': [
-                ['/web/vue/','vue首页'],
                 {
                     title: 'vue',
+                    collapsable: false,
                     children: [
-                        // ['',''] => [路径,标题]
-                        // 或者写成 '路径',标题自动识别为该地址的文件中的h1标题
-                        // 不以 '/' 结尾的就是指向.md文件
-                        ['/web/vue/vuex/','vuex'],
-                        ['/web/vue/vue-router/','vue-router']
+                        '',
+                        'contact',
+                        'deploy',
                     ]
                 },
                 {
                     title: 'vuex',
+                    collapsable: false,
                     children: [
-                        ['/web/vue/vuex/','vuex']
+                        'vuex1',
+                        'vuex2'
                     ]
                 },
                 {
                     title: 'vue-router',
+                    collapsable: false,
                     children: [
-                        ['/web/vue/vue-router/','vue-router']
+                        'vue-router'
                     ]
                 },
-            ],
-            '/thought/': [
-                ['/thought/', '随笔首页']
             ],
             '/web/js/': [
                 {
-                    title: 'js',
+                    title: '基础',
+                    collapsable: false,
                     children: [
-                        ['/web/js/object/','面向对象'],
-                        ['/web/js/array/','数组']
+                        '',
+                        'array',
+                        'object'
                     ]
                 },
                 {
-                    title: 'css',
+                    title: '进阶',
+                    collapsable: false,
                     children: [
-                        ['/web/css/','css']
+                        'oss'
                     ]
                 },
+            ],
+            '/be/nginx/': [
+                {
+                    title: 'Nginx',
+                    collapsable: false,
+                    children: [
+                        ''
+                    ]
+                }
+            ],
+            '/be/elastic/': [
+                {
+                    title: 'ElasticSearch',
+                    collapsable: false,
+                    children: [
+                        ''
+                    ]
+                }
+            ],
+            '/vis/openlayers/': [
+                {
+                    title: 'OpenLayers',
+                    collapsable: false,
+                    children: [
+                        ''
+                    ]
+                }
             ],
         }
     }
