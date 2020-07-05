@@ -89,6 +89,7 @@ module.exports = {
                     children: [
                         '',
                         'array',
+                        'string',
                         'object'
                     ]
                 },

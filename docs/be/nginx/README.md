@@ -4,7 +4,7 @@
 
 地址： [http://nginx.org/en/download.html](http://nginx.org/en/download.html)
 
-![image](/img/nginx_download.png)
+![image](/blog/img/nginx_download.png)
 
 Mainline version：最新版本
 
@@ -19,7 +19,7 @@ Nginx就是反向代理服务器。
 
 代理服务器一般是指局域网内部的机器通过代理服务发送请求到互联网上的服务器，代理服务器一般作用于客户端。
 
-![image](/img/nginx1.png)
+![image](/blog/img/nginx1.png)
 
 简单的说：
 
@@ -58,6 +58,13 @@ Nginx就是反向代理服务器。
 然后运行 nginx-service.exe start 启动服务
 
 win+R输入service.msc打开系统服务，查看Nginx服务，启动类型为自动即成功开启服务。
+
+```
+nginx-service.exe install      注册对应的系统服务
+nginx-service.exe uninstall    删除对应的系统服务
+nginx-service.exe stop         停止对应的系统服务
+nginx-service.exe start        启动对应的系统服务
+```
 
 ## 配置nginx.conf文件
 
