@@ -8,18 +8,42 @@ module.exports = {
     themeConfig: {
         logo: '/img/logo.png',
         lastUpdated: 'Last Updated',
-        sidebarDepth: 2,
+        //sidebarDepth: 2,  // 默认是1，表示侧边栏只显示h1、h2；设置为2则h3也显示在侧边栏
         nav: [
             {
                 text: '前端',
                 items: [
-                    { text: 'html', link: '/web/html/' },
-                    { text: 'css', link: '/web/css/' },
-                    { text: 'js', link: '/web/js/' },
-                    { text: 'Vue', link: '/web/vue/' },
-                    { text: 'React', link: '/web/react/' },
-                    { text: 'Node', link: '/web/node/' },
-                    { text: '微信小程序', link: '/web/applet/' },
+                    { text: 'html', link: '/fe/html/' },
+                    { text: 'css', link: '/fe/css/' },
+                    { text: 'js', link: '/fe/js/' },
+                    { text: 'ts', link: '/fe/ts/' },
+                    { text: 'es6', link: '/fe/es6/' },
+                    { text: 'sass、less', link: '/fe/sass/' },
+                    { text: '浏览器', link: '/fe/browser/' },
+                    { text: '性能优化', link: '/fe/performance/' },
+                    { text: '正则表达式', link: '/fe/regular/' },
+                    { text: '移动端开发', link: '/fe/mobile/' },
+                ]
+            },
+            {
+                text: '框架和库',
+                items: [
+                    { text: 'Vue', link: '/fe/vue/' },
+                    { text: 'React', link: '/fe/react/' },
+                    { text: 'Node', link: '/fe/node/' },
+                    { text: 'express', link: '/fe/express/' },
+                    { text: 'koa', link: '/fe/koa/' },
+                    { text: 'mongodb', link: '/fe/mongodb/' },
+                    { text: '微信小程序', link: '/fe/wx/' },
+                ]
+            },
+            {
+                text: '工具',
+                items: [
+                    { text: 'npm', link: '/fe/npm/' },
+                    { text: 'git', link: '/fe/git/' },
+                    { text: 'webpack', link: '/fe/webpack/' },
+                    { text: 'gulp', link: '/fe/gulp/' }
                 ]
             },
             {
@@ -56,7 +80,7 @@ module.exports = {
             '/thought/': [
                 ''
             ],
-            '/web/vue/': [
+            '/fe/vue/': [
                 {
                     title: 'vue',
                     collapsable: false,
@@ -82,10 +106,11 @@ module.exports = {
                     ]
                 },
             ],
-            '/web/js/': [
+            '/fe/js/': [
                 {
                     title: '基础',
                     collapsable: false,
+                    sidebarDepth: 2,
                     children: [
                         '',
                         'array',
@@ -96,10 +121,72 @@ module.exports = {
                 {
                     title: '进阶',
                     collapsable: false,
+                    sidebarDepth: 1,
                     children: [
-                        'oss'
+                        'advanced',
+                        'oop',
+                        'es6'
                     ]
                 },
+            ],
+            '/fe/html/': [
+                {
+                    title: '基础',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        '',
+                    ]
+                },
+                {
+                    title: '进阶',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        'canvas',
+                        'svg'
+                    ]
+                }
+            ],
+            '/fe/css/': [
+                {
+                    title: '基础',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        ''
+                    ]
+                },
+                {
+                    title: '进阶',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        'box-shadow',
+                        'gradient',
+                        'animation'
+                    ]
+                }
+            ],
+            '/fe/npm/': [
+                {
+                    collapsable: false,
+                    children: ['']
+                }
+            ],
+            '/fe/gulp/': [
+                {
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['']
+                }
+            ],
+            '/fe/git/': [
+                {
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['']
+                }
             ],
             '/be/nginx/': [
                 {
@@ -121,11 +208,16 @@ module.exports = {
             ],
             '/vis/openlayers/': [
                 {
-                    title: 'OpenLayers',
                     collapsable: false,
-                    children: [
-                        ''
-                    ]
+                    sidebarDepth: 2,
+                    children: ['']
+                }
+            ],
+            '/vis/leaflet/': [
+                {
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['']
                 }
             ],
         }
