@@ -13,12 +13,11 @@ module.exports = {
             {
                 text: '前端',
                 items: [
-                    { text: 'html', link: '/fe/html/' },
-                    { text: 'css', link: '/fe/css/' },
-                    { text: 'js', link: '/fe/js/' },
-                    { text: 'ts', link: '/fe/ts/' },
-                    { text: 'es6', link: '/fe/es6/' },
-                    { text: 'sass、less', link: '/fe/sass/' },
+                    { text: 'HTML', link: '/fe/html/' },
+                    { text: 'CSS', link: '/fe/css/' },
+                    { text: 'JavaScript', link: '/fe/js/' },
+                    { text: 'TypeScript', link: '/fe/ts/' },
+                    { text: 'Sass、Less', link: '/fe/sass/' },
                     { text: '浏览器', link: '/fe/browser/' },
                     { text: '性能优化', link: '/fe/performance/' },
                     { text: '正则表达式', link: '/fe/regular/' },
@@ -31,19 +30,19 @@ module.exports = {
                     { text: 'Vue', link: '/fe/vue/' },
                     { text: 'React', link: '/fe/react/' },
                     { text: 'Node', link: '/fe/node/' },
-                    { text: 'express', link: '/fe/express/' },
-                    { text: 'koa', link: '/fe/koa/' },
-                    { text: 'mongodb', link: '/fe/mongodb/' },
+                    { text: 'Express', link: '/fe/express/' },
+                    { text: 'Koa', link: '/fe/koa/' },
+                    { text: 'MongoDB', link: '/fe/mongodb/' },
                     { text: '微信小程序', link: '/fe/wx/' },
                 ]
             },
             {
                 text: '工具',
                 items: [
-                    { text: 'npm', link: '/fe/npm/' },
-                    { text: 'git', link: '/fe/git/' },
-                    { text: 'webpack', link: '/fe/webpack/' },
-                    { text: 'gulp', link: '/fe/gulp/' }
+                    { text: 'NPM', link: '/fe/npm/' },
+                    { text: 'Git', link: '/fe/git/' },
+                    { text: 'Webpack', link: '/fe/webpack/' },
+                    { text: 'Gulp', link: '/fe/gulp/' }
                 ]
             },
             {
@@ -88,19 +87,20 @@ module.exports = {
                         '',
                         'contact',
                         'deploy',
+                        'plugin'
                     ]
                 },
                 {
                     title: 'vuex',
                     collapsable: false,
                     children: [
-                        'vuex1',
-                        'vuex2'
+                        'vuex'
                     ]
                 },
                 {
                     title: 'vue-router',
                     collapsable: false,
+                    sidebarDepth: 2,
                     children: [
                         'vue-router'
                     ]
@@ -201,6 +201,7 @@ module.exports = {
                 {
                     title: 'ElasticSearch',
                     collapsable: false,
+                    sidebarDepth: 2,
                     children: [
                         ''
                     ]

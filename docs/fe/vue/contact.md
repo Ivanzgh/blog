@@ -47,3 +47,80 @@ export default {
 ```
 
 ## 子向父传值
+在子组件中传递信息，注册childFn事件
+```vue
+methods: {
+    emitIndex(index) {
+      this.$emit('childFn', index)
+    }
+ }
+```
+在父组件中，接收childFn事件
+```vue
+<child :message="parentMsg" @childFn="parentFn($event)"></child> 
+
+methods: {
+    parentFn(event) {
+       this.fileValue = event
+    }
+ }
+```
+
+## 事件总线
+event bus可以让所有组件之间进行通信
+
+>当项目较大时，不便于维护
+
+新建bus.js
+```js
+import Vue from 'vue';
+const bus = new Vue();
+export default bus;
+```
+在A组件中发送信息
+```vue
+import bus from './bus';
+
+methods: {
+    handleClick() {
+        bus.$emit('collapse', this.isCollapse);
+    }
+}
+```
+在B组件中接收信息
+```vue
+import bus from './bus';
+
+mounted() {
+    bus.$on('collapse', param => {
+      this.isCollapse = param
+    })
+ }
+```
+
+移除事件的监听，可使用`$off`
+```vue
+import bus from './bus';
+bus.$off('collapse', {})
+```
+
+## vuex通信
+详见vuex部分
+
+传递信息
+```vue
+methods: {
+    login() {
+        this.$store.commit('SET_TOKEN', access_token)
+    }
+}
+```
+
+接收信息
+```vue
+computed: {
+   token() {
+      return this.$store.state.token
+   }
+}
+```
