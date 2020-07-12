@@ -121,7 +121,7 @@ module.exports = {
                 {
                     title: '进阶',
                     collapsable: false,
-                    sidebarDepth: 1,
+                    sidebarDepth: 2,
                     children: [
                         'advanced',
                         'oop',
