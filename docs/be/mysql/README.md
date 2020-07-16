@@ -1,7 +1,9 @@
-
 # mysql
 
 ## 安装
+最新版[https://dev.mysql.com/downloads/mysql/](https://dev.mysql.com/downloads/mysql/)
+
+选择版本[https://downloads.mysql.com/archives/community/](https://downloads.mysql.com/archives/community/)
 
 ## 初始化
 首先打开cmd进入mysql的bin目录下，安装服务
@@ -58,6 +60,15 @@ default-storage-engine=INNODB
 
 ```
 
+## Navicat Premium导入sql文件
+
+点击连接，选择要连接的数据库类型，连接名随意设置，主机填localhost或者远程的地址，端口、用户名、密码均是mysql设置的，点击测试连接
+![image](/blog/img/navicat.png)
+
+然后新建一个数据库，字符集选择UTF-8编码，然后右击新建的数据库，点击运行SQL文件即可
+
+
+## 常见问题
 ### mysql不允许外部主机连接解决方法
 登录mysql后使用如下命令：
 ```ini
@@ -71,11 +82,4 @@ flush privileges;
 ```
 ![image](/blog/img/mysql.png)
 
-
-## Navicat Premium导入sql文件
-
-点击连接，选择要连接的数据库类型，连接名随意设置，主机填localhost或者远程的地址，端口、用户名、密码均是mysql设置的，点击测试连接
-![image](/blog/img/navicat.png)
-
-然后新建一个数据库，字符集选择UTF-8编码，然后右击新建的数据库，点击运行SQL文件即可
 
