@@ -1,0 +1,81 @@
+
+# mysql
+
+## 安装
+
+## 初始化
+首先打开cmd进入mysql的bin目录下，安装服务
+```
+mysqld --install
+```
+接着初始化mysql，在最后一行会产生一个随机密码，要记住后面登录要用
+```
+mysqld --initialize --console
+```
+然后开启mysql服务
+```
+net start mysql
+```
+> 关闭服务 net stop mysql
+
+登录验证
+```
+mysql -u root -p
+```
+修改密码
+```
+set password for root@localhost=password("自己需要设置的密码");
+```
+输入`exit`退出登录，使用新密码登录
+
+## 配置文件
+在mysql目录下新建一个`my.ini`的配置文件，加入以下内容，注意安装目录和数据存放目录要修改
+```ini
+[mysql]
+
+# 设置mysql客户端默认字符集
+default-character-set=utf8 
+
+[mysqld]
+
+#设置3306端口
+port = 3306 
+
+# 设置mysql的安装目录
+basedir=C:\mysql-5.7.30-winx64
+
+# 设置mysql数据库的数据的存放目录
+datadir=C:\mysql-5.7.30-winx64\data
+
+# 允许最大连接数
+max_connections=200
+
+# 服务端使用的字符集默认为8比特编码的latin1字符集
+character-set-server=utf8
+
+# 创建新表时将使用的默认存储引擎
+default-storage-engine=INNODB
+
+```
+
+### mysql不允许外部主机连接解决方法
+登录mysql后使用如下命令：
+```ini
+use mysql;
+
+update user set host='%' where user='root';
+
+select host,user from user;
+
+flush privileges;
+```
+![image](/blog/img/mysql.png)
+
+
+## Navicat Premium导入sql文件
+
+点击连接，选择要连接的数据库类型，连接名随意设置，主机填localhost或者远程的地址，端口、用户名、密码均是mysql设置的，点击测试连接
+![image](/blog/img/navicat.png)
+
+然后新建一个数据库，字符集选择UTF-8编码，然后右击新建的数据库，点击运行SQL文件即可
+

@@ -50,6 +50,8 @@ module.exports = {
                 items: [
                     { text: 'Docker', link: '/be/docker/' },
                     { text: 'Nginx', link: '/be/nginx/' },
+                    { text: 'MySQL', link: '/be/mysql/' },
+                    { text: 'Tomcat', link: '/be/tomcat/' },
                     { text: 'ElasticSearch', link: '/be/elastic/' },
                     { text: 'OpenStack', link: '/be/openstack/' },
                 ]
@@ -191,6 +193,24 @@ module.exports = {
             '/be/nginx/': [
                 {
                     title: 'Nginx',
+                    collapsable: false,
+                    children: [
+                        ''
+                    ]
+                }
+            ],
+            '/be/mysql/': [
+                {
+                    title: 'MySQL',
+                    collapsable: false,
+                    children: [
+                        ''
+                    ]
+                }
+            ],
+            '/be/tomcat/': [
+                {
+                    title: 'Tomcat',
                     collapsable: false,
                     children: [
                         ''
