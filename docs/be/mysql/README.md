@@ -69,6 +69,11 @@ default-storage-engine=INNODB
 
 
 ## 常见问题
+### 安装服务时报错：无法启动此程序，因为计算机丢失MSVCP120.dll
+在执行`mysqld --install`时，若报丢失MSVCP120.dll错误，是因为没有安装`vcredist`，
+在官网[https://www.microsoft.com/zh-CN/download/details.aspx?id=40784](https://www.microsoft.com/zh-CN/download/details.aspx?id=40784)
+下载安装即可。
+
 ### mysql不允许外部主机连接解决方法
 登录mysql后使用如下命令：
 ```ini
