@@ -197,4 +197,91 @@ location字段应与数据库字段相对应
 ## 删除
 
 ## 修改
-            
+
+
+## 集群
+
+在`elasticsearch.yml`中添加如下内容：
+```yml
+cluster.name: elasticsearch		#集群名称，唯一
+node.name: node14		#节点名称
+node.master: true		#主节点
+node.data: true			#数据节点
+cluster.initial_master_nodes: ["node14","node15"]		#集群的主节点
+network.bind_host: 0.0.0.0				#设置可以访问的ip,默认为0.0.0.0，这里全部设置通过
+network.publish_host: 192.168.18.14		#设置其它结点和该结点通信的ip地址
+http.port: 9200		 					#设置对外服务的http端口，默认为9200
+transport.tcp.port: 9300				#设置节点之间通信的tcp端口，默认是9300
+transport.tcp.compress: true			#设置是否压缩tcp传输时的数据，默认false
+discovery.zen.ping.unicast.hosts: ["192.168.18.14","192.168.18.15"]		#集群的主节点
+discovery.zen.minimum_master_nodes: 1		#自动发现主节点的最小数
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+```
+
+首先进入elasticsearch的配置文件，比如 
+```yml
+cd /mntdata/docker/var/lib/docker/volumes/es/confing/
+```
+输入`ll`可查看子目录，直到出现`elasticsearch.yml`
+
+编辑es配置文件，点击`insert`键开始编辑，编辑完成后点击`Ecs`键，输入`:wq`保存退出。`:q`退出不保存，`:wq!`强制保存退出
+```yml
+vim elasticsearch.yml
+```
+接着重启es容器
+```yml
+docker restart es
+```
+注意es这个容器名字根据实际来定，可输入以下命令显示所有的容器，包括未运行的
+```yml
+docker ps -a
+```
+
+其他命令：
+```yml
+docker image ls   #列出镜像
+
+docker logs es   #查看es日志
+
+pwd   #显示工作目录
+
+history #查看命令的历史记录
+
+free -h  #查看内存
+```
+
+最后在浏览器输入`192.168.18.14:9200`或者`192.168.18.15:9200`均可看到下图所示内容：
+
+![image](/blog/img/es_cluster.png)
+
+查看集群状态  
+```
+http://192.168.18.14:9200/_cluster/health
+```
+
+![image](/blog/img/es_cluster_health.png)
+
+`status`字段是 `green` 表示集群正常可用
+
+在两个节点上查看所有索引，可以看到所有索引都同步 
+```
+/_cat/indices
+```
+
+### 常见问题
+1、报错 `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
+
+切换到root用户修改配置`sysctl.conf`
+```yml
+vi /etc/sysctl.conf 
+```
+添加下面配置：
+```yml
+vm.max_map_count=262144
+```
+执行
+```yml
+sysctl -p
+```
+重新启动elasticsearch

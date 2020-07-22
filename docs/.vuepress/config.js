@@ -63,6 +63,7 @@ module.exports = {
                     { text: 'Leaflet', link: '/vis/leaflet/' },
                     { text: 'GeoServer', link: '/vis/geoserver/' },
                     { text: 'Cesium', link: '/vis/cesium/' },
+                    { text: 'Three', link: '/vis/three/' }
                 ]
             },
             {
@@ -235,6 +236,13 @@ module.exports = {
                 }
             ],
             '/vis/leaflet/': [
+                {
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['']
+                }
+            ],
+            '/vis/three/': [
                 {
                     collapsable: false,
                     sidebarDepth: 2,
