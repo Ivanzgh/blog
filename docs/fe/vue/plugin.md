@@ -12,6 +12,8 @@
 
 [vue2-ace-editor](https://github.com/chairuosen/vue2-ace-editor)   基于ace的vue插件
 
+[monaco-editor](https://github.com/microsoft/monaco-editor) 为vscode编辑器提供支持
+
 ## 拖动
 [Vue.Draggable](https://github.com/SortableJS/Vue.Draggable)
 支持上下左右拖动列表、表格的行和列、折叠面板、复制等丰富的功能
