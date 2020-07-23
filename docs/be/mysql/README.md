@@ -74,6 +74,8 @@ default-storage-engine=INNODB
 在官网[https://www.microsoft.com/zh-CN/download/details.aspx?id=40784](https://www.microsoft.com/zh-CN/download/details.aspx?id=40784)
 下载安装即可。
 
+如果报MSVCP140.dll丢失错误，下载安装[https://www.microsoft.com/zh-cn/download/details.aspx?id=48145](https://www.microsoft.com/zh-cn/download/details.aspx?id=48145)
+
 ### mysql不允许外部主机连接解决方法
 登录mysql后使用如下命令：
 ```ini
