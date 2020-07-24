@@ -204,17 +204,17 @@ location字段应与数据库字段相对应
 在`elasticsearch.yml`中添加如下内容：
 ```yml
 cluster.name: elasticsearch		#集群名称，唯一
-node.name: node14		#节点名称
+node.name: node12		#节点名称
 node.master: true		#主节点
 node.data: true			#数据节点
-cluster.initial_master_nodes: ["node14","node15"]		#集群的主节点
+cluster.initial_master_nodes: ["node10","node11","node12"]		#集群的主节点
 network.bind_host: 0.0.0.0				#设置可以访问的ip,默认为0.0.0.0，这里全部设置通过
-network.publish_host: 192.168.18.14		#设置其它结点和该结点通信的ip地址
+network.publish_host: 192.168.18.12		#设置其它结点和该结点通信的ip地址
 http.port: 9200		 					#设置对外服务的http端口，默认为9200
 transport.tcp.port: 9300				#设置节点之间通信的tcp端口，默认是9300
 transport.tcp.compress: true			#设置是否压缩tcp传输时的数据，默认false
-discovery.zen.ping.unicast.hosts: ["192.168.18.14","192.168.18.15"]		#集群的主节点
-discovery.zen.minimum_master_nodes: 1		#自动发现主节点的最小数
+discovery.zen.ping.unicast.hosts: ["192.168.18.10","192.168.18.11","192.168.18.12"]		#集群的主节点
+discovery.zen.minimum_master_nodes: 2		#自动发现主节点的最小数 N = 节点数/2 + 1
 http.cors.enabled: true
 http.cors.allow-origin: "*"
 ```
@@ -251,13 +251,13 @@ history #查看命令的历史记录
 free -h  #查看内存
 ```
 
-最后在浏览器输入`192.168.18.14:9200`或者`192.168.18.15:9200`均可看到下图所示内容：
+最后在浏览器输入`192.168.18.10:9200`、`192.168.18.11:9200`或者`192.168.18.12:9200`均可看到下图所示内容：
 
 ![image](/blog/img/es_cluster.png)
 
 查看集群状态  
 ```
-http://192.168.18.14:9200/_cluster/health
+http://192.168.18.12:9200/_cluster/health
 ```
 
 ![image](/blog/img/es_cluster_health.png)
@@ -270,7 +270,7 @@ http://192.168.18.14:9200/_cluster/health
 ```
 
 ### 常见问题
-1、报错 `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
+**1、报错 `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`**
 
 切换到root用户修改配置`sysctl.conf`
 ```yml
@@ -285,3 +285,63 @@ vm.max_map_count=262144
 sysctl -p
 ```
 重新启动elasticsearch
+
+**2、文件无权限**
+
+报错信息如下：
+```yml
+java.lang.IllegalStateException: failed to obtain node locks, tried [[/usr/share/elasticsearch/data]] with lock id [0]; maybe these locations are not writable or multiple nodes were started without increasing [node.max_local_storage_nodes] (was [1])?
+
+java.io.IOException: failed to obtain lock on /usr/share/elasticsearch/data/nodes/0
+
+java.nio.file.AccessDeniedException: /usr/share/elasticsearch/data/nodes/0/node.lock
+```
+这是文件没有访问权限，此处在`/mntdata/docker/var/lib/docker/db_data_volumes`目录下输入
+```yml
+chmod -R 777 /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search-elasticsearch
+```
+
+找到`docker-compose`配置文件`cd /mntdata/map-server/docker-compose/`，可以看到`/usr/share/elasticsearch/data`存放es数据的目录映射到了上边的目录
+`/mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search-elasticsearch`，注意目录结构根据自己的实际目录来定。
+
+下面就是`map-search-docker-compose.yml`配置文件
+```yml
+version: '2.1'
+services:
+  sxmap-elasticsearch:
+    image: elasticsearch:7.5.1
+    restart: always
+    #environment:
+     # - discovery.type=single-node
+    volumes:
+      - /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search-elasticsearch:/usr/share/elasticsearch/data
+      - /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search-elasticsearch-config:/usr/share/elasticsearch/config
+    ports:
+      - 9200:9200
+      - 9300:9300
+  sxmap-search-node:
+    image: sxmap/mapsearch:last
+    restart: always
+    environment:
+      - GEOSERVER=http://geoserver:8080/geoserver
+      - ELASTICSEARCH=http://sxmap-elasticsearch:9200
+    volumes:
+      - sxmap-search-node:/opt/mapSearch
+    ports:
+      - '9999:5000'
+```
+
+**3、报错`with the same id but is a different node instance`**
+
+这种情况一般是复制节点造成的，比如在集群中新增一个节点，通常会复制一个已经存在的节点，这样会将节点数据也复制过来，
+所以删除存放elsticsearch数据的文件夹中的节点数据即可。
+
+```yml
+rm -rf /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search-elasticsearch/nodes/
+```
+
+如果删除时报错`Directory not empty`或者`Device or resource busy`，将容器先停掉
+```yml
+docker stop dockercompose_sxmap-elasticsearch_1
+```
+再执行删除命令就能删掉数据，然后重启容器即可。
