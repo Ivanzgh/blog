@@ -22,6 +22,7 @@ module.exports = {
                     { text: '性能优化', link: '/fe/performance/' },
                     { text: '正则表达式', link: '/fe/regular/' },
                     { text: '移动端开发', link: '/fe/mobile/' },
+                    { text: '前端插件', link: '/fe/plugin/' }
                 ]
             },
             {
@@ -79,9 +80,7 @@ module.exports = {
             { text: 'GitHub', link: 'https://github.com/Ivanzgh' }
         ],
         sidebar: {
-            '/thought/': [
-                ''
-            ],
+            '/thought/': [ '' ],
             '/fe/vue/': [
                 {
                     title: 'vue',
@@ -89,8 +88,7 @@ module.exports = {
                     children: [
                         '',
                         'contact',
-                        'deploy',
-                        'plugin'
+                        'deploy'
                     ]
                 },
                 {
@@ -169,6 +167,13 @@ module.exports = {
                         'gradient',
                         'animation'
                     ]
+                }
+            ],
+            '/fe/plugin/': [
+                {
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['']
                 }
             ],
             '/fe/npm/': [

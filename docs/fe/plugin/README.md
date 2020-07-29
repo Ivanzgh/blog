@@ -7,12 +7,18 @@
 [vue-quill-editor](https://github.com/surmon-china/vue-quill-editor)
 
 [mavonEditor](https://github.com/hinesboy/mavonEditor)
+
+[tinymce](https://github.com/tinymce/tinymce)
+
 ## 代码编辑器
 [ace](https://github.com/ajaxorg/ace) 
 
 [vue2-ace-editor](https://github.com/chairuosen/vue2-ace-editor)   基于ace的vue插件
 
 [monaco-editor](https://github.com/microsoft/monaco-editor) 为vscode编辑器提供支持
+
+## PDF
+[pdf.js](https://github.com/mozilla/pdf.js)
 
 ## 拖动
 [Vue.Draggable](https://github.com/SortableJS/Vue.Draggable)
@@ -53,3 +59,7 @@
 
 ## 范围滑块
 [noUiSlider](https://github.com/leongersen/noUiSlider)
+
+## 数据可视化
+
+[3d-force-graph](https://github.com/vasturiano/3d-force-graph) 3D力导图，基于three.js
