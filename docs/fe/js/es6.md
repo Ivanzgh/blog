@@ -5,10 +5,10 @@
 
 用来声明变量，只在let命令所在的代码块内有效，即块级作用域。不存在变量提升，它所声明的变量一定要在声明后使用，不允许重复声明，否则报错。 举个例子：
 ```js
- function varTest() { 
-    var a = 1;
+ function letTest() { 
+    let a = 1;
     if (true) {
-        var a = 2;  
+        let a = 2;  
         console.log(a);  // 2
     }
     console.log(a);  // 2
@@ -36,12 +36,12 @@ const的作用域与let命令相同：只在声明所在的块级作用域内有
 ```js
 const a = "123";
 a = "234";
-console.log(a);// TypeError: Assignment to constant variable.
+console.log(a);// TypeError: Assignment to constant letiable.
 const  arr = [1,2,3];
 arr.push(4);
 console.log(arr);// [1,2,3,4]
 arr = [];
-console.log(arr);// 改变数组的指向会出错 Uncaught TypeError: Assignment to constant variable
+console.log(arr);// 改变数组的指向会出错 Uncaught TypeError: Assignment to constant letiable
 ```
 ## 模板字符串
 
@@ -50,19 +50,19 @@ console.log(arr);// 改变数组的指向会出错 Uncaught TypeError: Assignmen
 第一个用途，基本的字符串格式化。
 ```js
 //ES5 
-    var name = 'world'
+    let name = 'world'
     console.log('hello' + name)
 //ES6
-    var name = 'world'
+    let name = 'world'
     console.log(`hello ${name}`)
 ```
 第二个用途，做多行字符串或者字符串一行行拼接。
 ```js
  // ES5
-    var a = "Hi \
+    let a = "Hi \
     Girl!"
 // ES6
-    const say = `<div>
+    let say = `<div>
         <p>hello, world</p>
     </div>`
 ```
@@ -89,13 +89,13 @@ ES6还提供了一些字符串方法，如下：
 
 可以从数组中提取值，按照对应位置，对变量赋值。这种写法属于“模式匹配”，只要等号两边的模式相同，左边的变量就会被赋予对应的值。
 ```js
-var [a, b, c] = [1, 2, 3];
+let [a, b, c] = [1, 2, 3];
 console.log(a,b,c);      // 1 2 3
 ```
 #### 对象的解构赋值
 
 ```js
-var { name,age } = {
+let { name,age } = {
     name: 'zgh',
     age: 22
 }
@@ -131,36 +131,36 @@ Person("Jack",20);
 #### ES6 允许使用“箭头”（=>）定义函数。
 ```js
 //1.不带参数
-var sum = () => 1+2;
+let sum = () => 1+2;
 //等同于
-var sum = function() {
+let sum = function() {
     return 1+2;
 }
 
 //2.带一个参数
-var sum = a => a;
+let sum = a => a;
 //等同于
-var sum = function(a) {
+let sum = function(a) {
     return a;
 }
 
 //3.带多个参数,需要使用小括号将参数括起来
-var sum = (a,b) => a+b;
+let sum = (a,b) => a+b;
 //等同于
-var sum = function(a,b) {
+let sum = function(a,b) {
     return a+b;
 }
 
 //4.代码块部分多于一条语句需要用大括号将其括起来，并且使用return语句返回。
-var sum = (a,b) => {
-    var c = a+b;
+let sum = (a,b) => {
+    let c = a+b;
     return c;
 }
 
 //5.返回对象，就必须用小括号把该对象括起来
-var person = (name) => ({name: "zgh",age: 22})
+let person = name => ({name: "zgh",age: 22})
 //等同于
-var person = function(name) {
+let person = function(name) {
     return {
         name: "zgh",
         age: 22
@@ -171,15 +171,15 @@ var person = function(name) {
 
 箭头函数本身是没有this和arguments的，在箭头函数中引用this实际上是调用的是定义时的父执行上下文的this。简单对象（非函数）是没有执行上下文的。
 ```js
-var obj = {
+let obj = {
     say: function() {
-        var f1 = () => {
+        let f1 = () => {
             console.log(this);    
         }
         f1();
     }
 }
-var rs = obj.say;
+let rs = obj.say;
 rs();       //f1执行时，say函数指向window，所以f1中的this指向window
 obj.say();  //f1执行时，say函数指向obj，所以f1中的this指向obj
 ```
@@ -189,17 +189,17 @@ obj.say();  //f1执行时，say函数指向obj，所以f1中的this指向obj
 
 条件：属性的值是一个变量，且变量名称和键名是一致的
 ```js
-var name = "zgh";
-var age = 22;
+let name = "zgh";
+let age = 22;
 
 //ES5写法
-var obj = {
+let obj = {
     name:name,
     age:age
 }
 
 //ES6写法
-var obj = {
+let obj = {
     name,
     age
 }
@@ -207,14 +207,14 @@ var obj = {
 #### 方法的简写
 ```js
 //ES5写法
-var obj = {
+let obj = {
     hello : function() {
         console.log("hello");
     }
 }
 
 //ES6写法
-var obj = {
+let obj = {
     hello() {
         console.log("hello");
     }
@@ -224,24 +224,24 @@ var obj = {
 
 Object.assign方法用于对象的合并，将源对象（source）的所有可枚举属性，复制到目标对象（target）。第一个参数为目标对象，后面的为源对象
 ```js
-var obj1 = {
+let obj1 = {
     name:"zgh",
     age:22
 }
-var obj2 = {
+let obj2 = {
     address:"beijing"
 }
-var obj = {}
+let obj = {}
 Object.assign(obj,obj1,obj2);
 console.log(obj);   // {name: "zgh", age: 22, address: "beijing"}
 ```
 ```js
 // [注意]：当Object.assign()方法用于数组时：
-var arr11 = Object.assign([1,2,3],[4,5]);
+let arr11 = Object.assign([1,2,3],[4,5]);
 console.log(arr11); //[4,5,3]
 
 // [说明]:对象是根据属性名来对应，数组是根据索引号来对应，相当于
-var arr23 = {
+let arr23 = {
     0:1,
     1:2,
     2:3
@@ -253,7 +253,7 @@ var arr23 = {
 Set对象是一组不重复的、无序的值的集合，可以往里面添加、删除、查询数据
 ```js
 //声明一个Set对象
-var mySet = new Set();
+let mySet = new Set();
 
 //添加元素
 mySet.add(1);
@@ -285,7 +285,7 @@ let deduped = [...new Set(arr)] // [1, 2, 3]
 类似于对象，里面存放的也是键值对，区别在于：对象中的键名只能是字符串，如果使用map，它里面的键可以是任意值。
 ```js
 //创建一个Map对象
-var myMap = new Map();
+let myMap = new Map();
 
 //添加键值对
 myMap.set("a","hello");
@@ -365,6 +365,8 @@ obj.say();
 上面代码定义了一个“类”，里面有一个constructor方法，这就是构造方法，而this关键字则代表实例对象。也就是说，ES5的构造函数Person，对应ES6的Person类的构造方法。
 
 Person类除了构造方法，还定义了一个say方法。注意，定义“类”的方法的时候，前面不需要加上function这个关键字，直接把函数定义放进去了就可以了。另外，方法之间不需要逗号分隔，否则会报错。
+
+[https://segmentfault.com/a/1190000023516545](https://segmentfault.com/a/1190000023516545)
 ### Class继承
 ```js
 class NBAPlayer {
@@ -444,15 +446,15 @@ catch 方法是 then(onFulfilled, onRejected) 方法当中 onRejected 函数的�
 #### all和race方法
 ```js
 console.time();
-var p1 = new Promise(function(resolve) {
+let p1 = new Promise(function(resolve) {
     setTimeout(function() {
         resolve("Hello");
     }, 3000);
 });
 
-var p2 = new Promise(function(resolve) {
+let p2 = new Promise(function(resolve) {
     setTimeout(function() {
-            resolve("world");
+        resolve("world");
     }, 3000);
 })
 

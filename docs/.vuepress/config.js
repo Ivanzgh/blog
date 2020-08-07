@@ -169,6 +169,16 @@ module.exports = {
                     ]
                 }
             ],
+            '/fe/node/': [
+                {
+                    title: 'Node',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        'express',
+                    ]
+                }
+            ],
             '/fe/plugin/': [
                 {
                     collapsable: false,
