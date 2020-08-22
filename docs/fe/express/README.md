@@ -1,6 +1,6 @@
 # Express
-官网：http://www.expressjs.com.cn/
-## 一、Express初步
+官网：[http://www.expressjs.com.cn/](http://www.expressjs.com.cn/)
+## 简介
 
 **1、概念**
 
@@ -27,10 +27,10 @@ app.listen(3000, () => console.log('listen port 3000'));
 + get请求
 + 图片上传
 
-## 二、应用生成器
+## 应用生成器
 
 **1、安装**
-```
+```js
 npm install -g express-generator
 ```
 查看全局安装的位置：
@@ -48,7 +48,7 @@ npm install
 //启动项目
 SET DEBUG=myApp:* 或者 npm start
 ```
-## 三、路由
+## 路由
 
 **1、express实现路由的方式**
 + 针对应用级别
@@ -88,9 +88,9 @@ router.get('/',(req,res,next) => {
 
 module.exports = router;
 ```
-**2、路由方式**
+**2、路由方法**
 
-Express 定义了如下和 HTTP 请求对应的路由方法： get, post, put, head, delete, options, trace, copy, lock, mkcol, move, purge, propfind, proppatch, unlock, report, mkactivity, checkout, merge, m-search, notify, subscribe, unsubscribe, patch, search, 和 connect。
+Express 定义了如下和 HTTP 请求对应的路由方法： `get, post, put, head, delete, options, trace, copy, lock, mkcol, move, purge, propfind, proppatch, unlock, report, mkactivity, checkout, merge, m-search, notify, subscribe, unsubscribe, patch, search, 和 connect`。
 
 **3、resfulAPI风格**
 
@@ -156,25 +156,24 @@ res.redirect &emsp; 重定向方法
 
 **6、ejs模板引擎**
 
-第一步，先下载ejs模块
+下载ejs模板
 ```js
 npm install ejs --save
 ```
-第二步:
-设定使用ejs作为express的模板引擎
+使用ejs作为express的模板引擎
 ```js
 // 设置模板存放的位置
 app.set('views', path.resolve(__dirname, './views'));
 // 设置模板引擎为ejs
 app.set('view engine', 'ejs');
 ```
-## 四、中间件
+## 中间件
 
-**1、概念**
+### 概念
 
-&emsp;&emsp;Express 是一个自身功能极简，完全是由路由和中间件构成一个的 web 开发框架；从本质上来说，一个 Express 应用就是在调用各种中间件。
+Express 是一个自身功能极简，完全是由路由和中间件构成一个的 web 开发框架；从本质上来说，一个 Express 应用就是在调用各种中间件。
 
-官方：中间件（Middleware） 是一个函数，它可以访问请求对象（request object (req)）
+>官方：中间件（Middleware） 是一个函数，它可以访问请求对象（request object (req)）
 
 响应对象（response object (res)）, 和 web 应用中处于请求-响应循环流程中的中间件，一般被命名为 next 的变量。
 
@@ -193,7 +192,7 @@ app.set('view engine', 'ejs');
 + 内置中间件
 + 第三方中间件
 
-**2、应用级中间件**
+### 应用级中间件
 
 所谓的应用级别的，就是指通过app对象来调用。
 
@@ -220,7 +219,7 @@ app.get('/',(req,res,next) => {
 
 app.listen(3000);
 ```
-**3、路由级中间件**
+### 路由级中间件
 
 路由级别的中间件，是指由express.Router对象来调用的。
 ```js
@@ -236,15 +235,15 @@ router.get('/',(req,res,next) => {
 
 app.listen(3000);
 ```
-**4、错误处理中间件**
+### 错误处理中间件
 
-**5、内置中间件**
+### 内置中间件
 
-**6、第三方中间件**
+### 第三方中间件
 
 如body-parser，cookie-parse，express-session。
 
-##### body-parser
+#### body-parser
 解析post请求传递的body，若req.body获取不到数据，则可以使用该中间件
 
 安装
@@ -258,9 +257,16 @@ const app = express();
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
+// 创建 application/x-www-form-urlencoded 编码解析
 app.use(bodyParser.urlencoded({ extended: false }));
 ```
+如果传输的内容不是string类型时，需配置`extended: ture`
 
+默认限制100kb大小，如果需要可自定义大小
+```js
+app.use(bodyParser.json({limit: '100mb'}));
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+```
 ## 托管静态文件
 可以将js、css、图片等静态文件利用express的中间件`express.static()`托管，对外开放
 
@@ -294,7 +300,7 @@ http://localhost:3000/static/common.js
 app.use('/static', express.static(path.join(__dirname,'public')))
 ```
 
-**处理404响应**
+## 处理404响应
 
 ```js
 app.use((req, res, next) => {
@@ -302,7 +308,7 @@ app.use((req, res, next) => {
 })
 ```
 
-**设置错误处理器**
+## 设置错误处理器
 
 ```js
 app.get('/', function (req, res) {
@@ -317,13 +323,18 @@ app.use((err, req, res, next) => {
 })
 ```
 
-**发送文件**
+## 发送文件
 
 ```js
 app.get('/plugin/three', (req, res) => {
     res.sendFile(__dirname +'/assets/three.js');
 });
 ```
+
+## 常见问题
+#### 1、报错`TypeError: res.json is not a function`
+
+可能有自定义变量和res重名
 
 
 

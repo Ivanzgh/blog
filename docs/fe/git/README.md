@@ -163,3 +163,30 @@ git rm --cached .DS_Store
 
 ### .gitkeep的作用
 为了可以提交空的文件夹
+
+### 无法访问github
+
+修改hosts文件，打开`C:\Windows\System32\drivers\etc`下的hosts文件，添加如下内容：
+```yml
+140.82.113.4 github.com
+199.232.69.194 github.global.ssl.fastly.net
+185.199.108.153 assets-cdn.github.com
+185.199.109.153 assets-cdn.github.com
+185.199.110.153 assets-cdn.github.com
+185.199.111.153 assets-cdn.github.com
+140.82.112.3 gist.github.com
+199.232.68.133 raw.githubusercontent.com
+199.232.68.133 gist.githubusercontent.com
+199.232.68.133 cloud.githubusercontent.com
+199.232.68.133 camo.githubusercontent.com
+199.232.68.133 avatars0.githubusercontent.com
+199.232.68.133 avatars1.githubusercontent.com
+199.232.68.133 avatars2.githubusercontent.com
+199.232.68.133 avatars3.githubusercontent.com
+199.232.68.133 avatars4.githubusercontent.com
+199.232.68.133 avatars5.githubusercontent.com
+199.232.68.133 avatars6.githubusercontent.com
+199.232.68.133 avatars7.githubusercontent.com
+199.232.68.133 avatars8.githubusercontent.com 
+```
+注意以上地址并不是固定的，通过[https://www.ipaddress.com/](https://www.ipaddress.com/)输入以上各个域名即可查询到最新的IP地址。如果有必要可以刷新一下DNS解析缓存，打开cmd窗口输入`ipconfig /flushdns`即可。

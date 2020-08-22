@@ -174,9 +174,23 @@ module.exports = {
                     title: 'Node',
                     collapsable: false,
                     sidebarDepth: 2,
-                    children: [
-                        'express',
-                    ]
+                    children: ['']
+                }
+            ],
+            '/fe/express/': [
+                {
+                    title: 'Express',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['']
+                }
+            ],
+            '/fe/mongodb/': [
+                {
+                    title: 'MongoDB',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['']
                 }
             ],
             '/fe/plugin/': [

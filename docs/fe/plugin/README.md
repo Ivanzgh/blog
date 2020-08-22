@@ -63,3 +63,47 @@
 ## 数据可视化
 
 [3d-force-graph](https://github.com/vasturiano/3d-force-graph) 3D力导图，基于three.js
+
+[https://github.com/Ivanzgh/3d-force-graph](https://github.com/Ivanzgh/3d-force-graph)自己改的星球效果
+
+## 生成随机数据
+
+网址：[https://www.npmjs.com/package/randomjson](https://www.npmjs.com/package/randomjson)
+
+可任意设置随机个数，数据格式自定义
+```js
+let axios = require('axios')
+let randomjson = require('randomjson');
+
+let dd = Math.random() * 10
+
+let modelJson = {
+    "data<@{5000}>": [
+        {
+            "RDJ_GRBH": "<@index>" + dd,
+            "BIP_XM": "姓名",
+            "BIP_SFZHM": "133024196310251658",
+            "FWZJBXXDJB_FWZBH": "7da462c1362200",
+            "RZF_XZDXZQH": "110112001027",
+            "RZF_XZDXXDZ": "北京市昌平区北控宏创科技园5号楼",
+            "DZBM": "1101122301000_0026_00_00_0003_0003_0002_0001",
+            "JD": "116.67528",
+            "WD": "39.9020300005",
+            "TJSJ": "20200115000555",
+            "user": "2333"
+        }
+    ]
+}
+
+let myjson = randomjson(modelJson);
+
+axios.post('http://192.168.130.63:5001/lgMulityInsert/ry', myjson).then(res => {
+    console.log(res.data);
+}).catch(err => {
+    console.log(err);
+});
+```
+
+## 时间轴
+
+[https://github.com/Ivanzgh/timeline](https://github.com/Ivanzgh/timeline)
