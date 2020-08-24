@@ -345,3 +345,5 @@ rm -rf /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search
 docker stop dockercompose_sxmap-elasticsearch_1
 ```
 再执行删除命令就能删掉数据，然后重启容器即可。
+
+如果报错`failed to find metadata for existing index`，解决方法同上删除nodes文件夹
