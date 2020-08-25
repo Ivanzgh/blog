@@ -43,7 +43,8 @@ module.exports = {
                     { text: 'NPM', link: '/fe/npm/' },
                     { text: 'Git', link: '/fe/git/' },
                     { text: 'Webpack', link: '/fe/webpack/' },
-                    { text: 'Gulp', link: '/fe/gulp/' }
+                    { text: 'Gulp', link: '/fe/gulp/' },
+                    { text: 'Others', link: '/utils/' }
                 ]
             },
             {
@@ -278,6 +279,7 @@ module.exports = {
                     children: ['']
                 }
             ],
+            '/utils/': [ '' ],
         }
     }
 }
