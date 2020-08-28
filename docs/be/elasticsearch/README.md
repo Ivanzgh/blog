@@ -193,10 +193,49 @@ location字段应与数据库字段相对应
 }
 ```
 ## 数据导入
+文档：[https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html)
+
+node版本的文档：[https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_bulk](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_bulk)
+
+批量导入`bulk`
 
 ## 删除
+[https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html)
 
+`DELETE /<index>/_doc/<_id>`
+```yml
+curl -X DELETE "localhost:9200/index111/_doc/1?pretty"
+```
+
+还有一种删除方式就是查询删除，先查询到`index111`索引下的所有数据，然后全部删除。注意索引还在！ 一次删不干净就多来几次(看total和deleted是否都是0)
+[https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_deletebyquery](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_deletebyquery)
+```js
+function dellgAllData() {
+    client.deleteByQuery({
+        index: 'index111',
+        body: {
+            'query': {
+                'match_all': {}
+            }
+        }
+    }).then(res => console.log(res)).catch(err => console.log(err))
+}
+dellgAllData()
+```
+查看索引是否存在
+```js
+function indexExists(index){
+  return client.indices.exists({
+    index : index
+  })
+}
+```
 ## 修改
+[https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html)
+
+`POST /<index>/_update/<_id>`
+
+node版本api：[https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_update](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_update)
 
 
 ## 集群
@@ -267,6 +306,16 @@ http://192.168.18.12:9200/_cluster/health
 在两个节点上查看所有索引，可以看到所有索引都同步 
 ```
 /_cat/indices
+```
+
+其他
+
+```
+查看分片 http://192.168.18.19:9200/_cat/shards
+
+查看索引 http://192.168.18.19:9200/_cluster/health?level=indices
+
+查看分片 http://192.168.18.19:9200/_cluster/health?level=shards
 ```
 
 ### 常见问题
@@ -347,3 +396,191 @@ docker stop dockercompose_sxmap-elasticsearch_1
 再执行删除命令就能删掉数据，然后重启容器即可。
 
 如果报错`failed to find metadata for existing index`，解决方法同上删除nodes文件夹
+
+
+**4、有分片未分配**
+
+`/_cluster/health`查询集群状态发现
+```json
+{
+    "cluster_name": "elasticsearch-produce",
+    "status": "red",                        // red状态表示有主分片未分配
+    "timed_out": false,
+    "number_of_nodes": 3,
+    "number_of_data_nodes": 3,
+    "active_primary_shards": 41,
+    "active_shards": 82,
+    "relocating_shards": 0,
+    "initializing_shards": 0,
+    "unassigned_shards": 6,                 // 表示有6个分片未分配
+    "delayed_unassigned_shards": 0,
+    "number_of_pending_tasks": 0,
+    "number_of_in_flight_fetch": 0,
+    "task_max_waiting_in_queue_millis": 0,
+    "active_shards_percent_as_number": 92.234   // 集群健康值，100表示完全可用
+}
+```
+
+分片未分配意味着有部分数据不可用，查看报错信息 `GET /_cluster/allocation/explain?pretty`，加上`?pretty`能让结果格式美化，即json
+```yml
+curl -X GET "192.168.18.19:9200/_cluster/allocation/explain?pretty" -H 'Content-Type: application/json' -d'
+{
+    "index": "wlxt_beijing_xiangzhenjie",
+    "shard": 0,
+    "primary": true
+}'
+```
+此处`shard`位置是0，可以通过`/_cat/shards`查看，返回结果如下：
+```json
+{
+  "index" : "wlxt_beijing_xiangzhenjie",
+  "shard" : 0,
+  "primary" : true,
+  "current_state" : "unassigned",
+  "unassigned_info" : {
+    "reason" : "CLUSTER_RECOVERED",
+    "at" : "2020-08-26T01:37:00.682Z",
+    "last_allocation_status" : "no_valid_shard_copy"
+  },
+  "can_allocate" : "no_valid_shard_copy",
+  "allocate_explanation" : "cannot allocate because all found copies of the shard are either stale or corrupt",
+  "node_allocation_decisions" : [
+    {
+      "node_id" : "Ghz5Ah-JQIS9dh6OnstNlg",
+      "node_name" : "node12",
+      "transport_address" : "192.168.18.12:9300",
+      "node_attributes" : {
+        "ml.machine_memory" : "33565294592",
+        "xpack.installed" : "true",
+        "ml.max_open_jobs" : "20"
+      },
+      "node_decision" : "no",
+      "store" : {
+        "found" : false
+      }
+    },
+    {
+      "node_id" : "O0pvUfQfTJe6PV0fRLCCTA",
+      "node_name" : "node19",
+      "transport_address" : "192.168.18.19:9300",
+      "node_attributes" : {
+        "ml.machine_memory" : "33565294592",
+        "ml.max_open_jobs" : "20",
+        "xpack.installed" : "true"
+      },
+      "node_decision" : "no",
+      "store" : {
+        "in_sync" : false,
+        "allocation_id" : "YIGvfbADT0abRdggsiu9Ow",
+        "store_exception" : {
+          "type" : "file_not_found_exception",
+          "reason" : "no segments* file found in SimpleFSDirectory@/usr/share/elasticsearch/data/nodes/0/indices/2AgVJg-USJebFipphzQdLg/0/index lockFactory=org.apache.lucene.store.NativeFSLockFactory@51f0a901: files: [write.lock]"
+        }
+      }
+    },
+    {
+      "node_id" : "rsDzn8HnRVSpkChaoI3c6A",
+      "node_name" : "node17",
+      "transport_address" : "192.168.18.17:9300",
+      "node_attributes" : {
+        "ml.machine_memory" : "33565294592",
+        "ml.max_open_jobs" : "20",
+        "xpack.installed" : "true"
+      },
+      "node_decision" : "no",
+      "store" : {
+        "in_sync" : false,
+        "allocation_id" : "FmD6r8DXQbWyDIxom9xOjg"
+      }
+    }
+  ]
+}
+```
+查看未分配的原因是副本分片太旧或损坏，在节点`node19`上还发现文件丢失，进入目录查看果然没有文件，这时考虑重新手动分配分片`POST /_cluster/reroute`，[https://www.elastic.co/guide/en/elasticsearch/reference/7.9/cluster-reroute.html](https://www.elastic.co/guide/en/elasticsearch/reference/7.9/cluster-reroute.html)
+
+首先考虑手动分配副本分片：`allocate_replica`，这种方式会保留数据
+```yml
+curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/json" -d '
+{ 
+    "commands": [
+        {
+            "allocate_replica": {
+                "index":"wlxt_beijing_xiangzhenjie",
+                "shard":0,
+                "node":"node19"
+            }
+        }
+    ]
+}'
+```
+但是报错了，显示分配失败
+```
+[allocate_replica] trying to allocate a replica shard [wlxt_beijing_xiangzhenjie], while corresponding primary shard is still unassigned]
+```
+
+接着考虑重建索引，依然能保留数据。[https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html)
+```yml
+curl -X POST "192.168.18.19:9200/_reindex?pretty" -H 'Content-Type: application/json' -d'
+{
+  "source": {
+    "index": "wlxt_beijing_xiangzhenjie"
+  },
+  "dest": {
+    "index": "wlxt_beijing_xiangzhenjie1"
+  }
+}'
+```
+重建成功后删除原索引，
+```
+curl -X DELETE 192.168.18.19:9200/wlxt_beijing_xiangzhenjie
+```
+但是我的新索引并未建成功，报错`SearchPhaseExecutionException: all shards failed`，刚开始查docker日志也是这个错误，说明这个方案也失败了。
+
+然后继续考虑重新手动分配主分片：`allocate_stale_primary`
+```yml
+curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/json" -d '
+{ 
+    "commands": [
+        {
+            "allocate_stale_primary": {
+                "index":"wlxt_beijing_xiangzhenjie",
+                "shard":0,
+                "node":"node19",
+                "accept_data_loss":true
+            }
+        }
+    ]
+}'
+```
+注意使用`allocate_stale_primary`会导致部分数据丢失，`"accept_data_loss":true`让你知道自己在干什么，所以要有备份数据。但是执行后还是报错
+```
+No data for shard [0] of index [wlxt_beijing_xiangzhenjie] found on node [node19]"},"status":400}
+```
+
+最后使用`allocate_empty_primary`，分配一个空的主分片给一个节点，意味着对应索引上的数据都没了。
+
+首先查看`http://192.168.18.19:9200/_shard_stores?pretty`，这里可以看到所有未分配的分片。执行以下命令：
+```yml
+curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/json" -d '
+{ 
+    "commands": [
+        {
+            "allocate_empty_primary": {
+                "index":"wlxt_beijing_xiangzhenjie",
+                "shard":0,
+                "node":"node19",
+                "accept_data_loss":true
+            }
+        }
+    ]
+}'
+```
+
+再次查看发现已经没了`wlxt_beijing_xiangzhenjie`这个索引，修改依然存在的索引继续执行，直到出现如下所示，再去看你的集群应该是`green`
+```
+{
+    "indices": {}
+}
+```
+
+最后一步，将对应索引的数据重新导入一遍。

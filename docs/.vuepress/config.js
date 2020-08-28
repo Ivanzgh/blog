@@ -54,7 +54,7 @@ module.exports = {
                     { text: 'Nginx', link: '/be/nginx/' },
                     { text: 'MySQL', link: '/be/mysql/' },
                     { text: 'Tomcat', link: '/be/tomcat/' },
-                    { text: 'ElasticSearch', link: '/be/elastic/' },
+                    { text: 'ElasticSearch', link: '/be/elasticsearch/' },
                     { text: 'OpenStack', link: '/be/openstack/' },
                 ]
             },
@@ -248,7 +248,7 @@ module.exports = {
                     ]
                 }
             ],
-            '/be/elastic/': [
+            '/be/elasticsearch/': [
                 {
                     title: 'ElasticSearch',
                     collapsable: false,
