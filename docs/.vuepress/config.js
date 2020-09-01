@@ -134,11 +134,7 @@ module.exports = {
                     title: '工具函数',
                     collapsable: false,
                     sidebarDepth: 2,
-                    children: [
-                        'advanced',
-                        'oop',
-                        'es6'
-                    ]
+                    children: ['utils']
                 },
             ],
             '/fe/html/': [

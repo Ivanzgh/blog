@@ -107,3 +107,63 @@ axios.post('http://192.168.130.63:5001/lgMulityInsert/ry', myjson).then(res => {
 ## 时间轴
 
 [https://github.com/Ivanzgh/timeline](https://github.com/Ivanzgh/timeline)
+
+
+# 动画库
+
+## Tween.js
+[https://github.com/tweenjs/tween.js](https://github.com/tweenjs/tween.js)
+```js
+let box = document.createElement('div');
+    box.style.setProperty('background-color', '#008800');
+    box.style.setProperty('width', '100px');
+    box.style.setProperty('height', '100px');
+    document.body.appendChild(box);
+
+    function animate() {
+        requestAnimationFrame(animate);
+        TWEEN.update();
+    }
+    animate()
+
+    let coords = { x: 200, y: 0 };
+    let tween = new TWEEN.Tween(coords)
+        .to({ y: 200 }, 3000)
+        .easing(TWEEN.Easing.Sinusoidal.InOut)
+        .onUpdate(() => {
+            box.style.setProperty('transform', 'translate(' + coords.x + 'px, ' + coords.y + 'px)');
+        })
+        .start();
+
+    let tweenBcak = new TWEEN.Tween(coords)
+        .to({ y: 0 }, 3000)
+        .easing(TWEEN.Easing.Sinusoidal.InOut)
+        .onUpdate(() => {
+            box.style.setProperty('transform', 'translate(' + coords.x + 'px, ' + coords.y + 'px)');
+        })
+
+    tween.chain(tweenBcak);
+    tweenBcak.chain(tween);
+```
+配合three.js使用，比如让一个球体沿z轴上下运动
+```js
+    let coords = {x: 84771.68253191965, y: 31757.48999119179, z: 8.530729184960364};
+    let tween = new TWEEN.Tween(coords)
+        .to({ z: coords.z + 1 }, 3000)
+        .easing(TWEEN.Easing.Sinusoidal.InOut)
+        .onUpdate(() => sphereMesh.translateZ(0.01))
+        .start();
+    let tweenBack = new TWEEN.Tween(coords)
+        .to({ z: coords.z }, 3000)
+        .easing(TWEEN.Easing.Sinusoidal.InOut)
+        .onUpdate(() => sphereMesh.translateZ(-0.01));
+    tween.chain(tweenBack);
+    tweenBack.chain(tween);
+
+     function animation() {
+         requestAnimationFrame(animation);
+         TWEEN.update();
+         threelayer.renderScene();
+     }
+     animation();
+```
