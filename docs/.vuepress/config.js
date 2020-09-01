@@ -130,6 +130,16 @@ module.exports = {
                         'es6'
                     ]
                 },
+                {
+                    title: '工具函数',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        'advanced',
+                        'oop',
+                        'es6'
+                    ]
+                },
             ],
             '/fe/html/': [
                 {
