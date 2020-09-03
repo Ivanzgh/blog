@@ -59,6 +59,29 @@ ctx.stroke()
 ctx.closePath()
 ```
 
+电子画笔
+```js
+let canvas = document.getElementById('canvas');
+    let ctx = canvas.getContext('2d');
+    let drawStatus = false;
+    canvas.onmousedown = e => {
+        ctx.moveTo(e.offsetX, e.offsetY);
+        drawStatus = true;
+    };
+    canvas.onmouseup = () => drawStatus = false;
+    canvas.onmouseout = () => {
+        if (drawStatus) {
+            drawStatus = false;
+        }
+    };
+    canvas.onmousemove = e => {
+        if (drawStatus) {
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke()
+        }
+    }
+```
+
 ## 圆
 
 ```js
