@@ -395,8 +395,86 @@ r2.showMVP();
 ```
 extends关键字用于实现类之间的继承。子类继承父类的所有属性和方法，使用super可以调用父类的方法。
 
+## 静态方法、静态属性
+类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前加上`static`关键字，则这个方法不会被实例继承，
+而是直接通过类来调用，这就是静态方法。
+```js
+class Foo {
+    static f() {
+        return '666'
+    }
+}
+Foo.f();     // '666'
+let person = new Foo()
+person.f();  // TypeError: person.f is not a function
+```
+父类的静态方法可以被子类继承
+```js
+class Foo {
+    static f() {
+        return '666'
+    }
+}
+
+class Bar extends Foo {}
+Bar.f()     // "666"
+```
+静态方法也可以被`super`对象调用
+```js
+class Foo {
+    static f() {
+        return '666'
+    }
+}
+class Bar extends Foo {
+    static g() {
+        return super.f()
+    }
+}
+Bar.g()     // "666"
+```
+
+**类的静态属性**
+```js
+// es6写法
+class Foo {}
+Foo.prop = 1
+
+// es7写法，推荐这一种写法
+class Bar {
+    static prop = 1
+    constructor() {
+        console.log(Bar.prop)
+    }
+}
+```
+**类的实例属性**
+
+类的实例属性可以用等式，写入类的定义之中
+```js
+class Foo {
+    state = { value: 1 }
+    constructor() {
+        console.log(this.state.value)   // 1
+    }
+}
+```
+再看看react类组件写法，以前定义类的实例属性只能在`constructor`里面，现在可以写在外面
+```js
+class Foo extends React.Component {  
+    constructor(props) {  
+        super(props);  
+        this.state = {  
+            count: 0  
+        };  
+    }  
+    modalRef = null;  
+}  
+```
+
 ## Promise
-在promise之前代码过多的回调或者嵌套，可读性差、耦合度高、扩展性低。通过Promise机制，扁平化的代码机构，大大提高了代码可读性；用同步编程的方式来编写异步代码，保存线性的代码逻辑，极大的降低了代码耦合性而提高了程序的可扩展性。
+在promise之前代码过多的回调或者嵌套，可读性差、耦合度高、扩展性低。通过Promise机制，扁平化的代码机构，大大提高了代码可读性；
+用同步编程的方式来编写异步代码，保存线性的代码逻辑，极大的降低了代码耦合性而提高了程序的可扩展性。
 ```js
 function Hello(hi) {
     return new Promise(function(resolve,reject) {

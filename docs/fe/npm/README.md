@@ -74,6 +74,11 @@ cnpm install packname
 npm config set registry https://registry.npmjs.org
 ```
 
+查看镜像源：
+```
+npm get registry
+```
+
 
 ## npm发布插件
 1、npm init 初始化项目,生成package.json文件
