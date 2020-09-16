@@ -1,47 +1,18 @@
 # 面向对象
 
-## new的过程
-new一个对象：
-```js
-function Person(name,age) {
-    this.name = name
-    this.age = age 
-}
-let person = new Person('zgh',23)
-```
-1、创建一个空对象obj
-```js
-var obj = new Object();
-```
-
-2、使用call将构造函数Person中的this指向刚创建的obj对象
-```js
-var result = Person.call(obj);
-```
-
-3、设置原型链，将创建的obj的__proto__指向构造函数Person的prototype
-```js
-obj.__proto__ = Person.prototype;
-```
-
-4、判断Person的返回值类型，如果是值类型，返回obj。如果是引用类型，则返回这个引用类型的对象。
-
-
 ## 创建对象的方式
 
 ### 直接创建
-
 ```js
-var obj = {
+let obj = {
     name : 'zgh',
     age : 23
 }
 ```
 
 ### new
-
 ```js
-var obj = new Object()
+let obj = new Object()
 obj.name = 'zgh'
 obj.age = 23
 ```
@@ -61,7 +32,6 @@ console.log(person1,person2);
 ```
 
 ### 构造函数模式
-
 ```js
 function createObj(name,age) {
     this.name = name 
@@ -73,7 +43,6 @@ console.log(person1,person2);
 ```
 
 ### 原型模式
-
 ```js
 function Person() {}
 
@@ -87,7 +56,6 @@ console.log(person1.name);  // zgh
 
 ### 混合模式（构造函数模式+原型模式）
 构造函数模式用于定义实例属性，原型模式用于定义方法和共享的属性
-
 ```js
 function Person(name,age) {
     this.name = name 
@@ -104,8 +72,33 @@ let person1 = new Person('zgh',23)
 let person2 = new Person('hxj',22)
 console.log(person1,person2);
 ```
-
 可以看出，混合模式共享着对相同方法的引用，又保证了每个实例有自己的私有属性。最大限度的节省了内存
+
+## new的过程
+new一个对象：
+```js
+function Person(name,age) {
+    this.name = name
+    this.age = age 
+}
+let person = new Person('zgh',23)
+```
+1、创建一个空对象obj
+```js
+let obj = new Object();
+```
+
+2、使用call将构造函数Person中的this指向刚创建的obj对象
+```js
+var result = Person.call(obj);
+```
+
+3、设置原型链，将创建的obj的__proto__指向构造函数Person的prototype
+```js
+obj.__proto__ = Person.prototype;
+```
+
+4、判断Person的返回值类型，如果是值类型，返回obj。如果是引用类型，则返回这个引用类型的对象。
 
 ## 继承
 ### 构造继承
