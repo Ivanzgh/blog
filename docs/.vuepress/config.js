@@ -107,6 +107,14 @@ module.exports = {
                         'vue-router'
                     ]
                 },
+                {
+                    title: 'vuePress',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        'vuepress'
+                    ]
+                },
             ],
             '/fe/js/': [
                 {
