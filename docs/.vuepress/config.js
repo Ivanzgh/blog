@@ -5,6 +5,20 @@ module.exports = {
     head: [
         ['link', {rel: 'icon', href: '/img/logo.png'}]
     ],
+    plugins: [
+        'reading-progress',
+        '@vuepress/back-to-top',
+        'img-lazy',
+        'vuepress-plugin-baidu-autopush',
+        [
+            {
+                name: 'page-plugin',
+                globalUIComponents: [
+                    'global-Cat'
+                ]
+            }
+        ]
+    ],
     themeConfig: {
         logo: '/img/logo.png',
         lastUpdated: 'Last Updated',
@@ -13,75 +27,75 @@ module.exports = {
             {
                 text: '前端',
                 items: [
-                    { text: 'HTML', link: '/fe/html/' },
-                    { text: 'CSS', link: '/fe/css/' },
-                    { text: 'JavaScript', link: '/fe/js/' },
-                    { text: 'TypeScript', link: '/fe/ts/' },
-                    { text: 'Sass、Less', link: '/fe/sass/' },
-                    { text: '浏览器', link: '/fe/browser/' },
-                    { text: '性能优化', link: '/fe/performance/' },
-                    { text: '正则表达式', link: '/fe/regular/' },
-                    { text: '移动端开发', link: '/fe/mobile/' },
-                    { text: '前端插件', link: '/fe/plugin/' }
+                    {text: 'HTML', link: '/fe/html/'},
+                    {text: 'CSS', link: '/fe/css/'},
+                    {text: 'JavaScript', link: '/fe/js/'},
+                    {text: 'TypeScript', link: '/fe/ts/'},
+                    {text: 'Sass、Less', link: '/fe/sass/'},
+                    {text: '浏览器', link: '/fe/browser/'},
+                    {text: '性能优化', link: '/fe/performance/'},
+                    {text: '正则表达式', link: '/fe/regular/'},
+                    {text: '移动端开发', link: '/fe/mobile/'},
+                    {text: '前端插件', link: '/fe/plugin/'}
                 ]
             },
             {
                 text: '框架和库',
                 items: [
-                    { text: 'Vue', link: '/fe/vue/' },
-                    { text: 'React', link: '/fe/react/' },
-                    { text: 'Node', link: '/fe/node/' },
-                    { text: 'Express', link: '/fe/express/' },
-                    { text: 'Koa', link: '/fe/koa/' },
-                    { text: 'MongoDB', link: '/fe/mongodb/' },
-                    { text: '微信小程序', link: '/fe/wx/' },
+                    {text: 'Vue', link: '/fe/vue/'},
+                    {text: 'React', link: '/fe/react/'},
+                    {text: 'Node', link: '/fe/node/'},
+                    {text: 'Express', link: '/fe/express/'},
+                    {text: 'Koa', link: '/fe/koa/'},
+                    {text: 'MongoDB', link: '/fe/mongodb/'},
+                    {text: '微信小程序', link: '/fe/wx/'},
                 ]
             },
             {
                 text: '工具',
                 items: [
-                    { text: 'NPM', link: '/fe/npm/' },
-                    { text: 'Git', link: '/fe/git/' },
-                    { text: 'Webpack', link: '/fe/webpack/' },
-                    { text: 'Gulp', link: '/fe/gulp/' },
-                    { text: 'Others', link: '/utils/' }
+                    {text: 'NPM', link: '/fe/npm/'},
+                    {text: 'Git', link: '/fe/git/'},
+                    {text: 'Webpack', link: '/fe/webpack/'},
+                    {text: 'Gulp', link: '/fe/gulp/'},
+                    {text: 'Others', link: '/utils/'}
                 ]
             },
             {
                 text: '后端',
                 items: [
-                    { text: 'Docker', link: '/be/docker/' },
-                    { text: 'Nginx', link: '/be/nginx/' },
-                    { text: 'MySQL', link: '/be/mysql/' },
-                    { text: 'Tomcat', link: '/be/tomcat/' },
-                    { text: 'ElasticSearch', link: '/be/elasticsearch/' },
-                    { text: 'OpenStack', link: '/be/openstack/' },
+                    {text: 'Docker', link: '/be/docker/'},
+                    {text: 'Nginx', link: '/be/nginx/'},
+                    {text: 'MySQL', link: '/be/mysql/'},
+                    {text: 'Tomcat', link: '/be/tomcat/'},
+                    {text: 'ElasticSearch', link: '/be/elasticsearch/'},
+                    {text: 'OpenStack', link: '/be/openstack/'},
                 ]
             },
             {
                 text: '可视化',
                 items: [
-                    { text: 'OpenLayers', link: '/vis/openlayers/' },
-                    { text: 'Leaflet', link: '/vis/leaflet/' },
-                    { text: 'GeoServer', link: '/vis/geoserver/' },
-                    { text: 'Cesium', link: '/vis/cesium/' },
-                    { text: 'Three', link: '/vis/three/' }
+                    {text: 'OpenLayers', link: '/vis/openlayers/'},
+                    {text: 'Leaflet', link: '/vis/leaflet/'},
+                    {text: 'GeoServer', link: '/vis/geoserver/'},
+                    {text: 'Cesium', link: '/vis/cesium/'},
+                    {text: 'Three', link: '/vis/three/'}
                 ]
             },
             {
                 text: '计算机基础',
                 items: [
-                    { text: '网络', link: '/base/network/' },
-                    { text: '数据结构', link: '/base/data/' },
-                    { text: '算法', link: '/base/algorithm/' },
-                    { text: '操作系统', link: '/base/os/' }
+                    {text: '网络', link: '/base/network/'},
+                    {text: '数据结构', link: '/base/data/'},
+                    {text: '算法', link: '/base/algorithm/'},
+                    {text: '操作系统', link: '/base/os/'}
                 ]
             },
-            { text: '随笔', link: '/thought/' },
-            { text: 'GitHub', link: 'https://github.com/Ivanzgh' }
+            {text: '随笔', link: '/thought/'},
+            {text: 'GitHub', link: 'https://github.com/Ivanzgh'}
         ],
         sidebar: {
-            '/thought/': [ '' ],
+            '/thought/': [''],
             '/fe/vue/': [
                 {
                     title: 'vue',
@@ -293,7 +307,7 @@ module.exports = {
                     children: ['']
                 }
             ],
-            '/utils/': [ '' ],
+            '/utils/': [''],
         }
     }
 }

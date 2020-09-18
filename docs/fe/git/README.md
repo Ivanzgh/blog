@@ -189,4 +189,7 @@ git rm --cached .DS_Store
 199.232.68.133 avatars7.githubusercontent.com
 199.232.68.133 avatars8.githubusercontent.com 
 ```
-注意以上地址并不是固定的，通过[https://www.ipaddress.com/](https://www.ipaddress.com/)输入以上各个域名即可查询到最新的IP地址。如果有必要可以刷新一下DNS解析缓存，打开cmd窗口输入`ipconfig /flushdns`即可。
+添加以后可以解决github无法访问、图片和头像加载失败等问题。
+
+注意以上地址并不是固定的，通过[https://www.ipaddress.com/](https://www.ipaddress.com/)输入以上各个域名即可查询到最新的IP地址。
+如果有必要可以刷新一下DNS解析缓存，打开cmd窗口输入`ipconfig /flushdns`即可。

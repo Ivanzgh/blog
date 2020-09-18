@@ -85,7 +85,7 @@ class Columns extends React.Component {
   }
 }
 ```
-有一个父组件使用了<Columns />
+有一个父组件使用了`<Columns />`
 ```jsx harmony
 class Table extends React.Component {
   render() {

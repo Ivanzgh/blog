@@ -15,6 +15,10 @@
   "author": "zgh",
   "license": "ISC",
   "devDependencies": {
-    "vuepress": "^1.5.2"
+    "@vuepress/plugin-back-to-top": "^1.5.4",
+    "vuepress": "^1.5.4",
+    "vuepress-plugin-baidu-autopush": "^1.0.1",
+    "vuepress-plugin-img-lazy": "^1.0.4",
+    "vuepress-plugin-reading-progress": "^1.0.10"
   }
 }

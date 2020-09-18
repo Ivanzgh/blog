@@ -94,7 +94,7 @@ Object.defineProperties(obj, {
 ## getter和setter
 从ES5开始提供了`getter`和`setter`，可以将属性值的获取和设置分别绑定到方法上，称之为“存取器”。
 
-### 简单的getter、setter
+### 简单的getter和setter
 ```js
 let obj = {
     a: 1,

@@ -1,9 +1,40 @@
 # vuePress
 
-## vuepress部署到GitHub Pages
+## 养个猫
 
-### 手动部署
-在项目根目录下新建deplogy.sh文件，配置好后在项目根文件夹右键 `gitBash here` , 然后输入部署命令**bash deploy.sh**
+如你所见，左下角有一只卡哇伊的猫，有白色和黑色两种。由[live2d](https://www.live2d.com/zh-CHS/)制作而来，
+特别好玩的一个东西，有兴趣自行了解。
+
+首先下载`lived2d.js`，然后在`components`下注册一个`Cat.vue`组件，最后在`config.js`中配置使用
+```js
+module.exports = {
+    plugins: [
+        [
+            {
+                name: 'page-plugin',
+                globalUIComponents: [
+                    'Cat'
+                ]
+            }
+        ]
+    ]
+}
+```
+
+## 插件
+
+地址：[awesome-vuepress](https://github.com/vuepressjs/awesome-vuepress#plugins)
+
+例如：
++ `vuepress-plugin-reading-progress`  - 阅读进度条
++ `@vuepress/plugin-back-to-top`    -  返回顶部
++ `vuepress-plugin-img-lazy`     -     图片懒加载
++ `vuepress-plugin-baidu-autopush`  -  百度SEO
+
+
+## 手动部署
+
+在项目根目录下新建deplogy.sh文件，配置好后在项目根文件夹右键 `gitBash here` , 然后输入部署命令`bash deploy.sh`
 
 ```shell script
 #!/usr/bin/env sh
@@ -32,11 +63,14 @@ git push -f git@github.com:Ivanzgh/blog.git master:gh-pages
 
 cd -
 ```
+注意将仓库地址修改成自己的地址
 
+## 自动化部署
 
-### github actions 自动化部署
-每次只需要将代码提交到github上即可，无需其他操作
-#### 设置`GitHub personal access`
+使用`github actions`实现自动化部署，每次只需要将代码提交到github上即可，无需其他操作。
+
+ **设置`GitHub personal access`**
+ 
 [设置个人访问令牌](https://docs.github.com/cn/github/authenticating-to-github/creating-a-personal-access-token)
 
 授予此令牌的作用域或权限时，只需勾选`repo`仓库即可。然后回到项目的`Settings`下的`Secrets`目录生成一个新令牌，名称叫
@@ -44,7 +78,7 @@ cd -
 
 进入`Actions`点击`Set up this workflow`创建一个新的`action`
 
-![image](/blog/img/vuepress/workflow.png)
+![image](/blog/img/vuepress/workflow.png =600x400)
 
 创建`.github/workflows/ci.yml`文件，名称随意。
 这里用了[deploy-to-github-pages](https://github.com/marketplace/actions/deploy-to-github-pages)这个action，
