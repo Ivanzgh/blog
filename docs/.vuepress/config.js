@@ -22,7 +22,7 @@ module.exports = {
     themeConfig: {
         logo: '/img/logo.png',
         lastUpdated: 'Last Updated',
-        //sidebarDepth: 2,  // 默认是1，表示侧边栏只显示h1、h2；设置为2则h3也显示在侧边栏
+        // sidebarDepth: 2,  // 默认是1，表示侧边栏只显示h1、h2；设置为2则h3也显示在侧边栏
         nav: [
             {
                 text: '前端',
@@ -128,7 +128,7 @@ module.exports = {
                     children: [
                         'vuepress'
                     ]
-                },
+                }
             ],
             '/fe/js/': [
                 {
@@ -158,6 +158,16 @@ module.exports = {
                     sidebarDepth: 2,
                     children: ['utils']
                 },
+            ],
+            '/fe/ts/': [
+                {
+                    title: 'TypeScript',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        ['', '介绍']
+                    ]
+                }
             ],
             '/fe/html/': [
                 {
