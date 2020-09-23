@@ -1,8 +1,14 @@
-# typescript
+# TypeScript
 
 官网：[https://www.typescriptlang.org/](https://www.typescriptlang.org/)
 
 中文手册： [https://typescript.bootcss.com/](https://typescript.bootcss.com/)
+
+[《深入理解TypeScript》](https://jkchao.github.io/typescript-book-chinese/)
+
+::: tip 关于《深入理解TypeScript》
+注意typescript版本问题，代码还是手动敲一下为好，当前内容基于`Version 4.0.3`，一切以官方为主
+:::
 
 ## 介绍
 
@@ -105,95 +111,5 @@ function infiniteLoop(): never {
 }
 ```
 
-## 接口
 
-```typescript
-interface Person {
-    first: string;
-    last: string;
-}
 
-function greeter(person: Person) {
-    return 'hello,' + person.first + 'and' + person.last;
-}
-
-// let user = 'tom';
-let user = {first: 'zgh', last: 'ivan'};
-greeter(user);
-```
-类型检查器会检查`greeter`的调用，greeter有一个参数，并要求这个对象参数有名称为`first`和`last`、类型为`string`的属性，
-属性的顺序不会检查
-
-### 可选属性
-接口里的属性并不都是必需的
-```typescript
-interface SquareConfig {
-    color?: string;
-    width?: number;
-}
-
-function createSquare(config: SquareConfig): { color: string; area: number } {
-    let newSquare = {color: 'blue', area: 100};
-    if (config.color) {
-        newSquare.color = config.color;
-    }
-    if (config.width) {
-        newSquare.area = config.width * config.width;
-    }
-    return newSquare
-}
-let square = createSquare({color: 'red'});
-```
-在接口属性名称后面加`?`即表示非必需
-
-::: tip
-createSquare()后面的`{ color: string; area: number }`表示返回值类型
-:::
-
-### 只读属性
-一些对象属性只能在对象刚刚创建的时候修改其值，使用`readonly`指定只读属性
-```typescript
-interface User {
-    readonly name: string;
-    readonly age: number;
-}
-let my: User = {name: 'zgh', age: 24};
-my.age = 23     // Error
-```
-
-::: tip
-数组也有只读属性，`let arr: ReadonlyArray<number> = [1, 2, 3]`
-:::
-
-### 任意属性
-当一个接口中有可选属性和只读属性时，还希望允许有其他的任意属性
-```typescript
-interface User {
-    name?: string;
-    readonly age: number;
-    [propName: string]: any
-}
-let my: User = {name: 'zgh', age: 24, height: 183};
-```
-
-## 断言
-
-### 类型断言
-类型断言有尖括号语法和`as`语法两种，类似类型转换，不进行特殊的数据检查和解构，即告诉编译器知道自己在干啥
-```typescript
-let str1: any = 'typescript';
-
-let res1 = <string>str1
-console.log(res1);       // 'typescript'
-
-let res2: number = (<string>str1).length;
-console.log(res2);   // 10
-
-let str2: any = 'typescript';
-let res3: number = (str2 as string).length;
-console.log(res3)       // 10
-```
-
-::: warning
-在TypeScript里使用JSX时，只有as语法断言是被允许的。
-:::

@@ -10,7 +10,7 @@ Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时。
 
 >node运行的js是指ECMAScript，不能运行BOM或DOM中的代码
 
-## 特点：
+## 特点
 + 单线程
 + 异步式I/O
 + 事件驱动

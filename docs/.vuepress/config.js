@@ -165,7 +165,10 @@ module.exports = {
                     collapsable: false,
                     sidebarDepth: 2,
                     children: [
-                        ['', '介绍']
+                        ['', '概览'],
+                        'interface',
+                        'assertion',
+                        'index-signatures'
                     ]
                 }
             ],
