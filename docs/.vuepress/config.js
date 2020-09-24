@@ -168,7 +168,8 @@ module.exports = {
                         ['', '概览'],
                         'interface',
                         'assertion',
-                        'index-signatures'
+                        'index-signatures',
+                        'enum'
                     ]
                 }
             ],

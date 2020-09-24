@@ -34,13 +34,24 @@ tsc .\src\helloworld.ts
 let isDone: boolean = false;    // 布尔
 let num: number = 6;        // 数字
 let str: string = 'zgh';    // 字符串
-let list1: number[] = [1,2,3];      // 由数字组成的数组
-let list2: Array<number> = [4,5,6];     // 数组泛型
-let list3: [string,number] = ['1',2];   // 元组Tuple，表示一个已知元素数量和类型的数组
+
 let u: undefined = undefined;
 let n: null = null;
 ```
-`Symbol`类型
+### 数组类型
+```typescript
+let list1: number[] = [1,2,3];      // 由数字组成的数组
+
+let list2: Array<number> = [4,5,6];     // 数组泛型
+
+let list3: [string,number] = ['1',2];   // 元组Tuple，表示一个已知元素数量和类型的数组
+
+let list4: [string, number]
+list4 = ['haha', 666]
+let [ha, info] = list4    // 解构赋值
+```
+
+### `Symbol`类型
 ```typescript
 const sym = Symbol();
 let obj = {
@@ -49,7 +60,7 @@ let obj = {
 console.log(obj[sym]); // zgh
 ```
 
-`枚举`类型
+### 枚举类型
 ```typescript
 enum Direction {
     NORTH,
@@ -63,7 +74,8 @@ let dirName: string = Direction[2]
 console.log(dirName)    // EAST
 ```
 
-`Any`类型，即任意类型，ts允许对any类型的值进行任何操作
+### `Any`类型
+即任意类型，ts允许对any类型的值进行任何操作
 ```typescript
 let notSure: any
 notSure.user.name   // ok
@@ -72,7 +84,8 @@ notSure()       // ok
 new notSure()   // ok
 ```
 
-`unknown`类型，就是不知道啥类型，只能被赋值给`any`类型和`unknown`类型本身
+###`unknown`类型
+就是不知道啥类型，只能被赋值给`any`类型和`unknown`类型本身
 ```typescript
 let unk: unknown
 
@@ -92,7 +105,8 @@ let value7: any[] = value; // Error
 let value8: Function = value; // Error
 ```
 
-`void`类型，表示没有任何类型。比如当一个函数没有返回值时
+### `void`类型
+表示没有任何类型，比如当一个函数没有返回值时
 ```typescript
 // 声明函数返回值为void
 function getInfo(): void {
@@ -100,7 +114,8 @@ function getInfo(): void {
 }
 ```
 
-`never`类型，表示永不存在的值的类型。 例如，`never`类型是那些总是会抛出异常、没有返回值的函数表达式、箭头函数表达式的返回值类型
+### `never`类型
+表示永不存在的值的类型。 例如，`never`类型是那些总是会抛出异常、没有返回值的函数表达式、箭头函数表达式的返回值类型
 ```typescript
 function error(message: string): never {
   throw new Error(message);
@@ -111,5 +126,28 @@ function infiniteLoop(): never {
 }
 ```
 
+### 联合类型
+以`|`为标记，若希望属性为多个类型中的一个，可以使用联合类型。下面的例子表示函数参数接受一个数字类型的数组或者一个字符串
+```typescript
+let union = function (item: number[] | string) {
+    if (typeof item === 'string') {
+        return 'string'
+    }
+    return item
+}
+union('sss')
+```
 
+### 类型别名
+使用`type`定义一个类型别名
+```typescript
+// 此处直接注解name是一个string类型
+let name: string
+
+// 此处定义一个别名age
+type age = string | number
+let user: age;
+user = 123
+user = 'he'
+```
 

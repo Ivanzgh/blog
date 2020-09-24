@@ -102,3 +102,16 @@ let re = ar[1];
 console.log(re);    // 'green'
 ```
 上面表示用`number`类型1去索引`Arr`时会得到一个`string`类型 'green'
+
+## 内联类型注解
+如果你不想写接口，可以直接使用内联类型注解。但是在多处使用相同注解时，建议使用接口
+```typescript
+let user: {
+    name: string;
+    age: number;
+}
+user = {
+    name: 'zgh',
+    age: 23
+}
+```
