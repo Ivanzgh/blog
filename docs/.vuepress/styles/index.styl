@@ -2,9 +2,26 @@
   .theme-default-content
     &:not(.custom)
       max-width: 1200px;
-    code
-      color: #42b983;
+    div[class*="language-"]
+      background-color: #F8F8F8;
+      pre code, pre[class*="language-"] code
+        color: #476582;
+        .token.selector, .token.important, .token.atrule, .token.keyword, .token.builtin
+          color: #cd54bc;
+        .token.punctuation
+          color: #999;
+        .token.string, .token.char, .token.attr-value, .token.regex, .token.variable
+          color: #42b983;
+        .token.property, .token.class-name, .token.constant, .token.symbol
+          color: #f8b344;
+        .token.operator, .token.entity, .token.url
+          color: #999;
+    div[class*="language-"] .highlight-lines .highlighted
+      background-color: rgba(153,248,149,0.66);
+    p code
+      color: #56cd95;
       font-weight: 700;
+
   .page-edit, .page-nav
     max-width: 1200px;
 .customer-page-class

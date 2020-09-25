@@ -84,7 +84,7 @@ notSure()       // ok
 new notSure()   // ok
 ```
 
-###`unknown`类型
+### `unknown`类型
 就是不知道啥类型，只能被赋值给`any`类型和`unknown`类型本身
 ```typescript
 let unk: unknown
@@ -108,7 +108,6 @@ let value8: Function = value; // Error
 ### `void`类型
 表示没有任何类型，比如当一个函数没有返回值时
 ```typescript
-// 声明函数返回值为void
 function getInfo(): void {
   console.log("This is message");
 }
