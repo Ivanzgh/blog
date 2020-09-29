@@ -1,12 +1,27 @@
 # 接口
 
 ```typescript
+function add(param: {one: number, two: number}): number {
+    return param.one + param.two;
+}
+const total = add({ one: 1, two: 2 });
+```
+注解表示`param`参数是一个对象，有参数`one、two`且类型是`number`，返回值是`number`
+
+也可以使用解构赋值
+```typescript
+function add({one, two}: {one: number, two: number}): number {
+    return one + two;
+}
+```
+使用接口
+```typescript
 interface Person {
     first: string;
     last: string;
 }
 
-function greeter(person: Person) {
+function greeter(person: Person): string {
     return 'hello,' + person.first + 'and' + person.last;
 }
 
@@ -15,6 +30,7 @@ greeter(user);
 ```
 类型检查器会检查`greeter`的调用，greeter有一个参数，并要求这个对象参数有名称为`first`和`last`、类型为`string`的属性，
 属性的顺序不会检查
+
 
 ## 可选属性
 接口里的属性并不都是必需的
@@ -67,6 +83,7 @@ interface User {
 }
 let my: User = {name: 'zgh', age: 24, height: 183};
 ```
+`[propName: string]: any`表示属性名称是字符串类型，值是任意类型
 
 ## 函数类型
 接口也可以描述函数类型，给接口定义一个调用签名，包括参数列表和返回值类型
@@ -114,4 +131,26 @@ user = {
     name: 'zgh',
     age: 23
 }
+```
+
+## 方法
+接口里可以写方法
+```typescript
+interface Info {
+    ff: number;
+    gg: string;
+    say(): string;      // 定义一个say方法，返回值类型是字符串
+}
+function getInfo2(res: Info): string {
+    const sayInfo = res.say()
+    return res.ff + res.gg
+}
+const user = {
+    gg: 'zgh',
+    ff: 666,
+    say():string {
+        return 'hello world'
+    }
+}
+getInfo2(user)
 ```

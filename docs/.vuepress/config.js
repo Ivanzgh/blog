@@ -169,7 +169,8 @@ module.exports = {
                         'interface',
                         'assertion',
                         'index-signatures',
-                        'enum'
+                        'enum',
+                        'function'
                     ]
                 }
             ],

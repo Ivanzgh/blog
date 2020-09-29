@@ -31,25 +31,55 @@ tsc .\src\helloworld.ts
 ## 类型
 
 ```typescript
-let isDone: boolean = false;    // 布尔
-let num: number = 6;        // 数字
-let str: string = 'zgh';    // 字符串
+const isDone: boolean = false;    // 布尔
+const num: number = 6;        // 数字
+const str: string = 'zgh';    // 字符串
 
-let u: undefined = undefined;
-let n: null = null;
+const u: undefined = undefined;
+const n: null = null;
 ```
 ### 数组类型
 ```typescript
-let list1: number[] = [1,2,3];      // 由数字组成的数组
+const list1: number[] = [1,2,3];      // 由数字组成的数组
 
-let list2: Array<number> = [4,5,6];     // 数组泛型
+const list2: Array<number> = [4,5,6];     // 数组泛型
 
-let list3: [string,number] = ['1',2];   // 元组Tuple，表示一个已知元素数量和类型的数组
+const list3: [string,number] = ['1',2];   // 元组Tuple，表示一个已知元素数量和类型的数组
 
-let list4: [string, number]
-list4 = ['haha', 666]
-let [ha, info] = list4    // 解构赋值
+const list4: (number | string)[] = [1, 'a', 'b', 2];   // 不知道元素数量，类型已知
+
+const list5: [string, number] = ['ha', 666]
+const [ha, info] = list5    // 解构赋值
 ```
+对象数组的类型注解
+```typescript
+const arr: {name: string, age: number}[] = [
+    {name:'tom', age: 18},
+    {name:'jack', age: 19}
+]
+```
+如果有同样类型的数组，可以用 类型别名
+```typescript
+type user = {name: string, age: number}
+
+const arr: user[] = [
+    {name:'tom', age: 18},
+    {name:'jack', age: 19}
+]
+```
+也可以使用 类
+```typescript
+class user {
+    name: string;
+    age: number;
+}
+
+const arr: user[] = [
+    {name:'tom', age: 18},
+    {name:'jack', age: 19}
+]
+```
+
 
 ### `Symbol`类型
 ```typescript
@@ -150,3 +180,16 @@ user = 123
 user = 'he'
 ```
 
+类型别名和接口的区别
+
+```typescript
+type name = string
+
+type user1 = {name: string, age: number}
+
+interface user2 {
+    name: string;
+    age: number;
+}
+```
+类型别名可以直接注解字符串、数字等类型，而接口只能注解对象
