@@ -20,12 +20,20 @@ npm install -g typescript
 ```sh
 tsc -v 
 ```
-编译
+编译，然后可以得到一个同名的js文件
 ```sh
 tsc helloworld.ts
 
 #如果不在根目录下，要加反斜杠
 tsc .\src\helloworld.ts
+```
+也可以用`ts-node`插件直接在终端查看结果，但不会生成js文件
+```sh
+npm install -g ts-node
+```
+运行
+```
+ts-node helloworld.ts
 ```
 
 ## 类型

@@ -170,7 +170,9 @@ module.exports = {
                         'assertion',
                         'index-signatures',
                         'enum',
-                        'function'
+                        'function',
+                        'class',
+                        'config'
                     ]
                 }
             ],
