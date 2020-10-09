@@ -172,7 +172,8 @@ module.exports = {
                         'enum',
                         'function',
                         'class',
-                        'config'
+                        'config',
+                        'generic'
                     ]
                 }
             ],

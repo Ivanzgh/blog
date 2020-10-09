@@ -31,6 +31,21 @@ greeter(user);
 类型检查器会检查`greeter`的调用，greeter有一个参数，并要求这个对象参数有名称为`first`和`last`、类型为`string`的属性，
 属性的顺序不会检查
 
+::: tip
+`interface`只支持声明对象类型，可以合并扩展
+```typescript
+interface Person {
+    first: string;
+}
+interface Person {
+    last: string;
+}
+const user = {} as Person
+console.log(user.first)
+console.log(user.last)
+```
+:::
+
 
 ## 可选属性
 接口里的属性并不都是必需的
