@@ -26,3 +26,32 @@ function distance(lon1,lat1,lon2,lat2) {
 let res = distance(116.293598,40.227442,116.29216,40.200555);   
 console.log(res)    // 3km
 ```
+
+## 浮点数取整
+通常使用`Math.floor()`、`Math.ceil()`、`Math.round()`，简便写法：
+```js
+console.log(~~8.666); // 8
+console.log(8.666 >> 0); // 8
+console.log(8.666 << 0); // 8
+console.log(8.666 | 0); // 8
+// >>>不可对负数取整
+console.log(8.666 >>> 0); // 8
+```
+
+## 求幂运算
+如求2的3次方
+```js
+Math.pow(2, 3)
+
+// 简便写法
+let res = 2 ** 3
+```
+
+## string转为number
+简便写法就是在字符串前面加上 `+`
+```js
+let res1 = parseInt('1')
+let res2 = parseFloat('1.23')
+
+console.log(typeof +'1')    // "number"
+```

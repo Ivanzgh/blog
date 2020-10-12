@@ -440,7 +440,7 @@ arr.length = 0
 console.log(arr);  // []
 ```
 
-### 平铺多维数组
+### 数组扁平化
 
 二维数组：
 ```js
@@ -456,6 +456,52 @@ let arr = ['z',['g','h',['d']],'f']
 let res = arr.join(',').split(',')
 console.log(res);   // ["z", "g", "h", "d", "f"]
 ```
+
+ES6有一个`flat(depth)`方法可以平铺数组，参数depth表示数组的展开深度，默认是1。若不管多少层都平铺可以填入`Infinity`关键字
+```js
+[1, [2, 3, [4, [5]]]].flat(2)   //  [1, 2, 3, 4, 5]
+```
+
+递归
+```js
+    const arr = [1, [2, [3, 4]]];
+
+    function flatten(arr) {
+        let res = [];
+        // for (let i = 0; i < arr.length; i++) {
+        //     if (Array.isArray(arr[i])) {
+        //         res = res.concat(flatten(arr[i]));
+        //     } else {
+        //         res.push(arr[i]);
+        //     }
+        // }
+        arr.forEach(i => {
+            // if (Array.isArray(i)) {
+            //     res = res.concat(flatten(i))
+            // } else {
+            //     res.push(i)
+            // }
+            Array.isArray(i) ? res = res.concat(flatten(i)) : res.push(i)
+        });
+        return res;
+    }
+
+    console.log(flatten(arr));
+```
+
+reduce
+```js
+    const arr = [1, [2, [3, 4]]];
+
+    function flatten(arr) {
+        return arr.reduce((prev,next) => {
+            return prev.concat(Array.isArray(next) ? flatten(next) : next)
+        }, [])
+    }
+
+    console.log(flatten(arr));
+```
+
 
 ### 求数组交集
 

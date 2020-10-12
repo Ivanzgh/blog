@@ -42,6 +42,7 @@ ts-node helloworld.ts
 const isDone: boolean = false;    // 布尔
 const num: number = 6;        // 数字
 const str: string = 'zgh';    // 字符串
+const obj: object = {};     // 对象
 
 const u: undefined = undefined;
 const n: null = null;

@@ -325,6 +325,13 @@ module.exports = {
                     children: ['']
                 }
             ],
+            '/base/algorithm/': [
+                {
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['']
+                }
+            ],
             '/utils/': [''],
         }
     }
