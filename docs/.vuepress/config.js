@@ -200,9 +200,10 @@ module.exports = {
                 {
                     title: '基础',
                     collapsable: false,
-                    sidebarDepth: 2,
                     children: [
-                        ''
+                        '',
+                        'layout',
+                        'business'
                     ]
                 },
                 {
@@ -212,7 +213,10 @@ module.exports = {
                     children: [
                         'box-shadow',
                         'gradient',
-                        'animation'
+                        'animation',
+                        'flex',
+                        'media-queries',
+                        'clip-path'
                     ]
                 }
             ],
