@@ -220,35 +220,8 @@ let obj = {
     }
 }
 ```
-### Object.assign()
 
-Object.assign方法用于对象的合并，将源对象（source）的所有可枚举属性，复制到目标对象（target）。第一个参数为目标对象，后面的为源对象
-```js
-let obj1 = {
-    name:"zgh",
-    age:22
-}
-let obj2 = {
-    address:"beijing"
-}
-let obj = {}
-Object.assign(obj,obj1,obj2);
-console.log(obj);   // {name: "zgh", age: 22, address: "beijing"}
-```
-```js
-// [注意]：当Object.assign()方法用于数组时：
-let arr11 = Object.assign([1,2,3],[4,5]);
-console.log(arr11); //[4,5,3]
-
-// [说明]:对象是根据属性名来对应，数组是根据索引号来对应，相当于
-let arr23 = {
-    0:1,
-    1:2,
-    2:3
-}; //相同的属性名有0、1，后面的覆盖前面的.
-```
-注意：assign实现了浅复制，会把原型上的属性也复制了，但是不能复制继承过来的属性
-### Set
+## Set
 
 Set对象是一组不重复的、无序的值的集合，可以往里面添加、删除、查询数据
 ```js
@@ -280,7 +253,7 @@ Set只存储唯一值，可用来数组去重
 let arr = [1, 1, 2, 2, 3, 3];
 let deduped = [...new Set(arr)] // [1, 2, 3]
 ```
-### Map
+## Map
 
 类似于对象，里面存放的也是键值对，区别在于：对象中的键名只能是字符串，如果使用map，它里面的键可以是任意值。
 ```js
@@ -561,8 +534,15 @@ f()
 ## generator
 
 ## Proxy
-在ES6之前，我们可以使用`Object.defineProperty`去保护对象的私有属性。例如:
+外界对目标对象的访问可以被Proxy拦截，进行过滤和改写，意为“代理器”
 
+```js
+let proxy = new Proxy(target, handler);
+```
++ target 目标对象
++ handler 配置对象
+
+在ES6之前，我们可以使用`Object.defineProperty`去保护对象的私有属性。例如:
 ```js
 let sign = {
     _appid: "12345678",
@@ -570,7 +550,7 @@ let sign = {
     desc: "zgh的密钥"
 }
 
-Object.defineProperties(sign,{
+Object.defineProperties(sign, {
     _appid: {
         writable: false
     },
@@ -579,74 +559,49 @@ Object.defineProperties(sign,{
     }
 })
 ```
-但是如果想对多个属性进行保护，就得对多个属性进行声明`writable: false`，ES5的方式显然很麻烦，这个时候就可以用ES6的Proxy来解决这个问题。
+但是如果想对多个属性进行保护，就得对多个属性进行声明`writable: false`，显然很麻烦，这时就可以用Proxy来解决这个问题
 
 Proxy意味着我们代理了这个对象，该对象所有的属性操作都会经过Proxy
 
 ```js
 let sign = {
-    _appid: "12345678",
+    _appid: "123456",
     _appkey: "666",
     desc: "zgh的密钥"
 }
-
 let signProxy = new Proxy(sign, {
-    get(target, property) {
-        console.log("loading");
+    get(target, property, receiver) {
         return target[property]
     },
-    set(target, propName, property, proxy) {
-      console.log(proxy);
-      if(propName!="desc") {
-          alert("该属性是私有属性，不允许修改");
-      } else {
-          target[propName] = property;
-      }
+    set(target, propName, value, receiver) {
+        if(propName !== "desc") {
+            console.log("该属性是私有属性，不允许修改!");
+        } else {
+            target[propName] = value;
+        }
     }
 })
-
+console.log(signProxy._appid)   // "123456"
+signProxy._appkey = 'dd'        // 该属性是私有属性，不允许修改!
+console.log(signProxy._appkey)  // "666"
 ```
 
-这时我们依然可以去直接修改这个sign这个对象，例如对sign对象的_appid进行修改是没问题的。
+这时依然可以直接修改sign对象，如果希望对象完全不可修改，可以直接将sign写到Proxy的target
 
-proxy模式类似于一个中间层的概念，供用户进行操作的，实际上是signProxy对象。如果你期望你的对象完全不可修改，可以直接将sign写到Proxy构造器当中。
+**应用场景:**
 
-```js
-let signProxy = new Proxy({
-    _appid: "12345678",
-    _appkey: "666",
-    desc: "zgh的密钥"
-}, {
-    get(target, property) {
-        console.log("loading");
-        return target[property]
-    },
-    set(target, propName, property, proxy){
-      console.log(proxy);
-      if(propName!="desc"){
-          alert("该属性是私有属性，不允许修改");
-      } else {
-          target[propName] = property;
-      }
-    }
-})
-```
-应用场景:
++ 数据校检
++ 属性保护
 
-1. 数据校检
-2. 属性保护
-
-### 相关例子
+### 示例
 
 #### 数据类型验证
 
-需求：
-
-有一个记账的对象，记录着用户的存款金额，为了方便以后计算，要保证存入的数据必须为Number。
+有一个记账的对象，记录着用户的存款金额，为了方便以后计算，要保证存入的数据类型必须为Number
 
 ```js
 let account = {
-    number: 88
+    num: 8888
 }
 
 let proxyAccount = new Proxy(account, {
@@ -654,15 +609,15 @@ let proxyAccount = new Proxy(account, {
         return target[property]
     },
     set(target, propName, propValue) {
-        if(propName == "number") {
-            if(typeof propValue!="number") {
-                alert("number属性必须存入数字");
-                return
-            }
+        if(propName === "num" && typeof propValue != "number") {
+            throw new TypeError('The num is not an number');
         }
         target[propName] = propValue;
     }
 })
+
+proxyAccount.num = '666'
+console.log(proxyAccount.num)   // Uncaught TypeError: The num is not an number
 ```
 
 #### 简易版本Vue双向数据绑定
@@ -674,44 +629,49 @@ let proxyAccount = new Proxy(account, {
 ```html
 <div id="container">
     用户名：<input type="text" id="user" v-model="text" is-number>
-    <br>
     密码：<input type="password" v-model="password">
-    <h1 id="h1" v-bind="text"></h1>
-    <h2 id="h2" v-bind="password"></h2>
+    <h1 v-bind="text"></h1>
+    <h2 v-bind="password"></h2>
 </div>
+
 <script>
     const container = [...document.querySelector("#container").children];
 
-    let proxyObj = new Proxy({text: "",password: ""},{
+    let proxyObj = new Proxy({text: "", password: ""}, {
         get(target, property) {
             return target[property]
         },
-        set(target, propName, propValue, proxy) {
+        set(target, propName, propValue, receiver) {
             let isCanEdit = true;
             container.forEach(dom => {
-                if(dom.getAttribute("v-bind") == propName) {
+                if(dom.getAttribute("v-bind") === propName) {
                     dom.innerHTML = propValue;
                 }
-                if(dom.getAttribute("v-model") == propName) {
+                if(dom.getAttribute("v-model") === propName) {
                     dom.value = propValue;
                 }
             })
 
             target[propName] = propValue;
-            console.log(proxy)
         }
     })
 
     container.forEach(dom => {
         if(dom.getAttribute("v-model") in proxyObj) {
-            dom.addEventListener("input",function() {
+            dom.addEventListener("input", function() {
                 proxyObj[this.getAttribute("v-model")] = this.value;
             })
         }
     })
 </script>
 ```
+首先获取到所有的dom节点，然后使用`Proxy`代理`{text: "", password: ""}`对象。
+遍历所有的dom节点，如果某个节点有`v-model`属性，且属性值在代理对象中，那么就监听输入框的变化，
+将该节点的值（input框内的值）赋值给代理对象对应的属性，从而实现简单的双向数据绑定
 
-
+::: tip
++ `v-model`和`v-bind`的属性值要相同，如都是text或都是password
++ `dom.addEventListener("input", function() {})`这里不能使用箭头函数，否则this指向Window对象
+:::
 
 

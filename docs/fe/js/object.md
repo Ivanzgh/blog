@@ -4,20 +4,39 @@
 `Object.assign(target, ...sources)`方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象，并返回目标对象。
 简单说就是通过复制一个或多个对象来创建一个新的对象
 ```js
-let obj1 = {
-    a: 1,
-    b: 2,
-    c: 3
-};
-let obj2 = {
-    d: 4,
-    e: 5,
-    c: 6
-};
+let obj1 = {a: 1, b: 2, c: 3};
+let obj2 = {d: 4, e: 5, c: 6};
 Object.assign(obj2, obj1);
 console.log(obj2);   // {d: 4, e: 5, c: 3, a: 1, b: 2}
 ```
 如果目标对象中的属性具有相同的键，则属性将被源对象中的属性覆盖。如例子中的 obj2.c 值由6被覆盖为3
+
+```js
+let obj1 = {
+    name:"zgh",
+    age:22
+}
+let obj2 = {
+    address:"beijing"
+}
+let obj = {}
+Object.assign(obj,obj1,obj2);
+console.log(obj);   // {name: "zgh", age: 22, address: "beijing"}
+```
+当Object.assign()方法用于数组时
+```js
+let arr11 = Object.assign([1,2,3],[4,5]);
+console.log(arr11); //[4,5,3]
+
+// 说明:对象是根据属性名来对应，数组是根据索引号来对应，相当于
+let arr23 = {
+    0:1,
+    1:2,
+    2:3
+}; //相同的属性名有0、1，后面的覆盖前面的.
+```
+
+assign实现了浅复制，会把原型上的属性也复制了，但是不能复制继承过来的属性
 
 ::: warning
 `Object.assign`不会在source对象值为 `null` 或 `undefined` 的时候抛出错误。

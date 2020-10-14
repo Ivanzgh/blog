@@ -4,7 +4,7 @@
 
 地址： [http://nginx.org/en/download.html](http://nginx.org/en/download.html)
 
-![image](/blog/img/nginx_download.png)
+![image](/blog/img/nginx_download.png =800x500)
 
 Mainline version：最新版本
 

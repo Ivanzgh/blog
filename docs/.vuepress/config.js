@@ -145,7 +145,6 @@ module.exports = {
                 {
                     title: '进阶',
                     collapsable: false,
-                    sidebarDepth: 2,
                     children: [
                         'advanced',
                         'oop',
@@ -217,6 +216,15 @@ module.exports = {
                         'flex',
                         'media-queries',
                         'clip-path'
+                    ]
+                },
+                {
+                    title: '预编译语言',
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: [
+                        'sass',
+                        'less'
                     ]
                 }
             ],
@@ -330,6 +338,13 @@ module.exports = {
                 }
             ],
             '/base/algorithm/': [
+                {
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['']
+                }
+            ],
+            '/base/network/': [
                 {
                     collapsable: false,
                     sidebarDepth: 2,
