@@ -357,8 +357,74 @@ console.log(res);  // hehe
 ```
 
 ## 深拷贝、浅拷贝
+https://juejin.im/post/59ac1c4ef265da248e75892b
+
+https://blog.csdn.net/weixin_33845477/article/details/88590652
+
+如何区分深拷贝与浅拷贝？
+
+简单来说，就是假设B复制了A，当修改A时，看B是否会发生变化，如果B也跟着变了，说明这是浅拷贝，如果B没变，那就是深拷贝
+
+区别：浅拷贝只复制对象的第一层属性、深拷贝可以对对象的属性进行递归复制
+
+浅拷贝是将原始对象中的数据型字段拷贝到新对象中去，将引用型字段的“引用”复制到新对象中去，不把“引用的对象”复制进去，
+所以原始对象和新对象引用同一对象，新对象中的引用型字段发生变化会导致原始对象中的对应字段也发生变化。
+
+深拷贝是在引用方面不同，深拷贝就是创建一个新的和原始字段的内容相同的字段，是两个一样大的数据段，所以两者的引用是不同的，
+之后的新对象中的引用型字段发生改变，不会引起原始对象中的字段发生改变。
 
 ## 闭包
+
+闭包就是能够读取其他函数内部变量的函数
+
+如果一个函数f()内部定义了一个函数g()，并且g()引用了f()中的变量，那么函数g()就是一个闭包
+
+```js
+function f() {
+    let a = 1
+    function g() {
+        a += 1
+        console.log(a);
+    }
+    g()
+}
+f()
+```
+优点：延长变量生命周期
+
+缺点：造成内存泄漏
+
+示例：打印点击了哪个数字
+```
+// html
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+</ul>
+
+// JS
+let lis = document.getElementsByTagName('li')
+for (var i = 0; i < lis.length; i++) {
+    (function(i) {
+        lis[i].onclick = function() {
+            console.log(i);
+        }
+    })(i)
+}
+
+//或者
+for (var i = 0; i < lis.length; i++) {
+    lis[i].onclick = (function (i) {
+        return function () {
+            console.log(i);
+        }
+    })(i)
+}
+```
+如果不使用闭包将会一直打印出5，使用闭包后正常显示，也可直接将var改为let
 
 ## 节流和防抖
 
@@ -452,3 +518,30 @@ inputs.addEventListener('keyup', function(e) {
 + 上拉加载
 + 下拉刷新
 + 鼠标快速多次触发事件
+
+## 递归
+程序调用自身的编程技巧叫做递归(recursion)
+
+求5的累加
+```js
+function f(n) {
+    if (n === 1) {
+        return 1
+    }
+    return f(n-1) + n
+}
+console.log(f(5));
+```
+斐波那契数列
+```js
+// F(1)=1，F(2)=1, F(n)=F(n-1)+F(n-2)（n>=3，n∈N*）
+//1,1,2,3,5,8,13,21......
+function f(n) {
+    if (n === 1 || n === 2) {
+        return 1
+    } else {
+        return f(n-1) + f(n-2)
+    }
+}
+console.log(f(3));
+```

@@ -1,4 +1,4 @@
-# object
+# Object
 
 ## Object.assign()
 `Object.assign(target, ...sources)`方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象，并返回目标对象。
@@ -42,6 +42,25 @@ assign实现了浅复制，会把原型上的属性也复制了，但是不能�
 `Object.assign`不会在source对象值为 `null` 或 `undefined` 的时候抛出错误。
 :::
 
+## Object.create()
+`Object.create()`方法创建一个新对象，使用现有的对象来提供新创建的对象的`__proto__`
+
+```js
+const user = {
+    age: 24,
+    say() {
+        console.log(`My name is ${this.name}. ${this.age} years old`);
+    }
+};
+
+const me = Object.create(user);
+
+me.name = 'zgh';
+me.age = 23;
+
+me.say();   // My name is zgh. 23 years old
+```
+创建一个新对象`{name: "zgh", age: 23}`，在这个对象的`__proto__`上有user对象
 
 ## Object.defineProperty()
 `Object.defineProperty(obj, prop, descriptor)`方法会直接在一个对象上定义一个新属性或者修改现有属性，并返回此对象。

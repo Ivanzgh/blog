@@ -86,9 +86,10 @@ module.exports = {
                 text: '计算机基础',
                 items: [
                     {text: '网络', link: '/base/network/'},
-                    {text: '数据结构', link: '/base/data/'},
+                    {text: '数据结构', link: '/base/data-structure/'},
                     {text: '算法', link: '/base/algorithm/'},
-                    {text: '操作系统', link: '/base/os/'}
+                    {text: '操作系统', link: '/base/os/'},
+                    {text: '设计模式', link: '/base/design-pattern/'}
                 ]
             },
             {text: '随笔', link: '/thought/'},
@@ -137,9 +138,12 @@ module.exports = {
                     sidebarDepth: 2,
                     children: [
                         '',
+                        'dom',
+                        'json',
                         'array',
                         'string',
-                        'object'
+                        'object',
+                        'ajax'
                     ]
                 },
                 {
@@ -154,7 +158,6 @@ module.exports = {
                 {
                     title: '工具函数',
                     collapsable: false,
-                    sidebarDepth: 2,
                     children: ['utils']
                 },
             ],
@@ -222,10 +225,7 @@ module.exports = {
                     title: '预编译语言',
                     collapsable: false,
                     sidebarDepth: 2,
-                    children: [
-                        'sass',
-                        'less'
-                    ]
+                    children: ['sass', 'less']
                 }
             ],
             '/fe/node/': [
@@ -283,27 +283,21 @@ module.exports = {
                 {
                     title: 'Nginx',
                     collapsable: false,
-                    children: [
-                        ''
-                    ]
+                    children: ['']
                 }
             ],
             '/be/mysql/': [
                 {
                     title: 'MySQL',
                     collapsable: false,
-                    children: [
-                        ''
-                    ]
+                    children: ['']
                 }
             ],
             '/be/tomcat/': [
                 {
                     title: 'Tomcat',
                     collapsable: false,
-                    children: [
-                        ''
-                    ]
+                    children: ['']
                 }
             ],
             '/be/elasticsearch/': [
@@ -311,9 +305,7 @@ module.exports = {
                     title: 'ElasticSearch',
                     collapsable: false,
                     sidebarDepth: 2,
-                    children: [
-                        ''
-                    ]
+                    children: ['']
                 }
             ],
             '/vis/openlayers/': [
@@ -349,6 +341,13 @@ module.exports = {
                     collapsable: false,
                     sidebarDepth: 2,
                     children: ['']
+                }
+            ],
+            '/base/design-pattern/': [
+                {
+                    collapsable: false,
+                    sidebarDepth: 2,
+                    children: ['strategy']
                 }
             ],
             '/utils/': [''],

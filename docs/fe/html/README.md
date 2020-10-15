@@ -110,6 +110,18 @@ word-wrap:break-word
 
 3、onfocus="this.blur()"不可输入，不可点击，不变灰，不可复制
 :::
+
+## 监听input框的值变化
+```html
+<input type="text" name="planLeave" readonly>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script>
+   $("input[name='planLeave']").trigger("input").bind('input propertychange', function () {
+        alert('hehe')
+   });
+</script>
+```
+
 ### select
 #### 鼠标移入展开下拉框
 select有一个size属性，设置size的值即可显示option的展开数量
