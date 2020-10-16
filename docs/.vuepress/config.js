@@ -86,8 +86,8 @@ module.exports = {
                 text: '计算机基础',
                 items: [
                     {text: '网络', link: '/base/network/'},
-                    {text: '数据结构', link: '/base/data-structure/'},
                     {text: '算法', link: '/base/algorithm/'},
+                    {text: '数据结构', link: '/base/data-structure/'},
                     {text: '操作系统', link: '/base/os/'},
                     {text: '设计模式', link: '/base/design-pattern/'}
                 ]
@@ -184,9 +184,7 @@ module.exports = {
                     title: '基础',
                     collapsable: false,
                     sidebarDepth: 2,
-                    children: [
-                        '',
-                    ]
+                    children: ['']
                 },
                 {
                     title: '进阶',
@@ -345,9 +343,14 @@ module.exports = {
             ],
             '/base/design-pattern/': [
                 {
+                    title: '设计模式',
                     collapsable: false,
                     sidebarDepth: 2,
-                    children: ['strategy']
+                    children: [
+                        'strategy',
+                        'observers',
+                        'publisher-subscriber'
+                    ]
                 }
             ],
             '/utils/': [''],

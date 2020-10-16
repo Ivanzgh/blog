@@ -16,7 +16,7 @@ OrthographicCamera( left, right, top, bottom, near, far)
 + near — 近截面，默认值0.1
 + far — 远截面，默认值2000
 
-![image](/blog/img/three_camera4.png)
+![image](/blog/img/vis/three_camera4.png)
 
 ```js
 const k = window.innerWidth / window.innerHeight;
@@ -38,9 +38,9 @@ PerspectiveCamera( fov, aspect, near, far )
 
 只有离相机的距离大于near值，小于far值，且在相机的可视角度之内，才能被相机投影到。
 
-![image](/blog/img/three_camera1.png)
-![image](/blog/img/three_camera2.png)
-![image](/blog/img/three_camera3.png)
+![image](/blog/img/vis/three_camera1.png)
+![image](/blog/img/vis/three_camera2.png)
+![image](/blog/img/vis/three_camera3.png)
 
 示例：
 ```js

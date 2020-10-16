@@ -4,7 +4,7 @@
 
 地址： [http://nginx.org/en/download.html](http://nginx.org/en/download.html)
 
-![image](/blog/img/nginx_download.png =800x500)
+![image](/blog/img/be/nginx_download.png =800x500)
 
 Mainline version：最新版本
 
@@ -19,7 +19,7 @@ Nginx就是反向代理服务器。
 
 代理服务器一般是指局域网内部的机器通过代理服务发送请求到互联网上的服务器，代理服务器一般作用于客户端。
 
-![image](/blog/img/nginx1.png)
+![image](/blog/img/be/nginx1.png)
 
 简单的说：
 

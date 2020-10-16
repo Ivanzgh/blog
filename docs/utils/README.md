@@ -55,6 +55,8 @@
 还有一种方式是导入外部主题，[http://www.themesmap.com/](http://www.themesmap.com/)，
 下载喜欢的主题，Editor --> Color Scheme 点击右侧的小齿轮，选择import Scheme即可
 
+![image](/blog/img/utils/webstorm_theme.png)
+
 ## vscode 
 
 ### 报错"在此系统上禁止运行脚本"
@@ -62,3 +64,10 @@
 
 首先以管理员身份运行vscode，在终端输入`get-ExecutionPolicy`得到`Restricted`，表示被限制。
 接着输入`set-ExecutionPolicy RemoteSigned`解除限制即可，可以用第一条命令查看结果为`RemoteSigned`
+
+### 插件
+
+#### 主题
+`Dracula Official`
+
+![image](/blog/img/utils/vscode_theme.png)

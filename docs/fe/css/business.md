@@ -482,6 +482,28 @@ white-space:pre-wrap,  会保留所有空格。
     </style>
 ```
 
+## 文字有下划线背景
+鼠标移入有背景色填满文字的过渡动画
+```
+<a href="#">hello world</a>
 
+a {
+    color: rgb(15, 15, 15);
+    text-decoration: none;
+    outline: none;
+    background-color: transparent;
+
+    padding: 2px 0px 1px;
+    background-image: linear-gradient(transparent 0%, transparent calc(50% - 9px), rgba(0, 255, 0, 0.5) calc(50% - 9px), rgba(0, 255, 0, 0.5) 100%);
+    transition: background-position 120ms ease-in-out 0s, padding 120ms ease-in-out 0s;
+    background-size: 100% 200%;
+    background-position: 0px 0px;
+    word-break: break-word;
+}
+a:hover {
+    background-image: linear-gradient(transparent 0%, transparent calc(50% - 9px), rgb(0, 255, 0) calc(50% - 9px), rgb(0, 255, 0) 100%);
+    background-position: 0px 100%;
+}
+```
 
 
