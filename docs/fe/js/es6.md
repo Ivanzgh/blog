@@ -95,7 +95,7 @@ console.log(a,b,c);      // 1 2 3
 #### 对象的解构赋值
 
 ```js
-let { name,age } = {
+let { name, age } = {
     name: 'zgh',
     age: 22
 }
@@ -531,6 +531,7 @@ async function f() {
 f()
 ```
 [参考](https://segmentfault.com/a/1190000013292562?utm_source=channel-newest)
+
 ## generator
 
 ## Proxy

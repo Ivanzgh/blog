@@ -250,6 +250,17 @@ module.exports = {
                     children: ['']
                 }
             ],
+            '/fe/browser/': [
+                {
+                    title: '浏览器',
+                    collapsable: false,
+                    children: [
+                        '',
+                        'window',
+                        'compatibility'
+                    ]
+                }
+            ],
             '/fe/plugin/': [
                 {
                     collapsable: false,
