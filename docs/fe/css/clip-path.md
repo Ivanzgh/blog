@@ -45,7 +45,7 @@ clip-path: ellipse(40% 30% at 50% 50%);
 定义多边形，语法：`polygon( <fill-rule>? , [ <length-percentage> <length-percentage> ]# )`
 
 参数说明： 
-<fill-rule>可选，表示填充规则用来确定该多边形的内部。可能的值有nonzero和evenodd,默认值是nonzero
+`<fill-rule>`可选，表示填充规则用来确定该多边形的内部。可能的值有nonzero和evenodd,默认值是nonzero
 后面的每对参数表示多边形的顶点坐标（X,Y），也就是连接点
 
 示例：画个菱形

@@ -534,6 +534,40 @@ f()
 
 ## generator
 
+Generator是一种异步编程解决方案，执行Generator函数会返回一个遍历器对象。两个特征：星号*、`yield`表达式
+
+调用函数返回一个指向内部状态的指针，即遍历器对象。必须调用遍历器的`next`方法，使得指针移向下一个状态。
+`yield`表达式就是暂停标志
+
+```js
+function* g() {
+    yield 'hello'
+    yield 'world'
+    return 'haha'
+}
+const ee = g()      // 函数并不会立即执行
+console.log(ee);    // g {<suspended>}
+
+console.log(ee.next());     // {value: "hello", done: false}
+console.log(ee.next());     // {value: "world", done: false}
+console.log(ee.next());     // {value: "haha", done: true}
+console.log(ee.next());     // {value: undefined, done: true}
+```
+遍历器对象`{value: "hello", done: false}`表示value是`yield`表达式的值，`done: false`表示遍历还没有结束
+
+Generator 函数可以不用`yield`表达式，这时就变成了一个单纯的暂缓执行函数。
+```js
+function* gg() {
+    console.log('666');
+}
+const g1 = gg()
+
+setTimeout(() => {
+    g1.next()       // 1s后输出666
+}, 1000)
+```
+`yield`表达式只能用在 Generator 函数里面
+
 ## Proxy
 外界对目标对象的访问可以被Proxy拦截，进行过滤和改写，意为“代理器”
 
