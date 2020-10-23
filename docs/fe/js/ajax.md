@@ -1,15 +1,15 @@
 # AJAX
 
 ## XMLHttpRequest
-https://juejin.im/post/58e4a174ac502e006c1e18f4#heading-0
 
-https://www.jianshu.com/p/918c63045bc3
+<https://juejin.im/post/58e4a174ac502e006c1e18f4#heading-0>
 
-https://blog.csdn.net/z550449054/article/details/80538623
+<https://www.jianshu.com/p/918c63045bc3>
 
+<https://blog.csdn.net/z550449054/article/details/80538623>
 
-```
-<div id="hehe"></div>
+```js
+// <div id="hehe"></div>
 
 var xhr = new XMLHttpRequest();
     //请求方式，路径，是否异步
@@ -25,9 +25,10 @@ var xhr = new XMLHttpRequest();
 ```
 
 ## ajax获取数据
+
 数据交互的几种方式：
 
-http://www.cnblogs.com/zxt-17862802783/p/7787258.html
+<http://www.cnblogs.com/zxt-17862802783/p/7787258.html>
 
 ```html
 <button id="btn">click!</button>
@@ -53,8 +54,10 @@ http://www.cnblogs.com/zxt-17862802783/p/7787258.html
     )
 </script>
 ```
+
 jquery中的$.ajax()常用参数：
-```
+
+```null
 url 请求地址
 
 async 是否异步
@@ -69,8 +72,9 @@ success 请求成功的回调函数
 
 error  请求失败的回调函数
 ```
+
 若为get请求可直接在url中使用?拼接
 
-推荐： http://louiszhai.github.io/2016/11/02/ajax/
+推荐： <http://louiszhai.github.io/2016/11/02/ajax/>
 
-MDN : https://developer.mozilla.org/zh-CN/docs/Web/Guide/AJAX
+MDN : <https://developer.mozilla.org/zh-CN/docs/Web/Guide/AJAX>

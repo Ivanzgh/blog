@@ -29,7 +29,9 @@ console.log(d)      // {x: 4}
 ```
 
 ## for与for in循环的区别
+
 ### 遍历数组
+
 for循环 数组下标的typeof类型:number,
 
 for in 循环数组下标的typeof类型:string
@@ -45,12 +47,14 @@ for (let k in arr) {
     console.log(arr[k]);
 }
 ```
+
 ### 遍历对象
-for循环 无法用于循环对象，获取不到obj.length; 
 
-for in 循环遍历对象的属性时，原型链上的所有属性都将被访问，
+`for`循环 无法用于循环对象，获取不到`obj.length`;
 
-解决方案：使用`hasOwnProperty`方法过滤或`Object.keys`会返回自身可枚举属性组成的数组 
+`for in`循环遍历对象的属性时，原型链上的所有属性都将被访问，
+
+解决方案：使用`hasOwnProperty`方法过滤或`Object.keys`会返回自身可枚举属性组成的数组
 
 ```js
 Object.prototype.sex = 'man'
@@ -68,11 +72,21 @@ console.log(Object.prototype);
 
 ## innerHTML和innerText的区别
 
+都能获取document对象文本内容，`innerHTML`能获取html标签，而`innerText`不能获取
+
+```html
+<!-- innerHTML -->
+<p>666</p>
+
+<!-- innerText -->
+666
+```
+
 ## js隐式类型转换
 
-https://blog.csdn.net/qq_33120763/article/details/88296955
+<https://blog.csdn.net/qq_33120763/article/details/88296955>
 
-https://www.cnblogs.com/superlizhao/p/8945432.html
+<https://www.cnblogs.com/superlizhao/p/8945432.html>
 
 ```js
 console.log('1'+1);   // '11'   string
@@ -82,6 +96,7 @@ console.log([] == []);   // false
 ```
 
 ## not defined和undefined的区别
+
 如果定义了一个变量，但未赋值，则是`undefined`; 如果未定义，则是`not defined`
 
 ```js
@@ -91,33 +106,44 @@ console.log(b);   // b is not defined
 ```
 
 ## 类型转换
+
 ### 数字转化为字符串
+
 1、toString()
+
 ```js
 let a = 123
 let b = a.toString()
-console.log(typeof b) 
+console.log(typeof b)
 ```
+
 2、String()
+
 ```js
 let b = String(123)
-console.log(typeof b) 
+console.log(typeof b)
 ```
 
 ### 字符串转化为数字
+
 1、Number()
+
 ```js
 let b = Number('12.3')
 console.log(b);
 ```
+
 2、parseInt()和parseFloat()
+
 ```js
 parseInt("1234blue"); // 1234
 parseInt("0xA"); // 10
 parseInt("22.5"); // 22
 parseInt("blue"); // NaN
 ```
+
 3、在字符串前面加上 `+`
+
 ```js
 let res1 = parseInt('1')
 let res2 = parseFloat('1.23')
@@ -126,9 +152,13 @@ console.log(typeof +'1')    // "number"
 ```
 
 ## 锚点链接
+
 实现地址栏变化，页面不刷新
+
 ### 页面内的跳转
+
 方法一、
+
 ```html
 <!--设置一个锚点链接-->
 <a href="#zgh">zgh</a>
@@ -136,7 +166,9 @@ console.log(typeof +'1')    // "number"
 <!--在页面中需要的位置设置锚点-->
 <a name="zgh">haha</a>
 ```
+
 方法二、
+
 ```html
 <!--设置一个锚点链接-->
 <a href="#zgh">zgh</a>
@@ -144,6 +176,7 @@ console.log(typeof +'1')    // "number"
 <!--在页面中需要的位置设置锚点-->
 <h3 id="zgh">hahha</h3>
 ```
+
 ### 跨页面跳转
 
 ```html
@@ -155,18 +188,23 @@ console.log(typeof +'1')    // "number"
 ```
 
 ## 千位分割符
+
 `toLocaleString()`
-```
+
+```js
 (386485473.88).toLocaleString('en-US')   // 386,485,473.88
 ```
+
 小数部分会根据四舍五入只留下三位
 
-
 ## 回流与重绘
+
 ### 回流(reflow)
+
 只要修改了dom或改变了元素的形状或大小等会改变布局的操作就会触发reflow
 
 ### 重绘(repaint)
+
 只是改变了颜色，不影响周围元素或布局，会引起浏览器的重绘
 
 ### 减少reflow和repaint

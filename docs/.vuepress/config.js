@@ -135,7 +135,6 @@ module.exports = {
                 {
                     title: '基础',
                     collapsable: false,
-                    sidebarDepth: 2,
                     children: [
                         '',
                         'dom',
