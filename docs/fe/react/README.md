@@ -7,7 +7,9 @@
 ### class
 
 ## 事件绑定
+
 1、在调用的时候使用`bind`绑定`this`
+
 ```jsx harmony
 class Order extends React.Component {
     handleSearch() {
@@ -21,7 +23,9 @@ class Order extends React.Component {
     }
 }
 ```
+
 2、在构造器中使用`bind`绑定`this`
+
 ```jsx harmony
 class Order extends React.Component {
     constructor(props) {
@@ -39,7 +43,9 @@ class Order extends React.Component {
     }
 }
 ```
+
 3、在箭头函数中绑定this
+
 ```jsx harmony
 class Order extends React.Component {
     handleSearch() {
@@ -53,7 +59,9 @@ class Order extends React.Component {
     }
 }
 ```
+
 4、`public class fields` 语法
+
 ```jsx harmony
 class Order extends React.Component {
     handleSearch = () => {
@@ -67,12 +75,15 @@ class Order extends React.Component {
     }
 }
 ```
+
 推荐使用第4种方式绑定事件
 
 ## Fragments
+
 简单说就是避免向DOM中添加额外的节点
 
 假如有一个子组件`<Columns />`
+
 ```jsx harmony
 class Columns extends React.Component {
   render() {
@@ -85,7 +96,9 @@ class Columns extends React.Component {
   }
 }
 ```
+
 有一个父组件使用了`<Columns />`
+
 ```jsx harmony
 class Table extends React.Component {
   render() {
@@ -99,7 +112,9 @@ class Table extends React.Component {
   }
 }
 ```
+
 结果如下，在tr和td之间多了一个div节点，这样就导致了html是无效的
+
 ```html
 <table>
   <tr>
@@ -110,7 +125,9 @@ class Table extends React.Component {
   </tr>
 </table>
 ```
+
 `Fragments`就解决了这个问题
+
 ```jsx harmony
 class Columns extends React.Component {
   render() {
@@ -123,7 +140,9 @@ class Columns extends React.Component {
   }
 }
 ```
+
 也可以使用一种短语法，像空标签一样
+
 ```jsx harmony
 class Columns extends React.Component {
   render() {

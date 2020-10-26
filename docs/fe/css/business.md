@@ -2,9 +2,10 @@
 
 ## 纯CSS创建三角形
 
-https://www.cnblogs.com/monozxy/p/7903019.html
+<https://www.cnblogs.com/monozxy/p/7903019.html>
 
 把左、右、下三条边隐藏掉（颜色设为 transparent）可画出向下的小三角
+
 ```css
 #demo {
     width: 0;
@@ -18,9 +19,9 @@ https://www.cnblogs.com/monozxy/p/7903019.html
 
 ## 更改复选框样式
 
-https://blog.csdn.net/qq_34182808/article/details/79992465
+<https://blog.csdn.net/qq_34182808/article/details/79992465>
 
-```html
+```css
  .input-color +label{
     display: block;
     width: 20px;
@@ -32,7 +33,7 @@ https://blog.csdn.net/qq_34182808/article/details/79992465
     background-color: #999;
     border-radius:4px;
  }
- 
+
 .input-color:checked +label::before {
     display: block;
     content: "\2714";
@@ -42,15 +43,16 @@ https://blog.csdn.net/qq_34182808/article/details/79992465
     background-color: #c00;
     border-radius:4px;
 }
-        
-        
-        
-<input type="checkbox" class="input-color">
+
+/* <input type="checkbox" class="input-color">
 
 <label for="input-color" onclick="toggleStatus()"></label>
+
+*/
 ```
 
 ## 毛玻璃效果
+
 ```html
 <style>
         * {
@@ -104,7 +106,7 @@ https://blog.csdn.net/qq_34182808/article/details/79992465
             background-attachment: fixed;
         }
     </style>
-    
+
 <!------------------------------------------ -->
 <div class="container">
     <div class="content">
@@ -113,8 +115,7 @@ https://blog.csdn.net/qq_34182808/article/details/79992465
 </div>
 ```
 
-
-https://www.cnblogs.com/ghost-xyx/p/5677168.html
+<https://www.cnblogs.com/ghost-xyx/p/5677168.html>
 
 ## 时光轴
 
@@ -317,9 +318,10 @@ https://www.cnblogs.com/ghost-xyx/p/5677168.html
 ```
 
 ## 进度条
-https://www.cnblogs.com/xiaofeixiang/p/5036154.html
 
-https://blog.csdn.net/weixin_40687883/article/details/80388420
+<https://www.cnblogs.com/xiaofeixiang/p/5036154.html>
+
+<https://blog.csdn.net/weixin_40687883/article/details/80388420>
 
 ## img加载失败显示默认图片
 
@@ -373,8 +375,10 @@ img {
     }
     </style>
 ```
+
 如果表格的某一行的状态是true
-```
+
+```js
 if(item.processResult) {
 <td>
     <input type="checkbox" class="input-color" checked>
@@ -382,8 +386,10 @@ if(item.processResult) {
 </td>
 }
 ```
+
 如果表格的某一行的状态是false
-```
+
+```js
 if(!item.processResult) {
 <td>
     <input type="checkbox" class="input-color">
@@ -391,8 +397,10 @@ if(!item.processResult) {
 </td>
 }
 ```
+
 点击某一条数据可以切换状态
-```
+
+```html
 <script>
     function toggleStatus(statusId, status) {
         var jsonData = {
@@ -411,8 +419,10 @@ if(!item.processResult) {
 ```
 
 ## 换行显示后端返回的数据
+
 ### 1、可以使用CSS样式
-```
+
+```css
 white-space: pre-line;
 ```
 
@@ -420,25 +430,28 @@ white-space:pre-line,  把多个空格合并成一个
 
 white-space:pre-wrap,  会保留所有空格。
 
-
 ### 2、如果有\n可以使用br标签替换
-```
+
+```html
 <script>
     var str = '职位描述: 诚聘20名商务模特：\n岗位要求：年龄在18-26周岁之间，身高在165cm以上。\n有良好的形象和气质，颜值较高，有才艺、有经验者优先，无经验可以提供免费培训。 '
     res = str.replace(/\n+/g,"<br/>");
     document.write(res)
 </script>
 ```
+
 ### 3、文本域textarea
 
 若是在文本域中显示，默认会首行缩进2个空格，只需将textarea标签写在一行即可
 
-```
+```css
 <textarea rows="10" cols="50"></textarea>
 ```
 
 ## 放射性条状物
+
 核心在`clip-path: polygon()`属性
+
 ```html
 <div class="box"></div>
 
@@ -483,9 +496,11 @@ white-space:pre-wrap,  会保留所有空格。
 ```
 
 ## 文字有下划线背景
+
 鼠标移入有背景色填满文字的过渡动画
-```
-<a href="#">hello world</a>
+
+```css
+/* <a href="#">hello world</a> */
 
 a {
     color: rgb(15, 15, 15);
@@ -505,5 +520,3 @@ a:hover {
     background-position: 0px 100%;
 }
 ```
-
-

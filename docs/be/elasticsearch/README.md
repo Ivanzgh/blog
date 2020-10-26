@@ -2,19 +2,23 @@
 
 Node.js api地址：
 
-[https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/index.html](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/index.html)
+<https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/index.html>
 
 ## 安装
-```
+
+```sh
 npm install @elastic/elasticsearch
 ```
 
 ## 使用
+
 ```js
 const { Client } = require('@elastic/elasticsearch')
 const client = new Client({ node: 'http://localhost:9200' })
 ```
+
 index表示索引；size表示每页的数据条数，默认10；from表示跳过开始的结果数，默认0，比如第一页返回10条数据，第二页就从第11条开始返回，即from为10
+
 ```js
 client.search({
     index: "lgbzdzk",
@@ -45,8 +49,11 @@ client.search({
     console.log(e);
 })
 ```
+
 ## 搜索
+
 ### 通用匹配
+
 ```json
 {
     "query": {
@@ -56,10 +63,13 @@ client.search({
     }
 }
 ```
+
 自动分词，会将含有“高级”和“前端”字样的数据都匹配出来
 
 ### 短语匹配
+
 短语匹配不存在分词的情况，类似于精确匹配
+
 ```json
 {
     "query": {
@@ -71,7 +81,9 @@ client.search({
 ```
 
 ### 多字段匹配
+
 多个字段内只要含有关键词都会被匹配出来
+
 ```json
 {
     "query": {
@@ -82,11 +94,13 @@ client.search({
     }
 }
 ```
+
 ### 布尔查询
 
 must关键词，表示所有条件必须满足
 
 还有should表示或的关系、must_not表示一定不满足
+
 ```json
 {
     "query": {
@@ -109,9 +123,11 @@ must关键词，表示所有条件必须满足
 ```
 
 ### 去重计数
+
 统计某个字段上出现的不同值的个数
 
 "house_count"为自定义字段，聚合字段需要keyword类型
+
 ```json
 {
     "query": {},
@@ -130,6 +146,7 @@ must关键词，表示所有条件必须满足
 #### 搜索圆形区域内的点
 
 location字段应与数据库字段相对应
+
 ```json
 {
     "query": {
@@ -149,6 +166,7 @@ location字段应与数据库字段相对应
 ```
 
 #### 搜索矩形范围区域内的点
+
 ```json
 {
     "query": {
@@ -170,6 +188,7 @@ location字段应与数据库字段相对应
 ```
 
 #### 搜索多边形区域内的点
+
 ```json
 {
     "query": {
@@ -192,23 +211,28 @@ location字段应与数据库字段相对应
     }
 }
 ```
-## 数据导入
-文档：[https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html)
 
-node版本的文档：[https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_bulk](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_bulk)
+## 数据导入
+
+文档：<https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-bulk.html>
+
+node版本的文档：<https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_bulk>
 
 批量导入`bulk`
 
 ## 删除
+
 [https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html)
 
 `DELETE /<index>/_doc/<_id>`
+
 ```yml
 curl -X DELETE "localhost:9200/index111/_doc/1?pretty"
 ```
 
 还有一种删除方式就是查询删除，先查询到`index111`索引下的所有数据，然后全部删除。注意索引还在！ 一次删不干净就多来几次(看total和deleted是否都是0)
-[https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_deletebyquery](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_deletebyquery)
+<https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_deletebyquery>
+
 ```js
 function dellgAllData() {
     client.deleteByQuery({
@@ -222,7 +246,9 @@ function dellgAllData() {
 }
 dellgAllData()
 ```
+
 查看索引是否存在
+
 ```js
 function indexExists(index){
   return client.indices.exists({
@@ -230,54 +256,64 @@ function indexExists(index){
   })
 }
 ```
+
 ## 修改
-[https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html)
+
+<https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html>
 
 `POST /<index>/_update/<_id>`
 
-node版本api：[https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_update](https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_update)
-
+node版本api：<https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/api-reference.html#_update>
 
 ## 集群
 
 在`elasticsearch.yml`中添加如下内容：
+
 ```yml
-cluster.name: elasticsearch		#集群名称，唯一
-node.name: node12		#节点名称
-node.master: true		#主节点
-node.data: true			#数据节点
-cluster.initial_master_nodes: ["node10","node11","node12"]		#集群的主节点
-network.bind_host: 0.0.0.0				#设置可以访问的ip,默认为0.0.0.0，这里全部设置通过
-network.publish_host: 192.168.18.12		#设置其它结点和该结点通信的ip地址
-http.port: 9200		 					#设置对外服务的http端口，默认为9200
-transport.tcp.port: 9300				#设置节点之间通信的tcp端口，默认是9300
-transport.tcp.compress: true			#设置是否压缩tcp传输时的数据，默认false
-discovery.zen.ping.unicast.hosts: ["192.168.18.10","192.168.18.11","192.168.18.12"]		#集群的主节点
-discovery.zen.minimum_master_nodes: 2		#自动发现主节点的最小数 N = 节点数/2 + 1
+cluster.name: elasticsearch   #集群名称，唯一
+node.name: node12   #节点名称
+node.master: true   #主节点
+node.data: true     #数据节点
+cluster.initial_master_nodes: ["node10","node11","node12"]    #集群的主节点
+network.bind_host: 0.0.0.0      #设置可以访问的ip,默认为0.0.0.0，这里全部设置通过
+network.publish_host: 192.168.18.12   #设置其它结点和该结点通信的ip地址
+http.port: 9200         #设置对外服务的http端口，默认为9200
+transport.tcp.port: 9300      #设置节点之间通信的tcp端口，默认是9300
+transport.tcp.compress: true    #设置是否压缩tcp传输时的数据，默认false
+discovery.zen.ping.unicast.hosts: ["192.168.18.10","192.168.18.11","192.168.18.12"]   #集群的主节点
+discovery.zen.minimum_master_nodes: 2   #自动发现主节点的最小数 N = 节点数/2 + 1
 http.cors.enabled: true
 http.cors.allow-origin: "*"
 ```
 
-首先进入elasticsearch的配置文件，比如 
+首先进入elasticsearch的配置文件，比如
+
 ```yml
 cd /mntdata/docker/var/lib/docker/volumes/es/confing/
 ```
+
 输入`ll`可查看子目录，直到出现`elasticsearch.yml`
 
 编辑es配置文件，点击`insert`键开始编辑，编辑完成后点击`Ecs`键，输入`:wq`保存退出。`:q`退出不保存，`:wq!`强制保存退出
+
 ```yml
 vim elasticsearch.yml
 ```
+
 接着重启es容器
+
 ```yml
 docker restart es
 ```
+
 注意es这个容器名字根据实际来定，可输入以下命令显示所有的容器，包括未运行的
+
 ```yml
 docker ps -a
 ```
 
 其他命令：
+
 ```yml
 docker image ls   #列出镜像
 
@@ -295,7 +331,8 @@ free -h  #查看内存
 ![image](/blog/img/be/es_cluster.png)
 
 查看集群状态  
-```
+
+```null
 http://192.168.18.12:9200/_cluster/health
 ```
 
@@ -303,14 +340,15 @@ http://192.168.18.12:9200/_cluster/health
 
 `status`字段是 `green` 表示集群正常可用
 
-在两个节点上查看所有索引，可以看到所有索引都同步 
-```
+在两个节点上查看所有索引，可以看到所有索引都同步
+
+```sh
 /_cat/indices
 ```
 
 其他
 
-```
+```null
 查看分片 http://192.168.18.19:9200/_cat/shards
 
 查看索引 http://192.168.18.19:9200/_cluster/health?level=indices
@@ -319,25 +357,33 @@ http://192.168.18.12:9200/_cluster/health
 ```
 
 ### 常见问题
-**1、报错 `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`**
+
+#### 1、报错 `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
 
 切换到root用户修改配置`sysctl.conf`
+
 ```yml
-vi /etc/sysctl.conf 
+vi /etc/sysctl.conf
 ```
+
 添加下面配置：
+
 ```yml
 vm.max_map_count=262144
 ```
+
 执行
+
 ```yml
 sysctl -p
 ```
+
 重新启动elasticsearch
 
-**2、文件无权限**
+#### 2、文件无权限
 
 报错信息如下：
+
 ```yml
 java.lang.IllegalStateException: failed to obtain node locks, tried [[/usr/share/elasticsearch/data]] with lock id [0]; maybe these locations are not writable or multiple nodes were started without increasing [node.max_local_storage_nodes] (was [1])?
 
@@ -345,7 +391,9 @@ java.io.IOException: failed to obtain lock on /usr/share/elasticsearch/data/node
 
 java.nio.file.AccessDeniedException: /usr/share/elasticsearch/data/nodes/0/node.lock
 ```
+
 这是文件没有访问权限，此处在`/mntdata/docker/var/lib/docker/db_data_volumes`目录下输入
+
 ```yml
 chmod -R 777 /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search-elasticsearch
 ```
@@ -354,6 +402,7 @@ chmod -R 777 /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-
 `/mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search-elasticsearch`，注意目录结构根据自己的实际目录来定。
 
 下面就是`map-search-docker-compose.yml`配置文件
+
 ```yml
 version: '2.1'
 services:
@@ -380,7 +429,7 @@ services:
       - '9999:5000'
 ```
 
-**3、报错`with the same id but is a different node instance`**
+#### 3、报错`with the same id but is a different node instance`
 
 这种情况一般是复制节点造成的，比如在集群中新增一个节点，通常会复制一个已经存在的节点，这样会将节点数据也复制过来，
 所以删除存放elsticsearch数据的文件夹中的节点数据即可。
@@ -390,17 +439,19 @@ rm -rf /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search
 ```
 
 如果删除时报错`Directory not empty`或者`Device or resource busy`，将容器先停掉
+
 ```yml
 docker stop dockercompose_sxmap-elasticsearch_1
 ```
+
 再执行删除命令就能删掉数据，然后重启容器即可。
 
 如果报错`failed to find metadata for existing index`，解决方法同上删除nodes文件夹
 
-
-**4、有分片未分配**
+#### 4、有分片未分配
 
 `/_cluster/health`查询集群状态发现
+
 ```json
 {
     "cluster_name": "elasticsearch-produce",
@@ -422,6 +473,7 @@ docker stop dockercompose_sxmap-elasticsearch_1
 ```
 
 分片未分配意味着有部分数据不可用，查看报错信息 `GET /_cluster/allocation/explain?pretty`，加上`?pretty`能让结果格式美化，即json
+
 ```yml
 curl -X GET "192.168.18.19:9200/_cluster/allocation/explain?pretty" -H 'Content-Type: application/json' -d'
 {
@@ -430,7 +482,9 @@ curl -X GET "192.168.18.19:9200/_cluster/allocation/explain?pretty" -H 'Content-
     "primary": true
 }'
 ```
+
 此处`shard`位置是0，可以通过`/_cat/shards`查看，返回结果如下：
+
 ```json
 {
   "index" : "wlxt_beijing_xiangzhenjie",
@@ -496,12 +550,15 @@ curl -X GET "192.168.18.19:9200/_cluster/allocation/explain?pretty" -H 'Content-
   ]
 }
 ```
-查看未分配的原因是副本分片太旧或损坏，在节点`node19`上还发现文件丢失，进入目录查看果然没有文件，这时考虑重新手动分配分片`POST /_cluster/reroute`，[https://www.elastic.co/guide/en/elasticsearch/reference/7.9/cluster-reroute.html](https://www.elastic.co/guide/en/elasticsearch/reference/7.9/cluster-reroute.html)
+
+查看未分配的原因是副本分片太旧或损坏，在节点`node19`上还发现文件丢失，进入目录查看果然没有文件，这时考虑重新手动分配分片`POST /_cluster/reroute`，
+<https://www.elastic.co/guide/en/elasticsearch/reference/7.9/cluster-reroute.html>
 
 首先考虑手动分配副本分片：`allocate_replica`，这种方式会保留数据
+
 ```yml
 curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/json" -d '
-{ 
+{
     "commands": [
         {
             "allocate_replica": {
@@ -513,12 +570,15 @@ curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/
     ]
 }'
 ```
+
 但是报错了，显示分配失败
-```
+
+```null
 [allocate_replica] trying to allocate a replica shard [wlxt_beijing_xiangzhenjie], while corresponding primary shard is still unassigned]
 ```
 
 接着考虑重建索引，依然能保留数据。[https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html)
+
 ```yml
 curl -X POST "192.168.18.19:9200/_reindex?pretty" -H 'Content-Type: application/json' -d'
 {
@@ -530,16 +590,20 @@ curl -X POST "192.168.18.19:9200/_reindex?pretty" -H 'Content-Type: application/
   }
 }'
 ```
+
 重建成功后删除原索引，
-```
+
+```yml
 curl -X DELETE 192.168.18.19:9200/wlxt_beijing_xiangzhenjie
 ```
+
 但是我的新索引并未建成功，报错`SearchPhaseExecutionException: all shards failed`，刚开始查docker日志也是这个错误，说明这个方案也失败了。
 
 然后继续考虑重新手动分配主分片：`allocate_stale_primary`
+
 ```yml
 curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/json" -d '
-{ 
+{
     "commands": [
         {
             "allocate_stale_primary": {
@@ -552,17 +616,20 @@ curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/
     ]
 }'
 ```
+
 注意使用`allocate_stale_primary`会导致部分数据丢失，`"accept_data_loss":true`让你知道自己在干什么，所以要有备份数据。但是执行后还是报错
-```
+
+```null
 No data for shard [0] of index [wlxt_beijing_xiangzhenjie] found on node [node19]"},"status":400}
 ```
 
 最后使用`allocate_empty_primary`，分配一个空的主分片给一个节点，意味着对应索引上的数据都没了。
 
 首先查看`http://192.168.18.19:9200/_shard_stores?pretty`，这里可以看到所有未分配的分片。执行以下命令：
+
 ```yml
 curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/json" -d '
-{ 
+{
     "commands": [
         {
             "allocate_empty_primary": {
@@ -577,7 +644,8 @@ curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/
 ```
 
 再次查看发现已经没了`wlxt_beijing_xiangzhenjie`这个索引，修改依然存在的索引继续执行，直到出现如下所示，再去看你的集群应该是`green`
-```
+
+```josn
 {
     "indices": {}
 }

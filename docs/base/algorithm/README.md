@@ -14,7 +14,9 @@
         { id: 8, value: "节点8", p_id: 6 },
     ];
 ```
+
 输出结果如下：
+
 ```json
 [{
     "id": 1,
@@ -71,6 +73,7 @@
 ```
 
 实现
+
 ```js
 const arr = [
     {id: 1, value: "节点1", p_id: 0},
@@ -95,4 +98,5 @@ let getTree = (arr) => {
 }
 getTree(arr)
 ```
+
 时间复杂度 O(n)

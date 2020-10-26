@@ -14,7 +14,7 @@ IE盒模型：`width = content + padding + border`
 
 margin始终是透明的。
 
-http://www.hicss.net/do-not-tell-me-you-understand-margin/
+<http://www.hicss.net/do-not-tell-me-you-understand-margin/>
 
 #### 1、给子盒子设置margin-top后，父盒子也跟着子盒子一块向下移动
 
@@ -36,14 +36,16 @@ http://www.hicss.net/do-not-tell-me-you-understand-margin/
 + 优先级就近原则，同权重情况下样式定义最近者为准;
 + 载入样式以最后载入的定位为准;
 
- 优先级为:
- 
- + 同权重: 内联样式表（标签内部）> 嵌入样式表（当前文件中）> 外部样式表（外部文件中）。
- + !important >  id > class > tag
- + !important 比 内联优先级高
- 
+优先级为:
+
++ 同权重: 内联样式表（标签内部）> 嵌入样式表（当前文件中）> 外部样式表（外部文件中）。
++ !important >  id > class > tag
++ !important 比 内联优先级高
+
 ### 权重的规则
+
 标签的权重为1，class的权重为10，id的权重为100
+
 ```css
  /*权重为1*/
   div{}
@@ -65,14 +67,17 @@ http://www.hicss.net/do-not-tell-me-you-understand-margin/
 ```
 
 ## BFC规范
+
 ### 块级格式化上下文：block formatting context
 
 （W3C CSS 2.1 规范中的一个概念,它是一个独立容器，决定了元素如何对其内容进行定位,以及与其他元素的关系和相互作用。）
-   一个页面是由很多个 Box 组成的,元素的类型和 display 属性,决定了这个 Box 的类型。
-   不同类型的 Box,会参与不同的 Formatting Context（决定如何渲染文档的容器）,因此Box内的元素会以不同的方式渲染,也就是说BFC内部的元素和外部的元素不会互相影响。
-   
+一个页面是由很多个 Box 组成的,元素的类型和 display 属性,决定了这个 Box 的类型。
+不同类型的 Box,会参与不同的 Formatting Context（决定如何渲染文档的容器），因此Box内的元素会以不同的方式渲染,也就是说BFC内部的元素和外部的元素不会互相影响。
+
 ### BFC特性和创建条件
+
 特性:
+
 + 内部的Box会在垂直方向，从顶部开始一个接一个地放置。
 + Box垂直方向的距离由margin决定。属于同一个BFC的两个相邻Box的margin会发生叠加
 + 每个元素的margin box的左边，与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。
@@ -81,6 +86,7 @@ http://www.hicss.net/do-not-tell-me-you-understand-margin/
 + 计算BFC的高度时，浮动元素也参与计算。
 
 BFC由以下之一创建：
+
 + 根元素或其它包含它的元素
 + 浮动 (元素的 float 不是 none)
 + 绝对定位的元素 (元素具有 position 为 absolute 或 fixed)
@@ -91,9 +97,11 @@ BFC由以下之一创建：
 + display:flow-root
 
 ### BFC作用
-   
+
 #### 解决margin重叠的问题
+
 同一个BFC下的两个相邻的盒子会出现垂直margin重叠的问题，通常我们可以为其中一个盒子添加一个父元素，并使其触发BFC，即可解决这个问题
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -101,9 +109,9 @@ BFC由以下之一创建：
     <meta charset="UTF-8">
     <style>
         .box {
-            <!--关键点-->
-            overflow: auto   
-        } 
+            /* 关键点 */
+            overflow: auto
+        }
         p {
             margin: 30px;
             height: 30px;
@@ -120,6 +128,7 @@ BFC由以下之一创建：
 </body>
 </html>
 ```
+
 #### 浮动带来的布局问题
 
 在同一个BFC下即使有元素浮动，BFC下元素的最左边边缘总是会与包含它的盒子左边相接触，那么就会出现浮动元素遮盖了其他元素的情况。
@@ -138,7 +147,7 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
     <style>
         body {
             position: relative;
-        } 
+        }
         .green {
             width: 30px;
             height: 30px;
@@ -162,12 +171,14 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
 ```
 
 #### 清除浮动
+
 在触发BFC后，这个盒子的高度将包含浮动元素的高度，在计算时，浮动元素会参与高度计算，我们可以理解为，当一个父元素中包含了浮动元素，
 而浮动元素超出了父元素，此时我们为父元素创建BFC，那么浮动元素就会包裹进这个BFC解决了父元素中高度塌陷的问题。
 
 如下面的例子，div.parent包含了两个div.child，而两个div由于赋予了`float:left`使其浮动，导致了div.parent高度的坍塌，
 此时我们给div.parent添加一个`overflow:hidden`属性值，使div.parent触发BFC，由于BFC下的盒子会包含浮动元素的高度，
 因此盒子就被撑了起来，高度塌陷的问题也就得到了解决。
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -177,7 +188,7 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
         .parent {
             border: 2px solid #f00;
             overflow: hidden;
-        } 
+        }
         .child {
             height: 30px;
             border: 1px solid #0f0;
@@ -197,31 +208,39 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
 ## div水平垂直居中
 
 ### 负margin
+
 确定容器的宽高，设置层的外边距
+
 ```css
  div {
- 	position: absolute;	
- 	width:500px;
- 	height:300px;
- 	top: 50%;
- 	left: 50%;
- 	margin: -150px 0 0 -250px;     	/* 外边距为自身宽高的一半 */
- 	background-color: pink;	 
+    position: absolute;
+    width:500px;
+    height:300px;
+    top: 50%;
+    left: 50%;
+    margin: -150px 0 0 -250px;     /* 外边距为自身宽高的一半 */
+    background-color: pink;
   }
 ```
+
 ### transform
+
 未知容器的宽高，利用 `transform` 属性
+
 ```css
  div {
- 	position: absolute;	
- 	top: 50%;
- 	left: 50%;
- 	transform: translate(-50%, -50%); //移动自身长度的一半
- 	background-color: pink;	 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 移动自身长度的一半 */
+    background-color: pink;
  }
 ```
+
 ### margin auto
+
 确定容器的宽高
+
 ```html
 <div class="container">
     <div class="box-center">
@@ -253,8 +272,8 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
 ```
 
 ### calc()
-确定容器的宽高,
-通过calc计算属性减去元素本身高度和宽度的一半。
+
+确定容器的宽高，通过calc计算属性减去元素本身高度和宽度的一半。
 
 ```css
  .box-center {
@@ -268,6 +287,7 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
 ```
 
 ### flex布局
+
 未知容器的宽高，利用 flex 布局，实际使用时应考虑兼容性
 
 ```html
@@ -296,7 +316,9 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
 ```
 
 ### grid布局
+
 未知容器的宽高
+
 ```css
     .container {
         width: 500px;
@@ -319,7 +341,9 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
 ```
 
 ### css-table
+
 未知容器的宽高，通过`display: table-cell`把div元素变为table元素
+
 ```css
     .container {
         width: 500px;
@@ -341,8 +365,7 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
     }
 ```
 
-
-**推荐用法**
+### 推荐用法
 
 + PC端有兼容性要求，宽高固定，推荐absolute + 负margin
 
@@ -353,6 +376,7 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
 + 移动端推荐使用flex
 
 ## 初始化样式
+
 ```css
   body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin:0; padding:0; }
   h1, h2, h3, h4, h5, h6{ font-size:100%; }
@@ -371,6 +395,7 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
 ```
 
 ## box-sizing
+
 `box-sizing : content-box` 标准盒模型
 
 `box-sizing : border-box` IE的怪异盒模型
@@ -380,9 +405,11 @@ BFC还有一条重要特性：BFC的区域不会与float box 重叠。试想，�
 支持到IE8
 
 ## border-radius
-https://www.jianshu.com/p/4640e9e8375e
+
+<https://www.jianshu.com/p/4640e9e8375e>
 
 ## 改变页面鼠标样式
+
 ```css
 * {
     cursor: url(https://chokcoco.github.io/demo/boom/cd_glowsword.cur),auto !important;
@@ -396,14 +423,15 @@ calc是英文单词calculate(计算)的缩写，支持到IE9
 ### vh、vw
 
  viewport：可视窗口，也就是浏览器。
- 
+
  vw Viewport宽度，1vw等于viewport宽度的1%
- 
+
  vh Viewport高度，1vh等于viewport高的的1%
- 
+
 ### calc()
- 
+
 calc 是css3提供的一个在css文件中计算值的函数,用于动态计算长度值。
+
 + 运算符前后都需要保留一个空格，例如：width: calc(100% - 10px)；
 + 任何长度值都可以使用calc()函数进行计算；
 + calc()函数支持 "+", "-", "*", "/" 运算；
@@ -411,11 +439,12 @@ calc 是css3提供的一个在css文件中计算值的函数,用于动态计算�
 
 `calc(100vh - 10px)`  表示整个浏览器窗口高度减去10px的大小;
 
-`calc(100vw - 10px)`   表示整个浏览器窗口宽度减去10px的大小 
+`calc(100vw - 10px)`   表示整个浏览器窗口宽度减去10px的大小
 
 如果用了CSS预处理器（less,scss）会被它们先解析，这时需要禁用解析 `calc(~ '100vh - 64px')` (less的写法）
 
 例如在vue项目中使用element-ui设置el-card的高度
+
 ```css
   /*定义全局el-card的高度*/
   #app .el-card{
@@ -424,6 +453,7 @@ calc 是css3提供的一个在css文件中计算值的函数,用于动态计算�
 ```
 
 ## rgba()和opacity的区别
+
 二者均可设置透明度,使用opacity后子元素会继承父元素的透明效果，设置rgba元素的子元素不会继承透明效果
 
 ### opacity
@@ -434,6 +464,7 @@ calc 是css3提供的一个在css文件中计算值的函数,用于动态计算�
     opacity: 0.5
 }
 ```
+
 IE9, Firefox, Chrome, Opera 和 Safari 使用属性 opacity 来设定透明度。
 
 opacity 属性能够设置的值从 0.0 到 1.0。值越小，越透明。
@@ -441,6 +472,7 @@ opacity 属性能够设置的值从 0.0 到 1.0。值越小，越透明。
 IE8 以及更早的版本使用滤镜 `filter:alpha(opacity=x)`。x 能够取的值从 0 到 100。值越小，越透明。
 
 所以如果项目为了要兼容IE8及以下，则需要写两段代码
+
 ```css
 #box{
     background-color:rgb(125,25,0);
@@ -464,11 +496,13 @@ RGBA 颜色值得到以下浏览器的支持：IE9+、Firefox 3+、Chrome、Safa
 RGBA 颜色值是这样规定的：`rgba(red, green, blue, alpha)`。alpha 参数是介于 0.0（完全透明）与 1.0（完全不透明）的数字。
 
 那么对于IE8及以下需要做以下兼容：
+
 ```css
 #box{
     filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr=#80000000,endColorStr=#80000000);
 }
 ```
+
 其中：#88000000 的前两位数字控制透明度，取值16进制从00 -> FF（越小越透明），00表示完全透明，FF就是全不透明，后面六位是色值。
 
 ::: warning
@@ -477,10 +511,13 @@ RGBA 颜色值是这样规定的：`rgba(red, green, blue, alpha)`。alpha 参�
 :::
 
 ## transition
+
 transition: <过度属性> <过渡时间> <过度模式>
-```
+
+```css
 transition: background 6s linear;
 ```
+
 过度模式：transition-timing-function
 
 + ease 缓慢开始，缓慢结束
@@ -490,11 +527,13 @@ transition: background 6s linear;
 + ease-in-out 缓慢开始，缓慢结束(与ease稍有区别)
 
 ## 清除浮动
+
 **浮动元素会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素。**
 
 清除浮动是为了清除使用浮动元素产生的影响。浮动会导致父元素高度坍塌，而高度的塌陷使我们页面后面的布局不能正常显示。
 
 主推采用`:after`伪元素方法清理浮动
+
 ```css
 .clearfix {
     /*触发IE6中的 hasLayout*/
@@ -510,15 +549,19 @@ transition: background 6s linear;
 ```
 
 ## 设置3D场景
+
 ### 使用transform属性调整元素
 
 使用3D场景：`transform-style: preserve-3d;`
 
 #### transition(位移操作)
+
 + translateX(x px)
 + translateY(y px)
 + translateZ(z px)
+
 #### rotate(旋转操作)
+
 + rotateX(x deg)
 + rotateY(y deg)
 + rotateZ(z deg)
@@ -526,6 +569,7 @@ transition: background 6s linear;
 `perspective` 设置从何处查看一个元素的角度：
 
 `perspective-origin`  设置一个3D元素的基数位置：
+
 ```html
 <div class="box">
     <div class="content"></div>
@@ -554,27 +598,32 @@ Y轴：top , center , bottom
 Z轴：length px
 
 ## 设置body高度100%自适应屏幕
+
 一个对象的高度是否可以用百分比显示取决于父级对象。在浏览器默认状态下没有给body高度，
 所以需要给html和body设置`height：100%`，子元素才能正常显示
 
 ## 设置页面小图标
+
 在head标签引入
+
 ```html
  <link rel="shortcut icon" type="image/x-icon" href="cxp.ico" />
 ```
 
 ## 外边距合并
+
 当两个垂直外边距相遇时，它们将形成一个外边距。
 
 合并后的外边距的高度等于两个发生合并的外边距的高度中的较大者。
 
-![](http://www.w3school.com.cn/i/ct_css_margin_collapsing_example_1.gif)
+![image](http://www.w3school.com.cn/i/ct_css_margin_collapsing_example_1.gif)
 
-w3school介绍网址： http://www.w3school.com.cn/css/css_margin_collapsing.asp
+w3school介绍网址： <http://www.w3school.com.cn/css/css_margin_collapsing.asp>
 
-**解决方法**
+### 解决方法
 
 统一设置margin-top或者margin-bottom，不要混合使用。
 
 ## 伪元素
+
 `:after`、`:before`

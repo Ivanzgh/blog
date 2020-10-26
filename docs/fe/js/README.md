@@ -2,7 +2,7 @@
 
 ## 数据类型
 
-基本数据类型： Number、String、Boolean、Null、Undefined、Symbol
+基本数据类型： Number、String、Boolean、Null、Undefined、Symbol、BigInt
 
 引用类型： 函数、数组、对象
 
@@ -32,13 +32,13 @@ console.log(d)      // {x: 4}
 
 ### 遍历数组
 
-for循环 数组下标的typeof类型:number,
++ for循环 数组下标的typeof类型是`number`
 
-for in 循环数组下标的typeof类型:string
++ for in循环 数组下标的typeof类型是`string`
 
 ```js
 let arr = ['zgh',22,180,125]
-for (let i = 0;i < arr.length; i++) {
+for (let i = 0; i < arr.length; i++) {
     console.log(typeof i);  //number
     console.log(arr[i]);
 }
@@ -58,7 +58,7 @@ for (let k in arr) {
 
 ```js
 Object.prototype.sex = 'man'
-let obj = {name : 'zgh',age : 22}
+let obj = {name : 'zgh', age : 22}
 for (let m = 0; m < obj.length; m++) {
     console.log(typeof m); //空
     console.log(obj[m]);  //空
@@ -201,7 +201,7 @@ console.log(typeof +'1')    // "number"
 
 ### 回流(reflow)
 
-只要修改了dom或改变了元素的形状或大小等会改变布局的操作就会触发reflow
+只要修改了dom或改变了元素的形状或大小等，会改变布局的操作就会触发reflow
 
 ### 重绘(repaint)
 
@@ -211,5 +211,5 @@ console.log(typeof +'1')    // "number"
 
 + 不要一条一条的修改样式，应该固定写一个class，更换className，减少reflow次数
 + 不要把 DOM结点的属性值放在一个循环里当成循环里的变量
-+ 为动画的HTML元件使用position:fixed 或 absolute，那么修改他们的CSS是不会 reflow 的
-+ 避免使用table布局，一个很小的改动会造成整个table reflow！
++ 为动画的HTML文件使用position:fixed 或 absolute，那么修改他们的CSS是不会 reflow 的
++ 避免使用table布局，一个很小的改动会造成整个table reflow

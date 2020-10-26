@@ -19,14 +19,13 @@ sessionStorage和localStorage 虽然也有存储大小的限制，但比cookie�
 
 不对cookie设置任何正、负或0时间的即可;
 
-2)、sessionStorage在浏览器多窗口之间 (同域)数据是否互通共享? 
+2)、sessionStorage在浏览器多窗口之间 (同域)数据是否互通共享?
 
 不会，都是独立的，localStorage会共享;
 
 3)、能让localStorage也跟cookie一样设置过期时间？
 
 可以，每次在存储的时候同时也存入一个时效时间戳，而在获取数据前，先与当前时间比较，如果小于当前时间则过期了，直接返回空的数据。
-
 
 ## dl、dt、dd表格标签
 
@@ -44,6 +43,7 @@ dl 标签与 dt（定义项目/名字）和dd（描述每一个项目/名字）�
     ...
 </dl>
 ```
+
 在dl下，dt与dd处于同级标签。dd标签可以若干。
 
 通常使用在具有标题，而标题下对应有若干列表简单的（栏目标题+对应标题列表）和标题对应下面有内容。
@@ -51,30 +51,37 @@ dl 标签与 dt（定义项目/名字）和dd（描述每一个项目/名字）�
 ## 文本
 
 ### 首行缩进2个字
-```
+
+```css
 text-indent:2em;
 ```
 
 ### 文字加下划线
-```
+
+```css
 text-decoration:underline
 ```
+
 ### 字体设置
-```
+
+```css
 font:600 16px/30px 微软雅黑
+```
 
 表示字体粗600，字体大小16px，行高30px，微软雅黑字体
-```
 
 ### 文字换行
-```
+
+```css
 word-break: break-all;
 ```
+
 强制换行，行尾会将一个完整的单词拆开
 
-```
+```css
 word-wrap:break-word
 ```
+
 行尾不会拆解单词，如果宽度不够会放到下一行，尾部会有空白
 
 ## 表单
@@ -82,27 +89,37 @@ word-wrap:break-word
 ### input
 
 #### 禁止显示历史记录
+
 `autocomplete="off"` 禁用自动完成功能。on 启用
 
 #### input框设置只读
+
 方法一、readonly
-```
+
+```html
 <input type="text" value="hello" readonly>
 ```
-```
+
+```html
 <input type="text" value="hello" readonly='true'>
 ```
+
 方法二、disabled
-```
+
+```html
 <input type="text" value="hello" disabled>
 ```
-```
+
+```html
 <input type="text" value="hello" disabled='true'>
 ```
+
 方法三、onfocus="this.blur()"
-```
+
+```html
 <input type="text" value="hello" onfocus="this.blur()">
 ```
+
 ::: tip 区别：
 1、使用disabled会使输入框变灰，不可输入，不可点击，可复制
 
@@ -112,6 +129,7 @@ word-wrap:break-word
 :::
 
 ## 监听input框的值变化
+
 ```html
 <input type="text" name="planLeave" readonly>
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
@@ -123,20 +141,26 @@ word-wrap:break-word
 ```
 
 ### select
+
 #### 鼠标移入展开下拉框
+
 select有一个size属性，设置size的值即可显示option的展开数量
-```
+
+```js
 select.size = 6
 ```
+
 #### 根据后台数据设置选中项
+
 默认选中后台返回的下拉项
-```
+
+```js
 <select name="codeShare" id="codeShare">
     <option value="0">否</option>
     <option value="1">是</option>
 </select>
 <button onclick="he()">click</button>
-        
+
 <script>
     function he() {
         //后台返回的数据
@@ -148,4 +172,5 @@ select.size = 6
 ```
 
 #### 通过ajax动态加载select控件下拉框的option
-https://blog.csdn.net/zhengxiangwen/article/details/46480687
+
+<https://blog.csdn.net/zhengxiangwen/article/details/46480687>

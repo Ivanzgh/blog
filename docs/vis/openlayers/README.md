@@ -9,7 +9,7 @@ OpenLayers 是一个专为 WebGIS 客户端开发提供的JavaScript 类库包�
 
 下载：[https://openlayers.org/download/](https://openlayers.org/download/)
 
-## 快速上手：
+## 快速上手
 
 ```html
 <!doctype html>
@@ -107,6 +107,7 @@ OpenLayers 是一个专为 WebGIS 客户端开发提供的JavaScript 类库包�
 </body>
 </html>
 ```
+
 ## 绘制点线面
 
 openlayers支持的类型有 `Point`, `LineString`, `LinearRing`, `Polygon`, `MultiPoint`, `MultiLineString`, `MultiPolygon`, `GeometryCollection`, `Circle`
@@ -127,6 +128,7 @@ const drawPoint = new ol.interaction.Draw({
 });
 map.addInteraction(drawPoint);
 ```
+
 首先添加一个矢量图层，接着创建一个交互，注意添加 `source: pointLayer.getSource()` 用于保存绘制的内容。如果要绘制线、面等其他类型，只需更改`ol.interaction.Draw()`中type的类型即可。
 
 ## 手绘形状

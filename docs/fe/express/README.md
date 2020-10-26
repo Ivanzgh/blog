@@ -1,16 +1,21 @@
 # Express
+
 官网：[http://www.expressjs.com.cn/](http://www.expressjs.com.cn/)
+
 ## 简介
 
-**1、概念**
+### 1、概念
 
 &emsp;&emsp;Express 基于Node.js平台，快速、开放、极简的 web 开发框架。
 
-**2、安装**
+### 2、安装
+
 ```js
 npm install express --save
 ```
-**3、创建Express应用**
+
+### 3、创建Express应用
+
 ```js
 const express = require('express');
 const app = express();
@@ -21,7 +26,8 @@ app.get('/',(req,res) => {
 
 app.listen(3000, () => console.log('listen port 3000'));
 ```
-**4、使用Express处理表单**
+
+### 4、使用Express处理表单
 
 + post请求
 + get请求
@@ -29,15 +35,20 @@ app.listen(3000, () => console.log('listen port 3000'));
 
 ## 应用生成器
 
-**1、安装**
+### 1、安装
+
 ```js
 npm install -g express-generator
 ```
+
 查看全局安装的位置：
+
 ```js
 npm root -g
 ```
-**2、创建应用**
+
+### 2、创建应用
+
 ```js
 //创建项目
 express myApp
@@ -48,10 +59,13 @@ npm install
 //启动项目
 SET DEBUG=myApp:* 或者 npm start
 ```
+
 ## 路由
 
-**1、express实现路由的方式**
+### 1、express实现路由的方式
+
 + 针对应用级别
+
 ```js
 const express = require('express');
 const app = express();
@@ -77,7 +91,9 @@ app.delete('/list', function (req, res) {
 
 app.listen(3000);
 ```
+
 + 针对Router实例对象
+
 ```js
 const express = require('express');
 const router = express.Router();
@@ -88,11 +104,12 @@ router.get('/',(req,res,next) => {
 
 module.exports = router;
 ```
-**2、路由方法**
+
+### 2、路由方法
 
 Express 定义了如下和 HTTP 请求对应的路由方法： `get, post, put, head, delete, options, trace, copy, lock, mkcol, move, purge, propfind, proppatch, unlock, report, mkactivity, checkout, merge, m-search, notify, subscribe, unsubscribe, patch, search, 和 connect`。
 
-**3、resfulAPI风格**
+### 3、resfulAPI风格
 
 + 获取数据的地址，比如我要获取用户列表（get请求）
 
@@ -118,11 +135,13 @@ Express 定义了如下和 HTTP 请求对应的路由方法： `get, post, put, 
 
 /user/01   删除用户01
 
-**4、路由句柄**
+### 4、路由句柄
 
 路由句柄就是一个回调函数。可以设置多个，它必须要有两个参数，req, res.
-+ req是指incommingmessage，它表示一些请求信息，这个信息，我们只能获取，不能修改。
-+ res是指serverResponse，它表示响应对象，可以做服务器上的任何事情。
+
++ req是指`incommingmessage`，它表示一些请求信息，这个信息，我们只能获取，不能修改。
++ res是指`serverResponse`，它表示响应对象，可以做服务器上的任何事情。
+
 ```js
 const express = require('express');
 const app = express();
@@ -136,7 +155,8 @@ app.get('/',(req,res,next) => {
 
 app.listen(3000);
 ```
-**5、req,res相关方法**
+
+### 5、req,res相关方法
 
 req.query&emsp;将查询字符串变成对象
 
@@ -154,19 +174,23 @@ res.download&emsp;提供下载的方法
 
 res.redirect &emsp; 重定向方法
 
-**6、ejs模板引擎**
+### 6、ejs模板引擎
 
 下载ejs模板
-```js
+
+```sh
 npm install ejs --save
 ```
+
 使用ejs作为express的模板引擎
+
 ```js
 // 设置模板存放的位置
 app.set('views', path.resolve(__dirname, './views'));
 // 设置模板引擎为ejs
 app.set('view engine', 'ejs');
 ```
+
 ## 中间件
 
 ### 概念
@@ -204,6 +228,7 @@ Express 是一个自身功能极简，完全是由路由和中间件构成一个
 对于app.use()方式的中间件，如果说没有写path，就说明所有的请求都会使用这个中间件。
 
 对于app.METHOD,实际上就是路由，从这个方面来说，路由也是中间件的一种。
+
 ```js
 const express = require('express');
 const app = express();
@@ -219,9 +244,11 @@ app.get('/',(req,res,next) => {
 
 app.listen(3000);
 ```
+
 ### 路由级中间件
 
 路由级别的中间件，是指由express.Router对象来调用的。
+
 ```js
 const express = require('express');
 const app = express();
@@ -235,6 +262,7 @@ router.get('/',(req,res,next) => {
 
 app.listen(3000);
 ```
+
 ### 错误处理中间件
 
 ### 内置中间件
@@ -244,13 +272,17 @@ app.listen(3000);
 如body-parser，cookie-parse，express-session。
 
 #### body-parser
+
 解析post请求传递的body，若req.body获取不到数据，则可以使用该中间件
 
 安装
-```js
+
+```sh
 npm install body-parser
 ```
+
 使用
+
 ```js
 const express = require('express')
 const app = express();
@@ -260,21 +292,28 @@ app.use(bodyParser.json());
 // 创建 application/x-www-form-urlencoded 编码解析
 app.use(bodyParser.urlencoded({ extended: false }));
 ```
+
 如果传输的内容不是string类型时，需配置`extended: ture`
 
 默认限制100kb大小，如果需要可自定义大小
+
 ```js
 app.use(bodyParser.json({limit: '100mb'}));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
 ```
+
 ## 托管静态文件
+
 可以将js、css、图片等静态文件利用express的中间件`express.static()`托管，对外开放
 
 假如public文件夹下有common.js、haha.png等文件
+
 ```js
 app.use(express.static('public'))
 ```
+
 重启服务后就可以通过以下地址访问了
+
 ```js
 http://localhost:3000/common.js
 
@@ -282,12 +321,14 @@ http://localhost:3000/haha.png
 ```
 
 如果想托管多个文件夹，可以多次调用中间件
+
 ```js
 app.use(express.static('public'))
 app.use(express.static('files'))
 ```
 
 若想带前缀访问，加个路径即可
+
 ```js
 app.use('/static', express.static('public'))
 
@@ -296,6 +337,7 @@ http://localhost:3000/static/common.js
 ```
 
 关于文件路径，`__dirname`表示当前模块的目录名
+
 ```js
 app.use('/static', express.static(path.join(__dirname,'public')))
 ```
@@ -315,7 +357,9 @@ app.get('/', function (req, res) {
   throw new Error('BROKEN') // Express will catch this on its own.
 })
 ```
+
 或者
+
 ```js
 app.use((err, req, res, next) => {
   console.error(err.stack)
@@ -332,20 +376,7 @@ app.get('/plugin/three', (req, res) => {
 ```
 
 ## 常见问题
-#### 1、报错`TypeError: res.json is not a function`
+
+### 1、报错`TypeError: res.json is not a function`
 
 可能有自定义变量和res重名
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -46,41 +46,55 @@ npm中文文档：[https://www.npmjs.cn/](https://www.npmjs.cn/)
 </table>
 
 ## 安装参数区别
+
 ### 全局安装
+
+```sh
+npm install packname -g
 ```
-npm install packname -g 
-```
-### 生产环境安装 
+
+### 生产环境安装
+
 简写：-S ， 并在package.json的dependencies属性写入依赖。
+
+```sh
+npm install packname --save
 ```
-npm install packname --save 
-```
+
 ### 开发环境安装
+
 简写：-D ， 并在package.json的devDependencies属性写入依赖。
-```
+
+```sh
 npm install packname --save-dev  
 ```
 
 ## 切换淘宝镜像
-```
+
+```sh
 npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```
+
 安装成功后即可使用：
-```
+
+```sh
 cnpm install packname
 ```
+
 切换回npm镜像：
-```
+
+```sh
 npm config set registry https://registry.npmjs.org
 ```
 
 查看镜像源：
-```
+
+```sh
 npm get registry
 ```
 
-
 ## npm发布插件
+
 1、npm init 初始化项目,生成package.json文件
 
 2、敲代码
@@ -89,7 +103,7 @@ npm get registry
 
 4、创建README.md文件，添加插件描述
 
-5、使用邮箱注册npm账号,官网：https://www.npmjs.com/
+5、使用邮箱注册npm账号,官网：<https://www.npmjs.com/>
 
 6、在npm官网查看插件名是否已经注册
 
@@ -97,7 +111,7 @@ npm get registry
 
 8、在项目下运行 npm login，输入用户名、密码、邮箱
 
-9、运行 npm publish 
+9、运行 npm publish
 
 10、在npm官网查看是否发布成功
 

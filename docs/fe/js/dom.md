@@ -36,7 +36,7 @@ js包括dom，js由ECMAScript、DOM、BOM组成
 + 删除 removeChild
 + 替换 replaceChild
 
-(1)、createElement
+#### createElement
 
 ```html
 <!DOCTYPE html>
@@ -57,7 +57,7 @@ js包括dom，js由ECMAScript、DOM、BOM组成
 
 创建好的元素并未添加进页面
 
-(2)、appendChild、insertBefore
+#### appendChild、insertBefore
 
 ```js
 let h1 = document.createElement('h1')
@@ -67,7 +67,7 @@ box.appendChild(h1)
 box.insertBefore(h2,h1) //将h2添加到h1的前面
 ```
 
-(3)、cloneNode
+#### cloneNode
 
 ```js
 // <div id="box">hello</div>
@@ -78,7 +78,7 @@ let rs = box.cloneNode() //浅复制
 console.log(rs);
 ```
 
-(4)、removeChild
+#### removeChild
 
 ```js
 /**
@@ -93,7 +93,7 @@ let rm = document.getElementsByTagName('p')[0]
 box.removeChild(rm) //删除p元素
 ```
 
-(5)、replaceChild
+#### replaceChild
 
 ```js
 /**
@@ -110,8 +110,6 @@ box.replaceChild(p,h1)
 
 ### 操作属性节点
 
-注意：属性节点并没有作为节点出现
-
 两种操作方式：
 
 + 对象.属性
@@ -126,6 +124,10 @@ let a = document.getElementsByTagName('a')[0]
 console.log(a.href);
 // a.href = 'xxx'
 ```
+
+::: warning
+属性节点并没有作为节点出现
+:::
 
 ### 操作文本节点
 

@@ -13,26 +13,35 @@
 ## 介绍
 
 安装
+
 ```sh
 npm install -g typescript
 ```
+
 验证
+
 ```sh
-tsc -v 
+tsc -v
 ```
+
 编译，然后可以得到一个同名的js文件
+
 ```sh
 tsc helloworld.ts
 
 #如果不在根目录下，要加反斜杠
 tsc .\src\helloworld.ts
 ```
+
 也可以用`ts-node`插件直接在终端查看结果，但不会生成js文件
+
 ```sh
 npm install -g ts-node
 ```
+
 运行
-```
+
+```sh
 ts-node helloworld.ts
 ```
 
@@ -47,7 +56,9 @@ const obj: object = {};     // 对象
 const u: undefined = undefined;
 const n: null = null;
 ```
+
 ### 数组类型
+
 ```typescript
 const list1: number[] = [1,2,3];      // 由数字组成的数组
 
@@ -60,14 +71,18 @@ const list4: (number | string)[] = [1, 'a', 'b', 2];   // 不知道元素数量�
 const list5: [string, number] = ['ha', 666]
 const [ha, info] = list5    // 解构赋值
 ```
+
 对象数组的类型注解
+
 ```typescript
 const arr: {name: string, age: number}[] = [
     {name:'tom', age: 18},
     {name:'jack', age: 19}
 ]
 ```
+
 如果有同样类型的数组，可以用 类型别名
+
 ```typescript
 type user = {name: string, age: number}
 
@@ -76,7 +91,9 @@ const arr: user[] = [
     {name:'jack', age: 19}
 ]
 ```
+
 也可以使用 类
+
 ```typescript
 class user {
     name: string;
@@ -89,8 +106,8 @@ const arr: user[] = [
 ]
 ```
 
-
 ### `Symbol`类型
+
 ```typescript
 const sym = Symbol();
 let obj = {
@@ -100,6 +117,7 @@ console.log(obj[sym]); // zgh
 ```
 
 ### 枚举类型
+
 ```typescript
 enum Direction {
     NORTH,
@@ -114,7 +132,9 @@ console.log(dirName)    // EAST
 ```
 
 ### `Any`类型
+
 即任意类型，ts允许对any类型的值进行任何操作
+
 ```typescript
 let notSure: any
 notSure.user.name   // ok
@@ -124,7 +144,9 @@ new notSure()   // ok
 ```
 
 ### `unknown`类型
+
 就是不知道啥类型，只能被赋值给`any`类型和`unknown`类型本身
+
 ```typescript
 let unk: unknown
 
@@ -145,7 +167,9 @@ let value8: Function = value; // Error
 ```
 
 ### `void`类型
+
 表示没有任何类型，比如当一个函数没有返回值时
+
 ```typescript
 function getInfo(): void {
   console.log("This is message");
@@ -153,7 +177,9 @@ function getInfo(): void {
 ```
 
 ### `never`类型
+
 表示永不存在的值的类型。 例如，`never`类型是那些总是会抛出异常、没有返回值的函数表达式、箭头函数表达式的返回值类型
+
 ```typescript
 function error(message: string): never {
   throw new Error(message);
@@ -165,7 +191,9 @@ function infiniteLoop(): never {
 ```
 
 ### 联合类型
+
 以`|`为标记，若希望属性为多个类型中的一个，可以使用联合类型。下面的例子表示函数参数接受一个数字类型的数组或者一个字符串
+
 ```typescript
 let union = function (item: number[] | string) {
     if (typeof item === 'string') {
@@ -177,7 +205,9 @@ union('sss')
 ```
 
 ### 类型别名
+
 使用`type`定义一个类型别名
+
 ```typescript
 // 此处直接注解name是一个string类型
 let name: string
@@ -201,4 +231,5 @@ interface user2 {
     age: number;
 }
 ```
+
 类型别名可以直接注解字符串、数字等类型，而接口只能注解对象

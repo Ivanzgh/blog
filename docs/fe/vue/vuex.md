@@ -1,1 +1,1 @@
-# vuex1
+# vuex

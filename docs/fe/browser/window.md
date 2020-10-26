@@ -1,6 +1,7 @@
 # window对象
 
 ## window.location 对象
+
 属性|描述
 :--|:--
 hash|从井号 (#) 开始的 URL（锚）
@@ -13,6 +14,7 @@ protocol|当前 URL 的协议
 search|从问号 (?) 开始的 URL（查询部分）
 
 ## 刷新页面
+
 ```js
 function refresh(){
     location.reload();
@@ -20,6 +22,7 @@ function refresh(){
 ```
 
 ## 关闭当前窗口
+
 ```js
 function closeCurrentWindow() {
     window.opener = null;
@@ -29,7 +32,9 @@ function closeCurrentWindow() {
 ```
 
 ## 回退历史
+
 返回上一页
+
 ```js
 function historyBack() {
     window.history.go(-1);
@@ -39,16 +44,18 @@ function historyBack() {
 ## 获取url参数
 
 ### 获取单个参数
+
 ```js
 let urlParam = window.location.search;
 let loc = urlParam.substring(urlParam.lastIndexOf('=') + 1, urlParam.length);
 console.log(loc)
 ```
+
 ### 获取多个参数
+
 ```js
 //  <a href="file:///D:/test/url.html?index=1&item=2">fe</a>
- 
- 
+
 function GetRequest() {
     let url = location.search; //获取url中"?"符后的字串
     let theRequest = new Object();
@@ -66,13 +73,14 @@ console.log(GetRequest()) //{index: "1", item: "2"}
 ```
 
 ## 路由跳转
+
 `location` 和 `history` 接口
 
 在单页应用中，通常由前端来配置路由，根据不同的url显示不同的内容。
 
 我们在单页应用中需要做到的是改变url不刷新页面
 
-https://segmentfault.com/a/1190000014120456?tdsourcetag=s_pctim_aiomsg
+<https://segmentfault.com/a/1190000014120456?tdsourcetag=s_pctim_aiomsg>
 
 ## 确保浏览器不走缓存路线
 

@@ -3,6 +3,7 @@
 ## 基础方法
 
 ### substr()
+
 截取从 start 下标开始的指定数目的字符。
 
 语法：`stringObject.substr(start,length)`
@@ -16,7 +17,9 @@ var a = 'abcdef'
 var b = a.substr(1,3)
 console.log(b)   //bcd
 ```
-### substring() 
+
+### substring()
+
 截取字符串中介于两个指定下标之间的字符。
 
 语法：`stringObject.substring(start,stop)`
@@ -34,6 +37,7 @@ console.log(b)   //bc
 ## 常见场景
 
 ### 手机号校验
+
 校验手机号，号段主要有(不包括上网卡)：130~139、150~153，155~159，180~189、170~171、176~178。14号段为上网卡专属号段
 
 ```js
@@ -77,7 +81,7 @@ function convertUTCTimeToLocalTime(UTCDateString) {
 
 将“yy-mm-dd  HH:mm:ss”日期时间格式分割分别得到日期和时间
 
-**方法一、split**
+#### 方法一、split
 
 ```js
 let time = '2009-12-30 13:28:29';
@@ -88,7 +92,8 @@ console.log(date)
 console.log(time)
 ```
 
-**方法二、slice**
+#### 方法二、slice
+
 ```js
 let str = '2019-08-18  00:00:00'
 let res = str.slice(0,10)
@@ -97,7 +102,7 @@ console.log(res)  // 2019-08-18
 
 ### 截取字符串
 
-**1、slice**
+#### 1、slice
 
 语法：`stringObject.slice(start, end)`
 
@@ -106,6 +111,7 @@ start（必需）：规定从何处开始选取。如果是负数，那么它规
 end（可选）：规定从何处结束选取，即结束处的字符下标。如果没有指定该参数，那么截取的字符串包含从 start 到结束的所有字符。如果这个参数是负数，那么它规定的是从数组尾部开始算起的字符。
 
 （1）、截取身份证
+
 ```js
 let str = '330102197807280020'
 let res = str.slice(4)
@@ -113,38 +119,43 @@ let res1 = str.replace(res, "**************")
 console.log(res1)    // 3301**************
 ```
 
-**2、split**
+#### 2、split
+
 ```js
 let str = '3,25'
 let arr = str.split(',')
 console.log(arr)  // ['3','25']
 ```
 
-**3、单个值可直接获取**
+#### 3、单个值可直接获取
+
 ```js
 var str = '1,3'
-console.log(str[0])  // 1 
+console.log(str[0])  // 1
 console.log(str[1])  // ,
 console.log(str[2])  // 3
 ```
 
-**4、substring**
+#### 4、substring
 
 截取小数点后两位数字
+
 ```js
 let str = 22.123456;
-let res = num.substring(0,str.indexOf(".")+3);
+let res = num.substring(0, str.indexOf(".") + 3);
 console.log(res)
 ```
 
 ### 单双引号转换
-**1.双引号替换成单引号**
+
+#### 1.双引号替换成单引号
+
 ```js
 let _adrobj = JSON.stringify(address).replace(/\"/g,"'");  
 ```
 
-**2、单引号替换成双引号**
+#### 2、单引号替换成双引号
+
 ```js
 let _nstr = _adrdata.replace(/'/g, '"');  
 ```
-

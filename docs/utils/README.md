@@ -78,24 +78,24 @@
 
 ```json
 {
-	"Print to console": {
-		"prefix": "vue",
-		"body": [
-			"<template>\n",
-			"</template>\n",
-			"<script lang=\"ts\">",
-			"import { defineComponent, ref } from 'vue';\n",
-			"export default defineComponent({",
-			"  components: {},",
-			"  setup() {",
-			"    return {}",
-			"  },",
-			"})",
-			"</script>\n",
-			"<style scoped lang=\"scss\">\n",
-			"</style>"
-		]
-	}
+    "Print to console": {
+        "prefix": "vue",
+        "body": [
+            "<template>\n",
+            "</template>\n",
+            "<script lang=\"ts\">",
+            "import { defineComponent, ref } from 'vue';\n",
+            "export default defineComponent({",
+            "  components: {},",
+            "  setup() {",
+            "    return {}",
+            "  },",
+            "})",
+            "</script>\n",
+            "<style scoped lang=\"scss\">\n",
+            "</style>"
+        ]
+    }
 }
 ```
 

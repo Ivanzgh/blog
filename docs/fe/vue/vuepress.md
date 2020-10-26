@@ -6,6 +6,7 @@
 特别好玩的一个东西，有兴趣自行了解。
 
 首先下载`lived2d.js`，然后在`components`下注册一个`Cat.vue`组件，最后在`config.js`中配置使用
+
 ```js
 module.exports = {
     plugins: [
@@ -26,11 +27,11 @@ module.exports = {
 地址：[awesome-vuepress](https://github.com/vuepressjs/awesome-vuepress#plugins)
 
 例如：
+
 + `vuepress-plugin-reading-progress`  - 阅读进度条
 + `@vuepress/plugin-back-to-top`    -  返回顶部
 + `vuepress-plugin-img-lazy`     -     图片懒加载
 + `vuepress-plugin-baidu-autopush`  -  百度SEO
-
 
 ## 手动部署
 
@@ -63,6 +64,7 @@ git push -f git@github.com:Ivanzgh/blog.git master:gh-pages
 
 cd -
 ```
+
 注意将仓库地址修改成自己的地址
 
 ## 自动化部署
@@ -70,7 +72,7 @@ cd -
 使用`github actions`实现自动化部署，每次只需要将代码提交到github上即可，无需其他操作。
 
  **设置`GitHub personal access`**
- 
+
 [设置个人访问令牌](https://docs.github.com/cn/github/authenticating-to-github/creating-a-personal-access-token)
 
 授予此令牌的作用域或权限时，只需勾选`repo`仓库即可。然后回到项目的`Settings`下的`Secrets`目录生成一个新令牌，名称叫
@@ -100,8 +102,8 @@ jobs:
         uses: actions/checkout@v2.3.2
         with:
           persist-credentials: false
-      
-      - name: Install and Build 🔧 
+
+      - name: Install and Build 🔧
         run: |
           npm install
           npm run docs:build
@@ -116,6 +118,7 @@ jobs:
 
 `on`设置工作流的触发条件，一般设置为`on: [push]`，表示在每次 `git push` 操作后自动触发该项目的工作流。
 也可以让工作流在 `master`分支的 `push`事件上运行：
+
 ```yaml
 on:
   push:
@@ -127,8 +130,7 @@ on:
 
 `actions/checkout@v2.3.2`是github官方的一个action，用于clone该仓库的源码到工作流中。
 
-
-::: tip 
+::: tip
 打包命令需要修改为`npm run docs:build`，因为vuepress的打包命令就是如此
 
 `with`参数里注意第一行前面的key是`ACCESS_TOKEN`，初始是`GITHUB_TOKEN`，后面的就是刚配置的个人访问令牌
@@ -139,8 +141,10 @@ on:
 :::
 
 如果出现如下问题，
-```
+
+```null
 No url found for submodule path 'docs/.vuepress/dist' in .gitmodules
 ```
+
 就是git子模块找不到dist文件夹，我是之前使用手动部署导致本地产生了dist文件夹，所以删除dist文件夹再push到github上即可。
 在`.gitignore`中将`docs/.vuepress/dist`也删除，假如你添加过这个。

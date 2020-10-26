@@ -9,6 +9,7 @@
 通过提供 data 函数，每次创建一个新实例后，我们能够调用 data 函数，从而返回初始数据的一个全新副本数据对象。
 
 data声明为对象：
+
 ```js
 function VueComponent() {}
 VueComponent.prototype.$options = {
@@ -19,7 +20,9 @@ f1.$options.data.name = 'React'
 let f2 = new VueComponent()
 console.log(f2.$options.data.name);    // React
 ```
+
 data声明为函数：
+
 ```js
 function VueComponent() {}
 VueComponent.prototype.$options = {
@@ -32,5 +35,6 @@ console.log(res1)     // {name: "React"}
 let f22 = new VueComponent()
 console.log(f22.$options.data())   // {name: "Vue"}
 ```
+
 `new Vue()`可以将`data`声明为一个普通对象是因为这个类创建的实例不会被复用，只会new一次。
 而`App.vue`同样是因为整个系统中`App.vue`只会被使用一次，所以不存在上述的问题。

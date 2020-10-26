@@ -1,5 +1,7 @@
 # Canvas
+
 ## 介绍
+
 canvas 就是绘制图形的。
 
 canvas 是一个二维网格。左上角坐标为 (0,0)
@@ -9,14 +11,18 @@ canvas 是一个二维网格。左上角坐标为 (0,0)
 ```html
 <canvas id="first-canvas" width="1000" height="800"></canvas>
 ```
+
 然后获取到画布和二维模型
+
 ```js
 let firCanvas = document.getElementById('first-canvas')
 let ctx = firCanvas.getContext('2d')
 ```
+
 ctx就相当于画笔了
 
 示例：画个矩形
+
 ```js
 let firCanvas = document.getElementById('first-canvas')
 let ctx = firCanvas.getContext('2d')
@@ -25,6 +31,7 @@ ctx.fillStyle= '#0f0'
 ctx.fillRect(10,10,200,100)
 ctx.closePath()
 ```
+
 注意设置样式要在绘制之前，否则无效。
 
 如果要绘制多个图形，需要声明开始和结束路径，否则图形会相互干扰，影响结果。
@@ -37,6 +44,7 @@ ctx.lineTo(50,100)  // 定义终点
 ctx.strokeStyle= '#f00'   // 线的颜色
 ctx.stroke()        // 画线
 ```
+
 画个树：
 
 ```js
@@ -54,12 +62,13 @@ ctx.lineTo(550,200)
 ctx.lineTo(700,200)
 ctx.fillStyle= '#0f0'
 ctx.fill()
-ctx.strokeStyle = '#0f0' 
+ctx.strokeStyle = '#0f0'
 ctx.stroke()
 ctx.closePath()
 ```
 
 电子画笔
+
 ```js
 let canvas = document.getElementById('canvas');
     let ctx = canvas.getContext('2d');
@@ -89,15 +98,19 @@ ctx.arc(100,100,50,0,2*Math.PI,false)
 ctx.fillStyle= '#f00'
 ctx.fill()
 ```
-```
+
+```js
 arc(x, y, radius, startAngle, endAngle, anticlockwise)
 ```
+
 参数分别表示圆心坐标，半径，起始弧度，结束弧度，绘制方向
 
 角度与弧度的js表达式:
-```
+
+```sh
 弧度 = (Math.PI/180) * 角度
 ```
+
 anticlockwise为true，则按逆时针绘制，false按顺时针绘制，默认为false
 
 数学中的角度逆时针为正，而这里的起止角是以顺时针为正。当起角设为0度，止角设为120度时，会从右边水平位置向下旋转120度。
@@ -125,6 +138,7 @@ ctx.strokeStyle= '#666'
 ctx.strokeRect(140,430,30,30)
 ctx.closePath()
 ```
+
 `ctx.fillRect(50,400,200,100)`表示矩形左上角坐标为(50,400)，宽200px，高100px
 
 ## 阴影
@@ -139,7 +153,8 @@ ctx.shadowBlur= 5
 ctx.fillRect(600,400,200,200)
 ctx.closePath()
 ```
-shadowOffsetX、shadowOffsetY表示阴影横、纵向偏移量，shadowColor表示阴影颜色，shadowBlur表示模糊等级。
+
+`shadowOffsetX`、`shadowOffsetY`表示阴影横、纵向偏移量，`shadowColor`表示阴影颜色，`shadowBlur`表示模糊等级。
 
 ## 渐变
 
@@ -153,12 +168,13 @@ Color.addColorStop(0.5, "yellow");
 Color.addColorStop(1, "gray");
 ctx.fillStyle = Color;
 ctx.fillRect(0, 0, 1200, 800);
-ctx.closePath(); 
+ctx.closePath();
 ctx.stroke();
 ```
-createLinearGradient(x1,y1,x2,y2)，参数表示起点和终点
 
-addColorStop(x,y)，x表示偏移量，y表示颜色
+`createLinearGradient(x1,y1,x2,y2)`，参数表示起点和终点
+
+`addColorStop(x,y)`，x表示偏移量，y表示颜色
 
 ### 径向渐变
 
@@ -174,7 +190,8 @@ ctx.fill()
 ctx.closePath()
 ctx.stroke()
 ```
-createRadialGradient(x1,y1,r1,x2,y2,r2)，起始圆心、结束圆心和相关半径
+
+`createRadialGradient(x1,y1,r1,x2,y2,r2)`，起始圆心、结束圆心和相关半径
 
 ## 图片绘制
 
@@ -218,8 +235,8 @@ draw()
 
 可以用window.setInterval(), window.setTimeout(),和window.requestAnimationFrame()来设定定期执行一个指定函数。
 
-
 ### 示例：行走的绿巨人
+
 ```html
 <canvas id="first-canvas" width="2000" height="800"></canvas>
 <div style="display: none;">
@@ -262,5 +279,3 @@ clearRect()清除以前的图层，防止堆积覆盖
 countNum是计数器，控制图片的切换频率
 
 300ms，当切割宽度到达3个巨人宽度时归零，重新切割。
-
-
