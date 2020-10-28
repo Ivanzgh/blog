@@ -222,9 +222,11 @@ node版本的文档：<https://www.elastic.co/guide/en/elasticsearch/client/java
 
 ## 删除
 
-[https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html)
+<https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-delete.html>
 
 `DELETE /<index>/_doc/<_id>`
+
+假如要删除某个索引下的所有数据
 
 ```yml
 curl -X DELETE "localhost:9200/index111/_doc/1?pretty"
@@ -255,6 +257,23 @@ function indexExists(index){
     index : index
   })
 }
+```
+
+根据某个字段精确删除
+
+```js
+client.deleteByQuery({
+    index: "wlxt_beijing_xiangzhenjie",
+    body: {
+        "query": {
+            "match_phrase": {
+                "properties.name": "博兴街道小区"
+            }
+        }
+    }
+}).then(res => {
+    console.log(res)
+})
 ```
 
 ## 修改

@@ -460,6 +460,9 @@ es6实现：
 let arr = [1,2,1,3,3,4,5,5]
 let res = [... new Set(arr)]
 console.log(res);    // [1, 2, 3, 4, 5]
+
+// or
+Array.from(new Set(arr))
 ```
 
 ## 清空或截断数组

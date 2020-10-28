@@ -29,12 +29,12 @@ foo2<number>(1, 2)
 有两种表示方式：`Array<T>` 和 `T[]`
 
 ```typescript
-function foo3<Fan>(first: Fan[]) {
+function foo3<T>(first: T[]) {
     return first.length
 }
 foo3<string>(['hello', 'world'])
 
-function foo4<Fan>(first: Array<Fan>) {
+function foo4<T>(first: Array<T>) {
     return first.length
 }
 foo4<string>(['hello', 'world'])
@@ -105,7 +105,8 @@ const gen2 = new Foo<string>(['hello','world'])
 const gen3 = new Foo<number>([1, 2])
 ```
 
-上面的例子可以看到泛型可以是string、number、boolean等类型，现在进行泛型约束
+上面的例子可以看到泛型可以是`string`、`number`、`boolean`等类型，
+现在进行泛型约束，使其类型只能是`number`或者`string`
 
 ```typescript
 class Foo<T extends number | string> {

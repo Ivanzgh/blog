@@ -107,6 +107,28 @@
 
 ![image](/blog/img/utils/vscode_theme.png)
 
+#### 代码格式化
+
+`Prettier - Code formatter`和`Beautify`
+
+#### 快速生成React代码片段
+
+`Simple React Snippets`
+
+#### js/ts代码更优雅
+
+`JavaScript Booster`
+
+#### 更好的注释
+
+`Better Comments`改变注释的颜色
+
++ !  红色注释
++ ?  蓝色注释
++ //  灰色删除线注释
++ todo 橘红色注释
++ * 浅绿色注释
+
 #### makrdown语法检查
 
 `markdownlint`

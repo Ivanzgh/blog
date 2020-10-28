@@ -119,10 +119,10 @@ let my: User = {name: 'zgh', age: 24, height: 183};
 接口也可以描述函数类型，给接口定义一个调用签名，包括参数列表和返回值类型
 
 ```typescript
-interface fun {
+interface Fun {
     (name: string, age: number): boolean;
 }
-let myFun: fun = function (name: string, age: number) {
+let myFun: Fun = function (name: string, age: number) {
     return age > 20;
 };
 myFun('zgh', 23);
