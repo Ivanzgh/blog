@@ -24,6 +24,19 @@ foo2<string>('hello', 'world')
 foo2<number>(1, 2)
 ```
 
+定义一种`type`或者`interface`，可以传入泛型参数，达到类型复用的效果
+
+```ts
+type Fan<T> = {
+    [key: string]: T;
+}
+
+const obj: Fan<number> = {
+    a: 1,
+    b: 2
+}
+```
+
 ## 泛型在数组中的使用
 
 有两种表示方式：`Array<T>` 和 `T[]`

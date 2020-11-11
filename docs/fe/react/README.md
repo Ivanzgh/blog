@@ -319,14 +319,56 @@ function Home() {
 }
 ```
 
-### useContext
+简言之，如果不加第二个参数，那么每次渲染的时候都执行`effect`；加`[]`只在第一次执行；
+加`[]`并且里面有变量，表示这个变量更改了就执行
 
-可访问全局状态
+假设做一个数值自增功能
 
 ```jsx
-import React, { useState, useEffect, createContext, useContext } from 'react';
+function Counter() {
+  const [count, setCount] = useState(0);
 
-const numContext = createContext()
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+    return () => clearInterval(id);
+  }, [count]);
+
+  return <h1>{count}</h1>;
+}
+```
+
+当`count`每次改变时，定时器都重新设定和清除。更好的方案是使用**函数式更新**
+<https://zh-hans.reactjs.org/docs/hooks-reference.html#functional-updates>，
+这样`effect`只会执行一次，但是仍能实现自增功能
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCount(c => c + 1);
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return <h1>{count}</h1>;
+}
+```
+
+### useContext
+
+接收一个`context`对象（`React.createContext`的返回值）并返回该`context`的当前值。
+当前的`context`值由上层组件中距离当前组件最近的 `<MyContext.Provider>` 的 `value`决定。
+
+当组件上层最近的`<MyContext.Provider>`更新时，该`Hook`会触发重渲染，并使用最新传递的值。
+
+```jsx
+import React, { useState, createContext, useContext } from 'react';
+
+const numContext = createContext(null)
 
 function Num() {
     const getNum = useContext(numContext)
@@ -336,16 +378,11 @@ function Num() {
 function Home() {
     const [num, setNum] = useState(0)
 
-    useEffect(() => {
-        document.title = num
-        console.log('666');
-        return () => console.log('999');
-    })
-
     return (
         <div className='home'>
             <p>Welcome to React~{num}</p>
             <button onClick={() => setNum(num + 1)}>click me</button>
+
             <numContext.Provider value={num}>
                 <Num />
             </numContext.Provider>
@@ -358,28 +395,33 @@ export default Home
 
 ### useReducer
 
-通过action的传递，更新复杂逻辑的状态
+`useReducer`是`useState`的替代品。接收一个形如`(state, action) => newState` 的 `reducer`，并返回当前的`state`和`dispatch`方法。
+通过`action`的传递，更新复杂逻辑的状态
 
 ```jsx
 import React, { useReducer } from 'react';
 
+const initialState = { count: 0 }
+
+function reducer(state, action) {
+    switch (action.type) {
+        case 'decrement':
+            return {count: state.count + 1}
+        case 'increment':
+            return {count: state.count - 1}
+        default:
+            return state
+    }
+}
+
 function Home() {
-    const [count, dispatch] = useReducer((state, action) => {
-        switch (action) {
-            case 'add':
-                return state + 1
-            case 'sub':
-                return state - 1
-            default:
-                return state
-        }
-    }, 0)
+    const [state, dispatch] = useReducer(reducer, initialState)
 
     return (
         <div className='home'>
-            <h1>{count}</h1>
-            <button onClick={() => dispatch('add')}>add</button>
-            <button onClick={() => dispatch('sub')}>add</button>
+            <h1>{state.count}</h1>
+            <button onClick={() => dispatch({type: 'decrement'})}>decrement</button>
+            <button onClick={() => dispatch({type: 'increment'})}>increment</button>
         </div>
     )
 }

@@ -61,7 +61,9 @@ git branch < branch-name >
 git checkout < branch-name >
 ```
 
-### 新建分支，并切换到该分支（等同于以上两条命令）
+### 新建分支，并切换到该分支
+
+等同于以上两条命令
 
 ```sh
 git checkout -b < branch-name >
@@ -115,10 +117,28 @@ git push
 git remote show origin
 ```
 
+### 查看本地关联的仓库地址
+
+```sh
+git remote -v
+```
+
 ### 删除远程已经不存在但本地还存在的分支
 
 ```sh
 git remote prune origin
+```
+
+### 关联远程仓库
+
+如果存在本地项目，想将其推送到github上，要先和远程仓库关联，然后推送
+
+```sh
+git remote add origin git@github.com:Ivanzgh/elasticsearch.git      # 地址换成自己的
+
+git branch -M main
+
+git push -u origin main
 ```
 
 ## 集成到编辑器

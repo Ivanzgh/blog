@@ -596,3 +596,23 @@ function f(n) {
 }
 console.log(f(3));
 ```
+
+## 函数柯里化
+
+柯里化（Currying）是把接受多个参数的函数转变为接受一个单一参数的函数，并且返回接受余下的参数且返回结果的新函数的技术。
+
+```js
+// add(1)(2)(3) => 6        函数柯里化
+function add(a) {
+    function sum(b) { // 使用闭包
+        a = a + b; // 累加
+        return sum;
+    }
+    sum.toString = function () { // 重写toSting() 方法
+        return a;
+    }
+    return sum; // 返回一个函数
+}
+const res = add(1)(2)(3)
+console.log(res);
+```

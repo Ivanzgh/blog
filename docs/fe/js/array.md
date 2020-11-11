@@ -256,8 +256,8 @@ console.log(rs) // [11, 12, 13]
 
 ```js
 let arr = [1,2,3]
-let sum = arr.reduce((prev,next) => {
-    return prev+next
+let sum = arr.reduce((prev, next) => {
+    return prev + next
 })
 console.log(sum)  // 6
 ```
@@ -266,10 +266,21 @@ console.log(sum)  // 6
 
 ```js
 let arr = [1,2,3]
-let sum = arr.reduce((prev,next) => {
-    return prev+next
-},4)
+let sum = arr.reduce((prev, next) => {
+    return prev + next
+}, 4)
 console.log(sum)  // 10
+```
+
+示例：求和运算
+
+```js
+function add(...args) {
+    return args.reduce((prev, next) => prev + next)
+}
+
+let res = add2(1, 2, 3, 4, 5, 6)
+console.log(res);   // 21
 ```
 
 ## some()
@@ -547,9 +558,20 @@ ES6有一个`flat(depth)`方法可以平铺数组，参数depth表示数组的�
 
 ## 求数组交集
 
+### 去掉重复元素
+
 ```js
 let arr1 = [1,2,3,3,4,5]
 let arr2 = [1,3,5,6]
 let res = [...new Set(arr1)].filter(item => arr2.includes(item))
 console.log(res);  // [1, 3, 5]
+```
+
+### 保留重复元素
+
+```js
+// arr1 = [1, 2, 2, 3]  arr2 = [2, 2]   =>  [2, 2]
+const arr1 = [1, 2, 2, 3],  arr2 = [2, 2, 4]
+const res = arr1.filter(i => arr2.includes(i))
+console.log(res);   // [2, 2]
 ```
