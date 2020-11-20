@@ -213,3 +213,17 @@ console.log(typeof +'1')    // "number"
 + 不要把 DOM结点的属性值放在一个循环里当成循环里的变量
 + 为动画的HTML文件使用position:fixed 或 absolute，那么修改他们的CSS是不会 reflow 的
 + 避免使用table布局，一个很小的改动会造成整个table reflow
+
+## 奇怪的知识
+
+```js
+0 == []     // true
+
+0 == "0"    // true
+
+"0" == []   // false
+
+0 == ""     // true
+
+[] == ""    // true
+```

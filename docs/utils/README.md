@@ -109,7 +109,13 @@
 
 #### 代码格式化
 
-`Prettier - Code formatter`和`Beautify`
++ `Prettier - Code formatter`   推荐
++ `Beautify`
+
+#### 页面预览
+
++ `Open In Browser`     推荐
++ `View In Browser`
 
 #### 快速生成React代码片段
 

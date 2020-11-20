@@ -104,7 +104,8 @@ module.exports = {
                     children: [
                         '',
                         'contact',
-                        'deploy'
+                        'deploy',
+                        'vue3'
                     ]
                 },
                 {
