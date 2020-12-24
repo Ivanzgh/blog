@@ -39,6 +39,10 @@
 
 [vue-clipboard2](https://github.com/Inndy/vue-clipboard2)
 
+## 二维码生成器
+
+[QRCode.js](https://github.com/davidshimjs/qrcodejs)
+
 ## 留言板
 
 [gitalk](https://github.com/gitalk/gitalk)

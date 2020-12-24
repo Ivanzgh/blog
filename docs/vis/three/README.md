@@ -60,6 +60,55 @@ camera.lookAt(scene.position);
 
 ## 灯光
 
+### 平行光
+
+默认`position`位置在`(0, 1, 0)`，指向原点`(0, 0, 0)`。可设置`target`属性为场景中的其他任意有`position`属性的对象
+
+一种方式是创建`Object3D`对象
+
+```js
+const targetObject = new THREE.Object3D();
+const v1 = { x: 84768.72257683857, y: 31758.999152786924, z: 0 };
+targetObject.position.copy(v1);
+scene.add(targetObject);
+
+const light = new THREE.DirectionalLight(0xffffff, 0.4);
+light.target = targetObject;
+scene.add(light);
+```
+
+另一种方式是在场景中创建网格模型`mesh`。聚光灯设置`target`属性和平行光的方式一样
+
+```js
+const spotLight = new THREE.SpotLight(0x00ff00);
+
+const cubeGeometry = new THREE.BoxGeometry(0.001, 0.001, 0.001);
+const cubeMaterial = new THREE.MeshLambertMaterial({ color: "yellow" });
+const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+const v1 = { x: 84768.72257683857, y: 31758.999152786924, z: 0 };
+mesh.position.copy(v1);
+spotLight.target = mesh;
+
+scene.add(spotLight);
+scene.add(mesh);
+```
+
+### 聚光灯
+
+```js
+const spotLight = new THREE.SpotLight( 0xffffff );
+spotLight.position.set( 100, 1000, 100 );
+scene.add( spotLight );
+```
+
+辅助工具
+
+```js
+const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(spotLightHelper);
+```
+
 ## 阴影
 
 ## 几何体
@@ -67,3 +116,37 @@ camera.lookAt(scene.position);
 ## 平移、旋转、缩放
 
 ## 着色器
+
+## 工具
+
+### stats.js
+
+性能监控
+
+<https://github.com/mrdoob/stats.js>
+
+```js
+<script src="https://cdn.jsdelivr.net/npm/three@0.97.0/examples/js/libs/stats.min.js"></script>;
+
+const stats = new Stats();
+stats.domElement.style.zIndex = 100;
+document.getElementById("map").appendChild(stats.domElement);
+
+function animation() {
+  stats.update();
+  requestAnimationFrame(animation);
+}
+animation();
+```
+
+### dat.gui
+
+控制器
+
+<https://github.com/dataarts/dat.gui>
+
+### tween.js
+
+动画引擎
+
+<https://github.com/tweenjs/tween.js>

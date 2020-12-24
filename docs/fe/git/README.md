@@ -228,7 +228,7 @@ git rm --cached .DS_Store
 
 ### 无法访问github
 
-修改hosts文件，打开`C:\Windows\System32\drivers\etc`下的hosts文件，添加如下内容：
+Windows下修改hosts文件，打开`C:\Windows\System32\drivers\etc`下的hosts文件，添加如下内容：
 
 ```yml
 140.82.113.4 github.com
@@ -257,3 +257,7 @@ git rm --cached .DS_Store
 
 注意以上地址并不是固定的，通过[https://www.ipaddress.com/](https://www.ipaddress.com/)输入以上各个域名即可查询到最新的IP地址。
 如果有必要可以刷新一下DNS解析缓存，打开cmd窗口输入`ipconfig /flushdns`即可。
+
+::: tip
+如果无法保存hosts文件，可以在开始栏找到Windows附件，找到记事本，以管理员身份运行，然后找到hosts文件位置，选择所有文件，即可保存更改。
+:::

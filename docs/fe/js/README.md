@@ -2,7 +2,7 @@
 
 ## 数据类型
 
-基本数据类型： Number、String、Boolean、Null、Undefined、Symbol、BigInt
+基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
 
 引用类型： 函数、数组、对象
 
@@ -151,6 +151,27 @@ let res2 = parseFloat('1.23')
 console.log(typeof +'1')    // "number"
 ```
 
+## Math.floor、Math.round、Math.ceil
+
+`Math.round`四舍五入取整 `Math.ceil`向上取整 `Math.floor`向下取整
+
+```js
+Math.round(1.23)    // 1
+Math.round(1.78)    // 2
+Math.round(-1.23)   // -1
+Math.round(-1.78)   // -2
+
+Math.ceil(1.23)     // 2
+Math.ceil(1.78)     // 2
+Math.ceil(-1.23)    // -1
+Math.ceil(-1.78)    // -1
+
+Math.floor(1.23)    // 1
+Math.floor(1.78)    // 1
+Math.floor(-1.23)   // -2
+Math.floor(-1.78)   // -2
+```
+
 ## 锚点链接
 
 实现地址栏变化，页面不刷新
@@ -226,4 +247,26 @@ console.log(typeof +'1')    // "number"
 0 == ""     // true
 
 [] == ""    // true
+```
+
+## 表达式和运算符
+
+### 自增
+
+前置自增，先执行后运算
+
+```js
+let a = 1
+let b = a++
+console.log(a)  // 2
+console.log(b)  // 1
+```
+
+后置自增，先运算后执行
+
+```js
+let a = 1
+let b = ++a
+console.log(a)  // 2
+console.log(b)  // 2
 ```
