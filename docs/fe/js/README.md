@@ -70,6 +70,10 @@ for (let n in obj) {
 console.log(Object.prototype);
 ```
 
+## if in
+
+`if ( key in obj)` 意为判断对象`obj`中是否有 `key` 属性 ，有则返回 `true`， 没有则返回 `false`
+
 ## innerHTML和innerText的区别
 
 都能获取document对象文本内容，`innerHTML`能获取html标签，而`innerText`不能获取

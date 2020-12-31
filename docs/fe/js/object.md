@@ -12,7 +12,7 @@ Object.assign(obj2, obj1);
 console.log(obj2);   // {d: 4, e: 5, c: 3, a: 1, b: 2}
 ```
 
-如果目标对象中的属性具有相同的键，则属性将被源对象中的属性覆盖。如例子中的 obj2.c 值由6被覆盖为3
+如果目标对象中的属性具有相同的键，则属性将被源对象中的属性覆盖。如例子中的 `obj2.c` 值由6被覆盖为3
 
 ```js
 let obj1 = {
@@ -82,7 +82,7 @@ me.say();   // My name is zgh. 23 years old
 ### 数据描述符
 
 * `value`，表示该属性对应的值，默认`undefined`
-* `writable`,表示是否可写，默认`false`
+* `writable`，表示是否可写，默认`false`
 
 ```js
 let o = {};
@@ -100,7 +100,7 @@ console.log(o.a)    // 37
 ### 存取描述符
 
 * `get`，表示属性的getter函数，当访问该属性时会被调用
-* `set`,表示属性的setter函数，当属性值被修改时会被调用
+* `set`，表示属性的setter函数，当属性值被修改时会被调用
 
 ```js
 let obj = {

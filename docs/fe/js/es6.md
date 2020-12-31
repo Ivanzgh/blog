@@ -4,17 +4,18 @@
 
 ### let
 
-用来声明变量，只在 let 命令所在的代码块内有效，即块级作用域。不存在变量提升，它所声明的变量一定要在声明后使用，不允许重复声明，否则报错。 举个例子：
+用来声明变量，只在 let 命令所在的代码块内有效，即**块级作用域**。不存在变量提升，它所声明的变量一定要在声明后使用，不允许重复声明，否则报错。 举个例子：
 
 ```js
-function letTest() {
-  let a = 1;
+function varTest() {
+  var a = 1;
   if (true) {
-    let a = 2;
+    var a = 2;
     console.log(a); // 2
   }
   console.log(a); // 2
 }
+
 function letTest() {
   console.log(b); // ReferenceError: b is not defined
   let b = 1;
@@ -164,7 +165,7 @@ console.log(name, age); //zgh 22
 
 ```js
 let f = ([a, b]) => a + b;
-f([1, 2]);  // 3
+f([1, 2]); // 3
 ```
 
 上述代码可将数组`[1, 2]`看作一个参数`param`，即`param = [1, 2]`
