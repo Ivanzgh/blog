@@ -64,6 +64,7 @@
 
 + ctrl + f - 搜索/替换
 + shift + alt + 鼠标左键选择 - 选择多行
++ alt + ←→ - 切换更改的位置
 
 ### 报错"在此系统上禁止运行脚本"
 
@@ -110,12 +111,40 @@
 #### 代码格式化
 
 + `Prettier - Code formatter`   推荐
+
 + `Beautify`
 
 #### 页面预览
 
-+ `Open In Browser`     推荐
++ `Live Server`   本地服务，热更新
+
++ `Open In Browser`
+
 + `View In Browser`
+
+#### html和css
+
++ `Auto Rename Tag`       自动重命名html标签
+
++ `HTML CSS Support`      支持id和class属性关联提示
+
++ `Easy LESS`     支持less
+
++ `language-stylus`       支持stylus
+
++ `Bracket Pair Colorizer`        括号高亮
+
+#### 其他
+
+`vscode-icons`      小图标
+
+`Vetur`     vue工具
+
+`Bookmarks`     书签，方便跳转
+
+`韭菜盒子`      股票基金
+
+``
 
 #### 快速生成React代码片段
 
@@ -133,7 +162,7 @@
 + ?  蓝色注释
 + //  灰色删除线注释
 + todo 橘红色注释
-+ * 浅绿色注释
++ \* 浅绿色注释
 
 #### makrdown语法检查
 

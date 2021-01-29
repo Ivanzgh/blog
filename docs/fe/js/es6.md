@@ -52,6 +52,18 @@ arr = [];
 console.log(arr); // 改变数组的指向会出错 Uncaught TypeError: Assignment to constant letiable
 ```
 
+::: warning
+let 和 const 声明的全局变量不属于顶层对象的属性，只存在于块级作用域中
+
+```js
+let a = 1;
+const b = 2;
+console.log(window.a); // undefined
+console.log(window.b); // undefined
+```
+
+:::
+
 ## 模板字符串
 
 模板字符串（templatestring）是增强版的字符串，用反引号(`),标识，嵌入的变量名写在\${}之中。
@@ -300,38 +312,90 @@ let obj = {
 
 ## Set
 
-Set 对象是一组不重复的、无序的值的集合，可以往里面添加、删除、查询数据
+`Set`对象是一组不重复的、无序的值的集合，可以往里面添加、删除、查询数据。
+
+`Set`本身是一个构造函数，用来生成`Set`数据结构
+
+`Set()`接受具有`iterable`可迭代接口的数据结构作为参数，如数组、类数组、字符串等。
+不能接受对象结构，否则报错`Uncaught TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))`
 
 ```js
-//声明一个Set对象
+const set1 = new Set([1, 2, 3, 4, 5, 5, 5, 5]);
+set1.size; // 5
+
+// 两个对象是不相等的
+const set2 = new Set();
+set2.add({});
+set3.size; // 1
+set3.add({});
+set3.size; // 2
+
+// 声明一个Set对象
 let mySet = new Set();
 
-//添加元素
+// 添加元素
 mySet.add(1);
 mySet.add("hi");
 mySet.add([2, "hello"]);
 
-//判断集合中是否存在一个元素1
+// 判断集合中是否存在一个元素1
 mySet.has(1); // true
 
 // 删除集合中的字符串
 mySet.delete("hi");
 
-//获取集合中元素的数量
-mySet.size;
+// 获取集合中元素的数量
+mySet.size; // 3
 
-//遍历
+// 遍历
 mySet.forEach((item) => console.log(item));
 
-//删除集合中所有的元素
+// 删除集合中所有的元素
 mySet.clear();
 ```
 
-Set 只存储唯一值，可用来数组去重
+遍历操作
+
+```js
+let mySet = new Set(["a", "b", "c"]);
+
+// entries()返回的遍历器同时包括键名和键值，二者一样
+for (let i of mySet.entries()) {
+  console.log(i);
+}
+// ["a", "a"]
+// ["b", "b"]
+// ["c", "c"]
+
+// keys()返回键名
+for (let i of mySet.keys()) {
+  console.log(i);
+}
+// 'a'
+// 'b'
+// 'c'
+
+// values()返回键值，结果同keys()
+for (let i of mySet.values()) {
+  console.log(i);
+}
+```
+
+`Set`只存储唯一值，可用来数组去重
 
 ```js
 let arr = [1, 1, 2, 2, 3, 3];
-let deduped = [...new Set(arr)]; // [1, 2, 3]
+let res1 = [...new Set(arr)]; // [1, 2, 3]
+
+// 或者使用 Array.from()
+let res2 = Array.from(new Set(arr)); // [1, 2, 3]
+```
+
+也可以用来字符串去重
+
+```js
+const str = [...new Set("ababbc")].join("");
+console.log(str); // 'abc'
 ```
 
 ## Map
@@ -427,10 +491,22 @@ let obj = new Person("zgh", 22);
 obj.say();
 ```
 
-上面代码定义了一个“类”，里面有一个`constructor`方法，这就是构造方法，而 this 关键字则代表实例对象。也就是说，ES5 的构造函数 Person，对应 ES6 的 Person 类的构造方法。
+上面代码定义了一个“类”，里面有一个`constructor`方法，这就是构造方法，而`this`关键字则代表实例对象。也就是说，ES5 的构造函数 `Person`，
+对应 ES6 的 `Person` 类的构造方法。
 
 Person 类除了构造方法，还定义了一个`say`方法。注意，定义“类”的方法的时候，前面不需要加上`function`这个关键字，直接把函数定义放进去了就可以了。
 另外，方法之间不需要逗号分隔，否则会报错。
+
+```js
+function Foo() {}
+Foo.prototype.constructor === Foo; // true
+
+const fo = new Foo();
+fo.constructor === Foo; // true
+```
+
+`Foo.prototype`默认有一个公有且不可枚举的`construetor`属性，这个属性引用的是对象关联的函数（上例中是 Foo）。
+“构造函数”调用`new Foo()`创建的对象在`__proto__`上也有`construetor`属性，指向“创建这个对象的函数”
 
 [https://segmentfault.com/a/1190000023516545](https://segmentfault.com/a/1190000023516545)
 

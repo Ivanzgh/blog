@@ -197,7 +197,7 @@ let obj = {
 obj.fun();
 ```
 
-如果把对象方法赋值给变量，调用该方法时，this 指向 window
+如果把对象方法赋值给变量，调用该方法时，this 指向 `window`
 
 ```js
 let dd = "js"; // 若 var dd = 'js',则 this.dd结果为 js
@@ -213,7 +213,7 @@ res();
 
 ### 作为构造函数调用
 
-在调用一个构造函数时加上 new 关键字，此时 this 指向这个构造函数调用时实例化出来的对象
+在调用一个构造函数时加上 `new` 关键字，此时 `this` 指向这个构造函数调用时实例化出来的对象
 
 ```js
 function f(name) {
@@ -226,7 +226,7 @@ console.log(typeof res); // object
 
 ### 定时器中使用
 
-js 中的定时器都是定义在 window 下的，所以二者都是指向 window
+js 中的定时器都是定义在 `window` 下的，所以二者都是指向 `window`
 
 ```js
 setInterval(function f() {
@@ -240,7 +240,20 @@ setTimeout(function g() {
 
 ### 箭头函数中使用
 
-全局调用指向 window
+箭头函数中`this`的值取决于该函数外部非箭头函数的`this`的值，即外层（函数或者全局）作用域来决定`this`，
+且不能通过 `call()`、`apply()` 和 `bind()` 方法来改变 `this` 的值。
+
+```js
+let obj = {
+  val: "1",
+};
+let fun = () => {
+  console.log(this); // window
+};
+fun.call(obj);
+```
+
+全局调用指向 `window`
 
 ```js
 let fun = () => {
@@ -249,15 +262,33 @@ let fun = () => {
 fun();
 ```
 
-作为对象的方法调用，this 指向 window
+作为对象的方法调用，this 指向 `window`
 
 ```js
-let obj = {
+let obj1 = {
+  age: 23,
   fun: () => {
     console.log(this); // window
   },
 };
-obj.fun();
+obj1.fun();
+
+let obj2 = {
+  age: 23,
+  fun: function() {
+    console.log(this); // {age: 23, fun: ƒ}
+  },
+};
+obj2.fun();
+
+// 一般使用方法简写
+let obj3 = {
+  age: 23,
+  fun() {
+    console.log(this); // {age: 23, fun: ƒ}
+  },
+};
+obj3.fun();
 ```
 
 箭头函数作为定时器延时执行的函数调用，this 指向定义时所在的对象
@@ -274,18 +305,6 @@ let obj = {
   },
 };
 obj.fun();
-```
-
-箭头函数中 this 的值取决于该函数外部非箭头函数的 this 的值，且不能通过 call()、apply() 和 bind() 方法来改变 this 的值。
-
-```js
-let obj = {
-  val: "1",
-};
-let fun = () => {
-  console.log(this); // window
-};
-fun.call(obj);
 ```
 
 #### 小测试
@@ -632,10 +651,25 @@ console.log(f(3));
 
 ## 函数柯里化
 
-柯里化（Currying）是把接受多个参数的函数转变为接受一个单一参数的函数，并且返回接受余下的参数且返回结果的新函数的技术。
+柯里化（Currying）是把一个多参数的函数，转变为单一参数的函数
 
 ```js
-// add(1)(2)(3) => 6        函数柯里化
+function f(x, y) {
+  return x + y;
+}
+f(1, 2);
+
+function g(x) {
+  return function(y) {
+    return x + y;
+  };
+}
+g(1)(2);
+```
+
+示例：实现 `add(1)(2)(3) => 6`
+
+```js
 function add(a) {
   function sum(b) {
     // 使用闭包

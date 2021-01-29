@@ -6,8 +6,9 @@
 
 ```js
 let arr = [2, 1, 3];
-let rs = arr.join();
-console.log(rs); //  2,1,3
+arr.join();   // '2,1,3'
+arr.join('')  // '213'
+arr.join('-') // '2-1-3'
 ```
 
 ## sort()
@@ -49,26 +50,6 @@ console.log(rs1); // [2, 1, 3, 4, 5]
 console.log(rs2); // [2, 1, 3, 6, 7, 8]
 ```
 
-## slice()
-
-语法：`arrayObject.slice(start[, end])`
-
-从数组中截取一段元素，组成一个新的数组。新数组包括`start`，不包括`end`。若没指定 `end`，则从 `start` 截取到数组结束的所有元素。
-新数组是对原数组的浅拷贝，原数组不会被改变。
-
-```js
-let arr = [1, 2, 3, 4, 5];
-
-let rs1 = arr.slice(0, 3);
-console.log(rs1); // [1, 2, 3]
-
-let rs2 = arr.slice(-5, -1);
-console.log(rs2); // [1, 2, 3, 4]
-
-let rs3 = arr.slice(1);
-console.log(rs3); //[2, 3, 4, 5]
-```
-
 ## push()
 
 向数组的末尾添加一个或更多元素，并返回新的长度。
@@ -105,6 +86,40 @@ console.log(arr); // [4, 2, 1, 5]
 ```js
 let arr = [1, 2, 3];
 console.log(arr.toString()); //1,2,3
+```
+
+## slice()
+
+语法：`arrayObject.slice(start[, end])`
+
+从数组中截取一段元素，组成一个新的数组。新数组包括`start`，不包括`end`。若没指定 `end`，则从 `start` 截取到数组结束的所有元素。
+新数组是对原数组的浅拷贝，原数组不会被改变。
+
+```js
+let arr = [1, 2, 3, 4, 5];
+
+let rs1 = arr.slice(0, 3);
+console.log(rs1); // [1, 2, 3]
+
+let rs2 = arr.slice(-5, -1);
+console.log(rs2); // [1, 2, 3, 4]
+
+let rs3 = arr.slice(1);
+console.log(rs3); //[2, 3, 4, 5]
+```
+
+## splice()
+
+删除或者添加元素，然后返回删除的元素
+
+语法：`splice(index,sum,item1,item2,...)`
+
+替换数组中的元素：
+
+```js
+let arr = ["a", "b", "c", "d"];
+arr.splice(1, 2, "e", "f");
+console.log(arr); // ["a","e","f","d"]
 ```
 
 ## split()
@@ -213,20 +228,6 @@ if (fruits.indexOf("Apple") > -1) {
 如果在数组中没找到指定元素则返回 -1
 
 若查找字符串最后出现的位置，用 `lastIndexOf()` 方法
-
-## splice()
-
-删除或者添加元素，然后返回删除的元素
-
-语法：`splice(index,sum,item1,item2,...)`
-
-替换数组中的元素：
-
-```js
-let arr = ["a", "b", "c", "d"];
-arr.splice(1, 2, "e", "f");
-console.log(arr); // ["a","e","f","d"]
-```
 
 ## Array.isArray()
 
