@@ -6,7 +6,7 @@
 
 ### 变量提升
 
-变量提升，就是把变量提升到函数的顶部，只是提升变量的声明，不会把变量的值也提升上来
+变量提升，就是把变量提升到**函数的顶部**，只是提升变量的声明，不会把变量的值也提升上来
 
 ```js
 var name = "haha";
@@ -14,8 +14,8 @@ function changeName() {
   console.log(name);
   var name = "xixi";
 }
-changeName(); //undefined
-console.log(name); //haha
+changeName(); // undefined
+console.log(name); // haha
 ```
 
 提升后如下
@@ -35,27 +35,23 @@ console.log(name);
 
 函数提升就是把函数提升到前面。
 
-在 JavaScript 中函数的创建方式有三种：函数声明（静态的）、函数表达式（函数字面量）、函数构造法（动态的，匿名的）。
+在 JavaScript 中函数的创建方式有三种：函数声明（静态的）、函数表达式（函数字面量）、构造函数（动态的，匿名的）。
 
 函数表达式的形式如下：
 
 ```js
-var func1 = function(n1, n2) {
-  //function body;
-};
+var fun1 = function(n1, n2) {};
 ```
 
-函数构造法构造函数的形式如下:
+构造函数的形式如下:
 
 ```js
-
-var func2 = new Function("para1","para2",...,"function body");
+var fun2 = new Function("param1", "param2");
 ```
 
-只有函数声明形式才能被提升
+只有函数声明形式才能被真正提升，函数表达式形式提升的只是一个没有值的变量
 
 ```js
-//函数声明
 function f() {
   g();
   function g() {
@@ -63,6 +59,12 @@ function f() {
   }
 }
 f();
+
+console.log(m); // undefined
+m(); // TypeError: m is not a function
+var m = function() {
+  console.log(1);
+};
 ```
 
 ## 原型链
@@ -131,8 +133,8 @@ getValue.bind(a, "zgh", "23")();
 
 在全局作用域中：
 
-- 创建的变量都会作为 window 对象的属性保存。
-- 创建的函数都会作为 window 对象的方法保存。
+- 创建的变量都会作为`window`对象的属性保存
+- 创建的函数都会作为`window`对象的方法保存
 
 ### 局部作用域
 
@@ -140,14 +142,14 @@ getValue.bind(a, "zgh", "23")();
 
 ### 块级作用域
 
-ES6 增加的 let、const 可以声明块级作用域
+ES6 增加的`let`、`const`可以声明块级作用域，只在`let`和`const`命令所在的代码块内有效
 
 ### 作用域链
 
 当在函数作用域操作一个变量时，它会先在自身作用域中寻找，如果有就直接使用（就近原则）。如果没有则向上一级作用域中寻找，直到找到全局作用域；
-如果全局作用域中依然没有找到，则会报错 ReferenceError。
+如果全局作用域中依然没有找到，则会报错 `ReferenceError`。
 
-在函数中要访问全局变量可以使用 window 对象。
+在函数中要访问全局变量可以使用`window`对象。
 
 ### 执行上下文
 
@@ -414,9 +416,41 @@ console.log(res); // hehe
 
 ## 深拷贝、浅拷贝
 
+浅拷贝：
+
+```js
+const obj = {
+  name: "zgh",
+};
+function shallowClone(obj) {
+  const newObj = {};
+  for (let i in obj) {
+    newObj[i] = obj[i];
+  }
+  return newObj;
+}
+shallowClone(obj); // {name: "zgh"}
+```
+
+深拷贝：
+
+```js
+function deepClone(obj) {
+  if (typeof obj === "object") {
+    let res = obj.constructor === Array ? [] : {};
+    for (let i in obj) {
+      res[i] = typeof obj[i] === "object" ? deepClone(obj[i]) : obj[i];
+    }
+  } else {
+    let res = obj;
+  }
+  return obj;
+}
+```
+
 <https://juejin.im/post/59ac1c4ef265da248e75892b>
 
-<https://blog.csdn.net/weixin_33845477/article/details/88590652>
+<https://www.cnblogs.com/echolun/p/7889848.html>
 
 如何区分深拷贝与浅拷贝？
 

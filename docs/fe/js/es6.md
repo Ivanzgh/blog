@@ -4,7 +4,7 @@
 
 ### let
 
-用来声明变量，只在 let 命令所在的代码块内有效，即**块级作用域**。不存在变量提升，它所声明的变量一定要在声明后使用，不允许重复声明，否则报错。 举个例子：
+用来声明变量，**只在`let`命令所在的代码块内有效**，即**块级作用域**。不存在变量提升，它所声明的变量一定要在声明后使用，不允许重复声明，否则报错。 举个例子：
 
 ```js
 function varTest() {
@@ -19,6 +19,7 @@ function varTest() {
 function letTest() {
   console.log(b); // ReferenceError: b is not defined
   let b = 1;
+  // let b = 2; // Uncaught SyntaxError: Identifier 'b' has already been declared
   if (true) {
     let b = 2;
     console.log(b); // 2
@@ -27,24 +28,17 @@ function letTest() {
 }
 ```
 
+在`letTest()`的 if 语句中，可以再次声明变量 b，是因为变量 b 只在这个 if 语句中有效，即块级作用域，所以最后打印出来的是 1。
+如果在 if 语句中使用`var`声明变量 b，会报错。`let`在 for 循环和 if 中使用是同规则的
+
 ### const
 
-const 声明一个只读的常量。一旦声明，常量的值就不能改变。这意味着，const 一旦声明变量，就必须立即初始化，不能留到后面赋值。
-
-```js
-const a;
-//SyntaxError: Missing initializer in const declaration
-```
-
-const 的作用域与 let 命令相同：只在声明所在的块级作用域内有效。也不存在变量提升，不允许重复声明。
-
-**const 本质并不是保证变量的值不得改动，而是变量指向的那个内存地址所保存的数据不得改动**。如果 const 后面的变量是普通变量，改变值报错。
-如果后面存储的是数组或者对象，那么改变它的指向也会报错，但是如果改变数组或者对象的值是不会发生错误的。
+`const`声明一个只读的常量。一旦声明，常量的值就不能改变。必须立即初始化，不能留到后面赋值。只在声明所在的块级作用域内有效。
+不存在变量提升，不允许重复声明。**复杂类型(数组、对象等)指针指向的地址不能更改，内部数据可以更改**
 
 ```js
 const a = "123";
-a = "234";
-console.log(a); // TypeError: Assignment to constant letiable.
+a = "234"; // TypeError: Assignment to constant letiable.
 const arr = [1, 2, 3];
 arr.push(4);
 console.log(arr); // [1,2,3,4]
@@ -64,19 +58,20 @@ console.log(window.b); // undefined
 
 :::
 
+<https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/133>
+
 ## 模板字符串
 
-模板字符串（templatestring）是增强版的字符串，用反引号(`),标识，嵌入的变量名写在\${}之中。
+模板字符串（templatestring）是增强版的字符串，用反引号\`标识，嵌入的变量名写在`${}`之中。
 
 第一个用途，基本的字符串格式化。
 
 ```js
-//ES5
-let name = "world";
+const name = "world";
+// ES5
 console.log("hello" + name);
-//ES6
-let name = "world";
-console.log(`hello ${name}`);
+// ES6
+console.log(`hello${name}`);
 ```
 
 第二个用途，做多行字符串或者字符串一行行拼接。
@@ -165,13 +160,14 @@ let { name, age } = {
   name: "zgh",
   age: 22,
 };
-console.log(name, age); //zgh 22
+console.log(name, age); // zgh 22
 ```
 
-注意：对象与数组解构的不同点：
+::: tip 对象与数组解构的不同点
 
 - 数组的元素是按次序排列的，变量的取值由它的位置决定
 - 对象的属性没有次序，变量必须与属性同名，才能取到正确的值
+  :::
 
 ### 函数参数的解构赋值
 
@@ -180,7 +176,7 @@ let f = ([a, b]) => a + b;
 f([1, 2]); // 3
 ```
 
-上述代码可将数组`[1, 2]`看作一个参数`param`，即`param = [1, 2]`
+上述代码可将数组`[1, 2]`看作一个参数`param`，即`param = [1, 2]`，外面的小括号不能去掉
 
 ## 函数
 
@@ -251,20 +247,18 @@ let person = function(name) {
 
 #### 箭头函数的 this 指向
 
-箭头函数本身是没有 this 和 arguments 的，在箭头函数中引用 this 实际上是调用的是定义时的父执行上下文的 this。简单对象（非函数）是没有执行上下文的。
+箭头函数本身是没有`this`和`arguments`的，在箭头函数中引用 this 实际上是调用的是定义时的父执行上下文的 this。简单对象（非函数）是没有执行上下文的。
 
 ```js
 let obj = {
-  say: function() {
-    let f1 = () => {
-      console.log(this);
-    };
+  say() {
+    let f1 = () => console.log(this);
     f1();
   },
 };
 let rs = obj.say;
-rs(); //f1执行时，say函数指向window，所以f1中的this指向window
-obj.say(); //f1执行时，say函数指向obj，所以f1中的this指向obj
+rs(); // f1执行时，say函数指向window，所以f1中的this指向window
+obj.say(); // f1执行时，say函数指向obj，所以f1中的this指向obj
 ```
 
 ## 对象
@@ -462,7 +456,7 @@ console.log(merged) // {a:1, b:30, c:40, d:50}
 
 ## Class
 
-ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过 class 关键字，可以定义类。基本上，ES6 的 class 可以看作只是一个语法糖，
+ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过 `class` 关键字，可以定义类。基本上，ES6 的 class 可以看作只是一个语法糖，
 它的绝大部分功能，ES5 都可以做到，新的 class 写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。
 
 ```js
@@ -508,7 +502,7 @@ fo.constructor === Foo; // true
 `Foo.prototype`默认有一个公有且不可枚举的`construetor`属性，这个属性引用的是对象关联的函数（上例中是 Foo）。
 “构造函数”调用`new Foo()`创建的对象在`__proto__`上也有`construetor`属性，指向“创建这个对象的函数”
 
-[https://segmentfault.com/a/1190000023516545](https://segmentfault.com/a/1190000023516545)
+<https://segmentfault.com/a/1190000023516545>
 
 ### Class 继承
 
@@ -532,9 +526,9 @@ class MVP extends NBAPlayer {
     console.log(`我是${this.name},在${this.year}获得MVP!`);
   }
 }
-let r1 = new NBAPlayer("科比", "39", "198");
+let r1 = new NBAPlayer("Jack", "39", "198");
 r1.say();
-let r2 = new MVP("科比", "39", "198", "2010");
+let r2 = new MVP("Jack", "39", "198", "2010");
 r2.showMVP();
 ```
 
@@ -630,47 +624,61 @@ class Foo extends React.Component {
 
 ## Promise
 
-在 promise 之前代码过多的回调或者嵌套，可读性差、耦合度高、扩展性低。通过 Promise 机制，扁平化的代码机构，大大提高了代码可读性；
-用同步编程的方式来编写异步代码，保存线性的代码逻辑，极大的降低了代码耦合性而提高了程序的可扩展性。
+`promise`用同步编程的方式来编写异步代码，解决回调嵌套问题
 
 ```js
-function Hello(hi) {
-  return new Promise(function(resolve, reject) {
-    if (hi) {
-      resolve("HelloWorld");
-    } else {
-      reject("GoodBay");
-    }
-  });
-}
-Hello(true).then(
-  function(message) {
-    console.log(message);
-  },
-  function(error) {
-    console.log(error);
-  }
-);
+new Promise((resolve, reject) => {});
 ```
-
-上面的代码实现的功能非常简单，Hello 函数接受一个参数，如果为`true`就打印 "Hello World!"，如果为`false`就打印错误的信息。Hello 函数返回的是一个 Promise 对象。
-在 Promise 对象当中有两个重要方法——`resolve` 和 `reject`。
-`resolve` 方法可以使 Promise 对象的状态改变成成功，同时传递一个参数用于后续成功后的操作，在这个例子当中就是 Hello World 字符串
-`reject` 方法则是将 Promise 对象的状态改变为失败，同时将错误的信息传递到后续错误处理的操作
 
 ### Promise 的三种状态
 
-- resolved 可以理解为成功的状态
-- rejected 可以理解为失败的状态
-- pending promise 对象实例创建时候的初始状态
+- `resolved` 成功
+- `rejected` 失败
+- `pending` 创建 promise 对象实例进行中
 
-Hello 函数的例子中的`then`方法就是根据 Promise 对象的状态来确定执行的操作，`resolve`时执行第一个函数（onFulfilled），`reject`时执行第二个函数（onRejected）
+#### then 方法
+
+分别指定`resolved`状态和`rejected`状态的回调函数，第二个参数可选（不推荐使用）。
+返回的是一个新的`Promise`，支持链式调用
+
+```js
+function pro(params) {
+  return new Promise((resolve, reject) => {
+    if (params) {
+      resolve("hahaha");
+    } else {
+      reject("error");
+    }
+  });
+}
+pro(true).then(
+  (res) => {
+    console.log(res);
+  },
+  (err) => console.log(err)
+);
+```
+
+::: warning
+`Promise` 本身是同步的，`then` 方法是异步的
+
+```js
+const p = new Promise((resolve, reject) => {
+  console.log(1);
+  resolve(3);
+});
+p.then((res) => console.log(res));
+console.log(2);
+```
+
+结果是1、2、3
+:::
 
 #### catch 方法
 
 ```js
 function Cat(ready) {
-  return new Promise(function(resolve, reject) {
+  return new Promise((resolve, reject) => {
     if (ready) {
       resolve("Tom");
     } else {
@@ -679,20 +687,35 @@ function Cat(ready) {
   });
 }
 Cat(false)
-  .then(function(value1) {
-    console.log(value1);
+  .then((res) => {
+    console.log(res);
   })
-  .catch(function() {
-    console.log("此时执行的是then方法中的第二个函数参数");
-  });
+  .catch((err) => console.log(err));
 ```
 
-catch 方法是 `then(onFulfilled, onRejected)` 方法当中 `onRejected` 函数的一个简单的写法，也就是说可以写成`then(fn).catch(fn)`，相当于 `then(fn).then(null, fn)`。使用 catch 的写法比一般的写法更加清晰明确
+`catch`方法可以捕获错误，作用和 `then(onFulfilled, onRejected)` 当中的 `onRejected` 函数类似。
+
+```js
+Cat(false)
+  .then((res) => {
+    console.log(tom);
+  })
+  .catch((err) => console.log(err));
+```
+
+示例未定义变量 tom，如果不使用 catch 会直接报错，终止程序。使用后不会报错，但会将错误信息传递到 catch 方法中，方便处理
+
+::: tip
+将`catch`语句和`try/catch`语句进行比较
+:::
 
 #### all 和 race 方法
 
+`Promise.all()`提供并行执行异步操作的能力，将多个实例包装成一个新实例，返回全部实例状态变更后的结果数组(**全部变更再返回**)
+
+`Promise.race()`将多个实例包装成一个新实例，返回全部实例状态优先变更后的结果(**先变更先返回**)
+
 ```js
-console.time();
 let p1 = new Promise(function(resolve) {
   setTimeout(function() {
     resolve("Hello");
@@ -702,24 +725,28 @@ let p1 = new Promise(function(resolve) {
 let p2 = new Promise(function(resolve) {
   setTimeout(function() {
     resolve("world");
-  }, 3000);
+  }, 1000);
 });
 
-Promise.all([p1, p2]).then(function(result) {
-  console.log(result);
-  console.timeEnd();
+Promise.all([p1, p2]).then((res) => {
+  console.log(res);
+});
+
+Promise.race([p1, p2]).then((res) => {
+  console.log(res);
 });
 ```
 
-上面的例子模拟了传输两个数据需要不同的时长，虽然 p2 的速度比 p1 要快，但是 `Promise.all` 方法会按照数组里面的顺序将结果返回。`Promise.race`方法和`Promise.all`相类似，它同样接收一个数组，不同的是只要该数组中的 Promise 对象的状态发生变化（无论是 resolve 还是 reject）该方法都会返回。
+结果是 1 秒后打印出`world`，3 秒后打印出`["Hello", "world"]`，表明`Promise.all` 方法会按照参数数组里面的顺序将结果返回。
+`Promise.race`方法则是只要该数组中的`Promise`对象的状态发生变化（无论是`resolve`还是`reject`）该方法都会返回。
 
 ## async、await
 
-async、await 用来处理异步问题
+`async`、`await`用来处理异步问题
 
-async 放置在函数的前面，返回一个 promise
+`async`放置在函数的前面，返回一个`promise`
 
-await 只能在 async 函数里面使用，可以让 js 进行等待，直到一个 promise 执行并返回它的结果，js 才会继续往下执行
+**await 只能在 async 函数里面使用**，可以让 js 进行等待，直到一个 promise 执行并返回它的结果，js 才会继续往下执行
 
 ```js
 async function f() {

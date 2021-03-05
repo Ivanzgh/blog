@@ -315,30 +315,30 @@ export default defineComponent({
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, computed } from 'vue';
+import { defineComponent, reactive, toRefs, computed } from "vue";
 
 interface DataProps {
   list: string[];
 }
 
 export default defineComponent({
-  name: 'HelloWorld',
+  name: "HelloWorld",
   setup() {
     const data: DataProps = reactive({
-      list: ['first', 'second', 'third']
-    })
+      list: ["first", "second", "third"],
+    });
 
-    const count = computed(() => data.list.length)
+    const count = computed(() => data.list.length);
 
-    return { ...toRefs(data), count }
-  }
+    return { ...toRefs(data), count };
+  },
 });
 </script>
 ```
 
 ## hooks
 
-在 `src` 目录下新建 `hooks` 文件夹，建立一个`useMousePosition.ts`文件，功能是获取鼠标位置，hooks命名建议以`use`开头
+在 `src` 目录下新建 `hooks` 文件夹，建立一个`useMousePosition.ts`文件，功能是获取鼠标位置，hooks 命名建议以`use`开头
 
 ```ts
 import { ref, onMounted, onUnmounted } from "vue";
@@ -385,4 +385,29 @@ export default defineComponent({
   },
 });
 </script>
+```
+
+## 填坑记录
+
+### vue-router
+
+#### 404错误
+
+2020/2/3
+
+匹配404路由时，以前是`path: "*"`，现在是`path: "/:catchAll(.*)"`，否则报下面的错误
+
+```sh
+Catch all routes ("*") must now be defined using a param with a custom regexp.
+```
+
+更正：
+
+```sh
+  {
+    path: "/404",
+    name: '404',
+    component: () => import(/* webpackChunkName: "404" */ "@/views/404.vue"),
+  },
+  { path: "/:catchAll(.*)", redirect: "/404" }
 ```
