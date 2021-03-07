@@ -98,13 +98,13 @@ let person = new Person("zgh", 23);
 1、创建一个空对象 obj
 
 ```js
-let obj = new Object();
+let obj = {};
 ```
 
-2、使用 call 将构造函数 Person 中的 this 指向刚创建的 obj 对象
+2、使用 `call` 将构造函数 Person 中的 this 指向刚创建的 obj 对象
 
 ```js
-var result = Person.call(obj);
+let result = Person.call(obj);
 ```
 
 3、设置原型链，将创建的 obj 的`__proto__`指向构造函数 Person 的`prototype`

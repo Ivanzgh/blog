@@ -28,7 +28,7 @@ console.log(c)      // {x: 4}
 console.log(d)      // {x: 4}
 ```
 
-## for与for in循环的区别
+## for与for in
 
 ### 遍历数组
 
@@ -74,7 +74,7 @@ console.log(Object.prototype);
 
 `if ( key in obj)` 意为判断对象`obj`中是否有 `key` 属性 ，有则返回 `true`， 没有则返回 `false`
 
-## innerHTML和innerText的区别
+## innerHTML和innerText
 
 都能获取document对象文本内容，`innerHTML`能获取html标签，而`innerText`不能获取
 
@@ -99,7 +99,7 @@ console.log('1'-1);   //  0    number
 console.log([] == []);   // false
 ```
 
-## not defined和undefined的区别
+## not defined和undefined
 
 如果定义了一个变量，但未赋值，则是`undefined`; 如果未定义，则是`not defined`
 

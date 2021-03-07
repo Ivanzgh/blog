@@ -95,11 +95,11 @@ npm get registry
 
 ## npm发布插件
 
-1、npm init 初始化项目,生成package.json文件
+1、`npm init` 初始化项目,生成package.json文件
 
 2、敲代码
 
-3、创建.npmignore文件，发布时会忽略里面的文件
+3、创建`.npmignore`文件，发布时会忽略里面的文件
 
 4、创建README.md文件，添加插件描述
 
@@ -107,11 +107,11 @@ npm get registry
 
 6、在npm官网查看插件名是否已经注册
 
-7、可以运行npm whoami 查看当前用户是不是自己
+7、可以运行`npm whoami` 查看当前用户是不是自己
 
-8、在项目下运行 npm login，输入用户名、密码、邮箱
+8、在项目下运行 `npm login`，输入用户名、密码、邮箱
 
-9、运行 npm publish
+9、运行 `npm publish`
 
 10、在npm官网查看是否发布成功
 
@@ -122,6 +122,22 @@ npm get registry
 + 如果只是修复bug，需要更新Z位。
 + 如果是新增了功能，但是向下兼容，需要更新Y位。
 + 如果有大变动，向下不兼容，需要更新X位。
+
+### 插件升级
+
+首先运行以下命令之一，修改版本
+
+```js
+npm version patch  // 补丁【1.0.1】
+npm version minor  // 小改【1.1.0】
+npm version major  // 大改【2.0.0】
+```
+
+然后再运行一遍发布命令即可
+
+```js
+npm publish
+```
 
 ## package.json和package-lock.json的区别
 

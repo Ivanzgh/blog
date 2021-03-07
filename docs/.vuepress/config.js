@@ -31,10 +31,7 @@ module.exports = {
                     {text: 'CSS', link: '/fe/css/'},
                     {text: 'JavaScript', link: '/fe/js/'},
                     {text: 'TypeScript', link: '/fe/ts/'},
-                    {text: 'Sass、Less', link: '/fe/sass/'},
                     {text: '浏览器', link: '/fe/browser/'},
-                    {text: '性能优化', link: '/fe/performance/'},
-                    {text: '正则表达式', link: '/fe/regular/'},
                     {text: '移动端开发', link: '/fe/mobile/'},
                     {text: '前端插件', link: '/fe/plugin/'}
                 ]
@@ -69,7 +66,6 @@ module.exports = {
                     {text: 'MySQL', link: '/be/mysql/'},
                     {text: 'Tomcat', link: '/be/tomcat/'},
                     {text: 'ElasticSearch', link: '/be/elasticsearch/'},
-                    {text: 'OpenStack', link: '/be/openstack/'},
                 ]
             },
             {
@@ -130,6 +126,20 @@ module.exports = {
                     children: [
                         'vuepress'
                     ]
+                }
+            ],
+            '/fe/react/': [
+                {
+                    title: 'react',
+                    collapsable: false,
+                    children: [
+                        ''
+                    ]
+                },
+                {
+                    title: 'redux',
+                    collapsable: false,
+                    children: ['redux']
                 }
             ],
             '/fe/js/': [
@@ -285,6 +295,13 @@ module.exports = {
                 {
                     collapsable: false,
                     sidebarDepth: 2,
+                    children: ['']
+                }
+            ],
+            '/be/docker/': [
+                {
+                    title: 'Docker',
+                    collapsable: false,
                     children: ['']
                 }
             ],

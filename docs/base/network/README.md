@@ -75,7 +75,7 @@
 
 域名到IP地址的转换过程
 
-![image](https://segmentfault.com/img/bVDM45?w=1928&h=1248)
+![image](https://image-static.segmentfault.com/161/828/1618288278-57f00bf9444dd_articlex)
 
 首先在本地域名服务器中查询IP地址，如果没有找到的情况下，本地域名服务器会向根域名服务器发送一个请求，
 如果根域名服务器也不存在该域名时，本地域名会向com顶级域名服务器发送一个请求，依次类推下去。
