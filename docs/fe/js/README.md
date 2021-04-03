@@ -15,36 +15,36 @@
 :::
 
 ```js
-let a = 1       // 在内存中开辟一块空间存储a的值 1
-let b = a      // 开辟一块新的内存空间，将a的值拷贝一份存储到新的内存里
+let a = 1 // 在内存中开辟一块空间存储a的值 1
+let b = a // 开辟一块新的内存空间，将a的值拷贝一份存储到新的内存里
 a = 2
-console.log(a)  // 2
-console.log(b)  // 1
+console.log(a) // 2
+console.log(b) // 1
 
-let c = {x: 3}
+let c = { x: 3 }
 let d = c
 c.x = 4
-console.log(c)      // {x: 4}
-console.log(d)      // {x: 4}
+console.log(c) // {x: 4}
+console.log(d) // {x: 4}
 ```
 
-## for与for in
+## for 与 for in
 
 ### 遍历数组
 
-+ for循环 数组下标的typeof类型是`number`
+- for 循环 数组下标的 typeof 类型是`number`
 
-+ for in循环 数组下标的typeof类型是`string`
+- for in 循环 数组下标的 typeof 类型是`string`
 
 ```js
-let arr = ['zgh',22,180,125]
+let arr = ['zgh', 22, 180, 125]
 for (let i = 0; i < arr.length; i++) {
-    console.log(typeof i);  //number
-    console.log(arr[i]);
+  console.log(typeof i) //number
+  console.log(arr[i])
 }
 for (let k in arr) {
-    console.log(typeof k); //string
-    console.log(arr[k]);
+  console.log(typeof k) //string
+  console.log(arr[k])
 }
 ```
 
@@ -58,25 +58,25 @@ for (let k in arr) {
 
 ```js
 Object.prototype.sex = 'man'
-let obj = {name : 'zgh', age : 22}
+let obj = { name: 'zgh', age: 22 }
 for (let m = 0; m < obj.length; m++) {
-    console.log(typeof m); //空
-    console.log(obj[m]);  //空
+  console.log(typeof m) //空
+  console.log(obj[m]) //空
 }
 for (let n in obj) {
-    console.log(typeof n); // string
-    console.log(obj[n]);//zgh,22,man
+  console.log(typeof n) // string
+  console.log(obj[n]) //zgh,22,man
 }
-console.log(Object.prototype);
+console.log(Object.prototype)
 ```
 
 ## if in
 
 `if ( key in obj)` 意为判断对象`obj`中是否有 `key` 属性 ，有则返回 `true`， 没有则返回 `false`
 
-## innerHTML和innerText
+## innerHTML 和 innerText
 
-都能获取document对象文本内容，`innerHTML`能获取html标签，而`innerText`不能获取
+都能获取 document 对象文本内容，`innerHTML`能获取 html 标签，而`innerText`不能获取
 
 ```html
 <!-- innerHTML -->
@@ -86,27 +86,27 @@ console.log(Object.prototype);
 666
 ```
 
-## js隐式类型转换
+## js 隐式类型转换
 
 <https://blog.csdn.net/qq_33120763/article/details/88296955>
 
 <https://www.cnblogs.com/superlizhao/p/8945432.html>
 
 ```js
-console.log('1'+1);   // '11'   string
-console.log('1'-1);   //  0    number
+console.log('1' + 1) // '11'   string
+console.log('1' - 1) //  0    number
 
-console.log([] == []);   // false
+console.log([] == []) // false
 ```
 
-## not defined和undefined
+## not defined 和 undefined
 
 如果定义了一个变量，但未赋值，则是`undefined`; 如果未定义，则是`not defined`
 
 ```js
-let a;
-console.log(a);   // undefined
-console.log(b);   // b is not defined
+let a
+console.log(a) // undefined
+console.log(b) // b is not defined
 ```
 
 ## 类型转换
@@ -134,16 +134,16 @@ console.log(typeof b)
 
 ```js
 let b = Number('12.3')
-console.log(b);
+console.log(b)
 ```
 
-2、parseInt()和parseFloat()
+2、parseInt()和 parseFloat()
 
 ```js
-parseInt("1234blue"); // 1234
-parseInt("0xA"); // 10
-parseInt("22.5"); // 22
-parseInt("blue"); // NaN
+parseInt('1234blue') // 1234
+parseInt('0xA') // 10
+parseInt('22.5') // 22
+parseInt('blue') // NaN
 ```
 
 3、在字符串前面加上 `+`
@@ -152,7 +152,7 @@ parseInt("blue"); // NaN
 let res1 = parseInt('1')
 let res2 = parseFloat('1.23')
 
-console.log(typeof +'1')    // "number"
+console.log(typeof +'1') // "number"
 ```
 
 ## Math.floor、Math.round、Math.ceil
@@ -160,20 +160,20 @@ console.log(typeof +'1')    // "number"
 `Math.round`四舍五入取整 `Math.ceil`向上取整 `Math.floor`向下取整
 
 ```js
-Math.round(1.23)    // 1
-Math.round(1.78)    // 2
-Math.round(-1.23)   // -1
-Math.round(-1.78)   // -2
+Math.round(1.23) // 1
+Math.round(1.78) // 2
+Math.round(-1.23) // -1
+Math.round(-1.78) // -2
 
-Math.ceil(1.23)     // 2
-Math.ceil(1.78)     // 2
-Math.ceil(-1.23)    // -1
-Math.ceil(-1.78)    // -1
+Math.ceil(1.23) // 2
+Math.ceil(1.78) // 2
+Math.ceil(-1.23) // -1
+Math.ceil(-1.78) // -1
 
-Math.floor(1.23)    // 1
-Math.floor(1.78)    // 1
-Math.floor(-1.23)   // -2
-Math.floor(-1.78)   // -2
+Math.floor(1.23) // 1
+Math.floor(1.78) // 1
+Math.floor(-1.23) // -2
+Math.floor(-1.78) // -2
 ```
 
 ## 锚点链接
@@ -217,7 +217,7 @@ Math.floor(-1.78)   // -2
 `toLocaleString()`
 
 ```js
-(386485473.88).toLocaleString('en-US')   // 386,485,473.88
+;(386485473.88).toLocaleString('en-US') // 386,485,473.88
 ```
 
 小数部分会根据四舍五入只留下三位
@@ -226,18 +226,18 @@ Math.floor(-1.78)   // -2
 
 ### 回流(reflow)
 
-只要修改了dom或改变了元素的形状或大小等，会改变布局的操作就会触发reflow
+只要修改了 dom 或改变了元素的形状或大小等，会改变布局的操作就会触发 reflow
 
 ### 重绘(repaint)
 
 只是改变了颜色，不影响周围元素或布局，会引起浏览器的重绘
 
-### 减少reflow和repaint
+### 减少 reflow 和 repaint
 
-+ 不要一条一条的修改样式，应该固定写一个class，更换className，减少reflow次数
-+ 不要把 DOM结点的属性值放在一个循环里当成循环里的变量
-+ 为动画的HTML文件使用position:fixed 或 absolute，那么修改他们的CSS是不会 reflow 的
-+ 避免使用table布局，一个很小的改动会造成整个table reflow
+- 不要一条一条的修改样式，应该固定写一个 class，更换 className，减少 reflow 次数
+- 不要把 DOM 结点的属性值放在一个循环里当成循环里的变量
+- 为动画的 HTML 文件使用 position:fixed 或 absolute，那么修改他们的 CSS 是不会 reflow 的
+- 避免使用 table 布局，一个很小的改动会造成整个 table reflow
 
 ## 奇怪的知识
 
@@ -262,8 +262,8 @@ Math.floor(-1.78)   // -2
 ```js
 let a = 1
 let b = a++
-console.log(a)  // 2
-console.log(b)  // 1
+console.log(a) // 2
+console.log(b) // 1
 ```
 
 后置自增，先运算后执行
@@ -271,6 +271,6 @@ console.log(b)  // 1
 ```js
 let a = 1
 let b = ++a
-console.log(a)  // 2
-console.log(b)  // 2
+console.log(a) // 2
+console.log(b) // 2
 ```

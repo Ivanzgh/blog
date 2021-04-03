@@ -8,7 +8,7 @@
 
 ```typescript
 function foo1(first: string | number, last: string | number) {
-    return `${first}-${last}`
+  return `${first}-${last}`
 }
 foo1('hello', 'world')
 ```
@@ -17,7 +17,7 @@ foo1('hello', 'world')
 
 ```typescript
 function foo2<Fan>(first: Fan, last: Fan) {
-    return `${first}-${last}`
+  return `${first}-${last}`
 }
 foo2<string>('hello', 'world')
 
@@ -28,12 +28,12 @@ foo2<number>(1, 2)
 
 ```ts
 type Fan<T> = {
-    [key: string]: T;
+  [key: string]: T
 }
 
 const obj: Fan<number> = {
-    a: 1,
-    b: 2
+  a: 1,
+  b: 2
 }
 ```
 
@@ -43,23 +43,23 @@ const obj: Fan<number> = {
 
 ```typescript
 function foo3<T>(first: T[]) {
-    return first.length
+  return first.length
 }
 foo3<string>(['hello', 'world'])
 
 function foo4<T>(first: Array<T>) {
-    return first.length
+  return first.length
 }
 foo4<string>(['hello', 'world'])
 ```
 
 ## 定义多个泛型
 
-比如定义两个泛型T、P
+比如定义两个泛型 T、P
 
 ```typescript
 function foo5<T, P>(first: T, second: P) {
-    return `${first}-${second}`
+  return `${first}-${second}`
 }
 foo5<string, number>('hi', 666)
 ```
@@ -68,53 +68,53 @@ foo5<string, number>('hi', 666)
 
 ```typescript
 class Foo<T> {
-    constructor(private first: T[]) {}
-    say(index: number): T {
-        return this.first[index]
-    }
+  constructor(private first: T[]) {}
+  say(index: number): T {
+    return this.first[index]
+  }
 }
 
-const gen = new Foo<string>(['hello','world'])
-gen.say(1)      // 'world'
+const gen = new Foo<string>(['hello', 'world'])
+gen.say(1) // 'world'
 ```
 
 ## 泛型继承
 
-上个例子中，假如传入对象数组，希望调用say方法返回传入的name值，直接改成`this.first[index].name`会报错
+上个例子中，假如传入对象数组，希望调用 say 方法返回传入的 name 值，直接改成`this.first[index].name`会报错
 `Property 'name' does not exist on type 'T'.`，这时就要用到泛型的继承了
 
 ```typescript
 interface Person {
-    name: string
+  name: string
 }
 class Foo<T extends Person> {
-    constructor(private first: T[]) {}
-    say(index: number): string {
-        return this.first[index].name
-    }
+  constructor(private first: T[]) {}
+  say(index: number): string {
+    return this.first[index].name
+  }
 }
-const fff = new Foo([{name: 'z'}, {name: 'g'}, {name: 'h'}])
-fff.say(1)  // 'g'
+const fff = new Foo([{ name: 'z' }, { name: 'g' }, { name: 'h' }])
+fff.say(1) // 'g'
 ```
 
 这里省略了参数类型，因为泛型的类型推断，所以也不会报错，完整的写法如下
 
 ```typescript
-const fff = new Foo<{name: string}>([{name: 'z'}, {name: 'g'}, {name: 'h'}])
+const fff = new Foo<{ name: string }>([{ name: 'z' }, { name: 'g' }, { name: 'h' }])
 ```
 
 ## 泛型约束
 
 ```typescript
 class Foo<T> {
-    constructor(private first: T[]) {}
-    say(index: number): T {
-        return this.first[index]
-    }
+  constructor(private first: T[]) {}
+  say(index: number): T {
+    return this.first[index]
+  }
 }
 
 const gen1 = new Foo<boolean>([true, false])
-const gen2 = new Foo<string>(['hello','world'])
+const gen2 = new Foo<string>(['hello', 'world'])
 const gen3 = new Foo<number>([1, 2])
 ```
 
@@ -123,12 +123,12 @@ const gen3 = new Foo<number>([1, 2])
 
 ```typescript
 class Foo<T extends number | string> {
-    constructor(private first: T[]) {}
-    say(index: number): T {
-        return this.first[index]
-    }
+  constructor(private first: T[]) {}
+  say(index: number): T {
+    return this.first[index]
+  }
 }
 
-const gen2 = new Foo<string>(['hello','world'])
+const gen2 = new Foo<string>(['hello', 'world'])
 const gen3 = new Foo<number>([1, 2])
 ```

@@ -132,24 +132,24 @@ vue3 新增`setup()`语法，包括两个参数`props`和`context`。定义的�
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   setup() {
-    const user = ref(["tom", "jack", "ivan"]);
-    const name = ref("");
+    const user = ref(['tom', 'jack', 'ivan'])
+    const name = ref('')
     const clickName = (index: number) => {
-      name.value = user.value[index];
-    };
+      name.value = user.value[index]
+    }
 
     return {
       user,
       name,
-      clickName,
-    };
-  },
-});
+      clickName
+    }
+  }
+})
 </script>
 ```
 
@@ -167,28 +167,28 @@ export default defineComponent({
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "vue";
+import { defineComponent, reactive, toRefs } from 'vue'
 
 interface DataProps {
-  list: string[];
-  listName: string;
-  btnFun: (index: number) => void;
+  list: string[]
+  listName: string
+  btnFun: (index: number) => void
 }
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   setup() {
     const data: DataProps = reactive({
-      list: ["first", "second", "third"],
-      listName: "",
+      list: ['first', 'second', 'third'],
+      listName: '',
       btnFun: (index: number) => {
-        data.listName = data.list[index];
-      },
-    });
+        data.listName = data.list[index]
+      }
+    })
 
-    return { ...toRefs(data) };
-  },
-});
+    return { ...toRefs(data) }
+  }
+})
 </script>
 ```
 
@@ -211,47 +211,47 @@ import {
   onRenderTriggered,
   onRenderTracked,
   onBeforeUnmount,
-  onUnmounted,
-} from "vue";
+  onUnmounted
+} from 'vue'
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   setup() {
-    console.log("开始创建组件");
+    console.log('开始创建组件')
 
     onBeforeMount(() => {
-      console.log("挂载前");
-    });
+      console.log('挂载前')
+    })
 
     onMounted(() => {
-      console.log("完成挂载");
-    });
+      console.log('完成挂载')
+    })
 
     onBeforeUpdate(() => {
-      console.log("更新前");
-    });
+      console.log('更新前')
+    })
 
     onUpdated(() => {
-      console.log("完成更新");
-    });
+      console.log('完成更新')
+    })
 
-    onRenderTriggered((event) => {
-      console.log("状态触发");
-    });
+    onRenderTriggered(event => {
+      console.log('状态触发')
+    })
 
-    onRenderTracked((event) => {
-      console.log("状态跟踪");
-    });
+    onRenderTracked(event => {
+      console.log('状态跟踪')
+    })
 
     onBeforeUnmount(() => {
-      console.log("卸载之前");
-    });
+      console.log('卸载之前')
+    })
 
     onUnmounted(() => {
-      console.log("卸载完成");
-    });
-  },
-});
+      console.log('卸载完成')
+    })
+  }
+})
 </script>
 ```
 
@@ -283,20 +283,20 @@ errorCaptured -> onErrorCaptured
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch } from 'vue'
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   setup() {
-    const name = ref("hello");
+    const name = ref('hello')
 
     watch(overText, (newVal, oldVal) => {
-      console.log(newVal);
-    });
+      console.log(newVal)
+    })
 
-    return { name };
-  },
-});
+    return { name }
+  }
+})
 </script>
 ```
 
@@ -307,32 +307,30 @@ export default defineComponent({
 ```vue
 <template>
   <div class="hello">
-    <button v-for="(item, index) in list" :key="index">
-      {{ index }} : {{ item }}
-    </button>
+    <button v-for="(item, index) in list" :key="index">{{ index }} : {{ item }}</button>
     <p>{{ count }}</p>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, computed } from "vue";
+import { defineComponent, reactive, toRefs, computed } from 'vue'
 
 interface DataProps {
-  list: string[];
+  list: string[]
 }
 
 export default defineComponent({
-  name: "HelloWorld",
+  name: 'HelloWorld',
   setup() {
     const data: DataProps = reactive({
-      list: ["first", "second", "third"],
-    });
+      list: ['first', 'second', 'third']
+    })
 
-    const count = computed(() => data.list.length);
+    const count = computed(() => data.list.length)
 
-    return { ...toRefs(data), count };
-  },
-});
+    return { ...toRefs(data), count }
+  }
+})
 </script>
 ```
 
@@ -341,26 +339,26 @@ export default defineComponent({
 在 `src` 目录下新建 `hooks` 文件夹，建立一个`useMousePosition.ts`文件，功能是获取鼠标位置，hooks 命名建议以`use`开头
 
 ```ts
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from 'vue'
 
 export default function mousePosition() {
-  const x = ref(0);
-  const y = ref(0);
+  const x = ref(0)
+  const y = ref(0)
 
   function update(e: any) {
-    x.value = e.pageX;
-    y.value = e.pageY;
+    x.value = e.pageX
+    y.value = e.pageY
   }
 
   onMounted(() => {
-    window.addEventListener("mousemove", update);
-  });
+    window.addEventListener('mousemove', update)
+  })
 
   onUnmounted(() => {
-    window.removeEventListener("mousemove", update);
-  });
+    window.removeEventListener('mousemove', update)
+  })
 
-  return { x, y };
+  return { x, y }
 }
 ```
 
@@ -372,18 +370,18 @@ export default function mousePosition() {
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
-import mousePosition from "@/hooks/useMousePosition";
+import mousePosition from '@/hooks/useMousePosition'
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
   setup() {
-    const { x, y } = mousePosition();
+    const { x, y } = mousePosition()
 
-    return { x, y };
-  },
-});
+    return { x, y }
+  }
+})
 </script>
 ```
 
@@ -391,11 +389,11 @@ export default defineComponent({
 
 ### vue-router
 
-#### 404错误
+#### 404 错误
 
 2020/2/3
 
-匹配404路由时，以前是`path: "*"`，现在是`path: "/:catchAll(.*)"`，否则报下面的错误
+匹配 404 路由时，以前是`path: "*"`，现在是`path: "/:catchAll(.*)"`，否则报下面的错误
 
 ```sh
 Catch all routes ("*") must now be defined using a param with a custom regexp.

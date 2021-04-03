@@ -22,11 +22,11 @@ OrthographicCamera( left, right, top, bottom, near, far)
 ![image](/blog/img/vis/three_camera4.png)
 
 ```js
-const k = window.innerWidth / window.innerHeight;
-const s = 200;
-const camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000); // 左截面、右截面、上截面、下截面、近截面、远截面
-camera.position.set(300, 400, 300);
-camera.lookAt(scene.position);
+const k = window.innerWidth / window.innerHeight
+const s = 200
+const camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000) // 左截面、右截面、上截面、下截面、近截面、远截面
+camera.position.set(300, 400, 300)
+camera.lookAt(scene.position)
 ```
 
 ### 透视相机
@@ -51,9 +51,9 @@ PerspectiveCamera( fov, aspect, near, far )
 示例：
 
 ```js
-const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000); // 视角(单位是度)、视锥体长宽比(width/height)、近截面、远截面
-camera.position.set(300, 400, 300);
-camera.lookAt(scene.position);
+const camera = new THREE.PerspectiveCamera(45, 2, 1, 1000) // 视角(单位是度)、视锥体长宽比(width/height)、近截面、远截面
+camera.position.set(300, 400, 300)
+camera.lookAt(scene.position)
 ```
 
 如果将视野角度 fov 变小，则物体在页面上会变大。原因是视野角度变小后，视景窗口就变小了，而物体大小实际是不会变的，但相对视景窗口来说就变大了。
@@ -67,46 +67,46 @@ camera.lookAt(scene.position);
 一种方式是创建`Object3D`对象
 
 ```js
-const targetObject = new THREE.Object3D();
-const v1 = { x: 84768.72257683857, y: 31758.999152786924, z: 0 };
-targetObject.position.copy(v1);
-scene.add(targetObject);
+const targetObject = new THREE.Object3D()
+const v1 = { x: 84768.72257683857, y: 31758.999152786924, z: 0 }
+targetObject.position.copy(v1)
+scene.add(targetObject)
 
-const light = new THREE.DirectionalLight(0xffffff, 0.4);
-light.target = targetObject;
-scene.add(light);
+const light = new THREE.DirectionalLight(0xffffff, 0.4)
+light.target = targetObject
+scene.add(light)
 ```
 
 另一种方式是在场景中创建网格模型`mesh`。聚光灯设置`target`属性和平行光的方式一样
 
 ```js
-const spotLight = new THREE.SpotLight(0x00ff00);
+const spotLight = new THREE.SpotLight(0x00ff00)
 
-const cubeGeometry = new THREE.BoxGeometry(0.001, 0.001, 0.001);
-const cubeMaterial = new THREE.MeshLambertMaterial({ color: "yellow" });
-const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+const cubeGeometry = new THREE.BoxGeometry(0.001, 0.001, 0.001)
+const cubeMaterial = new THREE.MeshLambertMaterial({ color: 'yellow' })
+const mesh = new THREE.Mesh(cubeGeometry, cubeMaterial)
 
-const v1 = { x: 84768.72257683857, y: 31758.999152786924, z: 0 };
-mesh.position.copy(v1);
-spotLight.target = mesh;
+const v1 = { x: 84768.72257683857, y: 31758.999152786924, z: 0 }
+mesh.position.copy(v1)
+spotLight.target = mesh
 
-scene.add(spotLight);
-scene.add(mesh);
+scene.add(spotLight)
+scene.add(mesh)
 ```
 
 ### 聚光灯
 
 ```js
-const spotLight = new THREE.SpotLight( 0xffffff );
-spotLight.position.set( 100, 1000, 100 );
-scene.add( spotLight );
+const spotLight = new THREE.SpotLight(0xffffff)
+spotLight.position.set(100, 1000, 100)
+scene.add(spotLight)
 ```
 
 辅助工具
 
 ```js
-const spotLightHelper = new THREE.SpotLightHelper(spotLight);
-scene.add(spotLightHelper);
+const spotLightHelper = new THREE.SpotLightHelper(spotLight)
+scene.add(spotLightHelper)
 ```
 
 ## 阴影
@@ -126,17 +126,17 @@ scene.add(spotLightHelper);
 <https://github.com/mrdoob/stats.js>
 
 ```js
-<script src="https://cdn.jsdelivr.net/npm/three@0.97.0/examples/js/libs/stats.min.js"></script>;
+;<script src="https://cdn.jsdelivr.net/npm/three@0.97.0/examples/js/libs/stats.min.js"></script>
 
-const stats = new Stats();
-stats.domElement.style.zIndex = 100;
-document.getElementById("map").appendChild(stats.domElement);
+const stats = new Stats()
+stats.domElement.style.zIndex = 100
+document.getElementById('map').appendChild(stats.domElement)
 
 function animation() {
-  stats.update();
-  requestAnimationFrame(animation);
+  stats.update()
+  requestAnimationFrame(animation)
 }
-animation();
+animation()
 ```
 
 ### dat.gui

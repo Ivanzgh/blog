@@ -15,7 +15,7 @@
 
 ```less
 .box1 {
-    width : @test_width;
+  width: @test_width;
 }
 ```
 
@@ -25,8 +25,8 @@
 
 ```less
 .box2 {
-    .box1;
-    height : 100px;
+  .box1;
+  height: 100px;
 }
 ```
 
@@ -34,11 +34,11 @@
 
 ```less
 .box3(@test_ml) {
-    margin-left : @test_ml;
+  margin-left: @test_ml;
 }
 //传参
 .box2 {
-    .box3(10px);
+  .box3(10px);
 }
 ```
 
@@ -46,7 +46,7 @@
 
 ```less
 .box2 {
-    .box3(10px)!important;
+  .box3(10px) !important;
 }
 ```
 
@@ -54,11 +54,11 @@
 
 ```less
 .box3(@test_ml: 20px) {
-    margin-left : @test_ml;
+  margin-left: @test_ml;
 }
 
 .box2 {
-    .box3();  //需要修改默认值可传参 .box3(30px)
+  .box3(); //需要修改默认值可传参 .box3(30px)
 }
 ```
 
@@ -69,74 +69,74 @@
 ```less
 /*箭头朝上*/
 .triangle(top, @w: 10px, @c: #f00) {
-    border-width: @w;
-    border-style: dashed dashed solid dashed;
-    border-color: transparent transparent @c  transparent;
-  }
-  /*箭头朝下*/
-  .triangle(bottom, @w: 10px, @c: #f00) {
-    border-width: @w;
-    border-style: solid dashed dashed dashed;
-    border-color: @c transparent transparent  transparent;
-  }
-  /*箭头朝左*/
-  .triangle(left, @w: 10px, @c: #f00) {
-    border-width: @w;
-    border-style: dashed solid dashed dashed;
-    border-color: transparent @c transparent  transparent;
-  }
-  /*箭头朝右*/
-  .triangle(right, @w: 10px, @c: #f00) {
-    border-width: @w;
-    border-style: dashed dashed dashed solid;
-    border-color: transparent transparent  transparent @c;
-  }
+  border-width: @w;
+  border-style: dashed dashed solid dashed;
+  border-color: transparent transparent @c transparent;
+}
+/*箭头朝下*/
+.triangle(bottom, @w: 10px, @c: #f00) {
+  border-width: @w;
+  border-style: solid dashed dashed dashed;
+  border-color: @c transparent transparent transparent;
+}
+/*箭头朝左*/
+.triangle(left, @w: 10px, @c: #f00) {
+  border-width: @w;
+  border-style: dashed solid dashed dashed;
+  border-color: transparent @c transparent transparent;
+}
+/*箭头朝右*/
+.triangle(right, @w: 10px, @c: #f00) {
+  border-width: @w;
+  border-style: dashed dashed dashed solid;
+  border-color: transparent transparent transparent @c;
+}
 ```
 
 注意：不管匹配到哪一个，都会有固定的`@_`，相当于公共部分，后面的默认参数还要带上
 
 ```less
- .triangle(@_, @w: 10px, @c: #f00) {
-    width: 0;
-    height: 0;
-    overflow: hidden;  
-  }
+.triangle(@_, @w: 10px, @c: #f00) {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
 ```
 
 使用：
 
 ```less
-.triangle(top, 20px, #f0f)
+.triangle;
 ```
 
 再来一个定位的例子：
 
 ```less
 .pos(r) {
-    position: relative;
+  position: relative;
 }
 .pos(a) {
-    position: absolute;
+  position: absolute;
 }
 .pos(f) {
-    position: fixed;
+  position: fixed;
 }
 // 需要定位的盒子
 .pos-box {
-    .pos(r)
+  .pos(r);
 }
 ```
 
 ## 运算
 
-可进行+ - * / 运算，数值可以不带单位
+可进行+ - \* / 运算，数值可以不带单位
 
 ```less
-@test_1:300px;
+@test_1: 300px;
 
 .box4 {
-    width: @test_1 + 10;
-    height: (@test_1 - 250) * 2;
+  width: @test_1 + 10;
+  height: (@test_1 - 250) * 2;
 }
 ```
 
@@ -150,7 +150,7 @@
 </ul>
 ```
 
-使用less嵌套的写法
+使用 less 嵌套的写法
 
 ```less
 /*
@@ -161,22 +161,22 @@ ul li span {}
 */
 
 ul {
-    list-style: none;
-    li {
-        height: 100px;
-    }
-    a {
-        text-decoration: none;
+  list-style: none;
+  li {
+    height: 100px;
+  }
+  a {
+    text-decoration: none;
 
-        // & 表示上一层选择器
-        &:hover {
-            color: #0f0;
-        }
-
-        span {
-              font-size: 16px;
-        }
+    // & 表示上一层选择器
+    &:hover {
+      color: #0f0;
     }
+
+    span {
+      font-size: 16px;
+    }
+  }
 }
 ```
 
@@ -186,8 +186,8 @@ ul {
 
 ```less
 .border_1(@w: 1px, @s: solid, @c: #f00) {
-    // 不用写成 border: @w @s @c;
-    border: @arguments;
+  // 不用写成 border: @w @s @c;
+  border: @arguments;
 }
 ```
 
@@ -197,16 +197,16 @@ ul {
 
 ```less
 .test_2 {
-    width: ~'calc(300px - 100px)';
+  width: ~'calc(300px - 100px)';
 }
 ```
 
-## vscode 配置less
+## vscode 配置 less
 
 首先安装`Easy LESS`插件，然后在项目下找`.vscode`文件夹，若没有自己新建一个，或者在该插件的配置项中选择`Workspace`，
 点击`Edit in settings.json`自动生成。
 
-在settings.json里添加如下代码：
+在 settings.json 里添加如下代码：
 
 ```json
 "less.compile": {
@@ -214,9 +214,9 @@ ul {
 }
 ```
 
-`${workspaceRoot}`表示根目录，上述配置表示将less编译后的css放入根目录下的css文件夹中，
-保存less文件后会自动生成同名的css文件，之后只需编辑less文件即可。
+`${workspaceRoot}`表示根目录，上述配置表示将 less 编译后的 css 放入根目录下的 css 文件夹中，
+保存 less 文件后会自动生成同名的 css 文件，之后只需编辑 less 文件即可。
 
-在html中引入的仍然是css文件,不用引入less
+在 html 中引入的仍然是 css 文件,不用引入 less
 
-先在less文件开头写 `@charset 'utf-8';` 之后正常编辑
+先在 less 文件开头写 `@charset 'utf-8';` 之后正常编辑

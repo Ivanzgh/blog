@@ -2,25 +2,25 @@
 
 ## 安装
 
-最新版[https://dev.mysql.com/downloads/mysql/](https://dev.mysql.com/downloads/mysql/)
+最新版：<https://dev.mysql.com/downloads/mysql/>
 
-选择版本[https://downloads.mysql.com/archives/community/](https://downloads.mysql.com/archives/community/)
+选择版本：<https://downloads.mysql.com/archives/community/>
 
 ## 初始化
 
-首先打开cmd进入mysql的bin目录下，安装服务
+首先打开 cmd 进入 mysql 的 bin 目录下，安装服务
 
 ```sh
 mysqld --install
 ```
 
-接着初始化mysql，在最后一行会产生一个随机密码，要记住后面登录要用
+接着初始化 mysql，在最后一行会产生一个随机密码，要记住后面登录要用
 
 ```sh
 mysqld --initialize --console
 ```
 
-然后开启mysql服务
+然后开启 mysql 服务
 
 ```sh
 net start mysql
@@ -44,7 +44,7 @@ set password for root@localhost=password("自己需要设置的密码");
 
 ## 配置文件
 
-在mysql目录下新建一个`my.ini`的配置文件，加入以下内容，注意安装目录和数据存放目录要修改
+在 mysql 目录下新建一个`my.ini`的配置文件，加入以下内容，注意安装目录和数据存放目录要修改
 
 ```ini
 [mysql]
@@ -74,26 +74,26 @@ default-storage-engine=INNODB
 
 ```
 
-## Navicat Premium导入sql文件
+## Navicat Premium 导入 sql 文件
 
-点击连接，选择要连接的数据库类型，连接名随意设置，主机填localhost或者远程的地址，端口、用户名、密码均是mysql设置的，点击测试连接
-![image](/blog/img/be/navicat.png)
+点击连接，选择要连接的数据库类型，连接名随意设置，主机填 localhost 或者远程的地址，端口、用户名、密码均是 mysql 设置的，点击测试连接
+![image](/blog/img/be/navicat.png =400x500)
 
-然后新建一个数据库，字符集选择UTF-8编码，然后右击新建的数据库，点击运行SQL文件即可
+然后新建一个数据库，字符集选择 UTF-8 编码，然后右击新建的数据库，点击运行 SQL 文件即可
 
 ## 常见问题
 
-### 安装服务时报错：无法启动此程序，因为计算机丢失MSVCP120.dll
+### 安装服务时报错：无法启动此程序，因为计算机丢失 MSVCP120.dll
 
-在执行`mysqld --install`时，若报丢失MSVCP120.dll错误，是因为没有安装`vcredist`，
+在执行`mysqld --install`时，若报丢失 MSVCP120.dll 错误，是因为没有安装`vcredist`，
 在官网<https://www.microsoft.com/zh-CN/download/details.aspx?id=40784>
 下载安装即可。
 
-如果报MSVCP140.dll丢失错误，下载安装<https://www.microsoft.com/zh-cn/download/details.aspx?id=48145>
+如果报 MSVCP140.dll 丢失错误，下载安装<https://www.microsoft.com/zh-cn/download/details.aspx?id=48145>
 
-### mysql不允许外部主机连接解决方法
+### mysql 不允许外部主机连接解决方法
 
-登录mysql后使用如下命令：
+登录 mysql 后使用如下命令：
 
 ```ini
 use mysql;

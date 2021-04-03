@@ -2,7 +2,7 @@
 
 ## 安装
 
-地址： [http://nginx.org/en/download.html](http://nginx.org/en/download.html)
+地址： <http://nginx.org/en/download.html>
 
 ![image](/blog/img/be/nginx_download.png =800x500)
 

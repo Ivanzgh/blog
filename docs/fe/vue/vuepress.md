@@ -9,16 +9,14 @@
 
 ```js
 module.exports = {
-    plugins: [
-        [
-            {
-                name: 'page-plugin',
-                globalUIComponents: [
-                    'Cat'
-                ]
-            }
-        ]
+  plugins: [
+    [
+      {
+        name: 'page-plugin',
+        globalUIComponents: ['Cat']
+      }
     ]
+  ]
 }
 ```
 
@@ -28,14 +26,14 @@ module.exports = {
 
 例如：
 
-+ `vuepress-plugin-reading-progress`  - 阅读进度条
-+ `@vuepress/plugin-back-to-top`    -  返回顶部
-+ `vuepress-plugin-img-lazy`     -     图片懒加载
-+ `vuepress-plugin-baidu-autopush`  -  百度SEO
+- `vuepress-plugin-reading-progress` - 阅读进度条
+- `@vuepress/plugin-back-to-top` - 返回顶部
+- `vuepress-plugin-img-lazy` - 图片懒加载
+- `vuepress-plugin-baidu-autopush` - 百度 SEO
 
 ## 手动部署
 
-在项目根目录下新建deplogy.sh文件，配置好后在项目根文件夹右键 `gitBash here` , 然后输入部署命令`bash deploy.sh`
+在项目根目录下新建 deplogy.sh 文件，配置好后在项目根文件夹右键 `gitBash here` , 然后输入部署命令`bash deploy.sh`
 
 ```shell script
 #!/usr/bin/env sh
@@ -69,9 +67,9 @@ cd -
 
 ## 自动化部署
 
-使用`github actions`实现自动化部署，每次只需要将代码提交到github上即可，无需其他操作。
+使用`github actions`实现自动化部署，每次只需要将代码提交到 github 上即可，无需其他操作。
 
- **设置`GitHub personal access`**
+**设置`GitHub personal access`**
 
 [设置个人访问令牌](https://docs.github.com/cn/github/authenticating-to-github/creating-a-personal-access-token)
 
@@ -83,7 +81,7 @@ cd -
 ![image](/blog/img/vuepress/workflow.png =600x400)
 
 创建`.github/workflows/ci.yml`文件，名称随意。
-这里用了[deploy-to-github-pages](https://github.com/marketplace/actions/deploy-to-github-pages)这个action，
+这里用了[deploy-to-github-pages](https://github.com/marketplace/actions/deploy-to-github-pages)这个 action，
 选择最新版本
 
 内容如下，注意版本问题
@@ -128,14 +126,14 @@ on:
 
 `runs-on: ubuntu-latest`表示工作流将在 `ubuntu` 的最新版本上运行，GitHub Actions 提供 Linux、Windows 和 macOS 来构建运行
 
-`actions/checkout@v2.3.2`是github官方的一个action，用于clone该仓库的源码到工作流中。
+`actions/checkout@v2.3.2`是 github 官方的一个 action，用于 clone 该仓库的源码到工作流中。
 
 ::: tip
-打包命令需要修改为`npm run docs:build`，因为vuepress的打包命令就是如此
+打包命令需要修改为`npm run docs:build`，因为 vuepress 的打包命令就是如此
 
-`with`参数里注意第一行前面的key是`ACCESS_TOKEN`，初始是`GITHUB_TOKEN`，后面的就是刚配置的个人访问令牌
+`with`参数里注意第一行前面的 key 是`ACCESS_TOKEN`，初始是`GITHUB_TOKEN`，后面的就是刚配置的个人访问令牌
 
-`gh-pages` 是GitHub Pages 要读取的分支
+`gh-pages` 是 GitHub Pages 要读取的分支
 
 `FOLDER: docs/.vuepress/dist`就是要部署的文件目录
 :::
@@ -146,5 +144,5 @@ on:
 No url found for submodule path 'docs/.vuepress/dist' in .gitmodules
 ```
 
-就是git子模块找不到dist文件夹，我是之前使用手动部署导致本地产生了dist文件夹，所以删除dist文件夹再push到github上即可。
+就是 git 子模块找不到 dist 文件夹，我是之前使用手动部署导致本地产生了 dist 文件夹，所以删除 dist 文件夹再 push 到 github 上即可。
 在`.gitignore`中将`docs/.vuepress/dist`也删除，假如你添加过这个。

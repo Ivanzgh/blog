@@ -6,39 +6,39 @@
 简单说就是通过复制一个或多个对象来创建一个新的对象
 
 ```js
-let obj1 = { a: 1, b: 2, c: 3 };
-let obj2 = { d: 4, e: 5, c: 6 };
-Object.assign(obj2, obj1);
-console.log(obj2); // {d: 4, e: 5, c: 3, a: 1, b: 2}
+let obj1 = { a: 1, b: 2, c: 3 }
+let obj2 = { d: 4, e: 5, c: 6 }
+Object.assign(obj2, obj1)
+console.log(obj2) // {d: 4, e: 5, c: 3, a: 1, b: 2}
 ```
 
 如果目标对象中的属性具有相同的键，则属性将被源对象中的属性覆盖。如例子中的 `obj2.c` 值由 6 被覆盖为 3
 
 ```js
 let obj1 = {
-  name: "zgh",
-  age: 22,
-};
+  name: 'zgh',
+  age: 22
+}
 let obj2 = {
-  address: "beijing",
-};
-let obj = {};
-Object.assign(obj, obj1, obj2);
-console.log(obj); // {name: "zgh", age: 22, address: "beijing"}
+  address: 'beijing'
+}
+let obj = {}
+Object.assign(obj, obj1, obj2)
+console.log(obj) // {name: "zgh", age: 22, address: "beijing"}
 ```
 
 当`Object.assign()`方法用于数组时
 
 ```js
-let arr11 = Object.assign([1, 2, 3], [4, 5]);
-console.log(arr11); //[4,5,3]
+let arr11 = Object.assign([1, 2, 3], [4, 5])
+console.log(arr11) //[4,5,3]
 
 // 说明:对象是根据属性名来对应，数组是根据索引号来对应，相当于
 let arr23 = {
   0: 1,
   1: 2,
-  2: 3,
-}; //相同的属性名有0、1，后面的覆盖前面的.
+  2: 3
+} //相同的属性名有0、1，后面的覆盖前面的.
 ```
 
 assign 实现了浅复制，会把原型上的属性也复制了，但是不能复制继承过来的属性
@@ -55,16 +55,16 @@ assign 实现了浅复制，会把原型上的属性也复制了，但是不能�
 const user = {
   age: 24,
   say() {
-    console.log(`My name is ${this.name}. ${this.age} years old`);
-  },
-};
+    console.log(`My name is ${this.name}. ${this.age} years old`)
+  }
+}
 
-const me = Object.create(user);
+const me = Object.create(user)
 
-me.name = "zgh";
-me.age = 23;
+me.name = 'zgh'
+me.age = 23
 
-me.say(); // My name is zgh. 23 years old
+me.say() // My name is zgh. 23 years old
 ```
 
 创建一个新对象`{name: "zgh", age: 23}`，在这个对象的`__proto__`上有 `user` 对象
@@ -76,20 +76,20 @@ me.say(); // My name is zgh. 23 years old
 
 ```js
 const user = {
-  age: 24,
-};
+  age: 24
+}
 
-const me = Object.create(user);
-me.name = "zgh";
+const me = Object.create(user)
+me.name = 'zgh'
 
 me.p1 = null
 me.p2 = undefined
 
-console.log(me.hasOwnProperty("name")); // true
-console.log(me.hasOwnProperty("age")); // false
+console.log(me.hasOwnProperty('name')) // true
+console.log(me.hasOwnProperty('age')) // false
 
-console.log(me.hasOwnProperty("p1")); // true
-console.log(me.hasOwnProperty("p2")); // true
+console.log(me.hasOwnProperty('p1')) // true
+console.log(me.hasOwnProperty('p2')) // true
 ```
 
 ## Object.getPrototypeOf()
@@ -97,9 +97,9 @@ console.log(me.hasOwnProperty("p2")); // true
 获取对象的原型
 
 ```js
-const proto = {};
-const obj = Object.create(proto);
-Object.getPrototypeOf(obj) === proto; // true
+const proto = {}
+const obj = Object.create(proto)
+Object.getPrototypeOf(obj) === proto // true
 ```
 
 ## Object.defineProperty()
@@ -118,16 +118,16 @@ Object.getPrototypeOf(obj) === proto; // true
 - `writable`，表示是否可写，默认`false`
 
 ```js
-let o = {};
-Object.defineProperty(o, "a", {
+let o = {}
+Object.defineProperty(o, 'a', {
   value: 37,
   writable: false,
   enumerable: true,
-  configurable: true,
-});
-console.log(o.a); // 37
-o.a = 25;
-console.log(o.a); // 37
+  configurable: true
+})
+console.log(o.a) // 37
+o.a = 25
+console.log(o.a) // 37
 ```
 
 ### 存取描述符
@@ -137,23 +137,23 @@ console.log(o.a); // 37
 
 ```js
 let obj = {
-  a: 1,
-};
-let num = 2;
-Object.defineProperty(obj, "count", {
+  a: 1
+}
+let num = 2
+Object.defineProperty(obj, 'count', {
   get() {
-    return this.a + num;
+    return this.a + num
   },
   set(v) {
-    num = v;
+    num = v
   },
   enumerable: true,
-  configurable: true,
-});
-console.log(obj.count); // 3
-obj.count = 3;
-console.log(num); // 3
-console.log(obj.count); // 4
+  configurable: true
+})
+console.log(obj.count) // 3
+obj.count = 3
+console.log(num) // 3
+console.log(obj.count) // 4
 ```
 
 ## Object.defineProperties()
@@ -161,18 +161,18 @@ console.log(obj.count); // 4
 给对象添加多个属性并分别指定它们的配置
 
 ```js
-let obj = {};
+let obj = {}
 Object.defineProperties(obj, {
   property1: {
     value: true,
-    writable: true,
+    writable: true
   },
   property2: {
-    value: "Hello",
-    writable: false,
-  },
+    value: 'Hello',
+    writable: false
+  }
   // etc. etc.
-});
+})
 ```
 
 ## getter 和 setter
@@ -185,16 +185,16 @@ Object.defineProperties(obj, {
 let obj = {
   a: 1,
   get val() {
-    return this.a + 1;
+    return this.a + 1
   },
   set val(value) {
-    this.a = value;
-  },
-};
+    this.a = value
+  }
+}
 
-console.log(obj.val); // 2
-obj.val = 100;
-console.log(obj.val); // 101
+console.log(obj.val) // 2
+obj.val = 100
+console.log(obj.val) // 101
 ```
 
 第一次获取`obj.val`的值为 2，接着给 a 赋值 100，然后第二次获取就是 100+1，即 101。
@@ -206,19 +206,19 @@ console.log(obj.val); // 101
 
 ```js
 let obj = {
-  a: 1,
-};
-Object.defineProperty(obj, "count", {
+  a: 1
+}
+Object.defineProperty(obj, 'count', {
   get() {
-    return this.a;
+    return this.a
   },
   set(v) {
-    this.a = v;
-  },
-});
-console.log(obj.count); // 1
-obj.count = 3;
-console.log(obj.count); // 3
+    this.a = v
+  }
+})
+console.log(obj.count) // 1
+obj.count = 3
+console.log(obj.count) // 3
 ```
 
 ### class
@@ -228,17 +228,17 @@ ES6 增加了`class`类的概念，在其中的 setter 和 getter 使用如下�
 ```js
 class Obj {
   constructor(props) {
-    this.num = props;
+    this.num = props
   }
   get val() {
-    return this.num;
+    return this.num
   }
   set val(v) {
-    this.num = v;
+    this.num = v
   }
 }
-const res = new Obj(6);
-console.log(res.val); // 6
-res.val = 8;
-console.log(res.val); // 8
+const res = new Obj(6)
+console.log(res.val) // 6
+res.val = 8
+console.log(res.val) // 8
 ```

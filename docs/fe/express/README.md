@@ -6,7 +6,7 @@
 
 ### 1、概念
 
-&emsp;&emsp;Express 基于Node.js平台，快速、开放、极简的 web 开发框架。
+&emsp;&emsp;Express 基于 Node.js 平台，快速、开放、极简的 web 开发框架。
 
 ### 2、安装
 
@@ -14,24 +14,24 @@
 npm install express --save
 ```
 
-### 3、创建Express应用
+### 3、创建 Express 应用
 
 ```js
-const express = require('express');
-const app = express();
+const express = require('express')
+const app = express()
 
-app.get('/',(req,res) => {
-    res.send('hello wrold');
-});
+app.get('/', (req, res) => {
+  res.send('hello wrold')
+})
 
-app.listen(3000, () => console.log('listen port 3000'));
+app.listen(3000, () => console.log('listen port 3000'))
 ```
 
-### 4、使用Express处理表单
+### 4、使用 Express 处理表单
 
-+ post请求
-+ get请求
-+ 图片上传
+- post 请求
+- get 请求
+- 图片上传
 
 ## 应用生成器
 
@@ -62,111 +62,115 @@ SET DEBUG=myApp:* 或者 npm start
 
 ## 路由
 
-### 1、express实现路由的方式
+### 1、express 实现路由的方式
 
-+ 针对应用级别
+- 针对应用级别
 
 ```js
-const express = require('express');
-const app = express();
+const express = require('express')
+const app = express()
 
-app.get('/',(req,res) => {
-    res.send('这是首页面')
-});
-app.get('/login',(req,res) => {
-    res.send('这是登录页')
-});
-app.get('/list',(req,res) => {
-    res.send('这是列表页')
-});
-app.post('/list', function (req, res) {
+app.get('/', (req, res) => {
+  res.send('这是首页面')
+})
+app.get('/login', (req, res) => {
+  res.send('这是登录页')
+})
+app.get('/list', (req, res) => {
+  res.send('这是列表页')
+})
+app.post('/list', function(req, res) {
   res.send('POST request')
-});
-app.put('/list', function (req, res) {
+})
+app.put('/list', function(req, res) {
   res.send('PUT request')
-});
-app.delete('/list', function (req, res) {
+})
+app.delete('/list', function(req, res) {
   res.send('DELETE request')
-});
+})
 
-app.listen(3000);
+app.listen(3000)
 ```
 
-+ 针对Router实例对象
+- 针对 Router 实例对象
 
 ```js
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-router.get('/',(req,res,next) => {
-    res.render('index',{title:'Express'})
-});
+router.get('/', (req, res, next) => {
+  res.render('index', { title: 'Express' })
+})
 
-module.exports = router;
+module.exports = router
 ```
 
 ### 2、路由方法
 
 Express 定义了如下和 HTTP 请求对应的路由方法： `get, post, put, head, delete, options, trace, copy, lock, mkcol, move, purge, propfind, proppatch, unlock, report, mkactivity, checkout, merge, m-search, notify, subscribe, unsubscribe, patch, search, 和 connect`。
 
-### 3、resfulAPI风格
+### 3、resfulAPI 风格
 
-+ 获取数据的地址，比如我要获取用户列表（get请求）
+- 获取数据的地址，比如我要获取用户列表（get 请求）
 
-/user       见名知意。直接利用路径名标识
-/user/01     直接跟上用户id获取单例用户
+/user 见名知意。直接利用路径名标识
+/user/01 直接跟上用户 id 获取单例用户
 
-+ 提交一个数据要添加到数据库（post请求）
+- 提交一个数据要添加到数据库（post 请求）
 
-/user      直接带在请求体formData当中提交
+/user 直接带在请求体 formData 当中提交
 
-+ 修改数据分为两种：
+- 修改数据分为两种：
 
-①部分修改数据(put请求)
+① 部分修改数据(put 请求)
 
 /user/01  
-资源路径名接上用户id
+资源路径名接上用户 id
 
-②完全替换(patch请求)
+② 完全替换(patch 请求)
 
-/user/01      全部替换掉用户01的内容
+/user/01 全部替换掉用户 01 的内容
 
-+ 删除数据 （delete请求）
+- 删除数据 （delete 请求）
 
-/user/01   删除用户01
+/user/01 删除用户 01
 
 ### 4、路由句柄
 
 路由句柄就是一个回调函数。可以设置多个，它必须要有两个参数，req, res.
 
-+ req是指`incommingmessage`，它表示一些请求信息，这个信息，我们只能获取，不能修改。
-+ res是指`serverResponse`，它表示响应对象，可以做服务器上的任何事情。
+- req 是指`incommingmessage`，它表示一些请求信息，这个信息，我们只能获取，不能修改。
+- res 是指`serverResponse`，它表示响应对象，可以做服务器上的任何事情。
 
 ```js
-const express = require('express');
-const app = express();
+const express = require('express')
+const app = express()
 
-app.get('/',(req,res,next) => {
-    res.send('one');
-    next();
-},(req,res,next) => {
-    res.send('two');
-});
+app.get(
+  '/',
+  (req, res, next) => {
+    res.send('one')
+    next()
+  },
+  (req, res, next) => {
+    res.send('two')
+  }
+)
 
-app.listen(3000);
+app.listen(3000)
 ```
 
-### 5、req,res相关方法
+### 5、req,res 相关方法
 
 req.query&emsp;将查询字符串变成对象
 
 req.path &emsp;得到路径名
 
-res.send&emsp;直接发送响应的内容，普通字符串和html标签均可
+res.send&emsp;直接发送响应的内容，普通字符串和 html 标签均可
 
 res.sendFile &emsp;用来发送文件
 
-res.json&emsp;用来发送一个json格式的字符串
+res.json&emsp;用来发送一个 json 格式的字符串
 
 res.render&emsp;渲染，需要结合模板引擎去使用
 
@@ -174,21 +178,21 @@ res.download&emsp;提供下载的方法
 
 res.redirect &emsp; 重定向方法
 
-### 6、ejs模板引擎
+### 6、ejs 模板引擎
 
-下载ejs模板
+下载 ejs 模板
 
 ```sh
 npm install ejs --save
 ```
 
-使用ejs作为express的模板引擎
+使用 ejs 作为 express 的模板引擎
 
 ```js
 // 设置模板存放的位置
-app.set('views', path.resolve(__dirname, './views'));
+app.set('views', path.resolve(__dirname, './views'))
 // 设置模板引擎为ejs
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs')
 ```
 
 ## 中间件
@@ -197,70 +201,70 @@ app.set('view engine', 'ejs');
 
 Express 是一个自身功能极简，完全是由路由和中间件构成一个的 web 开发框架；从本质上来说，一个 Express 应用就是在调用各种中间件。
 
->官方：中间件（Middleware） 是一个函数，它可以访问请求对象（request object (req)）
+> 官方：中间件（Middleware） 是一个函数，它可以访问请求对象（request object (req)）
 
 响应对象（response object (res)）, 和 web 应用中处于请求-响应循环流程中的中间件，一般被命名为 next 的变量。
 
 中间件可以做什么？
 
-+ 执行任何代码。
-+ 修改请求和响应对象。
-+ 终结请求-响应循环。
-+ 调用堆栈中的下一个中间件。
+- 执行任何代码。
+- 修改请求和响应对象。
+- 终结请求-响应循环。
+- 调用堆栈中的下一个中间件。
 
-在express中都有哪些中间件？
+在 express 中都有哪些中间件？
 
-+ 应用级中间件
-+ 路由级中间件
-+ 错误处理中间件
-+ 内置中间件
-+ 第三方中间件
+- 应用级中间件
+- 路由级中间件
+- 错误处理中间件
+- 内置中间件
+- 第三方中间件
 
 ### 应用级中间件
 
-所谓的应用级别的，就是指通过app对象来调用。
+所谓的应用级别的，就是指通过 app 对象来调用。
 
 如何使用应用级别中间件？
 
-+ app.use([path]);
-+ app.METHOD();  METHOD是指get, post等
+- app.use([path]);
+- app.METHOD(); METHOD 是指 get, post 等
 
-对于app.use()方式的中间件，如果说没有写path，就说明所有的请求都会使用这个中间件。
+对于 app.use()方式的中间件，如果说没有写 path，就说明所有的请求都会使用这个中间件。
 
-对于app.METHOD,实际上就是路由，从这个方面来说，路由也是中间件的一种。
+对于 app.METHOD,实际上就是路由，从这个方面来说，路由也是中间件的一种。
 
 ```js
-const express = require('express');
-const app = express();
+const express = require('express')
+const app = express()
 
-app.use((req,res,next) => {
-    res.send('应用级别中间件');
-    next();
-});
+app.use((req, res, next) => {
+  res.send('应用级别中间件')
+  next()
+})
 
-app.get('/',(req,res,next) => {
-    res.send('<h1>中间件</h1>')
-});
+app.get('/', (req, res, next) => {
+  res.send('<h1>中间件</h1>')
+})
 
-app.listen(3000);
+app.listen(3000)
 ```
 
 ### 路由级中间件
 
-路由级别的中间件，是指由express.Router对象来调用的。
+路由级别的中间件，是指由 express.Router 对象来调用的。
 
 ```js
-const express = require('express');
-const app = express();
-const router = express.Router();
+const express = require('express')
+const app = express()
+const router = express.Router()
 //在app中添加router中间件
-app.use(router);
+app.use(router)
 
-router.get('/',(req,res,next) => {
-    res.send('路由级中间件')
-});
+router.get('/', (req, res, next) => {
+  res.send('路由级中间件')
+})
 
-app.listen(3000);
+app.listen(3000)
 ```
 
 ### 错误处理中间件
@@ -269,11 +273,11 @@ app.listen(3000);
 
 ### 第三方中间件
 
-如body-parser，cookie-parse，express-session。
+如 body-parser，cookie-parse，express-session。
 
 #### body-parser
 
-解析post请求传递的body，若req.body获取不到数据，则可以使用该中间件
+解析 post 请求传递的 body，若 req.body 获取不到数据，则可以使用该中间件
 
 安装
 
@@ -285,28 +289,28 @@ npm install body-parser
 
 ```js
 const express = require('express')
-const app = express();
-const bodyParser = require('body-parser');
+const app = express()
+const bodyParser = require('body-parser')
 
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 // 创建 application/x-www-form-urlencoded 编码解析
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }))
 ```
 
-如果传输的内容不是string类型时，需配置`extended: ture`
+如果传输的内容不是 string 类型时，需配置`extended: ture`
 
-默认限制100kb大小，如果需要可自定义大小
+默认限制 100kb 大小，如果需要可自定义大小
 
 ```js
-app.use(bodyParser.json({limit: '100mb'}));
-app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }));
+app.use(bodyParser.json({ limit: '100mb' }))
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true }))
 ```
 
 ## 托管静态文件
 
-可以将js、css、图片等静态文件利用express的中间件`express.static()`托管，对外开放
+可以将 js、css、图片等静态文件利用 express 的中间件`express.static()`托管，对外开放
 
-假如public文件夹下有common.js、haha.png等文件
+假如 public 文件夹下有 common.js、haha.png 等文件
 
 ```js
 app.use(express.static('public'))
@@ -339,21 +343,21 @@ http://localhost:3000/static/common.js
 关于文件路径，`__dirname`表示当前模块的目录名
 
 ```js
-app.use('/static', express.static(path.join(__dirname,'public')))
+app.use('/static', express.static(path.join(__dirname, 'public')))
 ```
 
-## 处理404响应
+## 处理 404 响应
 
 ```js
 app.use((req, res, next) => {
-    res.status(404).send("Sorry can't find that!")
+  res.status(404).send("Sorry can't find that!")
 })
 ```
 
 ## 设置错误处理器
 
 ```js
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
   throw new Error('BROKEN') // Express will catch this on its own.
 })
 ```
@@ -371,12 +375,12 @@ app.use((err, req, res, next) => {
 
 ```js
 app.get('/plugin/three', (req, res) => {
-    res.sendFile(__dirname +'/assets/three.js');
-});
+  res.sendFile(__dirname + '/assets/three.js')
+})
 ```
 
 ## 常见问题
 
 ### 1、报错`TypeError: res.json is not a function`
 
-可能有自定义变量和res重名
+可能有自定义变量和 res 重名

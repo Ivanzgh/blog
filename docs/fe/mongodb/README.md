@@ -4,39 +4,34 @@
 
 中文文档：[http://www.mongodb.org.cn/](http://www.mongodb.org.cn/)
 
-mongoose文档：[https://mongoosejs.com/docs/index.html](https://mongoosejs.com/docs/index.html)
+mongoose 文档：[https://mongoosejs.com/docs/index.html](https://mongoosejs.com/docs/index.html)
 
 ## 简介
 
-MongoDB是一个基于分布式文件存储的数据库。由C++语言编写。旨在为WEB应用提供可扩展的高性能数据存储解决方案。
+MongoDB 是一个基于分布式文件存储的数据库。由 C++语言编写。旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。
 
-MongoDB是一个介于关系数据库和非关系数据库(nosql)之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。
+MongoDB 是一个介于关系数据库和非关系数据库(nosql)之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。
 
 ## 原子操作
 
-### $set
+### \$set
 
 用来指定一个键并更新键值，若键不存在则创建。
 
 ```js
-const {
+const { title, content, contentText, category } = req.body
+const data = await article.findById(id)
+const updateData = await data.update({
+  $set: {
     title,
     content,
     contentText,
     category
-} = req.body
-const data = await article.findById(id)
-const updateData = await data.update({
-    $set: {
-        title,
-        content,
-        contentText,
-        category
-    }
+  }
 })
 ```
 
-### $inc
+### \$inc
 
 对文档的某个值为数字型（只能为满足要求的数字）的键进行增减。
 
@@ -54,35 +49,39 @@ res.json({
 })
 ```
 
-### $unset
+### \$unset
 
 用来删除一个键。
 
-### $push
+### \$push
 
 ```js
-{ $push : { field : value } }
+{
+  $push: {
+    field: value
+  }
+}
 ```
 
-把value追加到field里面去，field一定要是数组类型才行，如果field不存在，会新增一个数组类型加进去。
+把 value 追加到 field 里面去，field 一定要是数组类型才行，如果 field 不存在，会新增一个数组类型加进去。
 
-### $pushAll
+### \$pushAll
 
-同$push,只是一次可以追加多个值到一个数组字段内。
+同\$push,只是一次可以追加多个值到一个数组字段内。
 
-### $pull
+### \$pull
 
-从数组field内删除一个等于value值。
+从数组 field 内删除一个等于 value 值。
 
-### $addToSet
+### \$addToSet
 
 增加一个值到数组内，而且只有当这个值不在数组内才增加。
 
-### $pop
+### \$pop
 
 删除数组的第一个或最后一个元素
 
-### $rename
+### \$rename
 
 修改字段名称
 
@@ -92,8 +91,8 @@ res.json({
 
 报错信息：
 
-```null
+```sh
  Unclean full-time diagnostic data capture shutdown detected, found interim file, some metrics may have been lost. OK
 ```
 
-解决方法：找到项目存放data的地方，删除`diagnostic.data`文件夹即可
+解决方法：找到项目存放 data 的地方，删除`diagnostic.data`文件夹即可

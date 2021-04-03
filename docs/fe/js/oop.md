@@ -143,8 +143,8 @@ console.log(demo.name);
 let demo1 = new Child();
 let demo2 = new Child();
 demo1.girl.push(6);
-console.log(demo1.girl);    // [1, 2, 3, 4, 5, 6]
-console.log(demo2.girl);    // [1, 2, 3, 4, 5, 6]
+console.log(demo1.girl); // [1, 2, 3, 4, 5, 6]
+console.log(demo2.girl); // [1, 2, 3, 4, 5, 6]
 ```
 
 ### 实例继承

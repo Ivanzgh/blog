@@ -4,6 +4,6 @@
 
 ```typescript
 interface Foo {
-    [propName: string]: number
+  [propName: string]: number
 }
 ```

@@ -9,26 +9,26 @@
 变量提升，就是把变量提升到**函数的顶部**，只是提升变量的声明，不会把变量的值也提升上来
 
 ```js
-var name = "haha";
+var name = 'haha'
 function changeName() {
-  console.log(name);
-  var name = "xixi";
+  console.log(name)
+  var name = 'xixi'
 }
-changeName(); // undefined
-console.log(name); // haha
+changeName() // undefined
+console.log(name) // haha
 ```
 
 提升后如下
 
 ```js
-var name = "haha";
+var name = 'haha'
 function changeName() {
-  var name;
-  console.log(name);
-  name = "xixi";
+  var name
+  console.log(name)
+  name = 'xixi'
 }
-changeName();
-console.log(name);
+changeName()
+console.log(name)
 ```
 
 ### 函数提升
@@ -40,31 +40,31 @@ console.log(name);
 函数表达式的形式如下：
 
 ```js
-var fun1 = function(n1, n2) {};
+var fun1 = function(n1, n2) {}
 ```
 
 构造函数的形式如下:
 
 ```js
-var fun2 = new Function("param1", "param2");
+var fun2 = new Function('param1', 'param2')
 ```
 
 只有函数声明形式才能被真正提升，函数表达式形式提升的只是一个没有值的变量
 
 ```js
 function f() {
-  g();
+  g()
   function g() {
-    console.log("我可以被提升");
+    console.log('我可以被提升')
   }
 }
-f();
+f()
 
-console.log(m); // undefined
-m(); // TypeError: m is not a function
+console.log(m) // undefined
+m() // TypeError: m is not a function
 var m = function() {
-  console.log(1);
-};
+  console.log(1)
+}
 ```
 
 ## 原型链
@@ -79,26 +79,26 @@ var m = function() {
 以此类推，直到找到为止，若找不到则返回`undefined`，这就是原型链。
 
 ```js
-let obj = {};
-console.log(obj);
-console.log(obj.constructor.prototype === obj.__proto__); // true
+let obj = {}
+console.log(obj)
+console.log(obj.constructor.prototype === obj.__proto__) // true
 
-let arr = [];
-console.log(arr);
+let arr = []
+console.log(arr)
 
 function Person(name) {
-  this.name = name;
+  this.name = name
 }
-console.log(Person.prototype); // {constructor: ƒ}
-Person.prototype.age = 23;
+console.log(Person.prototype) // {constructor: ƒ}
+Person.prototype.age = 23
 
-let person1 = new Person("zgh");
-console.log(person1); // Person {name: "zgh"}
-console.log(person1.age); // 23
+let person1 = new Person('zgh')
+console.log(person1) // Person {name: "zgh"}
+console.log(person1.age) // 23
 
-console.log(person1.__proto__ === Person.prototype); // true
+console.log(person1.__proto__ === Person.prototype) // true
 
-console.log(Person === Person.prototype.constructor); // true
+console.log(Person === Person.prototype.constructor) // true
 ```
 
 函数 Person 的 prototype 属性指向了一个对象，这个对象正是调用构造函数时创建的实例 person1 的原型
@@ -113,16 +113,16 @@ console.log(Person === Person.prototype.constructor); // true
 
 ```js
 let a = {
-  value: 1,
-};
-function getValue(name, age) {
-  console.log(name);
-  console.log(age);
-  console.log(this.value); // 1
+  value: 1
 }
-getValue.call(a, "zgh", "23"); // this指向a
-getValue.apply(a, ["zgh", "23"]);
-getValue.bind(a, "zgh", "23")();
+function getValue(name, age) {
+  console.log(name)
+  console.log(age)
+  console.log(this.value) // 1
+}
+getValue.call(a, 'zgh', '23') // this指向a
+getValue.apply(a, ['zgh', '23'])
+getValue.bind(a, 'zgh', '23')()
 ```
 
 ## 作用域
@@ -160,7 +160,7 @@ ES6 增加的`let`、`const`可以声明块级作用域，只在`let`和`const`�
 ### 全局执行
 
 ```js
-console.log(this); //  window
+console.log(this) //  window
 ```
 
 ### 函数中执行
@@ -169,19 +169,19 @@ console.log(this); //  window
 
 ```js
 function f() {
-  console.log(this); // window
+  console.log(this) // window
 }
-f();
+f()
 ```
 
 #### 2、严格模式
 
 ```js
-"use strict";
+'use strict'
 function f() {
-  console.log(this); // undefined
+  console.log(this) // undefined
 }
-f();
+f()
 ```
 
 ### 作为对象的方法调用
@@ -189,28 +189,28 @@ f();
 this 指向当前对象 obj
 
 ```js
-let name = "js";
+let name = 'js'
 let obj = {
-  name: "zgh",
+  name: 'zgh',
   fun: function() {
-    console.log(this.name); // zgh
-  },
-};
-obj.fun();
+    console.log(this.name) // zgh
+  }
+}
+obj.fun()
 ```
 
 如果把对象方法赋值给变量，调用该方法时，this 指向 `window`
 
 ```js
-let dd = "js"; // 若 var dd = 'js',则 this.dd结果为 js
+let dd = 'js' // 若 var dd = 'js',则 this.dd结果为 js
 let obj = {
-  dd: "zgh",
+  dd: 'zgh',
   fun: function() {
-    console.log(this.dd); // undefined
-  },
-};
-let res = obj.fun;
-res();
+    console.log(this.dd) // undefined
+  }
+}
+let res = obj.fun
+res()
 ```
 
 ### 作为构造函数调用
@@ -219,11 +219,11 @@ res();
 
 ```js
 function f(name) {
-  this.name = name;
-  console.log(this); // f {name: "zgh"}
+  this.name = name
+  console.log(this) // f {name: "zgh"}
 }
-let res = new f("zgh");
-console.log(typeof res); // object
+let res = new f('zgh')
+console.log(typeof res) // object
 ```
 
 ### 定时器中使用
@@ -232,12 +232,12 @@ js 中的定时器都是定义在 `window` 下的，所以二者都是指向 `wi
 
 ```js
 setInterval(function f() {
-  console.log(this); // window
-}, 2000);
+  console.log(this) // window
+}, 2000)
 
 setTimeout(function g() {
-  console.log(this); // window
-}, 0);
+  console.log(this) // window
+}, 0)
 ```
 
 ### 箭头函数中使用
@@ -247,21 +247,21 @@ setTimeout(function g() {
 
 ```js
 let obj = {
-  val: "1",
-};
+  val: '1'
+}
 let fun = () => {
-  console.log(this); // window
-};
-fun.call(obj);
+  console.log(this) // window
+}
+fun.call(obj)
 ```
 
 全局调用指向 `window`
 
 ```js
 let fun = () => {
-  console.log(this); // window
-};
-fun();
+  console.log(this) // window
+}
+fun()
 ```
 
 作为对象的方法调用，this 指向 `window`
@@ -270,27 +270,27 @@ fun();
 let obj1 = {
   age: 23,
   fun: () => {
-    console.log(this); // window
-  },
-};
-obj1.fun();
+    console.log(this) // window
+  }
+}
+obj1.fun()
 
 let obj2 = {
   age: 23,
   fun: function() {
-    console.log(this); // {age: 23, fun: ƒ}
-  },
-};
-obj2.fun();
+    console.log(this) // {age: 23, fun: ƒ}
+  }
+}
+obj2.fun()
 
 // 一般使用方法简写
 let obj3 = {
   age: 23,
   fun() {
-    console.log(this); // {age: 23, fun: ƒ}
-  },
-};
-obj3.fun();
+    console.log(this) // {age: 23, fun: ƒ}
+  }
+}
+obj3.fun()
 ```
 
 箭头函数作为定时器延时执行的函数调用，this 指向定义时所在的对象
@@ -299,14 +299,14 @@ obj3.fun();
 let obj = {
   fun: function() {
     setTimeout(() => {
-      console.log(this); // obj
-    }, 0);
+      console.log(this) // obj
+    }, 0)
     // setTimeout(function() {
     // console.log(this);  // window
     // },0)
-  },
-};
-obj.fun();
+  }
+}
+obj.fun()
 ```
 
 #### 小测试
@@ -315,11 +315,11 @@ obj.fun();
 
 ```js
 let user = {
-  name: "zgh",
+  name: 'zgh',
   go() {
-    console.log(this.name);
-  },
-}(user.go)();
+    console.log(this.name)
+  }
+}(user.go)()
 ```
 
 结果：ReferenceError
@@ -338,12 +338,12 @@ let user = { go:... }(user.go)()
 ```js
 function setUser() {
   return {
-    cool: "zgh",
-    ref: this,
-  };
+    cool: 'zgh',
+    ref: this
+  }
 }
-let user = setUser();
-console.log(user.ref.cool);
+let user = setUser()
+console.log(user.ref.cool)
 ```
 
 结果： undefined
@@ -361,14 +361,14 @@ console.log(user.ref.cool);
 ```js
 function setUser() {
   return {
-    cool: "zgh",
+    cool: 'zgh',
     ref() {
-      return this;
-    },
-  };
+      return this
+    }
+  }
 }
-let user = setUser();
-console.log(user.ref().cool); // zgh
+let user = setUser()
+console.log(user.ref().cool) // zgh
 ```
 
 此处 `user.ref()` 是一个方法，this 指向 user 对象
@@ -384,34 +384,34 @@ IIFE（Immediately-invoked function expression）
 #### 方式一
 
 ```js
-(function f(x) {
-  console.log(x); // 1
-})("1");
+;(function f(x) {
+  console.log(x) // 1
+})('1')
 ```
 
 #### 方式二
 
 ```js
-(function g(x) {
-  console.log(x); // 2
-})("2");
+;(function g(x) {
+  console.log(x) // 2
+})('2')
 ```
 
 示例
 
 ```js
-(function f() {
-  var iife = "zgh";
-})();
-console.log(iife); // Uncaught ReferenceError: iife is not defined
+;(function f() {
+  var iife = 'zgh'
+})()
+console.log(iife) // Uncaught ReferenceError: iife is not defined
 ```
 
 ```js
 var res = (function() {
-  var fe = "hehe";
-  return fe;
-})();
-console.log(res); // hehe
+  var fe = 'hehe'
+  return fe
+})()
+console.log(res) // hehe
 ```
 
 ## 深拷贝、浅拷贝
@@ -420,31 +420,31 @@ console.log(res); // hehe
 
 ```js
 const obj = {
-  name: "zgh",
-};
-function shallowClone(obj) {
-  const newObj = {};
-  for (let i in obj) {
-    newObj[i] = obj[i];
-  }
-  return newObj;
+  name: 'zgh'
 }
-shallowClone(obj); // {name: "zgh"}
+function shallowClone(obj) {
+  const newObj = {}
+  for (let i in obj) {
+    newObj[i] = obj[i]
+  }
+  return newObj
+}
+shallowClone(obj) // {name: "zgh"}
 ```
 
 深拷贝：
 
 ```js
 function deepClone(obj) {
-  if (typeof obj === "object") {
-    let res = obj.constructor === Array ? [] : {};
+  if (typeof obj === 'object') {
+    let res = obj.constructor === Array ? [] : {}
     for (let i in obj) {
-      res[i] = typeof obj[i] === "object" ? deepClone(obj[i]) : obj[i];
+      res[i] = typeof obj[i] === 'object' ? deepClone(obj[i]) : obj[i]
     }
   } else {
-    let res = obj;
+    let res = obj
   }
-  return obj;
+  return obj
 }
 ```
 
@@ -472,14 +472,14 @@ function deepClone(obj) {
 
 ```js
 function f() {
-  let a = 1;
+  let a = 1
   function g() {
-    a += 1;
-    console.log(a);
+    a += 1
+    console.log(a)
   }
-  g();
+  g()
 }
-f();
+f()
 ```
 
 优点：延长变量生命周期
@@ -499,22 +499,22 @@ f();
 </ul>
 */
 
-let lis = document.getElementsByTagName("li");
+let lis = document.getElementsByTagName('li')
 for (var i = 0; i < lis.length; i++) {
-  (function(i) {
+  ;(function(i) {
     lis[i].onclick = function() {
-      console.log(i);
-    };
-  })(i);
+      console.log(i)
+    }
+  })(i)
 }
 
 //或者
 for (var i = 0; i < lis.length; i++) {
   lis[i].onclick = (function(i) {
     return function() {
-      console.log(i);
-    };
-  })(i);
+      console.log(i)
+    }
+  })(i)
 }
 ```
 
@@ -525,8 +525,8 @@ for (var i = 0; i < lis.length; i++) {
 ```js
 for (var i = 1; i <= 5; i++) {
   setTimeout(function timer() {
-    console.log(i);
-  }, i * 1000);
+    console.log(i)
+  }, i * 1000)
 }
 ```
 
@@ -534,11 +534,11 @@ for (var i = 1; i <= 5; i++) {
 
 ```js
 for (var i = 1; i <= 5; i++) {
-  (function(j) {
+  ;(function(j) {
     setTimeout(function timer() {
-      console.log(j);
-    }, j * 1000);
-  })(i);
+      console.log(j)
+    }, j * 1000)
+  })(i)
 }
 ```
 
@@ -550,8 +550,8 @@ for (var i = 1; i <= 5; i++) {
 ```js
 for (let i = 1; i <= 5; i++) {
   setTimeout(function timer() {
-    console.log(i);
-  }, i * 1000);
+    console.log(i)
+  }, i * 1000)
 }
 ```
 
@@ -565,13 +565,13 @@ for (let i = 1; i <= 5; i++) {
 <input type="text" id="my-input" />
 
 <script>
-  let inp = document.getElementById("my-input");
+  let inp = document.getElementById('my-input')
   function ajaxTest(a) {
-    console.log(a);
+    console.log(a)
   }
-  inp.addEventListener("keyup", (e) => {
-    ajaxTest(e.target.value);
-  });
+  inp.addEventListener('keyup', e => {
+    ajaxTest(e.target.value)
+  })
 </script>
 ```
 
@@ -581,24 +581,24 @@ for (let i = 1; i <= 5; i++) {
 
 ```js
 function ajaxTest(a) {
-  console.log(a);
+  console.log(a)
 }
 
 function debounce(fun, delay) {
   return function(args) {
-    let that = this;
-    let _args = args;
-    clearTimeout(fun.id);
+    let that = this
+    let _args = args
+    clearTimeout(fun.id)
     fun.id = setTimeout(function() {
-      fun.call(that, _args);
-    }, delay);
-  };
+      fun.call(that, _args)
+    }, delay)
+  }
 }
-let debounceAjax = debounce(ajaxTest, 500);
-let inp = document.getElementById("my-input");
-inp.addEventListener("keyup", (e) => {
-  debounceAjax(e.target.value);
-});
+let debounceAjax = debounce(ajaxTest, 500)
+let inp = document.getElementById('my-input')
+inp.addEventListener('keyup', e => {
+  debounceAjax(e.target.value)
+})
 ```
 
 使用防抖后，当用户在频繁的输入时，并不会发送请求，只有当用户在指定间隔内没有输入时，才会执行函数。如果停止输入但是在指定间隔内又输入，会重新触发计时。
@@ -609,33 +609,33 @@ inp.addEventListener("keyup", (e) => {
 
 ```js
 function ajax(a) {
-  console.log(a);
+  console.log(a)
 }
 function throttle(fun, delay) {
-  let last, deferTimer;
+  let last, deferTimer
   return function(args) {
-    let that = this;
-    let _args = arguments;
-    let now = +new Date();
+    let that = this
+    let _args = arguments
+    let now = +new Date()
     if (last && now < last + delay) {
-      clearTimeout(deferTimer);
+      clearTimeout(deferTimer)
       deferTimer = setTimeout(function() {
-        last = now;
-        fun.apply(that, _args);
-      }, delay);
+        last = now
+        fun.apply(that, _args)
+      }, delay)
     } else {
-      last = now;
-      fun.apply(that, _args);
+      last = now
+      fun.apply(that, _args)
     }
-  };
+  }
 }
 
-let throttleAjax = throttle(ajax, 1000);
+let throttleAjax = throttle(ajax, 1000)
 
-let inputs = document.getElementById("throttle");
-inputs.addEventListener("keyup", function(e) {
-  throttleAjax(e.target.value);
-});
+let inputs = document.getElementById('throttle')
+inputs.addEventListener('keyup', function(e) {
+  throttleAjax(e.target.value)
+})
 ```
 
 函数在每 1s 内执行一次
@@ -661,11 +661,11 @@ inputs.addEventListener("keyup", function(e) {
 ```js
 function f(n) {
   if (n === 1) {
-    return 1;
+    return 1
   }
-  return f(n - 1) + n;
+  return f(n - 1) + n
 }
-console.log(f(5));
+console.log(f(5))
 ```
 
 斐波那契数列
@@ -675,12 +675,12 @@ console.log(f(5));
 //1,1,2,3,5,8,13,21......
 function f(n) {
   if (n === 1 || n === 2) {
-    return 1;
+    return 1
   } else {
-    return f(n - 1) + f(n - 2);
+    return f(n - 1) + f(n - 2)
   }
 }
-console.log(f(3));
+console.log(f(3))
 ```
 
 ## 函数柯里化
@@ -689,16 +689,16 @@ console.log(f(3));
 
 ```js
 function f(x, y) {
-  return x + y;
+  return x + y
 }
-f(1, 2);
+f(1, 2)
 
 function g(x) {
   return function(y) {
-    return x + y;
-  };
+    return x + y
+  }
 }
-g(1)(2);
+g(1)(2)
 ```
 
 示例：实现 `add(1)(2)(3) => 6`
@@ -707,15 +707,15 @@ g(1)(2);
 function add(a) {
   function sum(b) {
     // 使用闭包
-    a = a + b; // 累加
-    return sum;
+    a = a + b // 累加
+    return sum
   }
   sum.toString = function() {
     // 重写toSting() 方法
-    return a;
-  };
-  return sum; // 返回一个函数
+    return a
+  }
+  return sum // 返回一个函数
 }
-const res = add(1)(2)(3);
-console.log(res);
+const res = add(1)(2)(3)
+console.log(res)
 ```
