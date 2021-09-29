@@ -25,7 +25,7 @@ import { personalRegister } from '@/utils/validator'
 </script>
 ```
 
-在validator.js中封装校验规则
+在 validator.js 中封装校验规则
 
 ```js
 /**
@@ -65,24 +65,55 @@ const personalRegister = {
 module.exports = { personalRegister }
 ```
 
+#### 踩坑
+
+1、表单赋值报错
+
+场景：点击编辑按钮，弹出模态框，给模态框中的表单赋值
+
+错误提示： `Warning: You cannot set a form field before rendering a field associated with the value.`
+
+原因： 在表单还没渲染完成，就给表单赋值。使用了`setFieldsValue`方法，例如：`this.form.setFieldsValue({ name: 'zgh', age: 23 })`
+
+解决：
+
+1）、表单需要什么字段就传什么，可少传，不能多传
+
+2）、使用`nextTick()`
+
+```js
+this.$nextTick(() => {
+  this.form.setFieldsValue({ name: 'zgh', age: 23 })
+})
+```
+
+如果还不行就加一个`setTimeout()`
+
+```js
+this.$nextTick(() => {
+  setTimeout(() => {
+    this.form.setFieldsValue({ name: 'zgh', age: 23 })
+  })
+})
+```
+
+2、表单回填数据
+
+- 下拉框类型，如果显示数字即 value 值，可将回填的字段值改为 `string` 类型，即`toString()`
+
 #### 气泡卡片
 
 注册时填写密码，给出气泡卡片提示，根据输入位数更改进度条颜色和标题
 
 ```vue
 <template>
-  <a-form
-    :form="form"
-    :label-col="{ span: 6 }"
-    :wrapper-col="{ span: 18 }"
-    @submit="handleSubmit"
-  >
+  <a-form :form="form" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" @submit="handleSubmit">
     <a-form-item label="登录密码">
       <a-popover trigger="focus" placement="right">
         <template slot="title">
-          <span :style="passwordLength < 8 ? 'color:#f00' : 'color:#0f0'"
-            >强度: {{ passPower }}</span
-          >
+          <span :style="passwordLength < 8 ? 'color:#f00' : 'color:#0f0'">
+            强度: {{ passPower }}
+          </span>
           <a-progress
             :percent="percent"
             size="small"
@@ -112,42 +143,159 @@ export default {
   data() {
     return {
       percent: 0,
-      passPower: "0",
+      passPower: '0',
       passwordLength: 0,
-      form: this.$form.createForm(this, { name: "register" }),
+      form: this.$form.createForm(this, { name: 'register' }),
       validator: {
         rules: [
-          { required: true, message: "请输入登录密码", whitespace: true },
-          { min: 6, max: 16, message: "密码长度为6-16位" },
-        ],
-      },
-    };
+          { required: true, message: '请输入登录密码', whitespace: true },
+          { min: 6, max: 16, message: '密码长度为6-16位' }
+        ]
+      }
+    }
   },
   methods: {
     showTip() {
       this.$nextTick(() => {
-        let val = this.form.getFieldValue("password");
-        this.passwordLength = val.length;
-        this.percent = (val.length / 16) * 100;
+        let val = this.form.getFieldValue('password')
+        this.passwordLength = val.length
+        this.percent = (val.length / 16) * 100
         if (val.length >= 6 && val.length < 8) {
-          this.passPower = "太短";
+          this.passPower = '太短'
         }
         if (val.length >= 8) {
-          this.passPower = "安全";
+          this.passPower = '安全'
         }
-      });
+      })
     },
     handleSubmit(e) {
-      e.preventDefault();
+      e.preventDefault()
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log(values);
+          console.log(values)
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style scoped lang="less"></style>
+```
+
+### 表格
+
+#### 设置表格序号
+
+实现表格序号自增
+
+```js
+{
+  "title": "序号",
+  "dataIndex": "index",
+  "key": "index",
+  "width": "20%",
+  "customRender": (text, record, index) => `${index + 1}`
+}
+```
+
+使用`customRender`函数来渲染序号的数据，在`customRender`函数中：
+
+- `text` 表示是序号一列默认显示的数据
+- `record` 表示是一行的所有数据
+- `index` 表示 Table 表格数据的下标，也就是数组的下标
+
+因为数组的下标是从 0 开始的，所以需要 +1
+
+#### columns 配置
+
+```js
+{
+  title: '名称',
+  dataIndex: 'name',  // 数据字段
+  key: 'name',
+  ellipsis: true,   // 文字超出显示省略
+  width: '12%',
+  scopedSlots: { customRender: 'verifyStatus' },    // 插槽
+  sorter: (a, b) => a.name.length - b.name.length   // 排序
+}
+```
+
+#### 表格行点击事件
+
+```js
+<a-table :columns="colMain" :data-source="colMainData" :rowKey="row => row.id" :pagination="false" :customRow="clickRow"></a-table>
+
+ /**
+  * 点击表格的某一行
+  */
+  clickRow(record, index) {
+    return {
+      on: {
+        click: () => {
+          console.log(record, index)
+        }
+      }
+    }
+  }
+```
+
+### 分割线
+
+```js
+<a-divider orientation="left">请求信息</a-divider>
+<a-card :bordered="false" class="showContent"></a-card>
+```
+
+```css
+/deep/ .ant-divider-horizontal {
+  margin: 16px 0 0 0;
+  font-weight: 600;
+}
+/deep/ .ant-divider-horizontal.ant-divider-with-text-left::before {
+  width: 0;
+}
+```
+
+### 折叠面板
+
+折叠面板内容在被隐藏时默认是不会渲染 DOM 结构，设置`:forceRender='true'`即可。
+例如面板内容是表单时，不打开时是无法获取数据的
+
+### 日期选择器
+
+#### 年度选择器
+
+```vue
+<template>
+  <a-date-picker
+    mode="year"
+    placeholder="请选择年份"
+    format="YYYY"
+    :open="isopen"
+    @openChange="openChange"
+    @panelChange="panelChange"
+    v-decorator="['date']"
+  />
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isOpen: false
+    }
+  },
+  methods: {
+    // 年份选择器
+    openChange(e) {
+      this.isOpen = e ? true : false
+    },
+    panelChange(e) {
+      this.form.setFieldsValue({ date: e })
+      this.isOpen = false
+    }
+  }
+}
+</script>
 ```

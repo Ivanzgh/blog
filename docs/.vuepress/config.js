@@ -49,8 +49,9 @@ module.exports = {
         items: [
           { text: 'NPM', link: '/fe/npm/' },
           { text: 'Git', link: '/fe/git/' },
-          { text: 'Webpack', link: '/fe/webpack/' },
-          { text: 'Gulp', link: '/fe/gulp/' },
+          { text: 'Webpack', link: '/build/webpack/' },
+          { text: 'Gulp', link: '/build/gulp/' },
+          { text: 'rollup', link: '/build/rollup/' },
           { text: 'Others', link: '/utils/' }
         ]
       },
@@ -134,7 +135,7 @@ module.exports = {
         {
           title: '进阶',
           collapsable: false,
-          children: ['advanced', 'oop', 'es6']
+          children: ['advanced', 'oop', 'es6', 'module']
         },
         {
           title: '工具函数',
@@ -237,14 +238,28 @@ module.exports = {
           children: ['']
         }
       ],
-      '/fe/gulp/': [
+      '/fe/git/': [
         {
           collapsable: false,
           sidebarDepth: 2,
           children: ['']
         }
       ],
-      '/fe/git/': [
+      '/build/webpack/': [
+        {
+          collapsable: false,
+          sidebarDepth: 2,
+          children: ['']
+        }
+      ],
+      '/build/gulp/': [
+        {
+          collapsable: false,
+          sidebarDepth: 2,
+          children: ['']
+        }
+      ],
+      '/build/rollup/': [
         {
           collapsable: false,
           sidebarDepth: 2,

@@ -68,3 +68,164 @@ watch: {
 ```
 
 只要 url 变化了，就一定会重新创建这个组件。
+
+## wangEditor 富文本
+
+组件封装
+
+```js
+<template>
+  <div>
+    <div id="editorElem"></div>
+  </div>
+</template>
+
+<script>
+import E from 'wangeditor'
+export default {
+  props: {
+    value: {
+      type: String,
+      default: ''
+    },
+    isClear: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      editor: null,
+      editorData: ''
+    }
+  },
+  watch: {
+    isClear(val) {
+      if (val) {
+        this.editor.txt.clear()
+        this.editorData = null
+      }
+    }
+  },
+  methods: {
+    getHtml() {
+      return this.editor.txt.html()
+    },
+
+    setHtml(val) {
+      this.editor.txt.html(val)
+    },
+
+    getText() {
+      this.editor.txt.text()
+    },
+
+    clearVal() {
+      this.editor.txt.clear()
+      this.editorData = null
+    },
+
+    initEditor() {
+      const editor = new E('#editorElem')
+
+      editor.config.uploadImgShowBase64 = true // 使用base64保存图片  上下两者不可同用
+      // this.editor.config.uploadImgServer = "http://baidu.com/"; // 上传图片到服务器
+
+      editor.config.uploadImgMaxSize = 2 * 1024 * 1024
+
+      /**
+      // 配置菜单 可根据文档进行添加
+      this.editor.config.menus = [
+        // 'head', // 标题
+        // 'bold', // 粗体
+        "fontSize", // 字号
+        // 'fontName', // 字体
+        // 'italic', // 斜体
+        "underline", // 下划线
+        // 'strikeThrough', // 删除线
+        "foreColor", // 文字颜色
+        "backColor", // 背景颜色
+        // 'link', // 插入链接
+        "list", // 列表
+        "justify", // 对齐方式
+        "image", // 插入图片
+        // 'quote', // 引用
+        "emoticon" // 表情
+        // 'table', // 表格
+        // 'video', // 插入视频
+        // 'code', // 插入代码
+        // 'undo', // 撤销
+        // 'redo', // 重复
+        // 'fullscreen' // 全屏
+      ];
+      */
+      // 配置 onchange 回调函数，将数据同步到 vue 中
+      editor.config.onchange = newHtml => {
+        this.editorData = newHtml
+        this.$emit('change', this.editorData)
+      }
+
+      editor.create()
+      this.editor = editor
+
+      // this.$nextTick(() => {
+
+      // });
+    }
+  },
+  mounted() {
+    this.initEditor()
+  },
+  beforeDestroy() {
+    this.editor.destroy()
+    this.editor = null
+  }
+}
+</script>
+
+<style scoped lang="less"></style>
+
+```
+
+使用
+
+```vue
+<template>
+  <a-button type="primary" icon="plus" @click="showModal">问题反馈</a-button>
+  <wangEditor
+    ref="editor"
+    v-model="editorContent"
+    :isClear="isClear"
+    @change="getEditor"
+  ></wangEditor>
+</template>
+<script>
+import wangEditor from '@/components/editor/wangeditor'
+export default {
+  components: { wangEditor },
+  data() {
+    return {
+      visible: false,
+      editorContent: null,
+      isClear: false
+    }
+  },
+  methods: {
+    // 获取富文本内容
+    getEditor(val) {
+      this.editorContent = val
+    },
+    showModal() {
+      this.visible = true
+      // 打开对话框时都要清空富文本内容
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.editorContent = ''
+          this.$refs.editor.setHtml(this.editorContent)
+        })
+      })
+    }
+  }
+}
+</script>
+```

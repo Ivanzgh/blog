@@ -141,6 +141,38 @@ git branch -M main
 git push -u origin main
 ```
 
+创建一个新的仓库
+
+```sh
+git clone ssh://git@192.168.8.8:30001/gkhyy/report_web.git
+cd report_web
+touch README.md
+git add README.md
+git commit -m "add README"
+git push -u origin master
+```
+
+推送一个已经存在的文件夹
+
+```sh
+cd existing_folder
+git init
+git remote add origin ssh://git@192.168.8.8:30001/gkhyy/report_web.git
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+```
+
+推送一个已经存在的 git 仓库
+
+```sh
+cd existing_repo
+git remote rename origin old-origin
+git remote add origin ssh://git@192.168.8.8:30001/gkhyy/report_web.git
+git push -u origin --all
+git push -u origin --tags
+```
+
 ## 集成到编辑器
 
 ### webstorm 集成 git
@@ -183,7 +215,7 @@ VCS --> Git --> Clone，在弹出窗口 URL 输入项目地址，第二栏选择
 
 - feat:新功能
 - fix:修复 bug
-- doc:仅仅修改了文档，比如 README 等等
+- docs:仅仅修改了文档，比如 README 等等
 - style:仅仅修改了空格、格式缩进、不改变代码逻辑
 - refactor:代码重构，没有加新功能或者修复 bug
 - perf:性能优化，比如提升性能、体验
@@ -207,7 +239,7 @@ feat(all): project init
 ```
 
 ```sh
-doc(location): edit README
+docs(location): edit README
 ```
 
 ## 常见问题

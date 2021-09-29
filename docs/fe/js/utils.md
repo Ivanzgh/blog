@@ -359,3 +359,70 @@ function getBrowser() {
   return 'other'
 }
 ```
+
+## 密码强度判断
+
+```js
+/**
+ * 纯数字、纯字母 = 弱
+ * 数字 + 字母 & 小于10位 = 中
+ * 数字 + 字母 & 大于等于10位 = 强
+ */
+export const passwordStrength = function(val) {
+  const num = /^\d+$/
+  const eng = /^([a-zA-Z]+)$/
+  if (num.test(val) || eng.test(val)) {
+    return 0
+  }
+  if (!num.test(val) && !eng.test(val) && val.length < 10) {
+    return 1
+  }
+  if (!num.test(val) && !eng.test(val) && val.length >= 10) {
+    return 2
+  }
+}
+```
+
+## 截取浏览器路径
+
+```js
+clearUrl() {
+  let url = window.location.href
+  if (url.indexOf('/?') != -1) {
+    url = url.split('/?')[0] + '#/workbench'
+  }
+  localStorage.removeItem('account.forceToken')
+  window.history.pushState({}, 0, url)
+}
+```
+
+获取最后一个斜杠后的内容
+
+```js
+const url = '/dataManage/projectStage'
+const index = url.lastIndexOf('/')
+const router = url.substring(index + 1, url.length)
+console.log(router) // projectStage
+```
+
+## 对象数组转换
+
+```js
+/**
+ * const obj = { a1: 1, b1: 2, a2: 3, b2: 4 }
+ * const arr = [{ a: 1, b: 2 }, { a: 3, b: 4 }]
+ */
+
+const res = Object.values(
+  Object.entries(obj).reduce(
+    (acc, [key, val]) => (
+      Object.assign((acc[[key.match(/\d/)]] ||= {}), { [key.replace(/\d/, '')]: val }), acc
+    ),
+    {}
+  )
+)
+console.log(JSON.stringify(res))
+```
+
+`||=`表示或等于，`a ||= b` 等同于 `a || (a = b)`
+`&&=`表示且等于，`a &&= b` 等同于 `a && (a = b)`
