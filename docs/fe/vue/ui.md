@@ -299,3 +299,22 @@ export default {
 }
 </script>
 ```
+
+### 描述
+
+当描述信息太多需要独占一行时，可以单独使用描述组件。
+若使用一个组件，可以使用一个空的`<a-descriptions-item />`占位，但是不会占满一行
+
+```vue
+<template>
+  <a-descriptions :column="1">
+    <a-descriptions-item label="泊位中文名称">{{ berthInfo.berthCnName }}</a-descriptions-item>
+  </a-descriptions>
+  <a-descriptions :column="2">
+    <a-descriptions-item label="泊位英文名称">{{ berthInfo.berthEnName }}</a-descriptions-item>
+    <a-descriptions-item label="泊位缩写">{{ berthInfo.berthSimpleName }}</a-descriptions-item>
+    <a-descriptions-item label="泊位长度(米)">{{ berthInfo.berthLength }}</a-descriptions-item>
+    <a-descriptions-item label="泊位结构">{{ berthInfo.berthStructure }}</a-descriptions-item>
+  </a-descriptions>
+</template>
+```

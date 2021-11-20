@@ -8,12 +8,7 @@ module.exports = {
     '@vuepress/back-to-top',
     'img-lazy',
     'vuepress-plugin-baidu-autopush',
-    [
-      {
-        name: 'page-plugin',
-        globalUIComponents: ['global-Cat']
-      }
-    ]
+    [{ name: 'page-plugin', globalUIComponents: ['global-Cat'] }]
   ],
   themeConfig: {
     logo: '/img/logo.png',
@@ -91,40 +86,14 @@ module.exports = {
     sidebar: {
       '/thought/': [''],
       '/fe/vue/': [
-        {
-          title: 'vue',
-          collapsable: false,
-          children: ['', 'contact', 'business', 'vue3']
-        },
-        {
-          title: 'vuex',
-          collapsable: false,
-          children: ['vuex']
-        },
-        {
-          title: 'vue-router',
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['vue-router']
-        },
-        {
-          title: 'vuePress',
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['vuepress']
-        }
+        { title: 'vue', collapsable: false, children: ['', 'contact', 'business', 'vue3', 'ui'] },
+        { title: 'vuex', collapsable: false, children: ['vuex'] },
+        { title: 'vue-router', collapsable: false, sidebarDepth: 2, children: ['vue-router'] },
+        { title: 'vuePress', collapsable: false, sidebarDepth: 2, children: ['vuepress'] }
       ],
       '/fe/react/': [
-        {
-          title: 'react',
-          collapsable: false,
-          children: ['']
-        },
-        {
-          title: 'redux',
-          collapsable: false,
-          children: ['redux']
-        }
+        { title: 'react', collapsable: false, children: [''] },
+        { title: 'redux', collapsable: false, children: ['redux'] }
       ],
       '/fe/js/': [
         {
@@ -132,16 +101,8 @@ module.exports = {
           collapsable: false,
           children: ['', 'dom', 'json', 'array', 'string', 'object', 'ajax']
         },
-        {
-          title: '进阶',
-          collapsable: false,
-          children: ['advanced', 'oop', 'es6', 'module']
-        },
-        {
-          title: '工具函数',
-          collapsable: false,
-          children: ['utils']
-        }
+        { title: '进阶', collapsable: false, children: ['advanced', 'oop', 'es6', 'module'] },
+        { title: '工具函数', collapsable: false, children: ['utils'] }
       ],
       '/fe/ts/': [
         {
@@ -162,181 +123,46 @@ module.exports = {
         }
       ],
       '/fe/html/': [
-        {
-          title: '基础',
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        },
-        {
-          title: '进阶',
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['canvas', 'svg']
-        }
+        { title: '基础', collapsable: false, sidebarDepth: 2, children: [''] },
+        { title: '进阶', collapsable: false, sidebarDepth: 2, children: ['canvas', 'svg'] }
       ],
       '/fe/css/': [
-        {
-          title: '基础',
-          collapsable: false,
-          children: ['', 'layout', 'business']
-        },
+        { title: '基础', collapsable: false, children: ['', 'layout', 'business'] },
         {
           title: '进阶',
           collapsable: false,
           sidebarDepth: 2,
           children: ['box-shadow', 'gradient', 'animation', 'flex', 'media-queries', 'clip-path']
         },
-        {
-          title: '预编译语言',
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['sass', 'less']
-        }
+        { title: '预编译语言', collapsable: false, sidebarDepth: 2, children: ['sass', 'less'] }
       ],
-      '/fe/node/': [
-        {
-          title: 'Node',
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/fe/express/': [
-        {
-          title: 'Express',
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/fe/mongodb/': [
-        {
-          title: 'MongoDB',
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
+      '/fe/node/': [{ title: 'Node', collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/fe/express/': [{ title: 'Express', collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/fe/mongodb/': [{ title: 'MongoDB', collapsable: false, sidebarDepth: 2, children: [''] }],
       '/fe/browser/': [
-        {
-          title: '浏览器',
-          collapsable: false,
-          children: ['', 'window', 'compatibility']
-        }
+        { title: '浏览器', collapsable: false, children: ['', 'window', 'compatibility'] }
       ],
-      '/fe/plugin/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/fe/npm/': [
-        {
-          collapsable: false,
-          children: ['']
-        }
-      ],
-      '/fe/git/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/build/webpack/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/build/gulp/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/build/rollup/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/be/docker/': [
-        {
-          title: 'Docker',
-          collapsable: false,
-          children: ['']
-        }
-      ],
-      '/be/nginx/': [
-        {
-          title: 'Nginx',
-          collapsable: false,
-          children: ['']
-        }
-      ],
-      '/be/mysql/': [
-        {
-          title: 'MySQL',
-          collapsable: false,
-          children: ['']
-        }
-      ],
-      '/be/tomcat/': [
-        {
-          title: 'Tomcat',
-          collapsable: false,
-          children: ['']
-        }
-      ],
+      '/fe/plugin/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/fe/npm/': [{ collapsable: false, children: [''] }],
+      '/fe/git/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/build/webpack/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/build/gulp/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/build/rollup/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/be/docker/': [{ title: 'Docker', collapsable: false, children: [''] }],
+      '/be/nginx/': [{ title: 'Nginx', collapsable: false, children: [''] }],
+      '/be/mysql/': [{ title: 'MySQL', collapsable: false, children: [''] }],
+      '/be/tomcat/': [{ title: 'Tomcat', collapsable: false, children: [''] }],
       '/be/elasticsearch/': [
-        {
-          title: 'ElasticSearch',
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
+        { title: 'ElasticSearch', collapsable: false, sidebarDepth: 2, children: [''] }
       ],
-      '/vis/openlayers/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/vis/leaflet/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/vis/three/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/base/algorithm/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
-      '/base/network/': [
-        {
-          collapsable: false,
-          sidebarDepth: 2,
-          children: ['']
-        }
-      ],
+      '/vis/openlayers/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/vis/leaflet/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/vis/geoserver/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/vis/cesium/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/vis/three/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/base/algorithm/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/base/network/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/base/data-structure/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/base/design-pattern/': [
         {
           title: '设计模式',
@@ -345,6 +171,7 @@ module.exports = {
           children: ['', 'strategy', 'observers', 'publisher-subscriber']
         }
       ],
+      '/base/os/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/utils/': ['']
     }
   }

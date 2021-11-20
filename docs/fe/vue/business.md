@@ -229,3 +229,234 @@ export default {
 }
 </script>
 ```
+
+## 轮播缩略图
+
+安装指定版本
+
+```sh
+npm install swiper@5.3.6 vue-awesome-swiper@4.1.0
+```
+
+```vue
+<template>
+  <div class="carousel">
+    <swiper class="swiper gallery-top" :options="swiperOptionTop" ref="swiperTop">
+      <swiper-slide v-for="(e, i) in imglist" :key="i">
+        <img :src="e.url" alt="img" />
+      </swiper-slide>
+      <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
+      <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
+    </swiper>
+    <swiper class="swiper gallery-thumbs" :options="swiperOptionThumbs" ref="swiperThumbs">
+      <swiper-slide v-for="(e, i) in imglist" :key="i">
+        <img :src="e.url" alt="img" />
+      </swiper-slide>
+    </swiper>
+  </div>
+</template>
+
+<script>
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
+import 'swiper/css/swiper.css'
+
+export default {
+  props: {},
+  components: { Swiper, SwiperSlide },
+  data() {
+    return {
+      imglist: [
+        { id: 0, url: require('@/assets/sw/nature-1.jpg') },
+        { id: 1, url: require('@/assets/sw/nature-2.jpg') },
+        { id: 2, url: require('@/assets/sw/nature-3.jpg') },
+        { id: 3, url: require('@/assets/sw/nature-4.jpg') },
+        { id: 4, url: require('@/assets/sw/nature-5.jpg') },
+        { id: 5, url: require('@/assets/sw/nature-6.jpg') },
+        { id: 6, url: require('@/assets/sw/nature-7.jpg') },
+        { id: 7, url: require('@/assets/sw/nature-8.jpg') },
+        { id: 8, url: require('@/assets/sw/nature-9.jpg') },
+        { id: 9, url: require('@/assets/sw/nature-10.jpg') }
+      ],
+      swiperOptionTop: {
+        loop: true,
+        loopedSlides: 5, // looped slides 上下数量要一样
+        spaceBetween: 10,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      },
+      swiperOptionThumbs: {
+        loop: true,
+        loopedSlides: 5,
+        spaceBetween: 10,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        touchRatio: 0.2,
+        slideToClickedSlide: true
+      }
+    }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const swiperTop = this.$refs.swiperTop.$swiper
+      const swiperThumbs = this.$refs.swiperThumbs.$swiper
+      swiperTop.controller.control = swiperThumbs
+      swiperThumbs.controller.control = swiperTop
+    })
+  }
+}
+</script>
+
+<style scoped lang="less">
+.carousel {
+  width: 455px;
+  height: 323px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .swiper {
+    .swiper-slide {
+      background-size: cover;
+      background-position: center;
+    }
+    &.gallery-top {
+      height: 80%;
+      width: 100%;
+    }
+    &.gallery-thumbs {
+      height: 20%;
+      box-sizing: border-box;
+      padding: 10px 0;
+    }
+    &.gallery-thumbs .swiper-slide {
+      width: 25%;
+      height: 100%;
+      opacity: 0.4;
+    }
+    &.gallery-thumbs .swiper-slide-active {
+      opacity: 1;
+    }
+  }
+}
+</style>
+```
+
+## layer 使用方法
+
+LayerVue：<http://layer-vue.cn/#/doc>，web 弹层窗口
+
+子组件：
+
+```vue
+<template>
+  <div>
+    <LayerVue
+      :destroyOnClose="true"
+      :visible.sync="visible"
+      title="海星湾气象站"
+      :area="['430px', '530px']"
+      :offset="['100px', '84px']"
+      @cancel="cancelShow"
+    >
+      <div class="layer16">content</div>
+    </LayerVue>
+  </div>
+</template>
+
+<script>
+export default {
+  props: { showWeatherMark: Boolean },
+  data() {
+    return {
+      visible: false
+    }
+  },
+  watch: {
+    showWeatherMark(v) {
+      if (v) {
+        this.visible = true
+      }
+    }
+  },
+  methods: {
+    cancelShow() {
+      this.$emit('changeWeatherMark')
+    }
+  }
+}
+</script>
+
+<style scoped lang="less">
+.layer16 {
+  padding: 16px;
+}
+</style>
+```
+
+父组件：
+
+```vue
+<template>
+  <div>
+    <a-button type="primary" @click="showWeather">气象站点</a-button>
+    <weather-site
+      :showWeatherMark="showWeatherMark"
+      @changeWeatherMark="changeWeatherMark"
+    ></weather-site>
+  </div>
+</template>
+
+<script>
+import WeatherSite from './weatherSite'
+
+export default {
+  props: { showWeatherMark: Boolean },
+  components: { WeatherSite },
+  data() {
+    return {
+      showWeatherMark: false
+    }
+  },
+  methods: {
+    showWeather() {
+      this.showWeatherMark = true
+    },
+    changeWeatherMark() {
+      this.showWeatherMark = false
+    }
+  }
+}
+</script>
+```
+
+## g2plot
+
+如果在弹窗中可能会出现 dom 没生成就渲染图表，导致报错，可以使用`nextTick`，再加一个定时器
+
+```vue
+<template>
+  <div style="height:200px" id="container"></div>
+</template>
+<script>
+import { Line } from '@antv/g2plot'
+export default {
+  drawCanview() {
+    this.$nextTick(() => {
+      setTimeout(() => {
+        const line = new Line('container', {
+          data: lineData,
+          padding: 'auto',
+          xField: 'Date',
+          yField: 'scales',
+          smooth: true
+        })
+        line.render()
+      }, 500)
+    })
+  }
+}
+</script>
+```

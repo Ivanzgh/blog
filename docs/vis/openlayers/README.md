@@ -369,3 +369,15 @@ map.addInteraction(drawPoint)
   </body>
 </html>
 ```
+
+## 矢量图层
+
+### 删除矢量图层
+
+```js
+// 必须先移除矢量图层数据
+vectorLayer.getSource().clear()
+
+// 删除图层
+map.removeLayer(vectorLayer)
+```
