@@ -67,7 +67,8 @@ module.exports = {
           { text: 'Leaflet', link: '/vis/leaflet/' },
           { text: 'GeoServer', link: '/vis/geoserver/' },
           { text: 'Cesium', link: '/vis/cesium/' },
-          { text: 'Three', link: '/vis/three/' }
+          { text: 'Three', link: '/vis/three/' },
+          { text: 'Maptalks', link: '/vis/maptalks/' }
         ]
       },
       {
@@ -160,6 +161,7 @@ module.exports = {
       '/vis/geoserver/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/vis/cesium/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/vis/three/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
+      '/vis/maptalks/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/base/algorithm/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/base/network/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/base/data-structure/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],

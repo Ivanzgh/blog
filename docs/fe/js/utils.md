@@ -426,3 +426,44 @@ console.log(JSON.stringify(res))
 
 `||=`表示或等于，`a ||= b` 等同于 `a || (a = b)`
 `&&=`表示且等于，`a &&= b` 等同于 `a && (a = b)`
+
+## 经纬度格式化
+
+度转为度分秒
+
+```js
+function transformLonlatToDD(lon, lat) {
+  //利用 >> 位运算符取整
+  const lonUnit = lon > 0 ? 'E' : 'W'
+  const latUnit = lat > 0 ? 'N' : 'S'
+  const resLon = lonlat(lon) + lonUnit
+  const resLat = lonlat(lat) + latUnit
+  return [resLon, resLat]
+}
+
+function lonlat(coordinate) {
+  const d = coordinate >> 0 // 度
+  const m = ((coordinate % 1) * 60) >> 0 // 分
+  const s = ((((coordinate % 1) * 60) % 1) * 60) >> 0 // 秒
+  const ms = ((((coordinate % 1) * 60) % 1) * 60) % 1
+  const mss = Math.round(parseFloat(ms) * 100) / 100 // 四舍五入，保留两位小数
+  const lon23 = Math.abs(s) + mss
+  const res = Math.abs(d) + 'º' + Math.abs(m) + "'" + lon23 + "''"
+  return res
+}
+```
+
+## 分钟格式化转为天、时、分
+
+```js
+function formatMinutes(minutes) {
+  const day = parseInt(Math.floor(minutes / 1440))
+  const hour = day > 0 ? Math.floor((minutes - day * 1440) / 60) : Math.floor(minutes / 60)
+  const minute = hour > 0 ? Math.floor(minutes - day * 1440 - hour * 60) : minutes
+  let time = ''
+  if (day > 0) time += day + 'd'
+  if (hour > 0) time += hour + 'h'
+  if (minute > 0) time += minute + 'm'
+  return time
+}
+```

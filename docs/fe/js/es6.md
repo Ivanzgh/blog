@@ -97,7 +97,7 @@ console.log(str.includes('e')) // true
 // 2.repeat: 获取字符串重复n次
 const str = 'he'
 console.log(str.repeat(3)) // 'hehehe'
-//如果带入小数, Math.floor(num) 来处理
+// 如果带入小数, Math.floor(num) 来处理
 // s.repeat(3.1) 或者 s.repeat(3.9) 都当做 s.repeat(3) 来处理
 
 // 3. startsWith 和 endsWith 判断是否以给定文本开始或者结束
@@ -156,10 +156,7 @@ console.log(a, b, c) // 1 2 3
 ### 对象的解构赋值
 
 ```js
-let { name, age } = {
-  name: 'zgh',
-  age: 22
-}
+let { name, age } = { name: 'zgh', age: 22 }
 console.log(name, age) // zgh 22
 ```
 
@@ -238,10 +235,7 @@ let sum = (a, b) => {
 let person = name => ({ name: 'zgh', age: 22 })
 //等同于
 let person = function(name) {
-  return {
-    name: 'zgh',
-    age: 22
-  }
+  return { name: 'zgh', age: 22 }
 }
 ```
 
@@ -274,16 +268,10 @@ let name = 'zgh'
 let age = 22
 
 //ES5写法
-let obj = {
-  name: name,
-  age: age
-}
+let obj = { name: name, age: age }
 
 //ES6写法
-let obj = {
-  name,
-  age
-}
+let obj = { name, age }
 ```
 
 #### 方法的简写
@@ -830,11 +818,7 @@ let proxy = new Proxy(target, handler)
 在 ES6 之前，我们可以使用`Object.defineProperty`去保护对象的私有属性。例如:
 
 ```js
-let sign = {
-  _appid: '12345678',
-  _appkey: '666',
-  desc: 'zgh的密钥'
-}
+let sign = { _appid: '12345678', _appkey: '666', desc: 'zgh的密钥' }
 
 Object.defineProperties(sign, {
   _appid: {
@@ -851,11 +835,7 @@ Object.defineProperties(sign, {
 Proxy 意味着我们代理了这个对象，该对象所有的属性操作都会经过 Proxy
 
 ```js
-let sign = {
-  _appid: '123456',
-  _appkey: '666',
-  desc: 'zgh的密钥'
-}
+let sign = { _appid: '123456', _appkey: '666', desc: 'zgh的密钥' }
 let signProxy = new Proxy(sign, {
   get(target, property, receiver) {
     return target[property]
@@ -887,9 +867,7 @@ console.log(signProxy._appkey) // "666"
 有一个记账的对象，记录着用户的存款金额，为了方便以后计算，要保证存入的数据类型必须为`Number`
 
 ```js
-let account = {
-  num: 8888
-}
+let account = { num: 8888 }
 
 let proxyAccount = new Proxy(account, {
   get(target, property) {

@@ -2,11 +2,13 @@
 
 ## 数据类型
 
+![image](/blog/img/fe/js1.png =600x400)
+
 基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
 
 引用类型： 函数、数组、对象
 
-基本数据类型将数据名和值存储在栈中；
+基本数据类型将数据名和值存储在栈中
 
 引用类型在栈中存入地址，该地址指向堆内存，将具体值存储在堆中。访问时先从栈中获取地址，再从堆中获取相应值
 
@@ -26,6 +28,92 @@ let d = c
 c.x = 4
 console.log(c) // {x: 4}
 console.log(d) // {x: 4}
+```
+
+## 类型判断
+
+typeof
+
+instanceof
+
+## 类型转换
+
+### 数字转化为字符串
+
+1、toString()
+
+```js
+let a = 123
+let b = a.toString()
+console.log(typeof b)
+```
+
+2、String()
+
+```js
+let b = String(123)
+console.log(typeof b)
+```
+
+### 字符串转化为数字
+
+1、Number()
+
+```js
+let b = Number('12.3')
+console.log(b)
+```
+
+2、parseInt()和 parseFloat()
+
+```js
+parseInt('1234blue') // 1234
+parseInt('0xA') // 10
+parseInt('22.5') // 22
+parseInt('blue') // NaN
+```
+
+3、在字符串前面加上 `+`
+
+```js
+let res1 = parseInt('1')
+let res2 = parseFloat('1.23')
+
+console.log(typeof +'1') // "number"
+```
+
+### 隐式类型转换
+
+<https://blog.csdn.net/qq_33120763/article/details/88296955>
+
+<https://www.cnblogs.com/superlizhao/p/8945432.html>
+
+```js
+console.log('1' + 1) // '11'   string
+console.log('1' - 1) //  0    number
+
+console.log([] == []) // false
+```
+
+## Math.floor、Math.round、Math.ceil
+
+`Math.round`四舍五入取整 `Math.ceil`向上取整 `Math.floor`向下取整
+
+```js
+Math.round(1.23) // 1
+Math.round(1.78) // 2
+Math.round(-1.23) // -1
+Math.round(-1.78) // -2
+
+Math.ceil(1.23) // 2
+Math.ceil(1.78) // 2
+Math.ceil(-1.23) // -1
+Math.ceil(-1.78) // -1
+
+Math.floor(1.23) // 1
+Math.floor(1.78) // 1
+Math.floor(-1.23) // -2
+Math.floor(-1.78) // -2
 ```
 
 ## for 与 for in
@@ -86,19 +174,6 @@ console.log(Object.prototype)
 666
 ```
 
-## js 隐式类型转换
-
-<https://blog.csdn.net/qq_33120763/article/details/88296955>
-
-<https://www.cnblogs.com/superlizhao/p/8945432.html>
-
-```js
-console.log('1' + 1) // '11'   string
-console.log('1' - 1) //  0    number
-
-console.log([] == []) // false
-```
-
 ## not defined 和 undefined
 
 如果定义了一个变量，但未赋值，则是`undefined`; 如果未定义，则是`not defined`
@@ -107,73 +182,6 @@ console.log([] == []) // false
 let a
 console.log(a) // undefined
 console.log(b) // b is not defined
-```
-
-## 类型转换
-
-### 数字转化为字符串
-
-1、toString()
-
-```js
-let a = 123
-let b = a.toString()
-console.log(typeof b)
-```
-
-2、String()
-
-```js
-let b = String(123)
-console.log(typeof b)
-```
-
-### 字符串转化为数字
-
-1、Number()
-
-```js
-let b = Number('12.3')
-console.log(b)
-```
-
-2、parseInt()和 parseFloat()
-
-```js
-parseInt('1234blue') // 1234
-parseInt('0xA') // 10
-parseInt('22.5') // 22
-parseInt('blue') // NaN
-```
-
-3、在字符串前面加上 `+`
-
-```js
-let res1 = parseInt('1')
-let res2 = parseFloat('1.23')
-
-console.log(typeof +'1') // "number"
-```
-
-## Math.floor、Math.round、Math.ceil
-
-`Math.round`四舍五入取整 `Math.ceil`向上取整 `Math.floor`向下取整
-
-```js
-Math.round(1.23) // 1
-Math.round(1.78) // 2
-Math.round(-1.23) // -1
-Math.round(-1.78) // -2
-
-Math.ceil(1.23) // 2
-Math.ceil(1.78) // 2
-Math.ceil(-1.23) // -1
-Math.ceil(-1.78) // -1
-
-Math.floor(1.23) // 1
-Math.floor(1.78) // 1
-Math.floor(-1.23) // -2
-Math.floor(-1.78) // -2
 ```
 
 ## 锚点链接

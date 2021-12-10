@@ -162,6 +162,12 @@ module.exports = {
 
 `韭菜盒子` 股票基金
 
+`Weixin Read` 微信读书
+
+`vscode-mindmap` 集成百度脑图 <https://naotu.baidu.com>
+
+`Draw.io Integration` 集成`Draw.io`的功能，支持流程图、思维导图与 UML 图等
+
 #### 快速生成 React 代码片段
 
 `Simple React Snippets`

@@ -15,13 +15,8 @@ console.log(obj2) // {d: 4, e: 5, c: 3, a: 1, b: 2}
 如果目标对象中的属性具有相同的键，则属性将被源对象中的属性覆盖。如例子中的 `obj2.c` 值由 6 被覆盖为 3
 
 ```js
-let obj1 = {
-  name: 'zgh',
-  age: 22
-}
-let obj2 = {
-  address: 'beijing'
-}
+let obj1 = { name: 'zgh', age: 22 }
+let obj2 = { address: 'beijing' }
 let obj = {}
 Object.assign(obj, obj1, obj2)
 console.log(obj) // {name: "zgh", age: 22, address: "beijing"}
@@ -34,11 +29,7 @@ let arr11 = Object.assign([1, 2, 3], [4, 5])
 console.log(arr11) //[4,5,3]
 
 // 说明:对象是根据属性名来对应，数组是根据索引号来对应，相当于
-let arr23 = {
-  0: 1,
-  1: 2,
-  2: 3
-} //相同的属性名有0、1，后面的覆盖前面的.
+let arr23 = { 0: 1, 1: 2, 2: 3 } //相同的属性名有0、1，后面的覆盖前面的.
 ```
 
 assign 实现了浅复制，会把原型上的属性也复制了，但是不能复制继承过来的属性
@@ -60,10 +51,8 @@ const user = {
 }
 
 const me = Object.create(user)
-
 me.name = 'zgh'
 me.age = 23
-
 me.say() // My name is zgh. 23 years old
 ```
 
@@ -75,19 +64,14 @@ me.say() // My name is zgh. 23 years old
 即使属性值是`null`或`undefined`，也会返回`true`
 
 ```js
-const user = {
-  age: 24
-}
-
+const user = { age: 24 }
 const me = Object.create(user)
 me.name = 'zgh'
-
 me.p1 = null
 me.p2 = undefined
 
 console.log(me.hasOwnProperty('name')) // true
 console.log(me.hasOwnProperty('age')) // false
-
 console.log(me.hasOwnProperty('p1')) // true
 console.log(me.hasOwnProperty('p2')) // true
 ```
@@ -136,9 +120,7 @@ console.log(o.a) // 37
 - `set`，表示属性的 setter 函数，当属性值被修改时会被调用
 
 ```js
-let obj = {
-  a: 1
-}
+let obj = { a: 1 }
 let num = 2
 Object.defineProperty(obj, 'count', {
   get() {
@@ -163,14 +145,8 @@ console.log(obj.count) // 4
 ```js
 let obj = {}
 Object.defineProperties(obj, {
-  property1: {
-    value: true,
-    writable: true
-  },
-  property2: {
-    value: 'Hello',
-    writable: false
-  }
+  property1: { value: true, writable: true },
+  property2: { value: 'Hello', writable: false }
   // etc. etc.
 })
 ```
@@ -205,9 +181,7 @@ console.log(obj.val) // 101
 `Object.defineProperty()` 方法会直接在一个对象上定义一个新属性或者修改现有属性，并返回此对象。
 
 ```js
-let obj = {
-  a: 1
-}
+let obj = { a: 1 }
 Object.defineProperty(obj, 'count', {
   get() {
     return this.a

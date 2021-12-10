@@ -109,11 +109,30 @@ export default {
 
     init() {
       this.setUser({ name: 'zgh', age: 23 })
-      
+
       // 或者使用如下的方式
       this.$store.commit('account/setUser', { name: 'zgh', age: 23 })
     }
   }
 }
 </script>
+```
+
+## 监听变化
+
+先在`computed`中拿到值，然后在`watch`中监听即可
+
+```vue
+ computed: {
+    refreshData() {
+      return this.$store.state.ship.shipFocus
+    }
+  },
+  watch: {
+    refreshData(v) {
+      if (v) {
+        this.getData()
+      }
+    }
+  }
 ```

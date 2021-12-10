@@ -300,6 +300,86 @@ export default {
 </script>
 ```
 
+#### 设置范围
+
+例如设置当天以前的 30 天可选，结束时间要大于开始时间
+
+```vue
+<template>
+  <div>
+    <a-date-picker
+      show-time
+      v-model="value"
+      :disabled-date="disabledDate"
+      format="YYYY-MM-DD HH:mm:ss"
+      @change="onChange"
+    />
+
+    <div>
+      <a-date-picker
+        v-model="startValue"
+        :disabled-date="disabledStartDate"
+        show-time
+        format="YYYY-MM-DD HH:mm:ss"
+        placeholder="开始时间"
+        @openChange="handleStartOpenChange"
+      />
+      <span style="padding: 0 7px;">-</span>
+      <a-date-picker
+        v-model="endValue"
+        :disabled-date="disabledEndDate"
+        show-time
+        format="YYYY-MM-DD HH:mm:ss"
+        placeholder="结束时间"
+        :open="endOpen"
+        @openChange="handleEndOpenChange"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+import moment from 'moment'
+
+export default {
+  data() {
+    return {
+      moment,
+      value: null,
+      startValue: null,
+      endValue: null,
+      endOpen: false
+    }
+  },
+  methods: {
+    disabledDate(current) {
+      // 获取本月开始结束时间
+      // const monthStart = this.moment().startOf('month')
+      // const monthEnd = this.moment().endOf('month')
+      // 设置区间之外的日期不可选
+      return current > this.moment() || current < this.moment().subtract(30, 'days')
+    },
+
+    // 设置日期范围
+    disabledStartDate(current) {
+      return current > this.moment() || current < this.moment().subtract(30, 'days')
+    },
+    disabledEndDate(current) {
+      return current > this.moment() || current < this.startValue
+    },
+    handleStartOpenChange(open) {
+      if (!open) {
+        this.endOpen = true
+      }
+    },
+    handleEndOpenChange(open) {
+      this.endOpen = open
+    }
+  }
+}
+</script>
+```
+
 ### 描述
 
 当描述信息太多需要独占一行时，可以单独使用描述组件。
