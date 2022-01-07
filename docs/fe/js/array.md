@@ -122,26 +122,6 @@ arr.splice(1, 2, 'e', 'f')
 console.log(arr) // ["a","e","f","d"]
 ```
 
-## split()
-
-把一个字符串分割成字符串数组
-
-语法 `stringObject.split(separator,howmany)`
-
-```js
-let str = 'How are you doing today?'
-
-document.write(str.split(' ') + '<br />')
-document.write(str.split('') + '<br />')
-document.write(str.split(' ', 3))
-// How,are,you,doing,today?
-// H,o,w, ,a,r,e, ,y,o,u, ,d,o,i,n,g, ,t,o,d,a,y,?
-// How,are,you
-
-'2:3:4:5'.split(':') //["2", "3", "4", "5"]
-'|a|b|c'.split('|') //["", "a", "b", "c"]
-```
-
 ## filter()
 
 逐一过滤数组元素，返回符合条件的元素，得到一个新数组

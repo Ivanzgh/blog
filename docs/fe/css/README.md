@@ -612,6 +612,11 @@ transition: background 6s linear;
 }
 ```
 
+## 表单
+
+`outline: none;` 取消 input、textarea 的聚焦边框
+`resize: none;` 禁止 textarea 可拖动
+
 ## 设置 3D 场景
 
 ### 使用 transform 属性调整元素

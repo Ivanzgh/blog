@@ -2,6 +2,8 @@
 
 ## 纯 CSS 创建三角形
 
+<https://css-tricks.com/the-shapes-of-css/>
+
 <https://www.cnblogs.com/monozxy/p/7903019.html>
 
 把左、右、下三条边隐藏掉（颜色设为 transparent）可画出向下的小三角

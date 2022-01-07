@@ -40,7 +40,7 @@ console.log(name)
 函数表达式的形式如下：
 
 ```js
-var fun1 = function(n1, n2) {}
+var fun1 = function (n1, n2) {}
 ```
 
 构造函数的形式如下:
@@ -62,7 +62,7 @@ f()
 
 console.log(m) // undefined
 m() // TypeError: m is not a function
-var m = function() {
+var m = function () {
   console.log(1)
 }
 ```
@@ -112,9 +112,7 @@ console.log(Person === Person.prototype.constructor) // true
 `bind` 接收的也是一个参数列表，返回一个新的函数，必须调用才会执行
 
 ```js
-let a = {
-  value: 1
-}
+let a = { value: 1 }
 function getValue(name, age) {
   console.log(name)
   console.log(age)
@@ -192,7 +190,7 @@ this 指向当前对象 obj
 let name = 'js'
 let obj = {
   name: 'zgh',
-  fun: function() {
+  fun: function () {
     console.log(this.name) // zgh
   }
 }
@@ -205,7 +203,7 @@ obj.fun()
 let dd = 'js' // 若 var dd = 'js',则 this.dd结果为 js
 let obj = {
   dd: 'zgh',
-  fun: function() {
+  fun: function () {
     console.log(this.dd) // undefined
   }
 }
@@ -277,7 +275,7 @@ obj1.fun()
 
 let obj2 = {
   age: 23,
-  fun: function() {
+  fun: function () {
     console.log(this) // {age: 23, fun: ƒ}
   }
 }
@@ -297,7 +295,7 @@ obj3.fun()
 
 ```js
 let obj = {
-  fun: function() {
+  fun: function () {
     setTimeout(() => {
       console.log(this) // obj
     }, 0)
@@ -407,7 +405,7 @@ console.log(iife) // Uncaught ReferenceError: iife is not defined
 ```
 
 ```js
-var res = (function() {
+var res = (function () {
   var fe = 'hehe'
   return fe
 })()
@@ -501,8 +499,8 @@ f()
 
 let lis = document.getElementsByTagName('li')
 for (var i = 0; i < lis.length; i++) {
-  ;(function(i) {
-    lis[i].onclick = function() {
+  ;(function (i) {
+    lis[i].onclick = function () {
       console.log(i)
     }
   })(i)
@@ -510,8 +508,8 @@ for (var i = 0; i < lis.length; i++) {
 
 //或者
 for (var i = 0; i < lis.length; i++) {
-  lis[i].onclick = (function(i) {
-    return function() {
+  lis[i].onclick = (function (i) {
+    return function () {
       console.log(i)
     }
   })(i)
@@ -534,7 +532,7 @@ for (var i = 1; i <= 5; i++) {
 
 ```js
 for (var i = 1; i <= 5; i++) {
-  ;(function(j) {
+  ;(function (j) {
     setTimeout(function timer() {
       console.log(j)
     }, j * 1000)
@@ -569,7 +567,7 @@ for (let i = 1; i <= 5; i++) {
   function ajaxTest(a) {
     console.log(a)
   }
-  inp.addEventListener('keyup', e => {
+  inp.addEventListener('keyup', (e) => {
     ajaxTest(e.target.value)
   })
 </script>
@@ -585,18 +583,18 @@ function ajaxTest(a) {
 }
 
 function debounce(fun, delay) {
-  return function(args) {
+  return function (args) {
     let that = this
     let _args = args
     clearTimeout(fun.id)
-    fun.id = setTimeout(function() {
+    fun.id = setTimeout(function () {
       fun.call(that, _args)
     }, delay)
   }
 }
 let debounceAjax = debounce(ajaxTest, 500)
 let inp = document.getElementById('my-input')
-inp.addEventListener('keyup', e => {
+inp.addEventListener('keyup', (e) => {
   debounceAjax(e.target.value)
 })
 ```
@@ -613,13 +611,13 @@ function ajax(a) {
 }
 function throttle(fun, delay) {
   let last, deferTimer
-  return function(args) {
+  return function (args) {
     let that = this
     let _args = arguments
     let now = +new Date()
     if (last && now < last + delay) {
       clearTimeout(deferTimer)
-      deferTimer = setTimeout(function() {
+      deferTimer = setTimeout(function () {
         last = now
         fun.apply(that, _args)
       }, delay)
@@ -633,7 +631,7 @@ function throttle(fun, delay) {
 let throttleAjax = throttle(ajax, 1000)
 
 let inputs = document.getElementById('throttle')
-inputs.addEventListener('keyup', function(e) {
+inputs.addEventListener('keyup', function (e) {
   throttleAjax(e.target.value)
 })
 ```
@@ -694,7 +692,7 @@ function f(x, y) {
 f(1, 2)
 
 function g(x) {
-  return function(y) {
+  return function (y) {
     return x + y
   }
 }
@@ -710,7 +708,7 @@ function add(a) {
     a = a + b // 累加
     return sum
   }
-  sum.toString = function() {
+  sum.toString = function () {
     // 重写toSting() 方法
     return a
   }

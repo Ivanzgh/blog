@@ -97,7 +97,11 @@ console.log([] == []) // false
 
 ## Math.floor、Math.round、Math.ceil
 
-`Math.round`四舍五入取整 `Math.ceil`向上取整 `Math.floor`向下取整
+- `Math.round` 四舍五入取整
+- `Math.ceil` 向上取整
+- `Math.floor` 向下取整
+- `Math.random` 取`[0,1)`的随机小数
+- `Math.abs(x)` 取 x 的绝对值
 
 ```js
 Math.round(1.23) // 1
@@ -114,6 +118,16 @@ Math.floor(1.23) // 1
 Math.floor(1.78) // 1
 Math.floor(-1.23) // -2
 Math.floor(-1.78) // -2
+
+// 获取[n,m]之间的随机整数
+Math.round(Math.random() * (m - n) + n)
+```
+
+由于 js 数字精度的问题，当位数太多时会有误差
+
+```js
+let c = 2.999999999999999999999999999999
+Math.floor(c) // 3
 ```
 
 ## for 与 for in
@@ -281,4 +295,10 @@ let a = 1
 let b = ++a
 console.log(a) // 2
 console.log(b) // 2
+```
+
+## 禁用网页中的单击右键
+
+```html
+<body oncontextmenu="return false;"></body>
 ```

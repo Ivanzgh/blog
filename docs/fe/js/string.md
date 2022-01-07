@@ -1,37 +1,68 @@
 # 字符串
 
-## 基础方法
+## 获取字符串长度
 
-### substr()
-
-截取从 start 下标开始的指定数目的字符。
-
-语法：`stringObject.substr(start,length)`
-参数|描述
-:---:|:---
-start|必需。起始下标。如果是负数，如-1 指字符串中最后一个字符，-2 指倒数第二个字符，以此类推。
-length|可选。截取长度
+`length`属性可以获取字符串长度，空格也会计算在内
 
 ```js
-var a = 'abcdef'
-var b = a.substr(1, 3)
-console.log(b) //bcd
+const s1 = 'string'
+console.log(s1.length) // 6
+
+const s2 = 'How are you doing today?'
+console.log(s2.length) // 24
 ```
+
+## 截取字符串
 
 ### substring()
 
 截取字符串中介于两个指定下标之间的字符。
 
-语法：`stringObject.substring(start,stop)`
+语法：`str.substring(start,end)`
 参数|描述
 ---|---
 start|必需，非负整数
-stop|可选，非负整数，截取结果不包括该项
+end|可选，非负整数，截取结果不包括该项
 
 ```js
-var a = 'abcdef'
-var b = a.substring(1, 3)
-console.log(b) //bc
+let a = 'abcdef'
+let b = a.substring(1, 3)
+console.log(b) // bc
+```
+
+### substr()
+
+截取从 start 下标开始的指定数目的字符。作为遗留函数尽量避免使用，使用`substring()`代替
+
+语法：`str.substr(start[, length])`
+参数|描述
+:---:|:---
+start|起始下标。如果是负数，如-1 指字符串中最后一个字符，-2 指倒数第二个字符，以此类推。
+length|截取长度
+
+```js
+let a = 'abcdef'
+a.substr(1, 3) // bcd
+a.substr() // abcdef，这里无参数
+```
+
+### slice()
+
+### split()
+
+把一个字符串分割成字符串数组
+
+语法 `stringObject.split(separator,howmany)`
+
+```js
+let str = 'How are you doing today?'
+
+console.log(str.split(' ')) // How,are,you,doing,today?
+console.log(str.split('')) // H,o,w, ,a,r,e, ,y,o,u, ,d,o,i,n,g, ,t,o,d,a,y,?
+console.log(str.split(' ', 3)) // How,are,you
+
+'2:3:4:5'.split(':') //["2", "3", "4", "5"]
+'|a|b|c'.split('|') //["", "a", "b", "c"]
 ```
 
 ## 常见场景
