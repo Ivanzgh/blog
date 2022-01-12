@@ -83,7 +83,13 @@
 
 DNS 域名：
 
-![image](https://img-blog.csdn.net/2018041813475242?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzI5MzExNDA3/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
+名称类型|说明|示例
+---|---|---
+根域|DNS域名中使用时，规定由尾部句点（.）来指定名称位于根或更高级别的域层次结构|单个句点或句点用于末尾的名称
+顶级域|用来指示某个国家/地区/组织使用的名称的类型名称|.com
+第二层域|个人或组织在Internet上使用的注册名称|baidu.com
+子域|已注册的二级域名派生的域名，即网站名|www.baidu.com
+主机名|通常情况下，DNS域名的最左侧的标签标识网络上的特定计算机|h1.www.baidu.com
 
 ### 2、TCP 连接
 
@@ -98,3 +104,187 @@ DNS 域名：
 <https://segmentfault.com/a/1190000006879700>
 
 <https://www.cnblogs.com/kongxy/p/4615226.html>
+
+## websocket
+
+```js
+const WSURL = 'ws://192.168.8.210:8083'
+
+let ws, tt
+let lockReconnect = false //避免重复连接
+
+let websocket = {
+  Init: function (url, messageHandle, notReConn, onerror) {
+    if ('WebSocket' in window) {
+      ws = new WebSocket(BaseWs + url)
+    } else {
+      console.log('您的浏览器不支持 WebSocket!')
+      return
+    }
+
+    ws.onopen = function () {
+      // heartCheck.start();
+      // ws.send('from client: hello')
+    }
+    ws.onmessage = function (e) {
+      //heartCheck.start()
+      if (e.data == 'ok') {
+        //心跳消息不做处理
+        return
+      }
+      // console.log('from server: ' + e.data);
+      messageHandle(e.data)
+    }
+
+    ws.onclose = () => {
+      // if (onerror) {
+      //   onerror()
+      // }
+      // if (!notReConn) {
+      //   reconnect(url, messageHandle)
+      // }
+    }
+
+    ws.onerror = () => {
+      if (onerror) {
+        onerror()
+      }
+      if (!notReConn) {
+        reconnect(url, messageHandle)
+      }
+    }
+    return ws
+  },
+  toBreakOff: () => {
+    lockReconnect = true
+  },
+  Send: function (data) {
+    let msg = JSON.stringify(data)
+    console.log('发送消息：' + msg)
+    ws.send(msg)
+  },
+  closeWs: () => {
+    if (ws) {
+      ws.close()
+    }
+  },
+  getWebSocket() {
+    return ws
+  },
+  getStatus() {
+    if (ws.readyState == 0) {
+      return '未连接'
+    } else if (ws.readyState == 1) {
+      return '已连接'
+    } else if (ws.readyState == 2) {
+      return '连接正在关闭'
+    } else if (ws.readyState == 3) {
+      return '连接已关闭'
+    }
+  }
+}
+
+export default websocket
+
+//根据消息标识做不同的处理
+// function messageHandle(message) {
+//   let msg = JSON.parse(message)
+//   switch (msg.flag) {
+//     case 'command':
+//       console.log("指令消息类型")
+//       break;
+//     case 'inform':
+//       console.log("通知")
+//       break;
+//     default:
+//       console.log("未知消息类型")
+//   }
+// }
+
+function reconnect(url, messageHandle) {
+  if (lockReconnect) {
+    return
+  }
+  lockReconnect = true
+  //没连接上会一直重连，设置延迟避免请求过多
+  tt && clearTimeout(tt)
+  tt = setTimeout(function () {
+    console.log('执行断线重连...')
+    websocket.Init(url, messageHandle)
+    lockReconnect = false
+  }, 4000)
+}
+
+//心跳检测
+// let heartCheck = {
+//   timeout: 1000 * 60 * 3,
+//   timeoutObj: null,
+//   serverTimeoutObj: null,
+//   start: function(){
+//     console.log('开始心跳检测');
+//     let self = this;
+//     this.timeoutObj && clearTimeout(this.timeoutObj);
+//     this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj);
+//     this.timeoutObj = setTimeout(function(){
+//       //这里发送一个心跳，后端收到后，返回一个心跳消息，
+//       //onmessage拿到返回的心跳就说明连接正常
+//       console.log('心跳检测...');
+//       ws.send("HeartBeat:"+ clientId );
+//       self.serverTimeoutObj = setTimeout(function() {
+//         if(ws.readyState!=1){
+//            ws.close();
+//         }
+//         // createWebSocket();
+//       }, self.timeout);
+
+//     }, this.timeout)
+//   }
+// }
+```
+
+在vue中使用如下：
+
+```js
+export default {
+  data() {
+    return {
+      msg: null,
+      ws: null,
+      isDestroyed: false
+    }
+  },
+  methods: {
+    init() {
+      this.ws = webSocket.Init(`/ship/detail/${this.mmsi}`, this.messageHandle, true, this.onerror)
+    },
+    messageHandle(message) {
+      this.msg = JSON.parse(message)
+    },
+    onerror() {
+      if (!this.isDestroyed) {
+        this.$notification.open({
+          message: '提示',
+          description: 'webSocket连接出错，请重新加载页面',
+          btn: (h) => {
+            return h(
+              'a-button',
+              { props: { type: 'primary', size: 'small' }, on: { click: () => this.$router.go(0) } },
+              '重新载入'
+            )
+          },
+          onClose: close
+        })
+      }
+    }
+  },
+  mounted() {
+    this.init()
+  },
+  destroyed() {
+    this.isDestroyed = true
+    if (Object.keys(this.ws).length != 0) {
+      this.ws.close()
+    }
+  }
+}
+```

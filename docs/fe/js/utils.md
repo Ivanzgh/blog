@@ -448,7 +448,7 @@ function lonlat(coordinate) {
   const ms = ((((coordinate % 1) * 60) % 1) * 60) % 1
   const mss = Math.round(parseFloat(ms) * 100) / 100 // 四舍五入，保留两位小数
   const lon23 = Math.abs(s) + mss
-  const res = Math.abs(d) + 'º' + Math.abs(m) + "'" + lon23 + "''"
+  const res = Math.abs(d) + 'º' + Math.abs(m) + "'" + lon23.toFixed(2) + "''"
   return res
 }
 ```

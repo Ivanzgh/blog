@@ -14,6 +14,15 @@ console.log(s2.length) // 24
 
 ## 截取字符串
 
+### 单个值可直接获取
+
+```js
+let str = '1,3'
+console.log(str[0]) // 1
+console.log(str[1]) // ,
+console.log(str[2]) // 3
+```
+
 ### substring()
 
 截取字符串中介于两个指定下标之间的字符。
@@ -28,6 +37,11 @@ end|可选，非负整数，截取结果不包括该项
 let a = 'abcdef'
 let b = a.substring(1, 3)
 console.log(b) // bc
+
+// 截取小数点后两位数字
+let str = '22.123456'
+let res = str.substring(0, str.indexOf('.') + 3)
+console.log(res) // 22.12
 ```
 
 ### substr()
@@ -48,24 +62,91 @@ a.substr() // abcdef，这里无参数
 
 ### slice()
 
+语法：`str.slice(start, end)`
+参数|描述|
+---|---
+start|必需，起始下标。如果是负数，那么它规定从字符串尾部开始算起的位置。即-1 指最后一个字符，-2 指倒数第二个字符，以此类推
+end|可选，结束下标，不包含该处。如果没有指定该参数，那么结果包含从 start 到结束的所有字符。若为负数，同上
+
+示例：截取身份证
+
+```js
+let str = '330102197807280020'
+let res = str.slice(4)
+let res1 = str.replace(res, '**************')
+console.log(res1) // 3301**************
+```
+
 ### split()
 
 把一个字符串分割成字符串数组
 
-语法 `stringObject.split(separator,howmany)`
+语法 `str.split(separator,howmany)`
 
 ```js
-let str = 'How are you doing today?'
+let str = 'hello world'
 
-console.log(str.split(' ')) // How,are,you,doing,today?
-console.log(str.split('')) // H,o,w, ,a,r,e, ,y,o,u, ,d,o,i,n,g, ,t,o,d,a,y,?
-console.log(str.split(' ', 3)) // How,are,you
+str.split(' ') // ['hello', 'world']
+str.split('') // ['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
+str.split(' ', 1) // ['hello']
 
-'2:3:4:5'.split(':') //["2", "3", "4", "5"]
-'|a|b|c'.split('|') //["", "a", "b", "c"]
+'2:3:4:5'.split(':') // ['2', '3', '4', '5']
+'|a|b|c'.split('|') // ['', 'a', 'b', 'c']
+```
+
+## charAt()
+
+返回指定位置的字符
+
+例子：计算当前是星期几
+
+```js
+const day = '今天是星期' + '日一二三四五六'.charAt(new Date().getDay())
+```
+
+还有一些从代码量、代码效率、代码美观等方面都不太好的写法如下
+
+```js
+// 使用 if else
+let str = ''
+let week = new Date().getDay()
+if (week == 0) {
+  str = '今天是星期日'
+} else if (week == 1) {
+  str = '今天是星期一'
+}
+// 或者使用 switch
+let str1 = '今天是星期'
+let week = new Date().getDay()
+switch (week) {
+  case 0:
+    str1 += '日'
+    break
+  case 1:
+    str1 += '一'
+    break
+}
+// 更进一步
+let arr = new Array('日', '一', '二', '三', '四', '五', '六')
+let week = new Date().getDay()
+let day = '今天是星期' + arr[week]
 ```
 
 ## 常见场景
+
+### 单双引号转换
+
+#### 1.双引号替换成单引号
+
+```js
+let _adrobj = JSON.stringify(address).replace(/\"/g, "'")
+```
+
+#### 2、单引号替换成双引号
+
+```js
+let _nstr = _adrdata.replace(/'/g, '"')
+```
 
 ### 手机号校验
 
@@ -117,10 +198,8 @@ function convertUTCTimeToLocalTime(UTCDateString) {
 ```js
 let time = '2009-12-30 13:28:29'
 let res = time.split(' ')
-var date = res[0]
-var time = res[1]
-console.log(date)
-console.log(time)
+let date = res[0]
+let time = res[1]
 ```
 
 #### 方法二、slice
@@ -129,64 +208,4 @@ console.log(time)
 let str = '2019-08-18  00:00:00'
 let res = str.slice(0, 10)
 console.log(res) // 2019-08-18
-```
-
-### 截取字符串
-
-#### 1、slice
-
-语法：`stringObject.slice(start, end)`
-
-start（必需）：规定从何处开始选取。如果是负数，那么它规定从字符串尾部开始算起的位置。也就是说，-1 指最后一个字符，-2 指倒数第二个字符，以此类推。
-
-end（可选）：规定从何处结束选取，即结束处的字符下标。如果没有指定该参数，那么截取的字符串包含从 start 到结束的所有字符。如果这个参数是负数，那么它规定的是从数组尾部开始算起的字符。
-
-（1）、截取身份证
-
-```js
-let str = '330102197807280020'
-let res = str.slice(4)
-let res1 = str.replace(res, '**************')
-console.log(res1) // 3301**************
-```
-
-#### 2、split
-
-```js
-let str = '3,25'
-let arr = str.split(',')
-console.log(arr) // ['3','25']
-```
-
-#### 3、单个值可直接获取
-
-```js
-var str = '1,3'
-console.log(str[0]) // 1
-console.log(str[1]) // ,
-console.log(str[2]) // 3
-```
-
-#### 4、substring
-
-截取小数点后两位数字
-
-```js
-let str = 22.123456
-let res = num.substring(0, str.indexOf('.') + 3)
-console.log(res)
-```
-
-### 单双引号转换
-
-#### 1.双引号替换成单引号
-
-```js
-let _adrobj = JSON.stringify(address).replace(/\"/g, "'")
-```
-
-#### 2、单引号替换成双引号
-
-```js
-let _nstr = _adrdata.replace(/'/g, '"')
 ```

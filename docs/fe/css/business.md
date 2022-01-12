@@ -412,7 +412,7 @@ if(!item.processResult) {
       id: statusId,
       processResult: status
     }
-    postURL('/business/feedback/updateProcessResultById', JSON.stringify(jsonData), function(data) {
+    postURL('/business/feedback/updateProcessResultById', JSON.stringify(jsonData), function (data) {
       if (data.success) {
         getFeedBackList()
       } else {
@@ -565,5 +565,61 @@ a:hover {
     rgb(0, 255, 0) 100%
   );
   background-position: 0px 100%;
+}
+```
+
+## 元素从左往右渐显
+
+让元素从上往下，或者从左往右渐显出来。可以用伪元素遮盖住元素内容，然后用动画改变伪元素的宽或高
+
+```css
+/* <div class="box">天下无双</div> */
+
+.box {
+  position: relative;
+  padding: 5px;
+  display: inline-block;
+  border: solid 1px;
+  font-size: 1.5rem;
+}
+
+.box::after {
+  content: ' ';
+  background-color: #fff;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  animation: slide 3s ease-in forwards;
+}
+
+@keyframes slide {
+  to {
+    width: 0;
+  }
+}
+```
+
+- 如果元素有 border，伪元素的宽高要设为 100%加上 border，对应的 `top` 和 `right` 要设置为负的 border 宽度。
+- 因为动画中的文字元素是从左往右显现，伪元素的宽度需要从左往右缩小，所以我们需要将伪元素的固定点设置在右上角或者右下角，即：设置 `top/bottom` 和 `right` 属性；如果动画要从右往左显现，则需要设置 `top/bottom` 和 `left` 属性；同样，如果从上往下显现，那么就设置 `left/right` 和 `bottom` 属性。
+
+还可以使用`clip-path`实现效果
+
+```css
+.box {
+  position: relative;
+  display: inline-block;
+  padding: 5px;
+  border: solid 1px;
+  font-size: 1.5rem;
+  clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+  animation: slide 2s forwards;
+}
+
+@keyframes slide {
+  to {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
 }
 ```

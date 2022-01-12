@@ -4,11 +4,16 @@
 
 页面中的每个标签元素都由几个部分组成：内容(content)、内边距(padding)、边框(border)、外边距(margin)
 
-![image](https://user-gold-cdn.xitu.io/2018/9/23/16604521485d9947?imageView2/0/w/1280/h/960/format/webp/ignore-error/1 =750x500)
+![image](/blog/img/fe/css1.png)
 
 标准盒模型：`width = content`
 
 IE 盒模型：`width = content + padding + border`
+
+盒模型可通过`box-sizing`设置，支持到 IE8
+
+- `box-sizing: content-box` 标准盒模型
+- `box-sizing: border-box` IE 的怪异盒模型
 
 ### margin 特性
 
@@ -21,7 +26,7 @@ margin 始终是透明的。
 这个问题发生的原因是根据规范，一个盒子如果没有上补白(padding-top)和上边框(border-top)，
 那么这个盒子的上边距会和其内部文档流中的第一个子元素的上边距重叠。
 
-解决办法：给父 div 设置 border-top 或者 padding-top。
+解决办法：给父 div 设置 `border-top` 或者 `padding-top`。
 
 ### padding 特性
 
@@ -48,8 +53,7 @@ margin 始终是透明的。
 
 ```css
 /*权重为1*/
-div {
-}
+div {}
 
 /*权重为10*/
 .class1 {
@@ -248,9 +252,7 @@ div {
 
 ```html
 <div class="container">
-  <div class="box-center">
-    box-center
-  </div>
+  <div class="box-center">box-center</div>
 </div>
 
 <style>
@@ -304,8 +306,8 @@ div {
 <!--css-->
 html, body, .box3 { height: 100%;
 <!--容器要给高度-->
-} .box3 { display: flex; justify-content: center; /* 水平居中 */ align-items: center; /* 垂直居中 */
-} .box3 .container { width: 200px; height: 200px; background-color: #ff0; }
+} .box3 { display: flex; justify-content: center; /* 水平居中 */ align-items: center; /* 垂直居中 */ } .box3 .container
+{ width: 200px; height: 200px; background-color: #ff0; }
 ```
 
 ### grid 布局
@@ -457,16 +459,6 @@ table {
   border-spacing: 0;
 }
 ```
-
-## box-sizing
-
-`box-sizing : content-box` 标准盒模型
-
-`box-sizing : border-box` IE 的怪异盒模型
-
-使用场景分析：当需要以`content + padding + border`为整体的时候使用`border-box`，例如：底部菜单栏等
-
-支持到 IE8
 
 ## border-radius
 
@@ -644,8 +636,8 @@ transition: background 6s linear;
   <div class="content"></div>
 </div>
 
-.box{ perspective: 800px; perspective-origin: 50% 50%; transform-style: preserve-3d; } .content{
-width: 300px; height: 300px; background: #0f0; margin: 100px auto; transform: rotateX(45deg); }
+.box{ perspective: 800px; perspective-origin: 50% 50%; transform-style: preserve-3d; } .content{ width: 300px; height:
+300px; background: #0f0; margin: 100px auto; transform: rotateX(45deg); }
 ```
 
 #### 使用 transform-origin 调整旋转中心

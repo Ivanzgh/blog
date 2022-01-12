@@ -235,3 +235,9 @@ module.exports = {
 - MD045 - Images should have alternate text (alt text)（图片链接必须包含描述文本）
 - MD046 - Code block style（整篇文档采用一致的代码格式）
 - MD047 - Files should end with a single newline character（文档末尾需要一个空行）
+
+## Chrome
+
+### 截长屏
+
+在页面控制台按下`Ctrl+Shift+P`，输入`Capture full size screenshot`即可
