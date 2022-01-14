@@ -216,3 +216,27 @@ console.log(res.val) // 6
 res.val = 8
 console.log(res.val) // 8
 ```
+
+## Object.entries()
+
+返回一个给定对象自身可枚举属性的键值对数组
+
+```js
+const obj = { name: 'zgh', age: 23 }
+const arr = Object.entries(obj)
+console.log(arr) // [['name', 'zgh'], ['age',23]]
+```
+
+## Object.fromEntries()
+
+将键值对数组转为对象
+
+```js
+const entries = new Map([
+  ['name', 'zgh'],
+  ['age', 23]
+])
+
+const obj = Object.fromEntries(entries)
+console.log(obj) // { foo: "bar", baz: 42 }
+```

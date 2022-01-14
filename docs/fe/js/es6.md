@@ -207,21 +207,21 @@ Person('Jack', 20)
 //1.不带参数
 let sum = () => 1 + 2
 //等同于
-let sum = function() {
+let sum = function () {
   return 1 + 2
 }
 
 //2.带一个参数
-let sum = a => a
+let sum = (a) => a
 //等同于
-let sum = function(a) {
+let sum = function (a) {
   return a
 }
 
 //3.带多个参数,需要使用小括号将参数括起来
 let sum = (a, b) => a + b
 //等同于
-let sum = function(a, b) {
+let sum = function (a, b) {
   return a + b
 }
 
@@ -232,9 +232,9 @@ let sum = (a, b) => {
 }
 
 //5.返回对象，就必须用小括号把该对象括起来
-let person = name => ({ name: 'zgh', age: 22 })
+let person = (name) => ({ name: 'zgh', age: 22 })
 //等同于
-let person = function(name) {
+let person = function (name) {
   return { name: 'zgh', age: 22 }
 }
 ```
@@ -279,7 +279,7 @@ let obj = { name, age }
 ```js
 //ES5写法
 let obj = {
-  hello: function() {
+  hello: function () {
     console.log('hello')
   }
 }
@@ -330,7 +330,7 @@ mySet.delete('hi')
 mySet.size // 3
 
 // 遍历
-mySet.forEach(item => console.log(item))
+mySet.forEach((item) => console.log(item))
 
 // 删除集合中所有的元素
 mySet.clear()
@@ -392,6 +392,12 @@ let myMap = new Map()
 myMap.set('a', 'hello')
 myMap.set([1, 2, 3], { name: 'zgh' })
 
+// 也可以在声明时就添加键值对
+const user = new Map([
+  ['foo', 'zgh'],
+  ['baz', 23]
+])
+
 //查看集合中元素的数量
 myMap.size
 
@@ -452,7 +458,7 @@ ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概�
 function Person(name, age) {
   this.name = name
   this.age = age
-  this.say = function() {
+  this.say = function () {
     console.log('hello')
   }
 }
@@ -640,10 +646,10 @@ function pro(params) {
   })
 }
 pro(true).then(
-  res => {
+  (res) => {
     console.log(res)
   },
-  err => console.log(err)
+  (err) => console.log(err)
 )
 ```
 
@@ -655,7 +661,7 @@ const p = new Promise((resolve, reject) => {
   console.log(1)
   resolve(3)
 })
-p.then(res => console.log(res))
+p.then((res) => console.log(res))
 console.log(2)
 ```
 
@@ -675,20 +681,20 @@ function Cat(ready) {
   })
 }
 Cat(false)
-  .then(res => {
+  .then((res) => {
     console.log(res)
   })
-  .catch(err => console.log(err))
+  .catch((err) => console.log(err))
 ```
 
 `catch`方法可以捕获错误，作用和 `then(onFulfilled, onRejected)` 当中的 `onRejected` 函数类似。
 
 ```js
 Cat(false)
-  .then(res => {
+  .then((res) => {
     console.log(tom)
   })
-  .catch(err => console.log(err))
+  .catch((err) => console.log(err))
 ```
 
 示例未定义变量 tom，如果不使用 catch 会直接报错，终止程序。使用后不会报错，但会将错误信息传递到 catch 方法中，方便处理
@@ -701,10 +707,8 @@ Cat(false)
 
 ```js
 try {
-  ;(async function() {
-    a()
-      .b()
-      .c()
+  ;(async function () {
+    a().b().c()
   })()
 } catch (e) {
   console.log(`执行出错：${e.message}`)
@@ -723,23 +727,23 @@ try {
 `Promise.race()`将多个实例包装成一个新实例，返回全部实例状态优先变更后的结果(**先变更先返回**)
 
 ```js
-let p1 = new Promise(function(resolve) {
-  setTimeout(function() {
+let p1 = new Promise(function (resolve) {
+  setTimeout(function () {
     resolve('Hello')
   }, 3000)
 })
 
-let p2 = new Promise(function(resolve) {
-  setTimeout(function() {
+let p2 = new Promise(function (resolve) {
+  setTimeout(function () {
     resolve('world')
   }, 1000)
 })
 
-Promise.all([p1, p2]).then(res => {
+Promise.all([p1, p2]).then((res) => {
   console.log(res)
 })
 
-Promise.race([p1, p2]).then(res => {
+Promise.race([p1, p2]).then((res) => {
   console.log(res)
 })
 ```
@@ -912,7 +916,7 @@ console.log(proxyAccount.num) // Uncaught TypeError: The num is not an number
       },
       set(target, propName, propValue, receiver) {
         let isCanEdit = true
-        container.forEach(dom => {
+        container.forEach((dom) => {
           if (dom.getAttribute('v-bind') === propName) {
             dom.innerHTML = propValue
           }
@@ -926,9 +930,9 @@ console.log(proxyAccount.num) // Uncaught TypeError: The num is not an number
     }
   )
 
-  container.forEach(dom => {
+  container.forEach((dom) => {
     if (dom.getAttribute('v-model') in proxyObj) {
-      dom.addEventListener('input', function() {
+      dom.addEventListener('input', function () {
         proxyObj[this.getAttribute('v-model')] = this.value
       })
     }

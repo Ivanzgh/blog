@@ -128,19 +128,19 @@ console.log(arr) // ["a","e","f","d"]
 
 ```js
 let arr = [1, 2, 3]
-let rs = arr.filter(item => item > 1)
+let rs = arr.filter((item) => item > 1)
 console.log(rs) // [2, 3]
 
 // 删掉偶数，只保留奇数
 let arr = [1, 2, 4, 5, 6, 9, 10, 15]
-let r = arr.filter(function(x) {
+let r = arr.filter(function (x) {
   return x % 2 !== 0
 })
 console.log(r) // [1, 5, 9, 15]
 
 //把一个Array中的空字符串删掉
 let arr = ['A', '', 'B', null, undefined, 'C', '  ']
-let r = arr.filter(function(s) {
+let r = arr.filter(function (s) {
   return s && s.trim() // 注意：IE9以下的版本没有trim()方法
 })
 console.log(r) // ['A', 'B', 'C']
@@ -150,7 +150,7 @@ filter()接收的回调函数，可以有多个参数。通常仅使用第一个
 
 ```js
 let arr = ['A', 'B', 'C']
-let r = arr.filter(function(element, index, self) {
+let r = arr.filter(function (element, index, self) {
   console.log(element) // 依次打印'A', 'B', 'C'
   console.log(index) // 依次打印0, 1, 2
   console.log(self) // self就是变量arr
@@ -162,7 +162,7 @@ let r = arr.filter(function(element, index, self) {
 
 ```js
 const arr = ['apple', 'strawberry', 'banana', 'pear', 'apple', 'orange', 'orange', 'strawberry']
-const r = arr.filter(function(element, index, self) {
+const r = arr.filter(function (element, index, self) {
   return self.indexOf(element) === index
 })
 console.log(r.toString()) //apple,strawberry,banana,pear,orange
@@ -204,7 +204,7 @@ if (fruits.indexOf('Apple') > -1) {
 
 ```js
 let arr = [1, 2, 3]
-arr.forEach(item => {
+arr.forEach((item) => {
   console.log(item) // 1 2 3
 })
 ```
@@ -224,7 +224,7 @@ arr.forEach(item => {
 
 ```js
 let arr = [1, 2, 3]
-let rs = arr.map(item => {
+let rs = arr.map((item) => {
   return (item += 10)
 })
 console.log(rs) // [11, 12, 13]
@@ -245,10 +245,9 @@ console.log(sum) // 6
 带初值
 
 ```js
+// 第一次运算是 4 + 1
 let arr = [1, 2, 3]
-let sum = arr.reduce((prev, next) => {
-  return prev + next
-}, 4)
+let sum = arr.reduce((prev, next) => prev + next, 4)
 console.log(sum) // 10
 ```
 
@@ -259,7 +258,7 @@ function add(...args) {
   return args.reduce((prev, next) => prev + next)
 }
 
-let res = add2(1, 2, 3, 4, 5, 6)
+let res = add(1, 2, 3, 4, 5, 6)
 console.log(res) // 21
 ```
 
@@ -273,7 +272,7 @@ let arr = [
   { name: 'g', score: 95 },
   { name: 'h', score: 99 }
 ]
-let rs = arr.some(item => {
+let rs = arr.some((item) => {
   return item.score > 90
 })
 console.log(rs) // true
@@ -328,12 +327,12 @@ let arr = [
   { name: 'g', score: 95 },
   { name: 'h', score: 99 }
 ]
-let rs1 = arr.find(item => {
+let rs1 = arr.find((item) => {
   return item.name == 'g'
 })
 console.log(rs1) // {name: "g", score: 90}
 
-let rs2 = arr.findIndex(item => {
+let rs2 = arr.findIndex((item) => {
   return item.name == 'g'
 })
 console.log(rs2) // 1
@@ -493,7 +492,7 @@ function flatten(arr) {
   //         res.push(arr[i]);
   //     }
   // }
-  arr.forEach(i => {
+  arr.forEach((i) => {
     // if (Array.isArray(i)) {
     //     res = res.concat(flatten(i))
     // } else {
@@ -528,7 +527,7 @@ console.log(flatten(arr))
 ```js
 let arr1 = [1, 2, 3, 3, 4, 5]
 let arr2 = [1, 3, 5, 6]
-let res = [...new Set(arr1)].filter(item => arr2.includes(item))
+let res = [...new Set(arr1)].filter((item) => arr2.includes(item))
 console.log(res) // [1, 3, 5]
 ```
 
@@ -538,6 +537,6 @@ console.log(res) // [1, 3, 5]
 // arr1 = [1, 2, 2, 3]  arr2 = [2, 2]   =>  [2, 2]
 const arr1 = [1, 2, 2, 3],
   arr2 = [2, 2, 4]
-const res = arr1.filter(i => arr2.includes(i))
+const res = arr1.filter((i) => arr2.includes(i))
 console.log(res) // [2, 2]
 ```

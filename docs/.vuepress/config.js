@@ -103,7 +103,7 @@ module.exports = {
           children: ['', 'dom', 'json', 'array', 'string', 'object', 'ajax']
         },
         { title: '进阶', collapsable: false, children: ['advanced', 'oop', 'es6', 'module'] },
-        { title: '工具函数', collapsable: false, children: ['utils'] }
+        { title: '工具函数', collapsable: false, children: ['utils', 'utilsArray'] }
       ],
       '/fe/ts/': [
         {
@@ -140,9 +140,7 @@ module.exports = {
       '/fe/node/': [{ title: 'Node', collapsable: false, sidebarDepth: 2, children: [''] }],
       '/fe/express/': [{ title: 'Express', collapsable: false, sidebarDepth: 2, children: [''] }],
       '/fe/mongodb/': [{ title: 'MongoDB', collapsable: false, sidebarDepth: 2, children: [''] }],
-      '/fe/browser/': [
-        { title: '浏览器', collapsable: false, children: ['', 'window', 'compatibility'] }
-      ],
+      '/fe/browser/': [{ title: '浏览器', collapsable: false, children: ['', 'window', 'compatibility'] }],
       '/fe/plugin/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/fe/npm/': [{ collapsable: false, children: [''] }],
       '/fe/git/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
@@ -153,9 +151,7 @@ module.exports = {
       '/be/nginx/': [{ title: 'Nginx', collapsable: false, children: [''] }],
       '/be/mysql/': [{ title: 'MySQL', collapsable: false, children: [''] }],
       '/be/tomcat/': [{ title: 'Tomcat', collapsable: false, children: [''] }],
-      '/be/elasticsearch/': [
-        { title: 'ElasticSearch', collapsable: false, sidebarDepth: 2, children: [''] }
-      ],
+      '/be/elasticsearch/': [{ title: 'ElasticSearch', collapsable: false, sidebarDepth: 2, children: [''] }],
       '/vis/openlayers/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/vis/leaflet/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
       '/vis/geoserver/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
