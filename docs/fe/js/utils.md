@@ -4,10 +4,7 @@
 
 ```js
 const getRandomColor = () => {
-  return (
-    `#` +
-    [0, 0, 0].map(() => (~~(Math.random() * 0x100)).toString(16).replace(/^(\d)$/, `0$1`)).join(``)
-  )
+  return `#` + [0, 0, 0].map(() => (~~(Math.random() * 0x100)).toString(16).replace(/^(\d)$/, `0$1`)).join(``)
 }
 getRandomColor()
 ```
@@ -152,15 +149,9 @@ newDate.setTime(timestamp3) //设置Date对象的时间为时间戳的时间
   function getTime() {
     let nowDate = new Date()
     let year = nowDate.getFullYear()
-    let month =
-      nowDate.getMonth() + 1 > 10 ? nowDate.getMonth() + 1 : '0' + (nowDate.getMonth() + 1)
+    let month = nowDate.getMonth() + 1 > 10 ? nowDate.getMonth() + 1 : '0' + (nowDate.getMonth() + 1)
     let day = nowDate.getDate() > 10 ? nowDate.getDate() : '0' + nowDate.getDate()
-    let hour =
-      nowDate.getHours() > 10
-        ? nowDate.getHours()
-        : nowDate.getHours() === 0
-        ? 24
-        : '0' + nowDate.getHours()
+    let hour = nowDate.getHours() > 10 ? nowDate.getHours() : nowDate.getHours() === 0 ? 24 : '0' + nowDate.getHours()
     let minutes = nowDate.getMinutes() >= 10 ? nowDate.getMinutes() : '0' + nowDate.getMinutes()
     let seconds = nowDate.getSeconds() > 10 ? nowDate.getSeconds() : '0' + nowDate.getSeconds()
     let str = year + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds
@@ -271,7 +262,7 @@ document.write(str1) //javascript%20%u4F60%u597D
 解码一个由 escape()函数编码的字符串
 
 ```js
-window.onload = function() {
+window.onload = function () {
   let str = 'javascript 你好'
   let str1 = escape(str)
   document.write(str1) //javascript%20%u4F60%u597D
@@ -320,7 +311,7 @@ function findMostWord(article) {
 
   article = ' ' + wordList.join('  ') + ' '
 
-  wordList.forEach(function(item) {
+  wordList.forEach(function (item) {
     if (visited.indexOf(item) < 0) {
       visited.push(item)
 
@@ -368,7 +359,7 @@ function getBrowser() {
  * 数字 + 字母 & 小于10位 = 中
  * 数字 + 字母 & 大于等于10位 = 强
  */
-export const passwordStrength = function(val) {
+export const passwordStrength = function (val) {
   const num = /^\d+$/
   const eng = /^([a-zA-Z]+)$/
   if (num.test(val) || eng.test(val)) {
@@ -415,9 +406,7 @@ console.log(router) // projectStage
 
 const res = Object.values(
   Object.entries(obj).reduce(
-    (acc, [key, val]) => (
-      Object.assign((acc[[key.match(/\d/)]] ||= {}), { [key.replace(/\d/, '')]: val }), acc
-    ),
+    (acc, [key, val]) => (Object.assign((acc[[key.match(/\d/)]] ||= {}), { [key.replace(/\d/, '')]: val }), acc),
     {}
   )
 )
@@ -466,4 +455,42 @@ function formatMinutes(minutes) {
   if (minute > 0) time += minute + 'm'
   return time
 }
+```
+
+## js 实现拖拽功能
+
+- 当鼠标移点击元素时，触发`mousedown`事件，让元素变为可移动状态
+- 当鼠标在移动时，触发`mousemove`事件，先判断元素是否处于可移动状态
+- 当鼠标松开时，触发`mouseup`事件，使元素变为不可移动状态
+
+```js
+/**
+<div id='box'></div>
+
+#box {
+  width: 50px;
+  height: 50px;
+  background-color: #f00;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+}
+*/
+
+const box = document.getElementById('box')
+let isMove = false
+box.addEventListener('mousedown', () => {
+  isMove = true
+})
+box.addEventListener('mouseup', () => {
+  isMove = false
+})
+
+document.addEventListener('mousemove', (e) => {
+  if (!isMove) return
+  const x = e.pageX - box.offsetWidth / 2
+  const y = e.pageY - box.offsetHeight / 2
+  box.style.left = `${x}px`
+  box.style.top = `${y}px`
+})
 ```

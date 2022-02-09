@@ -2,6 +2,16 @@
 
 ## 创建项目
 
+### vite
+
+先安装`vite`，然后按照提示操作即可
+
+```sh
+npm init vite@latest
+```
+
+### @vue/cli
+
 首先安装或更新`@vue/cli 4.5.7`版本及以上
 
 ```sh
@@ -125,9 +135,7 @@ vue3 新增`setup()`语法，包括两个参数`props`和`context`。定义的�
 
 ```vue
 <template>
-  <button v-for="(item, index) in user" :key="index" @click="clickName(index)">
-    {{ index }} : {{ item }}
-  </button>
+  <button v-for="(item, index) in user" :key="index" @click="clickName(index)">{{ index }} : {{ item }}</button>
   <h1>{{ name }}</h1>
 </template>
 
@@ -160,9 +168,7 @@ export default defineComponent({
 
 ```vue
 <template>
-  <button v-for="(item, index) in list" :key="index" @click="btnFun(index)">
-    {{ index }} : {{ item }}
-  </button>
+  <button v-for="(item, index) in list" :key="index" @click="btnFun(index)">{{ index }} : {{ item }}</button>
   <h1>{{ listName }}</h1>
 </template>
 
@@ -235,11 +241,11 @@ export default defineComponent({
       console.log('完成更新')
     })
 
-    onRenderTriggered(event => {
+    onRenderTriggered((event) => {
       console.log('状态触发')
     })
 
-    onRenderTracked(event => {
+    onRenderTracked((event) => {
       console.log('状态跟踪')
     })
 

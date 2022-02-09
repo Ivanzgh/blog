@@ -238,5 +238,5 @@ const entries = new Map([
 ])
 
 const obj = Object.fromEntries(entries)
-console.log(obj) // { foo: "bar", baz: 42 }
+console.log(obj) // { name: "zgh", age: 23 }
 ```

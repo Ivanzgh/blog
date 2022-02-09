@@ -130,47 +130,37 @@ let c = 2.999999999999999999999999999999
 Math.floor(c) // 3
 ```
 
-## for 与 for in
+## for循环
 
 ### 遍历数组
 
-- for 循环 数组下标的 typeof 类型是`number`
-
-- for in 循环 数组下标的 typeof 类型是`string`
+- `for` 循环，数组下标的类型是`number`
+- `forEach`，没有返回值
+- `map`
+- `for of`，推荐
 
 ```js
 let arr = ['zgh', 22, 180, 125]
-for (let i = 0; i < arr.length; i++) {
-  console.log(typeof i) //number
-  console.log(arr[i])
+for (let i = 0, len = arr.length; i < len; i++) {
+  console.log(typeof i) // number
 }
+
+for (let m of arr) {}
+
 for (let k in arr) {
-  console.log(typeof k) //string
-  console.log(arr[k])
+  console.log(typeof k) // string
 }
 ```
 
 ### 遍历对象
+
+`for in` 循环，遍历数组下标的类型是`string`，不要使用这种方式遍历数组！仅适用于遍历普通对象的key
 
 `for`循环 无法用于循环对象，获取不到`obj.length`;
 
 `for in`循环遍历对象的属性时，原型链上的所有属性都将被访问，
 
 解决方案：使用`hasOwnProperty`方法过滤或`Object.keys`会返回自身可枚举属性组成的数组
-
-```js
-Object.prototype.sex = 'man'
-let obj = { name: 'zgh', age: 22 }
-for (let m = 0; m < obj.length; m++) {
-  console.log(typeof m) //空
-  console.log(obj[m]) //空
-}
-for (let n in obj) {
-  console.log(typeof n) // string
-  console.log(obj[n]) //zgh,22,man
-}
-console.log(Object.prototype)
-```
 
 ## if in
 
@@ -243,23 +233,6 @@ console.log(b) // b is not defined
 ```
 
 小数部分会根据四舍五入只留下三位
-
-## 回流与重绘
-
-### 回流(reflow)
-
-只要修改了 dom 或改变了元素的形状或大小等，会改变布局的操作就会触发 reflow
-
-### 重绘(repaint)
-
-只是改变了颜色，不影响周围元素或布局，会引起浏览器的重绘
-
-### 减少 reflow 和 repaint
-
-- 不要一条一条的修改样式，应该固定写一个 class，更换 className，减少 reflow 次数
-- 不要把 DOM 结点的属性值放在一个循环里当成循环里的变量
-- 为动画的 HTML 文件使用 position:fixed 或 absolute，那么修改他们的 CSS 是不会 reflow 的
-- 避免使用 table 布局，一个很小的改动会造成整个 table reflow
 
 ## 奇怪的知识
 

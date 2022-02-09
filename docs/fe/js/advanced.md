@@ -557,7 +557,7 @@ for (let i = 1; i <= 5; i++) {
 
 ### 防抖
 
-**事件在被触发 n 秒后执行回调函数，如果在这 n 秒内事件又被触发，则重新计时。**
+**事件在被触发 n 秒后执行回调函数，如果在这 n 秒内事件又被触发，则重新计时。** 即在规定时间内未触发第二次，则执行回调函数
 
 ```html
 <input type="text" id="my-input" />
@@ -582,13 +582,12 @@ function ajaxTest(a) {
   console.log(a)
 }
 
-function debounce(fun, delay) {
-  return function (args) {
-    let that = this
-    let _args = args
-    clearTimeout(fun.id)
-    fun.id = setTimeout(function () {
-      fun.call(that, _args)
+function debounce(fn, delay) {
+  let timer = null
+  return function () {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(this, arguments)
     }, delay)
   }
 }
@@ -603,20 +602,48 @@ inp.addEventListener('keyup', (e) => {
 
 ### 节流
 
-**在单位时间内，只能触发一次函数，如果触发多次，只有一次有效。**
+**在规定时间内多次触发函数，只有第一次有效。**
+
+时间戳版
 
 ```js
-function ajax(a) {
+function throttle(func, delay) {
+  let last = 0
+  return function () {
+    let now = Date.now()
+    if (now - last >= delay) {
+      func.apply(this, arguments)
+      last = now
+    } else {
+      console.log('距离上次调用的时间差不满足要求')
+    }
+  }
+}
+
+function ajaxTest(a) {
   console.log(a)
 }
+
+let throttleAjax = throttle(ajaxTest, 1000) // 函数在每 1s 内执行一次
+let inputs = document.getElementById('my-input')
+inputs.addEventListener('keyup', function (e) {
+  throttleAjax(e.target.value)
+})
+```
+
+定时器版
+
+```js
 function throttle(fun, delay) {
   let last, deferTimer
   return function (args) {
     let that = this
     let _args = arguments
     let now = +new Date()
+
+    clearTimeout(deferTimer)
+
     if (last && now < last + delay) {
-      clearTimeout(deferTimer)
       deferTimer = setTimeout(function () {
         last = now
         fun.apply(that, _args)
@@ -627,16 +654,7 @@ function throttle(fun, delay) {
     }
   }
 }
-
-let throttleAjax = throttle(ajax, 1000)
-
-let inputs = document.getElementById('throttle')
-inputs.addEventListener('keyup', function (e) {
-  throttleAjax(e.target.value)
-})
 ```
-
-函数在每 1s 内执行一次
 
 ### 应用场景
 

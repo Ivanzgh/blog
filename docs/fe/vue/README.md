@@ -48,11 +48,34 @@ console.log(f22.$options.data()); // {name: "Vue"}
 一般来说，`v-if` 有更高的切换开销，而 `v-show` 有更高的初始渲染开销。
 因此，如果需要非常频繁地切换，则使用 `v-show` 较好；如果在运行时条件很少改变，则使用 `v-if` 较好
 
-## 双向绑定原理
+## v-model原理
+
+```html
+<input placeholder="请输入" id="username" />
+内容：<span id="uName"></span>
+
+<script>
+  let obj = {}
+  Object.defineProperty(obj, "username", {
+    get() {
+      return this
+    },
+    set(val) {
+      document.getElementById("uName").innerText = val;
+    }
+  })
+  const el = document.getElementById("username")
+  el.addEventListener("keyup", function () {
+    obj.username = event.target.value
+  })
+</script>
+```
+
+## 双向数据绑定原理
 
 ### 1、双向绑定原理
 
-vue.js 是采用数据劫持结合发布者-订阅者模式，通过`Object.defineProperty()`来劫持各个属性的`setter`、`getter`，在数据变动时发布消息给订阅者，触发响应的监听回调。
+vue2是采用**数据劫持**结合**发布者-订阅者模式**，通过`Object.defineProperty()`来劫持各个属性的`setter`、`getter`，在数据变动时发布消息给订阅者，触发响应的监听回调。
 
 ### 2、Object.defineProperty()
 
@@ -70,30 +93,26 @@ Object.defineProperty(obj, prop, descriptor)
 - prop 要定义或修改的属性的名称。
 - descriptor 将被定义或修改的属性描述符。
 
-返回值:
-
-被传递给函数的对象。
+返回值: 被传递给函数的对象。
 
 MDN 地址： [Object.defineProperty()
 ](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
 
-### 3、vue 如何实现
+### 3、如何实现
 
 ![image](/blog/img/fe/vue1.png)
 
-3.1 observer 用来实现对每个 vue 中的 data 中定义的属性循环用 Object.defineProperty()实现数据劫持，以便利用其中的 setter 和 getter，然后通知订阅者，订阅者会触发它的 update 方法，对视图进行更新。
+`observer` 用来实现对每个组件中的 data 中定义的属性，循环用`Object.defineProperty()`实现数据劫持，以便利用其中的 setter 和 getter，然后通知订阅者，订阅者会触发它的 update 方法，对视图进行更新。
 
-3.2 我们介绍为什么要订阅者，在 vue 中 `v-model`，`v-name`，`{{}}`等都可以对数据进行显示，也就是说假如一个属性都通过这三个指令了，那么每当这个属性改变的时候，相应的这个三个指令的 html 视图也必须改变，于是 vue 中就是每当有这样的可能用到双向绑定的指令，就在一个 Dep 中增加一个订阅者，其订阅者只是更新自己的指令对应的数据，也就是 `v-model='name'`和`{\n{name}}`有两个对应的订阅者，各自管理自己的地方。每当属性的 set 方法触发，就循环更新 Dep 中的订阅者。
-
-### 4、vue 代码实现
+### 4、代码实现
 
 4.1 observer 实现，主要是给每个 vue 的属性用 `Object.defineProperty()`，代码如下：
 
 ```js
 function defineReactive(obj, key, val) {
-  var dep = new Dep();
+  let dep = new Dep();
   Object.defineProperty(obj, key, {
-    get: function() {
+    get() {
       //添加订阅者watcher到主题对象Dep
       if (Dep.target) {
         // JS的浏览器单线程特性，保证这个全局变量在同一时间内，只会有同一个监听器使用
@@ -101,17 +120,16 @@ function defineReactive(obj, key, val) {
       }
       return val;
     },
-    set: function(newVal) {
+    set(newVal) {
       if (newVal === val) return;
       val = newVal;
-      console.log(val);
       // 作为发布者发出通知
-      dep.notify(); //通知后dep会循环调用各自的update方法更新视图
+      dep.notify(); // 通知后dep会循环调用各自的update方法更新视图
     },
   });
 }
 function observe(obj, vm) {
-  Object.keys(obj).forEach(function(key) {
+  Object.keys(obj).forEach((key) => {
     defineReactive(vm, key, obj[key]);
   });
 }
@@ -119,7 +137,7 @@ function observe(obj, vm) {
 
 4.2 实现 compile
 
-compile 的目的就是解析各种指令称真正的 html。
+compile 的目的就是解析各种指令成为真正的 html
 
 ```js
 function Compile(node, vm) {
@@ -219,3 +237,129 @@ Dep.prototype = {
 首先我们为每个 vue 属性用 Object.defineProperty()实现数据劫持，为每个属性分配一个订阅者集合的管理数组 dep；然后在编译的时候在该属性的数组 dep 中添加订阅者，v-model 会添加一个订阅者，{{}}也会，v-bind 也会，只要用到该属性的指令理论上都会，接着为 input 会添加监听事件，修改值就会为该属性赋值，触发该属性的 set 方法，在 set 方法内通知订阅者数组 dep，订阅者数组循环调用各订阅者的 update 方法更新视图。
 
 参考文章： [vue 的双向绑定原理及实现](https://www.cnblogs.com/libin-1/p/6893712.html)
+
+### 简易版本 Vue2 双向数据绑定
+
+```html
+<div id="app">
+  订阅视图1：<span class="box1"></span>
+  订阅视图2：<span class="box2"></span>
+</div>
+
+<script src="index.js"></script>
+<script>
+  let obj = {}
+  dataRes({ data: obj, tag: 'view1', dataKey: 'one', selector: '.box1' })
+  dataRes({ data: obj, tag: 'view2', dataKey: 'two', selector: '.box2' })
+
+  obj.one = '这是视图一'
+  obj.two = '这是视图二'
+</script>
+```
+
+```js
+// // 订阅器模型
+const Dep = {
+  // 容器
+  container: {},
+  // 添加订阅
+  listen(key, fn) {
+    (this.container[key] || (this.container[key] = [])).push(fn)
+  },
+  // 发布
+  trigger() {
+    let key = Array.prototype.shift.call(arguments),
+      fns = this.container[key]
+    if (!fns || fns.length === 0) {
+      return
+    }
+    for (let i = 0, len = fns.length; i < len; i++) {
+      fns[i].apply(this, arguments)
+    }
+    // for (let i = 0, fn; (fn = fns[i++]); ) {
+    //   fn.apply(this, arguments);
+    // }
+  }
+}
+
+// 数据劫持
+const dataRes = ({ data, tag, dataKey, selector }) => {
+  let value = '',
+    el = document.querySelector(selector)
+
+  Object.defineProperty(data, dataKey, {
+    get() {
+      return value
+    },
+    set(val) {
+      value = val
+      Dep.trigger(tag, val)
+    }
+  })
+
+  Dep.listen(tag, (text) => {
+    el.innerHTML = text
+  })
+}
+```
+
+### 简易版本 Vue3 双向数据绑定
+
+功能：通过 v-model 绑定一个值的同时，v-bind 的 dom 元素可以实现双向数据绑定。
+
+代码如下:
+
+```html
+<div id="container">
+  用户名：
+  <input type="text" id="user" v-model="text" is-number />
+  密码：
+  <input type="password" v-model="password" />
+  <h1 v-bind="text"></h1>
+  <h2 v-bind="password"></h2>
+</div>
+
+<script>
+  const container = [...document.querySelector('#container').children]
+
+  let proxyObj = new Proxy(
+    { text: '', password: '' },
+    {
+      get(target, property) {
+        return target[property]
+      },
+      set(target, propName, propValue, receiver) {
+        let isCanEdit = true
+        container.forEach((dom) => {
+          if (dom.getAttribute('v-bind') === propName) {
+            dom.innerHTML = propValue
+          }
+          if (dom.getAttribute('v-model') === propName) {
+            dom.value = propValue
+          }
+        })
+
+        target[propName] = propValue
+      }
+    }
+  )
+
+  container.forEach((dom) => {
+    if (dom.getAttribute('v-model') in proxyObj) {
+      dom.addEventListener('input', function () {
+        proxyObj[this.getAttribute('v-model')] = this.value
+      })
+    }
+  })
+</script>
+```
+
+首先获取到所有的 dom 节点，然后使用`Proxy`代理`{text: "", password: ""}`对象。
+遍历所有的 dom 节点，如果某个节点有`v-model`属性，且属性值在代理对象中，那么就监听输入框的变化，
+将该节点的值（input 框内的值）赋值给代理对象对应的属性，从而实现简单的双向数据绑定
+
+::: tip
+
+- `v-model`和`v-bind`的属性值要相同，如都是 text 或都是 password
+- `dom.addEventListener("input", function() {})`这里不能使用箭头函数，否则 this 指向 Window 对象
+  :::
