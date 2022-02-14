@@ -13,17 +13,19 @@ arr.join('-') // '2-1-3'
 
 ## sort()
 
-对数组的元素排序，接收一个函数作为参数，影响原数组
+对数组的元素排序，接收一个函数作为参数，影响原数组。
+
+如果省略参数，元素按照转换为字符串的各个字符的Unicode位点进行排序。
 
 ```js
 let arr = [3, 5, 2, 4, 1]
 let newarr1 = arr.sort()
-//不加参数默认从小到大排序
+// 比较的数字会先被转换为字符串，比较Unicode顺序
 console.log(newarr1) // [1,2,3,4,5]
+let arr1 = [5, 10, 20]
+arr1.sort() // [10, 20, 5]
 
-let newarr2 = arr.sort((a, b) => {
-  return b - a
-})
+let newarr2 = arr.sort((a, b) => b - a)
 console.log(newarr2) // [5, 4, 3, 2, 1]
 ```
 

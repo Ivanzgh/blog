@@ -241,12 +241,10 @@ setTimeout(function g() {
 ### 箭头函数中使用
 
 箭头函数中`this`的值取决于该函数外部非箭头函数的`this`的值，即外层（函数或者全局）作用域来决定`this`，
-且不能通过 `call()`、`apply()` 和 `bind()` 方法来改变 `this` 的值。
+且不能通过 `call`、`apply` 和 `bind` 方法来改变 `this` 的值。
 
 ```js
-let obj = {
-  val: '1'
-}
+let obj = { val: '1' }
 let fun = () => {
   console.log(this) // window
 }
@@ -281,7 +279,7 @@ let obj2 = {
 }
 obj2.fun()
 
-// 一般使用方法简写
+// 推荐使用方法简写
 let obj3 = {
   age: 23,
   fun() {
@@ -335,10 +333,7 @@ let user = { go:... }(user.go)()
 
 ```js
 function setUser() {
-  return {
-    cool: 'zgh',
-    ref: this
-  }
+  return { cool: 'zgh', ref: this }
 }
 let user = setUser()
 console.log(user.ref.cool)
@@ -350,11 +345,11 @@ console.log(user.ref.cool)
 
 这是因为设置的 this 的规则并没有找到对象字面量。
 
-这里 `makeUser()` 中的 this 值是 `undefined`，因为它是被作为函数调用的，而不是方法调用。
+这里 `setUser()` 中的 this 值是 `undefined`，因为它是被作为函数调用的，而不是方法调用。
 
 对象字面量本身对于 this 没有影响。this 的值是整个函数，代码段和对象字面量对它没有影响。
 
-所以，ref: this 实际上取的是该函数当前的 this。打印 `user.ref` 结果是`window`
+所以，`ref: this` 实际上取的是该函数当前的 this。打印 `user.ref` 结果是`window`
 
 ```js
 function setUser() {

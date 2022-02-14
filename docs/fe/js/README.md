@@ -6,7 +6,7 @@
 
 基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
 
-引用类型： 函数、数组、对象
+引用类型： `Object`、`Array`、`Function`
 
 基本数据类型将数据名和值存储在栈中
 
@@ -26,8 +26,8 @@ console.log(b) // 1
 let c = { x: 3 }
 let d = c
 c.x = 4
-console.log(c) // {x: 4}
-console.log(d) // {x: 4}
+console.log(c) // { x: 4 }
+console.log(d) // { x: 4 }
 ```
 
 ## 类型判断
@@ -148,13 +148,14 @@ for (let i = 0, len = arr.length; i < len; i++) {
 for (let m of arr) {}
 
 for (let k in arr) {
+  console.log(k)  // 0 1 2 3，返回的是数组下标
   console.log(typeof k) // string
 }
 ```
 
 ### 遍历对象
 
-`for in` 循环，遍历数组下标的类型是`string`，不要使用这种方式遍历数组！仅适用于遍历普通对象的key
+`for in` 循环遍历键名，遍历数组下标的类型是`string`，不要使用这种方式遍历数组！仅适用于遍历普通对象的key
 
 `for`循环 无法用于循环对象，获取不到`obj.length`;
 
@@ -274,4 +275,14 @@ console.log(b) // 2
 
 ```html
 <body oncontextmenu="return false;"></body>
+```
+
+## 更改网页标题
+
+```js
+// 获取标题
+document.title
+
+// 更改标题
+document.title = 'hello world'
 ```

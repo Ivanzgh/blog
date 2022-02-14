@@ -511,7 +511,7 @@ calc 是 css3 提供的一个在 css 文件中计算值的函数,用于动态计
 
 ## rgba()和 opacity 的区别
 
-二者均可设置透明度,使用 opacity 后子元素会继承父元素的透明效果，设置 rgba 元素的子元素不会继承透明效果
+二者均可设置透明度，使用`opacity`后子元素会继承父元素的透明效果，设置`rgba`元素的子元素不会继承透明效果
 
 ### opacity
 
@@ -524,7 +524,7 @@ calc 是 css3 提供的一个在 css 文件中计算值的函数,用于动态计
 
 IE9, Firefox, Chrome, Opera 和 Safari 使用属性 opacity 来设定透明度。
 
-opacity 属性能够设置的值从 0.0 到 1.0。值越小，越透明。
+opacity 属性能够设置的范围值 `0.0 ~ 1.0`。值越小，越透明。
 
 IE8 以及更早的版本使用滤镜 `filter:alpha(opacity=x)`。x 能够取的值从 0 到 100。值越小，越透明。
 
@@ -566,6 +566,14 @@ RGBA 颜色值是这样规定的：`rgba(red, green, blue, alpha)`。alpha 参�
 如果在 IE9 里面同时使用这 RGBA 两种方法时，会造成冲突而无法做到透明度的实现。
 而对于 opacity 是可以两个一起写，没有冲突问题！
 :::
+
+## 隐藏元素
+
+以下 3 种方式都能隐藏元素，而且 dom 元素还在
+
+- `display: none;` 不占据页面位置
+- `opacity: 0;` 占据页面位置
+- `visibility: hidden;` 占据页面位置
 
 ## transition
 
@@ -710,3 +718,12 @@ w3school 介绍网址： <http://www.w3school.com.cn/css/css_margin_collapsing.a
 - 不要一条一条的修改样式，应该固定写一个`class`，更换 className，减少回流次数
 - 动画设置`position:fixed`或 `absolute`，尽可能地使元素脱离文档流，从而减少对其他元素的影响
 - 避免使用`table`布局，`table`中每个元素的大小以及内容的改动，都会导致整个`table`的重新计算
+
+## 设置复制文本的样式
+
+```css
+p::selection {
+  color: #f00;
+  background-color: #eee;
+}
+```

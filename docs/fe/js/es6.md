@@ -243,6 +243,10 @@ let person = function (name) {
 
 箭头函数本身是没有`this`和`arguments`的，在箭头函数中引用 this 实际上是调用的是定义时的父执行上下文的 this。简单对象（非函数）是没有执行上下文的。
 
+- 使用`call，apply，bind`都不能改变 this 指向
+- 箭头函数没有原型属性`prototype`
+- 不能用作构造函数，即new指令
+
 ```js
 let obj = {
   say() {
@@ -253,6 +257,11 @@ let obj = {
 let rs = obj.say
 rs() // f1执行时，say函数指向window，所以f1中的this指向window
 obj.say() // f1执行时，say函数指向obj，所以f1中的this指向obj
+
+// 下面写法错误！
+let Person = (name) => {
+  this.name = name
+}
 ```
 
 ## 对象
@@ -292,6 +301,38 @@ let obj = {
 }
 ```
 
+## Map
+
+类似于对象，是键值对的结构，区别在于：对象中的键名只能是字符串或者`Symbol`，而 Map 里面的键可以是任意值。
+
+```js
+//创建一个Map对象
+let myMap = new Map()
+
+//添加键值对
+myMap.set('a', 'hello')
+myMap.set([1, 2, 3], { name: 'zgh' })
+
+// 也可以在声明时就添加键值对，二维数组
+const user = new Map([
+  ['foo', 'zgh'],
+  ['baz', 23]
+])
+
+//查看集合中元素的数量
+myMap.size
+
+//获取相应的键值
+myMap.get('a')
+
+//删除一个键值对，然后再判断该键值对是否存在
+myMap.delete('a')
+myMap.has('a')
+
+//删除Map集合中所有的键值对
+myMap.clear()
+```
+
 ## Set
 
 `Set`对象是一组不重复的、无序的值的集合，可以往里面添加、删除、查询数据。
@@ -302,18 +343,9 @@ let obj = {
 不能接受对象结构，否则报错`Uncaught TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))`
 
 ```js
-const set1 = new Set([1, 2, 3, 4, 5, 5, 5, 5])
-set1.size // 5
-
-// 两个对象是不相等的
-const set2 = new Set()
-set2.add({})
-set3.size // 1
-set3.add({})
-set3.size // 2
-
 // 声明一个Set对象
 let mySet = new Set()
+let mySet2 = new Set([1, 2, 3])
 
 // 添加元素
 mySet.add(1)
@@ -334,6 +366,13 @@ mySet.forEach((item) => console.log(item))
 
 // 删除集合中所有的元素
 mySet.clear()
+
+// 两个对象是不相等的
+const set2 = new Set()
+set2.add({})
+set2.size // 1
+set2.add({})
+set2.size // 2
 ```
 
 遍历操作
@@ -378,38 +417,6 @@ let res2 = Array.from(new Set(arr)) // [1, 2, 3]
 ```js
 const str = [...new Set('ababbc')].join('')
 console.log(str) // 'abc'
-```
-
-## Map
-
-类似于对象，里面存放的也是键值对，区别在于：对象中的键名只能是字符串，如果使用 map，它里面的键可以是任意值。
-
-```js
-//创建一个Map对象
-let myMap = new Map()
-
-//添加键值对
-myMap.set('a', 'hello')
-myMap.set([1, 2, 3], { name: 'zgh' })
-
-// 也可以在声明时就添加键值对
-const user = new Map([
-  ['foo', 'zgh'],
-  ['baz', 23]
-])
-
-//查看集合中元素的数量
-myMap.size
-
-//获取相应的键值
-myMap.get('a')
-
-//删除一个键值对，然后再判断该键值对是否存在
-myMap.delete('a')
-myMap.has('a')
-
-//删除Map集合中所有的键值对
-myMap.clear()
 ```
 
 ## ...操作符
