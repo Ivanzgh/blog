@@ -4,37 +4,33 @@
 
 canvas 就是绘制图形的。
 
-canvas 是一个二维网格。左上角坐标为 (0,0)
+canvas 是一个二维网格。左上角坐标为 `(0,0)`
 
 首先创建一个画布
 
 ```html
-<canvas id="first-canvas" width="1000" height="800"></canvas>
+<canvas id="cvs" width="1000" height="800"></canvas>
 ```
 
 然后获取到画布和二维模型
 
 ```js
-let firCanvas = document.getElementById('first-canvas')
-let ctx = firCanvas.getContext('2d')
+let canvas = document.getElementById('cvs')
+let ctx = canvas.getContext('2d')
 ```
 
 ctx 就相当于画笔了
 
-示例：画个矩形
+### 检查支持性
 
 ```js
-let firCanvas = document.getElementById('first-canvas')
-let ctx = firCanvas.getContext('2d')
-ctx.beginPath()
-ctx.fillStyle = '#0f0'
-ctx.fillRect(10, 10, 200, 100)
-ctx.closePath()
+let canvas = document.getElementById('cvs')
+if (canvas.getContext) {
+  // 支持canvas
+} else {
+  // 不支持canvas
+}
 ```
-
-注意设置样式要在绘制之前，否则无效。
-
-如果要绘制多个图形，需要声明开始和结束路径，否则图形会相互干扰，影响结果。
 
 ## 线
 
@@ -44,6 +40,8 @@ ctx.lineTo(50, 100) // 定义终点
 ctx.strokeStyle = '#f00' // 线的颜色
 ctx.stroke() // 画线
 ```
+
+注意**设置样式要在绘制之前，否则无效**
 
 画个树：
 
@@ -73,7 +71,7 @@ ctx.closePath()
 let canvas = document.getElementById('canvas')
 let ctx = canvas.getContext('2d')
 let drawStatus = false
-canvas.onmousedown = e => {
+canvas.onmousedown = (e) => {
   ctx.moveTo(e.offsetX, e.offsetY)
   drawStatus = true
 }
@@ -83,7 +81,7 @@ canvas.onmouseout = () => {
     drawStatus = false
   }
 }
-canvas.onmousemove = e => {
+canvas.onmousemove = (e) => {
   if (drawStatus) {
     ctx.lineTo(e.offsetX, e.offsetY)
     ctx.stroke()
@@ -91,13 +89,79 @@ canvas.onmousemove = e => {
 }
 ```
 
-## 圆
+### 二次贝塞尔曲线
+
+二次贝塞尔曲线有一个开始点、一个结束点以及一个控制点
 
 ```js
-ctx.arc(100, 100, 50, 0, 2 * Math.PI, false)
+quadraticCurveTo(cp1x, cp1y, x, y) // cp1x,cp1y为一个控制点，x,y为结束点
+```
+
+示例：对钩
+
+```js
+ctx.beginPath()
+ctx.moveTo(500, 400) // 如果不设置，那么起始点位置就在控制点，视觉上就是绘制了一条直线
+ctx.quadraticCurveTo(500, 600, 900, 400)
+ctx.stroke()
+ctx.closePath()
+```
+
+### 三次贝塞尔曲线
+
+三次贝塞尔曲线有两个控制点
+
+```js
+bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y) // cp1x,cp1y为控制点一，cp2x,cp2y为控制点二，x,y为结束点
+```
+
+示例：红色爱心
+
+```js
+ctx.beginPath()
+ctx.moveTo(75, 40)
+ctx.bezierCurveTo(75, 37, 70, 25, 50, 25)
+ctx.bezierCurveTo(20, 25, 20, 62.5, 20, 62.5)
+ctx.bezierCurveTo(20, 80, 40, 102, 75, 120)
+ctx.bezierCurveTo(110, 102, 130, 80, 130, 62.5)
+ctx.bezierCurveTo(130, 62.5, 130, 25, 100, 25)
+ctx.bezierCurveTo(85, 25, 75, 37, 75, 40)
 ctx.fillStyle = '#f00'
 ctx.fill()
 ```
+
+## 路径
+
+```js
+ctx.beginPath()
+
+ctx.closePath()
+```
+
+如果要绘制多个图形，需要声明开始和结束路径，否则图形会相互干扰，影响结果。
+
+- 使用`fill()`时，路径自动闭合，可以不用`closePath()`。
+- 使用`stroke()`时，不会闭合路径，如果没有`closePath()`，则只绘制了两条线段，不是完整的三角形
+
+## 矩形
+
+- `fillRect(x, y, width, height)` 绘制填充的矩形
+- `strokeRect(x, y, width, height)` 绘制矩形的边框
+- `clearRect(x, y, width, height)` 清除指定矩形区域
+
+```js
+ctx.beginPath()
+ctx.fillStyle = '#eee'
+ctx.fillRect(50, 400, 200, 100)
+ctx.clearRect(60, 420, 180, 60) // 在内部擦除一个矩形
+ctx.strokeStyle = '#666'
+ctx.strokeRect(140, 430, 30, 30)
+ctx.closePath()
+```
+
+`ctx.fillRect(50,400,200,100)`表示矩形左上角坐标为(50,400)，宽 200px，高 100px
+
+## 圆
 
 ```js
 arc(x, y, radius, startAngle, endAngle, anticlockwise)
@@ -105,13 +169,19 @@ arc(x, y, radius, startAngle, endAngle, anticlockwise)
 
 参数分别表示圆心坐标，半径，起始弧度，结束弧度，绘制方向
 
+```js
+ctx.arc(100, 100, 50, 0, 2 * Math.PI, false)
+ctx.fillStyle = '#f00'
+ctx.fill() // 填充
+```
+
 角度与弧度的 js 表达式:
 
 ```sh
 弧度 = (Math.PI/180) * 角度
 ```
 
-anticlockwise 为 true，则按逆时针绘制，false 按顺时针绘制，默认为 false
+`anticlockwise` 为 true，则按逆时针绘制，false 按顺时针绘制，默认为 false
 
 数学中的角度逆时针为正，而这里的起止角是以顺时针为正。当起角设为 0 度，止角设为 120 度时，会从右边水平位置向下旋转 120 度。
 
@@ -126,20 +196,6 @@ ctx.fillStyle = '#00f'
 ctx.fillText('canvas', 800, 400) // 文字和位置
 ctx.closePath()
 ```
-
-## 矩形
-
-```js
-ctx.beginPath()
-ctx.fillStyle = '#eee'
-ctx.fillRect(50, 400, 200, 100)
-ctx.clearRect(60, 420, 180, 60) // 在内部擦除一个矩形
-ctx.strokeStyle = '#666'
-ctx.strokeRect(140, 430, 30, 30)
-ctx.closePath()
-```
-
-`ctx.fillRect(50,400,200,100)`表示矩形左上角坐标为(50,400)，宽 200px，高 100px
 
 ## 阴影
 
@@ -160,23 +216,24 @@ ctx.closePath()
 
 ### 线性渐变
 
-```js
-ctx.beginPath()
-var Color = ctx.createLinearGradient(0, 0, 0, 500)
-Color.addColorStop(0.3, 'orange')
-Color.addColorStop(0.5, 'yellow')
-Color.addColorStop(1, 'gray')
-ctx.fillStyle = Color
-ctx.fillRect(0, 0, 1200, 800)
-ctx.closePath()
-ctx.stroke()
-```
-
 `createLinearGradient(x1,y1,x2,y2)`，参数表示起点和终点
 
-`addColorStop(x,y)`，x 表示偏移量，y 表示颜色
+`addColorStop(x,y)`，x 表示偏移量(0~1)，y 表示颜色
+
+```js
+ctx.beginPath()
+const color = ctx.createLinearGradient(0, 0, 0, 400)
+color.addColorStop(0.3, '#E55D87')
+color.addColorStop(0.5, '#ff0')
+color.addColorStop(1, '#5FC3E4')
+ctx.fillStyle = color
+ctx.fillRect(500, 100, 300, 300)
+ctx.closePath()
+```
 
 ### 径向渐变
+
+`createRadialGradient(x1,y1,r1,x2,y2,r2)`，起始圆心、结束圆心和相关半径
 
 ```js
 ctx.beginPath()
@@ -188,10 +245,7 @@ color.addColorStop(1, 'yellow')
 ctx.fillStyle = color
 ctx.fill()
 ctx.closePath()
-ctx.stroke()
 ```
-
-`createRadialGradient(x1,y1,r1,x2,y2,r2)`，起始圆心、结束圆心和相关半径
 
 ## 图片绘制
 
@@ -211,7 +265,7 @@ image 是 image 或者 canvas 对象，前 4 个是定义图像源的切片位�
 function draw() {
   let ctx = document.getElementById('first-canvas').getContext('2d')
   let img = new Image()
-  img.onload = function() {
+  img.onload = function () {
     ctx.beginPath()
     ctx.drawImage(img, 0, 0)
     ctx.closePath()
@@ -233,7 +287,7 @@ draw()
 
 ## 动画
 
-可以用 window.setInterval(), window.setTimeout(),和 window.requestAnimationFrame()来设定定期执行一个指定函数。
+可以用 `window.setInterval()`, `window.setTimeout()`,和 `window.requestAnimationFrame()`来设定定期执行一个指定函数。
 
 ### 示例：行走的绿巨人
 

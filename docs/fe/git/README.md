@@ -27,9 +27,9 @@ git config --global user.email "your_email"
 
 在 Mac 终端里查看密钥：
 
-cd ~/.ssh 切换目录到这个路径
+`cd ~/.ssh` 切换目录到这个路径
 
-vim id_rsa.pub 将这个文件的内容显示到终端上
+`vim id_rsa.pub` 将这个文件的内容显示到终端上
 
 然后将公共密钥添加进 github 或者 gitlab 里
 
@@ -114,6 +114,12 @@ git push
 ### 查看本地远程所有分支
 
 ```sh
+git branch -a
+```
+
+### 查看origin的详细信息
+
+```sh
 git remote show origin
 ```
 
@@ -127,6 +133,14 @@ git remote -v
 
 ```sh
 git remote prune origin
+```
+
+### 本地分支关联远程分支
+
+如果远程新建了一个分支，本地没有该分支，那么可以使用该命令在本地新建一个分支名叫 dev ，会自动跟踪远程的同名分支 dev
+
+```sh
+git checkout --track origin/dev
 ```
 
 ### 关联远程仓库

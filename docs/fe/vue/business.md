@@ -460,3 +460,47 @@ export default {
 }
 </script>
 ```
+
+## 过渡动画
+
+```html
+<transition name="chat">
+  <p v-if="show">hello</p>
+</transition>
+```
+
+```css
+/* 进入前和结束后的状态 */
+.chat-enter,
+.chat-leave-to {
+  opacity: 0;
+  transform: translateY(80px);
+}
+/* 进入和离开的动画时间段 */
+.chat-enter-active,
+.chat-leave-active {
+  transition: all 0.5s ease;
+}
+```
+
+## vue-cli
+
+### 更改系统title
+
+在`public/index.html`中出现`htmlWebpackPlugin.options.title`，默认系统title显示的是项目名称。如果想更改title，
+除了直接改`<title>名称</title>`，也可以更改`vue.config.js`配置`webpack`
+
+```js
+const CONFIG = require('./src/config')
+
+module.exports = {
+  chainWebpack: config => {
+    config
+      .plugin('html')
+      .tap(args => {
+        args[0].title= CONFIG.title
+        return args
+      })
+  }
+}
+```

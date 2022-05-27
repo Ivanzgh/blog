@@ -89,3 +89,86 @@
 ```
 
 关键点在于中间部分设置左右 margin 等于左右两边的宽度，middle 部分放到最后渲染
+
+## 图片和文字等高
+
+将图片作为背景图，特别适合小图标。flex 布局也行
+
+```css
+.con-title {
+  height: 24px;
+  line-height: 24px;
+  padding-left: 40px;
+  background: url('danger.png') no-repeat left center;
+}
+```
+
+## 父元素设置 min-height，子元素设置 height:100%失效
+
+```html
+<div class="box">
+  <div class="child"></div>
+</div>
+
+<style>
+  .box {
+    min-height: 300px;
+    background-color: #09f;
+  }
+  .child {
+    height: 100%;
+    background-color: #f00;
+  }
+</style>
+```
+
+方案一、给父元素设置`position: relative`，子元素设置 `position: absolute`
+
+```css
+.box {
+  position: relative;
+}
+.child {
+  position: absolute;
+  width: 100%;
+}
+```
+
+方案二、给父元素设置包裹元素，设置 flex 布局
+
+```html
+<div class="box-wrap">
+  <div class="box">
+    <div class="child"></div>
+  </div>
+</div>
+
+<style>
+  .box-wrap {
+    display: flex;
+  }
+  .box {
+    width: 100%;
+  }
+</style>
+```
+
+方案三、父元素设置 grid 布局
+
+```css
+.box {
+  display: grid;
+}
+```
+
+方案四、使用 flex 改变布局方向，但是子元素会 100%占满父元素，不能设置比如 50%
+
+```css
+.box {
+  display: flex;
+  flex-direction: column;
+}
+.child {
+  flex: auto;
+}
+```

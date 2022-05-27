@@ -591,6 +591,20 @@ transition: background 6s linear;
 - ease-out 缓慢结束
 - ease-in-out 缓慢开始，缓慢结束(与 ease 稍有区别)
 
+```css
+.box {
+  width: 300px;
+  height: 400px;
+  background-color: #ff0;
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+.box:hover {
+  opacity: 1;
+}
+```
+
 ## 清除浮动
 
 **浮动元素会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素。**

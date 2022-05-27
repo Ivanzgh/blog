@@ -130,7 +130,7 @@ let c = 2.999999999999999999999999999999
 Math.floor(c) // 3
 ```
 
-## for循环
+## for 循环
 
 ### 遍历数组
 
@@ -145,17 +145,18 @@ for (let i = 0, len = arr.length; i < len; i++) {
   console.log(typeof i) // number
 }
 
-for (let m of arr) {}
+for (let m of arr) {
+}
 
 for (let k in arr) {
-  console.log(k)  // 0 1 2 3，返回的是数组下标
+  console.log(k) // 0 1 2 3，返回的是数组下标
   console.log(typeof k) // string
 }
 ```
 
 ### 遍历对象
 
-`for in` 循环遍历键名，遍历数组下标的类型是`string`，不要使用这种方式遍历数组！仅适用于遍历普通对象的key
+`for in` 循环遍历键名，遍历数组下标的类型是`string`，不要使用这种方式遍历数组！仅适用于遍历普通对象的 key
 
 `for`循环 无法用于循环对象，获取不到`obj.length`;
 
@@ -285,4 +286,65 @@ document.title
 
 // 更改标题
 document.title = 'hello world'
+```
+
+## 全屏事件
+
+```js
+    requestFullscreen(el) {
+      if (el.requestFullscreen) {
+        el.requestFullscreen()
+      } else if (el.msRequestFullscreen) {
+        el.msRequestFullscreen()
+      } else if (el.mozRequestFullScreen) {
+        el.mozRequestFullScreen()
+      } else if (el.webkitRequestFullscreen) {
+        el.webkitRequestFullscreen()
+      } else {
+        console.log('no Fullscreen Support')
+      }
+    },
+
+exitFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen()
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen()
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen()
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen()
+      } else {
+        console.log('no Fullscreen Support')
+      }
+    }
+```
+
+监听ESC键，退出全屏。vue中可以写在mounted生命周期内
+
+```js
+ // W3C
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) {
+        this.isFullScreen = false
+      }
+    })
+    // webkit
+    document.addEventListener('webkitfullscreenchange', e => {
+      if (!e.currentTarget.webkitIsFullScreen) {
+        this.isFullScreen = false
+      }
+    })
+    // IE
+    document.addEventListener('MSFullscreenChange', () => {
+      if (!document.msFullscreenElement) {
+        this.isFullScreen = false
+      }
+    })
+    // firefox
+    document.addEventListener('mozfullscreenchange', () => {
+      if (!document.mozFullScreenElement) {
+        this.isFullScreen = false
+      }
+    })
 ```

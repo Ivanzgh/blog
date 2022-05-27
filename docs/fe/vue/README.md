@@ -363,3 +363,44 @@ const dataRes = ({ data, tag, dataKey, selector }) => {
 - `v-model`和`v-bind`的属性值要相同，如都是 text 或都是 password
 - `dom.addEventListener("input", function() {})`这里不能使用箭头函数，否则 this 指向 Window 对象
   :::
+
+## 自定义组件挂载到全局
+
+在`/components/selfComponents.js`文件中引入所需要组件
+
+```js
+import Vue from 'vue'
+
+import Button from './Button.vue'
+
+Vue.component('st-button', Button)
+```
+
+在mian.js文件中引入
+
+```js
+import '@/components/selfComponents'
+```
+
+在需要公共组件的界面使用`<st-button />`
+
+## 使用其他字体
+
+在项目的`assets`文件夹下新建`fonts`文件夹，将字体文件放在这里，新建`font.css`
+
+```css
+@font-face {
+  font-family: 'SourceHanSans'; /* 字体名称 */
+  src: url('./SourceHanSansCN-Normal.otf'); /* 字体路径 */
+  font-weight: normal;
+  font-style: normal;
+}
+```
+
+然后在`main.js`里引入`import './assets/fonts/font.css'`，如果要全局用就在`App.vue`里引入
+
+```css
+#app {
+  font-family: SourceHanSans;
+}
+```

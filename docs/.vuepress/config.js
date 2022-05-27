@@ -72,6 +72,10 @@ module.exports = {
         ]
       },
       {
+        text: '音视频',
+        items: [{ text: '流媒体', link: '/media/' }]
+      },
+      {
         text: '计算机基础',
         items: [
           { text: '网络', link: '/base/network/' },
@@ -170,7 +174,15 @@ module.exports = {
         }
       ],
       '/base/os/': [{ collapsable: false, sidebarDepth: 2, children: [''] }],
-      '/utils/': ['']
+      '/utils/': [''],
+      '/media/': [
+        {
+          title: '流媒体',
+          collapsable: false,
+          sidebarDepth: 2,
+          children: ['']
+        }
+      ]
     }
   }
 }
