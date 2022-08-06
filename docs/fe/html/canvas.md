@@ -32,6 +32,35 @@ if (canvas.getContext) {
 }
 ```
 
+### 大小
+
+canvas 默认大小是宽度 300px，高度 150px。不能设置百分比，不能通过 css 设置宽高
+
+方式一、直接设置 width 和 height 属性
+
+```html
+<canvas id="cvs" width="1000" height="800"></canvas>
+```
+
+方式二、通过 js 设置
+
+```js
+let canvas = document.getElementById('cvs')
+let ctx = canvas.getContext('2d')
+ctx.width = 1000 // 可以不写单位px
+ctx.height = 800
+```
+
+如果想动态设置宽高，比如想让 canvas 的宽度占据屏幕的 70%，根据 16:9 的比例计算高度
+
+```js
+const canvasWidth = window.innerWidth * 0.7
+const canvasHeight = (canvasWidth * 9) / 16
+
+ctx.width = canvasWidth
+ctx.height = canvasHeight
+```
+
 ## 线
 
 ```js
@@ -333,3 +362,182 @@ clearRect()清除以前的图层，防止堆积覆盖
 countNum 是计数器，控制图片的切换频率
 
 300ms，当切割宽度到达 3 个巨人宽度时归零，重新切割。
+
+## 图片矩形标注
+
+### 场景
+
+要在一张图片上可以画矩形标注，并将坐标传给后端，那么可以使用`canvas`，宽高和图片的宽高一样，完全覆盖在图片上。提交时的数据格式为`[{left:1, top:2, width:3, height:4}]`
+
+思路：只要获取鼠标点击的起始点和抬起的结束点，绘制矩形，然后把 canvas 坐标和图片的实际坐标转换一下就可以了
+
+```vue
+<template>
+  <div style="position: relative">
+    <img id="myimg" :style="{ width: `${canvasWidth}px`, height: `${canvasHeight}px` }" src="img.png" alt="" />
+    <canvas id="cvs" style="position: absolute; top: 0; left: 0; z-index: 1">当前浏览器不支持Canvas</canvas>
+    <el-button type="primary" @click="resetLine">重置画线</el-button>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      canvasWidth: 900,
+      canvasHeight: 500,
+      ctx: null,
+      historyLine: [],
+      startPoint: [],
+      lineList: [] // 要提交的点坐标
+    }
+  }
+}
+</script>
+```
+
+canvas 默认大小是宽度`300px`，高度`150px`。不能设置百分比，不能通过 css 设置宽高。可以直接设置`width`和`height`属性。如果想动态设置宽高，比如想让 canvas 的宽度占据屏幕的 70%，根据`16:9`的比例计算高度，可以使用 js 设置
+
+```js
+this.canvasWidth = window.innerWidth * 0.7
+this.canvasHeight = (canvasWidth * 9) / 16
+
+const canvas = document.getElementById('cvs')
+canvas.width = this.canvasWidth
+canvas.height = this.canvasHeight
+```
+
+### 坐标转换
+
+1、将屏幕坐标转化为 canvas 坐标
+
+触发鼠标事件时，要将屏幕坐标转化为 canvas 坐标。即鼠标点击时，相对屏幕的位置要转换为相对 canvas 的位置
+
+这段代码`{ x: e.offsetX, y: e.offsetY, which: e.which }`也可用下面的方法代替
+
+[getBoundingClientRect()](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect)提供了元素的大小及其相对于视口的位置
+
+```js
+windowToCanvas(e, canvas) {
+    const bbox = canvas.getBoundingClientRect()
+    return {
+        x: e.clientX - bbox.left * (canvas.width / bbox.width),
+        y: e.clientY - bbox.top * (canvas.height / bbox.height),
+        which: e.which // 左击 1  右击 3
+    }
+}
+```
+
+2、将 canvas 坐标转为图片坐标
+
+```js
+function transform(point) {
+  const x = point[0] / this.canvasWidth // 计算比例
+  const y = point[1] / this.canvasHeight
+  const elementImage = document.querySelector('#myimg')
+  const originX = Math.round(elementImage.naturalWidth * x)
+  const originY = Math.round(elementImage.naturalHeight * y)
+  return [originX, originY]
+}
+```
+
+`naturalWidth`和`naturalHeight`是 h5 新增的属性，可以直接获取图片的原始宽高
+
+### 关键代码
+
+[getImageData](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/getImageData)返回一个`ImageData`对象，
+用来描述 canvas 区域隐含的像素数据
+
+[putImageData](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/putImageData)将数据从已有的`ImageData`对象绘制到位图
+
+```vue
+<script>
+export default {
+  methods: {
+    drawLine() {
+      let canvas = document.getElementById('cvs')
+      canvas.width = this.canvasWidth
+      canvas.height = this.canvasHeight
+      let ctx = canvas.getContext('2d')
+      ctx.strokeStyle = '#f00'
+      this.ctx = ctx
+
+      let dragging = false
+      let startPoint = {}
+
+      canvas.onmousedown = (e) => {
+        e.preventDefault()
+        startPoint = { x: e.offsetX, y: e.offsetY, which: e.which }
+        dragging = true
+        this.startPoint = this.transform([startPoint.x, startPoint.y])
+      }
+
+      canvas.onmousemove = (e) => {
+        e.preventDefault()
+        if (dragging) {
+          this.showLastHistory() // 每次绘制先清除上一次
+          this.updateRect({ x: e.offsetX, y: e.offsetY, which: e.which }, startPoint)
+        }
+      }
+
+      this.addHistoy(canvas.width, canvas.height) // 添加一个默认的数据
+
+      canvas.onmouseup = (e) => {
+        e.preventDefault()
+        dragging = false
+        this.addHistoy(canvas.width, canvas.height) // 保存上一次数据
+
+        const endP = { x: e.offsetX, y: e.offsetY, which: e.which }
+        const endPoint = this.transform([endP.x, endP.y])
+        const obj = {
+          left: this.startPoint[0],
+          top: this.startPoint[1],
+          width: Math.abs(this.startPoint[0] - endPoint[0]),
+          height: Math.abs(this.startPoint[1] - endPoint[1])
+        }
+        this.lineList.push(obj)
+      }
+    },
+
+    // 将canvas坐标转为图片坐标
+    transform(point) {
+      const x = point[0] / this.canvasWidth
+      const y = point[1] / this.canvasHeight
+      const elementImage = document.querySelector('#myimg')
+      const originX = Math.round(elementImage.naturalWidth * x)
+      const originY = Math.round(elementImage.naturalHeight * y)
+      return [originX, originY]
+    },
+
+    // 重置画线
+    resetLine() {
+      if (this.historyLine.length > 1) {
+        this.historyLine.pop()
+        this.showLastHistory()
+        this.lineList.pop()
+      }
+    },
+
+    addHistoy(width, height) {
+      this.historyLine.push({ data: this.ctx.getImageData(0, 0, width, height) })
+    },
+    showLastHistory() {
+      this.ctx.putImageData(this.historyLine[this.historyLine.length - 1]['data'], 0, 0)
+    },
+
+    // 更新矩形
+    updateRect(point, startPoint) {
+      const w = Math.abs(point.x - startPoint.x)
+      const h = Math.abs(point.y - startPoint.y)
+      const left = point.x > startPoint.x ? startPoint.x : point.x
+      const top = point.y > startPoint.y ? startPoint.y : point.y
+      this.ctx.save()
+      this.ctx.beginPath()
+      this.ctx.rect(left, top, w, h)
+      this.ctx.stroke()
+      this.ctx.restore()
+    }
+  }
+}
+</script>
+```

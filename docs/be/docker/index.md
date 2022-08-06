@@ -1,10 +1,10 @@
-# docker
+# Docker
 
 ## 常用命令
 
 包含一些 docker 命令和一些 Linux 命令
 
-```yml
+```sh
 docker image ls   #列出镜像
 
 docker logs es   #查看全部es日志
@@ -28,7 +28,7 @@ free -h  #查看内存
 
 编辑文件使用`vim`，比如编辑 es 配置文件`elasticsearch.yml`，
 
-```yml
+```sh
 vim elasticsearch.yml
 ```
 

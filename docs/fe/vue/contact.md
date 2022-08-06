@@ -116,15 +116,15 @@ computed: { token() { return this.$store.state.token } }
 
 ## $attrs、$listeners
 
-假设有组件A、B、C，组件A是B的父组件，B是C的父组件，要想使A、B组件通信可以使用`$attrs、$listeners`
+假设有组件 A、B、C，组件 A 是 B 的父组件，B 是 C 的父组件，要想使 A、B 组件通信可以使用`$attrs、$listeners`
 
-A组件：
+A 组件：
 
 ```vue
 <template>
-<A>
-  <B :msg='msg' :info='info' />
-</A>
+  <A>
+    <B :msg="msg" :info="info" />
+  </A>
 </template>
 <script>
 export default {
@@ -134,47 +134,49 @@ export default {
       info: 'hello'
     }
   },
-   methods: {
-     say(e) {
-      this.msg = e;
+  methods: {
+    say(e) {
+      this.msg = e
     }
-   }
-}  
+  }
+}
 </script>
 ```
 
-B组件：
+B 组件：
 
 ```vue
 <template>
-<B>
-  <C v-bind="$attrs" v-on="$listeners" />
-</B>
+  <B>
+    <C v-bind="$attrs" v-on="$listeners" />
+  </B>
 </template>
 <script>
 export default {
   props: { info: String },
   data() {
     return {
-      msg: '我是a组件'
+      msg: '我是b组件'
     }
   },
-   methods: {
-     say(e) {
-      this.msg = e;
+  methods: {
+    say(e) {
+      this.msg = e
     }
-   }
-}  
+  }
+}
 </script>
 ```
 
-C组件：
+`v-bind="$attrs"`可以继续向下传输，只会输出不在 `props` 中传递的属性
+
+C 组件：
 
 ```vue
 <template>
-<C>
-  <div>{{ world }}</div>
-</C>
+  <C>
+    <div>{{ world }}</div>
+  </C>
 </template>
 <script>
 export default {
@@ -185,18 +187,18 @@ export default {
     }
   },
   watch: {
-    "$attrs.msg"(v) {
-      this.world = v;
+    '$attrs.msg'(v) {
+      this.world = v
     }
   },
-   methods: {
-     hi(e) {
-      this.$listeners.say();
+  methods: {
+    hi(e) {
+      this.$listeners.say()
     }
-   }
-}  
+  }
+}
 </script>
 ```
 
-B组件就是中间桥梁，在C组件中可以通过`this.$listeners`调用A组件的方法，
-此处，`this.$attrs`可以获取msg数据，也可以在`watch`中监听
+B 组件就是中间桥梁，在 C 组件中可以通过`this.$listeners`调用 A 组件的方法，
+此处，`this.$attrs`可以获取 msg 数据，也可以在`watch`中监听

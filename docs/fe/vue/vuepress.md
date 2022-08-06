@@ -78,7 +78,7 @@ cd -
 
 进入`Actions`点击`Set up this workflow`创建一个新的`action`
 
-![image](/blog/img/vuepress/workflow.png =600x400)
+![image](/blog/img/vuepress/workflow.png)
 
 创建`.github/workflows/ci.yml`文件，名称随意。
 这里用了[deploy-to-github-pages](https://github.com/marketplace/actions/deploy-to-github-pages)这个 action，

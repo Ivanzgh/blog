@@ -1,4 +1,14 @@
-# 常用布局
+# 布局
+
+## flex 布局
+
+<https://www.processon.com/embed/62e696b45653bb071617d8d0>
+
+<https://the-echoplex.net/flexyboxes/>
+
+<https://www.yuque.com/linxz/flex>
+
+## grid 布局
 
 ## 多列等高布局
 

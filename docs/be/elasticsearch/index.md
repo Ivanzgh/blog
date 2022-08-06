@@ -1,4 +1,4 @@
-# 基础
+# ElasticSearch
 
 Node.js api 地址：
 
@@ -41,14 +41,14 @@ client
       }
     }
   })
-  .then(res => {
+  .then((res) => {
     let total = res.body.hits.total
     let arrPoint = res.body.hits.hits
     console.log(arrPoint)
     console.log(total)
     console.log(res.body.aggregations) // 房屋去重计数
   })
-  .catch(e => {
+  .catch((e) => {
     console.log(e)
   })
 ```
@@ -231,7 +231,7 @@ node 版本的文档：<https://www.elastic.co/guide/en/elasticsearch/client/jav
 
 假如要删除某个索引下的所有数据
 
-```yml
+```sh
 curl -X DELETE "localhost:9200/index111/_doc/1?pretty"
 ```
 
@@ -249,8 +249,8 @@ function dellgAllData() {
         }
       }
     })
-    .then(res => console.log(res))
-    .catch(err => console.log(err))
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err))
 }
 dellgAllData()
 ```
@@ -279,7 +279,7 @@ client
       }
     }
   })
-  .then(res => {
+  .then((res) => {
     console.log(res)
   })
 ```
@@ -296,7 +296,7 @@ node 版本 api：<https://www.elastic.co/guide/en/elasticsearch/client/javascri
 
 在`elasticsearch.yml`中添加如下内容：
 
-```yml
+```sh
 cluster.name: elasticsearch #集群名称，唯一
 node.name: node12 #节点名称
 node.master: true #主节点
@@ -315,7 +315,7 @@ http.cors.allow-origin: '*'
 
 首先进入 elasticsearch 的配置文件，比如
 
-```yml
+```sh
 cd /mntdata/docker/var/lib/docker/volumes/es/confing/
 ```
 
@@ -323,25 +323,25 @@ cd /mntdata/docker/var/lib/docker/volumes/es/confing/
 
 编辑 es 配置文件，点击`insert`键开始编辑，编辑完成后点击`Ecs`键，输入`:wq`保存退出。`:q`退出不保存，`:wq!`强制保存退出
 
-```yml
+```sh
 vim elasticsearch.yml
 ```
 
 接着重启 es 容器
 
-```yml
+```sh
 docker restart es
 ```
 
 注意 es 这个容器名字根据实际来定，可输入以下命令显示所有的容器，包括未运行的
 
-```yml
+```sh
 docker ps -a
 ```
 
 其他命令：
 
-```yml
+```sh
 docker image ls   #列出镜像
 
 docker logs es   #查看es日志
@@ -359,9 +359,7 @@ free -h  #查看内存
 
 查看集群状态
 
-```null
-http://192.168.18.12:9200/_cluster/health
-```
+<http://192.168.18.12:9200/_cluster/health>
 
 ![image](/blog/img/be/es_cluster_health.png)
 
@@ -375,7 +373,7 @@ http://192.168.18.12:9200/_cluster/health
 
 其他
 
-```null
+```sh
 查看分片 http://192.168.18.19:9200/_cat/shards
 
 查看索引 http://192.168.18.19:9200/_cluster/health?level=indices
@@ -389,19 +387,19 @@ http://192.168.18.12:9200/_cluster/health
 
 切换到 root 用户修改配置`sysctl.conf`
 
-```yml
+```sh
 vi /etc/sysctl.conf
 ```
 
 添加下面配置：
 
-```yml
+```sh
 vm.max_map_count=262144
 ```
 
 执行
 
-```yml
+```sh
 sysctl -p
 ```
 
@@ -411,7 +409,7 @@ sysctl -p
 
 报错信息如下：
 
-```yml
+```sh
 java.lang.IllegalStateException: failed to obtain node locks, tried [[/usr/share/elasticsearch/data]] with lock id [0]; maybe these locations are not writable or multiple nodes were started without increasing [node.max_local_storage_nodes] (was [1])?
 
 java.io.IOException: failed to obtain lock on /usr/share/elasticsearch/data/nodes/0
@@ -421,7 +419,7 @@ java.nio.file.AccessDeniedException: /usr/share/elasticsearch/data/nodes/0/node.
 
 这是文件没有访问权限，此处在`/mntdata/docker/var/lib/docker/db_data_volumes`目录下输入
 
-```yml
+```sh
 chmod -R 777 /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search-elasticsearch
 ```
 
@@ -430,7 +428,7 @@ chmod -R 777 /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-
 
 下面就是`map-search-docker-compose.yml`配置文件
 
-```yml
+```sh
 version: '2.1'
 services:
   sxmap-elasticsearch:
@@ -461,13 +459,13 @@ services:
 这种情况一般是复制节点造成的，比如在集群中新增一个节点，通常会复制一个已经存在的节点，这样会将节点数据也复制过来，
 所以删除存放 elsticsearch 数据的文件夹中的节点数据即可。
 
-```yml
+```sh
 rm -rf /mntdata/docker/var/lib/docker/db_data_volumes/dockercompose_sxmap-search-elasticsearch/nodes/
 ```
 
 如果删除时报错`Directory not empty`或者`Device or resource busy`，将容器先停掉
 
-```yml
+```sh
 docker stop dockercompose_sxmap-elasticsearch_1
 ```
 
@@ -501,7 +499,7 @@ docker stop dockercompose_sxmap-elasticsearch_1
 
 分片未分配意味着有部分数据不可用，查看报错信息 `GET /_cluster/allocation/explain?pretty`，加上`?pretty`能让结果格式美化，即 json
 
-```yml
+```sh
 curl -X GET "192.168.18.19:9200/_cluster/allocation/explain?pretty" -H 'Content-Type: application/json' -d'
 {
     "index": "wlxt_beijing_xiangzhenjie",
@@ -583,7 +581,7 @@ curl -X GET "192.168.18.19:9200/_cluster/allocation/explain?pretty" -H 'Content-
 
 首先考虑手动分配副本分片：`allocate_replica`，这种方式会保留数据
 
-```yml
+```sh
 curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/json" -d '
 {
     "commands": [
@@ -600,13 +598,13 @@ curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/
 
 但是报错了，显示分配失败
 
-```null
+```
 [allocate_replica] trying to allocate a replica shard [wlxt_beijing_xiangzhenjie], while corresponding primary shard is still unassigned]
 ```
 
 接着考虑重建索引，依然能保留数据。[https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-reindex.html)
 
-```yml
+```sh
 curl -X POST "192.168.18.19:9200/_reindex?pretty" -H 'Content-Type: application/json' -d'
 {
   "source": {
@@ -620,7 +618,7 @@ curl -X POST "192.168.18.19:9200/_reindex?pretty" -H 'Content-Type: application/
 
 重建成功后删除原索引，
 
-```yml
+```sh
 curl -X DELETE 192.168.18.19:9200/wlxt_beijing_xiangzhenjie
 ```
 
@@ -628,7 +626,7 @@ curl -X DELETE 192.168.18.19:9200/wlxt_beijing_xiangzhenjie
 
 然后继续考虑重新手动分配主分片：`allocate_stale_primary`
 
-```yml
+```sh
 curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/json" -d '
 {
     "commands": [
@@ -646,7 +644,7 @@ curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/
 
 注意使用`allocate_stale_primary`会导致部分数据丢失，`"accept_data_loss":true`让你知道自己在干什么，所以要有备份数据。但是执行后还是报错
 
-```null
+```
 No data for shard [0] of index [wlxt_beijing_xiangzhenjie] found on node [node19]"},"status":400}
 ```
 
@@ -654,7 +652,7 @@ No data for shard [0] of index [wlxt_beijing_xiangzhenjie] found on node [node19
 
 首先查看`http://192.168.18.19:9200/_shard_stores?pretty`，这里可以看到所有未分配的分片。执行以下命令：
 
-```yml
+```sh
 curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/json" -d '
 {
     "commands": [
@@ -672,9 +670,9 @@ curl -X POST '192.168.18.19:9200/_cluster/reroute' -H "content-type:application/
 
 再次查看发现已经没了`wlxt_beijing_xiangzhenjie`这个索引，修改依然存在的索引继续执行，直到出现如下所示，再去看你的集群应该是`green`
 
-```josn
+```json
 {
-    "indices": {}
+  "indices": {}
 }
 ```
 

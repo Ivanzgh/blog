@@ -1,4 +1,4 @@
-# react
+# React
 
 ## JSX
 

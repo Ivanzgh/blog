@@ -1,4 +1,4 @@
-# window 对象
+# Window 对象
 
 ## window.location 对象
 

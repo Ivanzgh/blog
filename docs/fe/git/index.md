@@ -1,4 +1,4 @@
-# git
+# Git
 
 ## 介绍
 
@@ -143,6 +143,12 @@ git remote prune origin
 git checkout --track origin/dev
 ```
 
+### 推送新分支到远程
+
+```sh
+git push --set-upstream origin < branch-name >
+```
+
 ### 关联远程仓库
 
 如果存在本地项目，想将其推送到 github 上，要先和远程仓库关联，然后推送
@@ -276,7 +282,7 @@ git rm --cached .DS_Store
 
 Windows 下修改 hosts 文件，打开`C:\Windows\System32\drivers\etc`下的 hosts 文件，添加如下内容：
 
-```yml
+```sh
 140.82.113.4 github.com
 199.232.69.194 github.global.ssl.fastly.net
 185.199.108.153 assets-cdn.github.com

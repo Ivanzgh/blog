@@ -1,25 +1,25 @@
 {
-  "name": "vuepress-blog",
+  "name": "blog",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "vuepress",
-    "blog"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Ivanzgh/blog.git"
+  },
   "author": "zgh",
   "license": "ISC",
-  "devDependencies": {
-    "@vuepress/plugin-back-to-top": "^1.9.5",
-    "vuepress": "^1.9.5",
-    "vuepress-plugin-baidu-autopush": "^1.0.1",
-    "vuepress-plugin-img-lazy": "^1.0.4",
-    "vuepress-plugin-reading-progress": "^1.0.10"
+  "bugs": {
+    "url": "https://github.com/Ivanzgh/blog/issues"
   },
-  "dependencies": {}
+  "homepage": "https://github.com/Ivanzgh/blog#readme",
+  "dependencies": {
+    "vitepress": "^1.0.0-alpha.4"
+  }
 }

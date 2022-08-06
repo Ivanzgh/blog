@@ -11,9 +11,8 @@
 
 不受同源策略限制的：
 
-1、页面中的链接，重定向以及表单提交是不会受到同源策略限制的。
-
-2、跨域资源的引入是可以的。但是 js 不能读写加载的内容。如嵌入到页面中的`<script src="..."></script>`，`<img>`，`<link>`，`<iframe>`等。
+- 页面中的链接，重定向以及表单提交
+- 跨域资源的引入是可以的。但是 js 不能读写加载的内容。如嵌入到页面中的`<script src="..."></script>`，`<img>`，`<link>`，`<iframe>`等。
 
 ## 跨域方案
 
@@ -23,7 +22,7 @@
 
 ### jsonp
 
-动态的创建 script 标签，通过 script 标签的 src 属性调用 js 脚本
+动态的创建`script`标签，通过`script`标签的`src`属性调用脚本
 
 首先定义一个处理函数，处理接收回来的数据
 
@@ -33,15 +32,14 @@ function getData(res) {
 }
 ```
 
-然后创建一个 script 标签去请求数据
+然后创建一个`script`标签去请求数据
 
 ```js
-let jsonp = document.createElement('script')
-
+const jsonp = document.createElement('script')
 jsonp.src = 'http://localhost:3000/jsonp?callback=getData'
 ```
 
-最后将这个 script 标签添加到页面当中去
+最后将这个`script`标签添加到页面当中去
 
 ```js
 document.body.appendChild(jsonp)
@@ -50,7 +48,7 @@ document.body.appendChild(jsonp)
 jsonp 的优势：
 
 - 使用简单
-- 兼容性极好。因为几乎所有的浏览器都支持 script 标签
+- 兼容性极好。几乎所有的浏览器都支持 script 标签
 
 jsonp 的劣势：
 
@@ -66,9 +64,11 @@ CORS 将请求分成两种，简单请求和非简单请求
 
 #### 简单请求
 
-同时满足以下两个条件，既是简单请求
-（1) 请求方法是以下三种方法之一：HEAD、GET、POST
-（2）HTTP 的头信息不超出以下几种字段：
+同时满足以下两个条件就是简单请求
+
+（1）请求方法是以下三种方法之一：HEAD、GET、POST
+
+（2） HTTP 的头信息不超出以下几种字段：
 
 - Accept
 - Accept-Language
@@ -80,11 +80,11 @@ axios 的`content-type`在 post 下是： `application/json`
 
 简单请求的流程:
 
-第一步：浏览器直接发出 CORS 请求。发送 cors 中，会自动带上一个请求头：`Origin：客户端域名`
+1. 浏览器直接发出 CORS 请求。发送时会自动带上一个请求头：`Origin：客户端域名`
 
-第二步：服务器根据请求返回内容。
+2. 服务器根据请求返回内容
 
-第三步：浏览器对返回的响应头进行分析。
+3. 浏览器对返回的响应头进行分析
 
 如果存在响应头为`Access-Control-Allow-Oringin："客户端的域名"`，那么，浏览器就会将请求到的数据返回给 ajax 对象。
 否则，浏览器将会触发 ajax 对象的`onerror`函数抛出一个错误。这种错误无法通过 http 状态码捕获，因为服务端是正确响应了的，
@@ -94,7 +94,7 @@ axios 的`content-type`在 post 下是： `application/json`
 
 请求过程:
 
-第一步：先发出一个 options 的请求，该请求会带上一些头信息
+1. 先发出一个 options 的请求，该请求会带上一些头信息
 
 ```sh
 Origin： 客户端域名
@@ -102,7 +102,7 @@ Access-Control-Request-Headers: content-type  (表明客户端发送的请求头
 Access-Control-Request-Method: POST （表明客户端发送的请求类型）
 ```
 
-第二步：服务器返回 options 请求
+2. 服务器返回 options 请求
 
 ```sh
 Access-Control-Allow-Origin：允许跨域的域名（可以是指定域名，也可以是全域名“*”）
@@ -110,9 +110,9 @@ Access-Control-Allow-Headers: "与客户端对应"
 Access-Control-Allow-Method： 与客户端的对应或者大于客户端
 ```
 
-第三步：客户端检查 options 请求的响应头。如果响应头对应上了，那么浏览器正式发起一个请求。
+3. 客户端检查 options 请求的响应头。如果响应头对应上了，那么浏览器正式发起一个请求。
 
-第四步：服务器对请求做出回应。同时，带上之前发送的请求头，完成跨域过程。
+4. 服务器对请求做出回应。同时，带上之前发送的请求头，完成跨域过程。
 
 默认情况下`Access-Control-Allow-Credentials: false`，即不允许客户端携带验证信息到服务端，比如 cookies。
 那么，可能存在 session 将无法根据 cookie 获取到用户的登录信息

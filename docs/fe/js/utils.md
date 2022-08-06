@@ -498,17 +498,18 @@ document.addEventListener('mousemove', (e) => {
 ## 计算数组中元素出现的次数，并实现去重
 
 ```js
-function getCount(arr, rank,ranktype){ 
-    var obj = {}, k, arr1 = [];
-    for (var i = 0, len = arr.length; i < len; i++) {
+function getCount(arr, rank,ranktype){
+    let obj = {}, k, arr1 = [];
+    for (let i = 0, len = arr.length; i < len; i++) {
         k = arr[i];
-        if (obj[k]) 
+        if (obj[k]) {
             obj[k]++;
-        else 
+        } else {
             obj[k] = 1;
+        }
     }
     //保存结果{el-'元素'，count-出现次数}
-    for (var o in obj) {
+    for (let o in obj) {
         arr1.push({el: o, count: obj[o]});
     }
     //排序（降序）
@@ -519,7 +520,7 @@ function getCount(arr, rank,ranktype){
     if(ranktype===1){
         arr1=arr1.reverse();
     }
-    var rank1 = rank || arr1.length;
+    const rank1 = rank || arr1.length;
     return arr1.slice(0,rank1);
 }
 
@@ -549,7 +550,7 @@ getCount([1,2,3,1,2,5,2,4,1,2,6,2,1,3,2],3,1)//传参（rank=3，ranktype=1）�
     // },
 
     // 直接传入对象数组
-    getCount2(data) {
+  funtion getCount2(data) {
       let obj = {},
         k,
         arr1 = []
@@ -565,5 +566,150 @@ getCount([1,2,3,1,2,5,2,4,1,2,6,2,1,3,2],3,1)//传参（rank=3，ranktype=1）�
         arr1.push({ location: o, num: obj[o].num, params: obj[o].params })
       }
       return arr1.slice(0, arr1.length)
-    },
+    }
+```
+
+## 时间
+
+### 获取一天以 5 分钟为间隔的时间数组
+
+```js
+const minute = 5 //间隔分钟
+const seconds = minute * 60
+const len = (60 * 24 * 60) / seconds //数组长度
+let newArr = []
+let total = 0
+for (let i = 0; i < len; i++) {
+  let h = parseInt(total / 3600),
+    min = parseInt((total % 3600) / 60)
+  newArr.push((h < 10 ? '0' + h : h) + ':' + (min < 10 ? '0' + min : min))
+  total += seconds
+}
+console.log(newArr) // ['00:00', '00:05', '00:10', ..., '23:55']
+```
+
+### 获取一分钟内以 2s 间隔组成的时间
+
+```sh
+npm install dayjs --save
+```
+
+```js
+import dayjs from 'dayjs'
+
+const nowTime = dayjs().format('HH:mm:ss')
+let key = []
+for (let i = 60; i > 0; i--) {
+  if (i % 2 == 0) {
+    key.push(i)
+  }
+}
+let arr = [],
+  time = ''
+for (let i = 0; i < key.length; i++) {
+  time = dayjs().subtract(key[i], 's').format('HH:mm:ss')
+  arr.push(time)
+}
+const res = [...arr, nowTime]
+```
+
+### 实时显示当前日期时间
+
+```js
+import dayjs from 'dayjs'
+const formatWeek = ['日', '一', '二', '三', '四', '五', '六']
+
+function showNowTime() {
+  this.timer = setInterval(() => {
+    let year = dayjs().format('YYYY')
+    let month = dayjs().format('MM').substring(0, 1) === '0' ? dayjs().format('MM').substring(1) : dayjs().format('MM')
+    let day = dayjs().format('DD').substring(0, 1) === '0' ? dayjs().format('DD').substring(1) : dayjs().format('DD')
+    this.nowDate = `${year}年${month}月${day}日`
+    this.nowTime = dayjs().format('HH:mm:ss')
+    this.nowDay = '星期' + formatWeek[dayjs().day()]
+  }, 1000)
+}
+```
+
+## 获取范围内的随机整数
+
+```js
+getRandom(n, m) {
+  return Math.floor(Math.random() * (m - n + 1) + n)
+}
+
+getRandom(1, 100)
+getRandom(0, 5)
+```
+
+## 查找树形元素
+
+```js
+const data = [
+  {
+    id: 1,
+    name: '终端管理',
+    pid: 0,
+    children: [
+      {
+        id: 2,
+        name: '终端列表',
+        pid: 1,
+        children: [{ id: 4, name: '添加终端', pid: 2 }]
+      },
+      { id: 3, name: '划拨设备', pid: 1 }
+    ]
+  },
+  {
+    id: 5,
+    name: '系统设置',
+    pid: 0,
+    children: [
+      {
+        id: 6,
+        name: '权限管理',
+        pid: 5,
+        children: [
+          { id: 7, name: '用户角色', pid: 6 },
+          { id: 8, name: '菜单设置', pid: 6 }
+        ]
+      }
+    ]
+  }
+]
+function getChidlren(data, id) {
+  let hasFound = false, // 表示是否找到id值
+    result = null
+  const fn = function (data) {
+    if (Array.isArray(data) && !hasFound) {
+      data.forEach((item) => {
+        if (item.id === id) {
+          result = item
+          hasFound = true
+        } else if (item.children) {
+          fn(item.children)
+        }
+      })
+    }
+  }
+  fn(data)
+  return result
+}
+getChidlren(data, 3)
+```
+
+## 数组拆分
+
+```js
+// array需要拆分的数组,size每组数组多少个
+function arrayChunk(array, size) {
+  let data = []
+  for (let i = 0; i < array.length; i += size) {
+    data.push(array.slice(i, i + size))
+  }
+  return data
+}
+
+const arr = [1, 2, 3, 4]
+arrayChunk(arr, 2) // [[1, 2], [3, 4]]
 ```

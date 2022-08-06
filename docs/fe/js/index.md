@@ -2,7 +2,7 @@
 
 ## 数据类型
 
-![image](/blog/img/fe/js1.png =600x400)
+![image](/blog/img/fe/js1.png)
 
 基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
 
@@ -291,60 +291,60 @@ document.title = 'hello world'
 ## 全屏事件
 
 ```js
-    requestFullscreen(el) {
-      if (el.requestFullscreen) {
-        el.requestFullscreen()
-      } else if (el.msRequestFullscreen) {
-        el.msRequestFullscreen()
-      } else if (el.mozRequestFullScreen) {
-        el.mozRequestFullScreen()
-      } else if (el.webkitRequestFullscreen) {
-        el.webkitRequestFullscreen()
-      } else {
-        console.log('no Fullscreen Support')
-      }
-    },
+function requestFullscreen(el) {
+  if (el.requestFullscreen) {
+    el.requestFullscreen()
+  } else if (el.msRequestFullscreen) {
+    el.msRequestFullscreen()
+  } else if (el.mozRequestFullScreen) {
+    el.mozRequestFullScreen()
+  } else if (el.webkitRequestFullscreen) {
+    el.webkitRequestFullscreen()
+  } else {
+    console.log('no Fullscreen Support')
+  }
+}
 
-exitFullscreen() {
-      if (document.exitFullscreen) {
-        document.exitFullscreen()
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen()
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen()
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen()
-      } else {
-        console.log('no Fullscreen Support')
-      }
-    }
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen()
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen()
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen()
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen()
+  } else {
+    console.log('no Fullscreen Support')
+  }
+}
 ```
 
-监听ESC键，退出全屏。vue中可以写在mounted生命周期内
+监听 ESC 键，退出全屏。vue 中可以写在 mounted 生命周期内
 
 ```js
- // W3C
-    document.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement) {
-        this.isFullScreen = false
-      }
-    })
-    // webkit
-    document.addEventListener('webkitfullscreenchange', e => {
-      if (!e.currentTarget.webkitIsFullScreen) {
-        this.isFullScreen = false
-      }
-    })
-    // IE
-    document.addEventListener('MSFullscreenChange', () => {
-      if (!document.msFullscreenElement) {
-        this.isFullScreen = false
-      }
-    })
-    // firefox
-    document.addEventListener('mozfullscreenchange', () => {
-      if (!document.mozFullScreenElement) {
-        this.isFullScreen = false
-      }
-    })
+// W3C
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    this.isFullScreen = false
+  }
+})
+// webkit
+document.addEventListener('webkitfullscreenchange', (e) => {
+  if (!e.currentTarget.webkitIsFullScreen) {
+    this.isFullScreen = false
+  }
+})
+// IE
+document.addEventListener('MSFullscreenChange', () => {
+  if (!document.msFullscreenElement) {
+    this.isFullScreen = false
+  }
+})
+// firefox
+document.addEventListener('mozfullscreenchange', () => {
+  if (!document.mozFullScreenElement) {
+    this.isFullScreen = false
+  }
+})
 ```

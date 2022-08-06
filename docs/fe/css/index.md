@@ -169,7 +169,7 @@ BFC 还有一条重要特性：BFC 的区域不会与 float box 重叠。试想�
         width: 50px;
         height: 50px;
         background-color: #f00;
-        <!--关键点-->overflow: hidden;
+        overflow: hidden;
       }
     </style>
   </head>
@@ -611,14 +611,14 @@ transition: background 6s linear;
 
 清除浮动是为了清除使用浮动元素产生的影响。浮动会导致父元素高度坍塌，而高度的塌陷使我们页面后面的布局不能正常显示。
 
-主推采用`:after`伪元素方法清理浮动
+主推采用`::after`伪元素方法清理浮动
 
 ```css
 .clearfix {
   /*触发IE6中的 hasLayout*/
   zoom: 1;
 }
-.clearfix:after {
+.clearfix::after {
   content: '';
   display: block;
   height: 0;
@@ -698,9 +698,30 @@ w3school 介绍网址： <http://www.w3school.com.cn/css/css_margin_collapsing.a
 
 统一设置 margin-top 或者 margin-bottom，不要混合使用。
 
-## 伪元素
+## 伪类、伪元素
 
-`:after`、`:before`
+### 伪类
+
+是选择器的一种，用于选择处于特定状态的元素，用一个冒号表示，例如`:first-child`、`:last-child`、`:hover`、`:focus`、`:link`、`:visited`等
+
+### 伪元素
+
+用两个冒号表示，`::before`、`::after`
+
+例如，给激活的菜单项底部添加下划线
+
+```css
+.menu-active::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  width: 30px;
+  height: 3px;
+  transform: translateX(-15px);
+  background-color: #3c82f3;
+}
+```
 
 ## 回流与重绘
 
@@ -740,4 +761,58 @@ p::selection {
   color: #f00;
   background-color: #eee;
 }
+```
+
+## 事件穿透
+
+比如有报警全屏闪烁功能，在报警时间内要求可以点击其他按钮。可以做一个全屏遮罩层覆盖在上面，
+关键在`pointer-events: none;`这个 css3 属性，可以让事件穿透
+
+```css
+/* <div class="alarm"></div> */
+
+.alarm {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  pointer-events: none;
+  margin: 0;
+  z-index: 3000;
+  box-shadow: inset 0 0 70px #f00;
+  animation: twinkling 1s infinite normal;
+}
+@keyframes twinkling {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+```
+
+## 文本超出显示省略号
+
+当文本内容为数字或者字母时候，flex 布局无法将数字或字母截断实现换行，需要强制换行`word-break: break-all;`
+
+flex 布局时显示省略号
+
+```html
+<div style="display: flex; border: 1px solid red">
+  <div style="min-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+    好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊
+  </div>
+  <div style="min-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+    好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊
+  </div>
+  <div style="min-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
+    好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊
+  </div>
+</div>
 ```

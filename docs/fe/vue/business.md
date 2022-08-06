@@ -192,12 +192,7 @@ export default {
 ```vue
 <template>
   <a-button type="primary" icon="plus" @click="showModal">问题反馈</a-button>
-  <wangEditor
-    ref="editor"
-    v-model="editorContent"
-    :isClear="isClear"
-    @change="getEditor"
-  ></wangEditor>
+  <wangEditor ref="editor" v-model="editorContent" :isClear="isClear" @change="getEditor"></wangEditor>
 </template>
 <script>
 import wangEditor from '@/components/editor/wangeditor'
@@ -402,10 +397,7 @@ export default {
 <template>
   <div>
     <a-button type="primary" @click="showWeather">气象站点</a-button>
-    <weather-site
-      :showWeatherMark="showWeatherMark"
-      @changeWeatherMark="changeWeatherMark"
-    ></weather-site>
+    <weather-site :showWeatherMark="showWeatherMark" @changeWeatherMark="changeWeatherMark"></weather-site>
   </div>
 </template>
 
@@ -485,22 +477,164 @@ export default {
 
 ## vue-cli
 
-### 更改系统title
+### 更改系统 title
 
-在`public/index.html`中出现`htmlWebpackPlugin.options.title`，默认系统title显示的是项目名称。如果想更改title，
+在`public/index.html`中出现`htmlWebpackPlugin.options.title`，默认系统 title 显示的是项目名称。如果想更改 title，
 除了直接改`<title>名称</title>`，也可以更改`vue.config.js`配置`webpack`
 
 ```js
 const CONFIG = require('./src/config')
 
 module.exports = {
-  chainWebpack: config => {
-    config
-      .plugin('html')
-      .tap(args => {
-        args[0].title= CONFIG.title
-        return args
-      })
+  chainWebpack: (config) => {
+    config.plugin('html').tap((args) => {
+      args[0].title = CONFIG.title
+      return args
+    })
   }
+}
+```
+
+## keep-alive
+
+场景：从列表页进入详情页，返回时要保持以前的搜索条件和页数。即从详情页返回列表页不刷新，从其他菜单页面进入列表页要刷新
+
+方式一： 使用 keep-alive
+
+router.js
+
+```js
+{
+  path: 'device',
+  name: 'device',
+  component: () => import('@/views/device/index'),
+  meta: { title: '设备列表', keepAlive: true, isBack: false }
+}
+```
+
+在列表页
+
+```js
+  activated() {
+    // 从其他菜单页面进入
+    if (!this.$route.meta.isBack) {
+      this.getList()
+    } else {
+      //详情页返回操作
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    if (from.path === '/list/detail') {
+      to.meta.isBack = true
+    } else {
+      to.meta.isBack = false
+    }
+    next()
+  },
+```
+
+详情页
+
+```js
+returnPage() {
+  this.$router.go(-1)
+}
+```
+
+方式二、将参数传递给详情页，返回时将参数带回列表页
+
+```js
+// listQuery是查询参数
+intoDetail(row) {
+  this.$router.push({ name: 'detail', params: { id: row.id, ...this.listQuery } })
+},
+```
+
+```js
+created() {
+  if (Object.keys(this.$route.params).length > 0) {
+    this.listQuery = this.$route.params.listQuery
+  }
+  this.getList()
+},
+```
+
+详情页
+
+```js
+returnPage() {
+  delete this.$route.params.id
+  this.$router.push({ name: 'list', params: { listQuery: this.$route.params } })
+}
+```
+
+## uniapp 横屏配置
+
+在`pages.json`中配置 [pageOrientation: "auto"](https://uniapp.dcloud.io/collocation/pages.html#globalstyle)
+
+```json
+"globalStyle": {
+  "pageOrientation": "auto"
+}
+```
+
+此时已经可以全局切换横竖屏了，再分别给横竖屏各写一套样式
+
+方式一、css 控制
+
+```css
+/* <view class="landscape">666</view> */
+
+/* 竖屏 */
+@media screen and (orientation: portrait) {
+  .landscape {
+    color: #f00;
+  }
+}
+
+/* 横屏 */
+@media screen and (orientation: landscape) {
+  .landscape {
+    color: #00f;
+  }
+}
+```
+
+方式二、js 控制
+
+在 data 里定义`isLandScape: false`表示是否横屏，默认为竖屏
+
+```js
+// <view :class="{'landscape': isLandScape}">666</view>
+// .landscape { color: #00f; }
+
+onResize() {
+  uni.getSystemInfo({
+    success: (res) => {
+      if (res.windowWidth > res.windowHeight) {
+        // 横屏
+        this.isLandScape = true
+      } else {
+        // 竖屏
+        this.isLandScape = false
+      }
+    }
+  })
+}
+```
+
+还有一种是使用`uni.onWindowResize()`，但是在`onLoad()`和`onShow()`中，在切换时都会触发两次
+
+```js
+onLoad() {
+  uni.onWindowResize((res) => {
+    if (res.size.windowWidth > res.size.windowHeight) {
+      this.isLandScape = true
+      console.log(123)
+    } else {
+      this.isLandScape = false
+      console.log(456)
+    }
+  })
 }
 ```

@@ -1,10 +1,10 @@
-# 基础
+# Nginx
 
 ## 安装
 
 地址： <http://nginx.org/en/download.html>
 
-![image](/blog/img/be/nginx_download.png =800x500)
+![image](/blog/img/be/nginx_download.png)
 
 Mainline version：最新版本
 

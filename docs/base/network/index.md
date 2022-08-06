@@ -1,3 +1,4 @@
+
 # 计算机网络
 
 ## OSI 的七层协议
@@ -19,7 +20,7 @@
 - 1xx：指示信息–表示请求已接收，继续处理。
 - 2xx：成功–表示请求已被成功接收、理解、接受。
 
-```null
+```sh
 204 No Content 成功，但不返回任何实体的主体部分；
 
 206 Partial Content 成功执行了一个范围（Range）请求
@@ -27,7 +28,7 @@
 
 - 3xx：重定向–要完成请求必须进行更进一步的操作。
 
-```null
+```sh
 301 Moved Permanently 永久性重定向，响应报文的Location首部应该有该资源的新URL
 
 302 Found 临时性重定向，响应报文的Location首部给出的URL用来临时定位资源
@@ -41,7 +42,7 @@
 
 - 4xx：客户端错误–请求有语法错误或请求无法实现。
 
-```null
+```sh
 400 Bad Request 表示客户端请求有语法错误，不能被服务器所理解
 
 401 Unauthonzed 表示请求未经授权，该状态代码必须与 WWW-Authenticate 报头域一起使用
@@ -53,7 +54,7 @@
 
 - 5xx：服务器端错误–服务器未能实现合法的请求。
 
-```null
+```sh
 500 Internel Server Error 表示服务器发生不可预期的错误，导致无法完成客户端的请求
 
 503 Service Unavailable 表示服务器当前不能够处理客户端的请求，在一段时间之后，服务器可能会恢复正常
@@ -83,13 +84,13 @@
 
 DNS 域名：
 
-名称类型|说明|示例
----|---|---
-根域|DNS域名中使用时，规定由尾部句点（.）来指定名称位于根或更高级别的域层次结构|单个句点或句点用于末尾的名称
-顶级域|用来指示某个国家/地区/组织使用的名称的类型名称|.com
-第二层域|个人或组织在Internet上使用的注册名称|baidu.com
-子域|已注册的二级域名派生的域名，即网站名|www.baidu.com
-主机名|通常情况下，DNS域名的最左侧的标签标识网络上的特定计算机|h1.www.baidu.com
+| 名称类型 | 说明                                                                        | 示例                         |
+| -------- | --------------------------------------------------------------------------- | ---------------------------- |
+| 根域     | DNS 域名中使用时，规定由尾部句点（.）来指定名称位于根或更高级别的域层次结构 | 单个句点或句点用于末尾的名称 |
+| 顶级域   | 用来指示某个国家/地区/组织使用的名称的类型名称                              | .com                         |
+| 第二层域 | 个人或组织在 Internet 上使用的注册名称                                      | baidu.com                    |
+| 子域     | 已注册的二级域名派生的域名，即网站名                                        | www.baidu.com                |
+| 主机名   | 通常情况下，DNS 域名的最左侧的标签标识网络上的特定计算机                    | h1.www.baidu.com             |
 
 ### 2、TCP 连接
 
@@ -106,6 +107,8 @@ DNS 域名：
 <https://www.cnblogs.com/kongxy/p/4615226.html>
 
 ## websocket
+
+### 原生 ws
 
 ```js
 const WSURL = 'ws://192.168.8.210:8083'
@@ -242,7 +245,7 @@ function reconnect(url, messageHandle) {
 // }
 ```
 
-在vue中使用如下：
+在 vue 中使用如下：
 
 ```js
 export default {
@@ -285,6 +288,79 @@ export default {
     if (Object.keys(this.ws).length != 0) {
       this.ws.close()
     }
+  }
+}
+```
+
+### SockJS 和 Stomp
+
+[stomp-websocket](http://jmesnil.net/stomp-websocket/doc/)
+
+```js
+import SockJS from 'sockjs-client'
+import Stomp from 'stompjs'
+
+let stompClient
+
+const WSURL = 'ws://192.168.8.210:8083'
+const token = 'jifodsjaoifjsf12345'
+
+export function connectMonitorWs() {
+  let socket = new SockJS(WSURL + '?token=' + token, '', { timeout: 10000 })
+  stompClient = Stomp.over(socket)
+  stompClient.connect(
+    { serialNo: serialNo },
+    () => {
+      successCallback(serialNo, uuid)
+    },
+    () => {
+      setTimeout(() => {
+        connectMonitorWs()
+      }, 5000)
+    }
+  )
+}
+
+export function successCallback(serialNo, uuid) {
+  // 获取客户端连接编号
+  stompClient.send(`/app/monitor/client/code/${serialNo}`, { 'content-type': 'text/plain' }, uuid)
+  // 客户端连接编号下发
+  stompClient.subscribe(`/topic/monitor/client/code/${serialNo}/${uuid}`, (msg) => {
+    let data = JSON.parse(msg.body)
+  })
+
+  // 申请主控制
+  stompClient.send(`/app/monitor/main/control/${serialNo}`)
+  // 主控制信号下发
+  stompClient.subscribe(`/topic/monitor/control/${serialNo}`, (msg) => {
+    let data = msg.body
+    console.log(data)
+    // 如果自己的客户端的连接编号和主控制端的连接编号一致，那么自己就是主控制端
+  })
+
+  // 实时快照下发
+  stompClient.subscribe(`/topic/monitor/live/snapshot/${serialNo}`, (msg) => {
+    let data = JSON.parse(msg.body)
+    console.log(data)
+  })
+}
+
+// 更新图片状态
+export function updateImage(serialNo, params) {
+  stompClient.send(`/app/monitor/image/status/${serialNo}`, {}, JSON.stringify(params))
+}
+
+// 取消订阅
+export function pauseSubscribe() {
+  if (stompClient) {
+    stompClient.unsubscribe()
+  }
+}
+
+// 销毁ws连接
+export function disconnect() {
+  if (stompClient) {
+    stompClient.disconnect()
   }
 }
 ```

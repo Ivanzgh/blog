@@ -6,7 +6,7 @@
 
 观察者模式中主体和观察者是互相感知的，发布-订阅模式是借助第三方来实现调度的，发布者和订阅者之间互不感知
 
-![image](/blog/img/design-pattern/observer.png =650x500)
+![image](/blog/img/design-pattern/observer.png)
 
 - 在观察者模式中，观察者是知道 Subject 的，Subject 一直保持对观察者进行记录。然而，在发布订阅模式中，
   发布者和订阅者不知道对方的存在。它们只有通过消息代理进行通信。
