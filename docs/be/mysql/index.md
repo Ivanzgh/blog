@@ -77,7 +77,7 @@ default-storage-engine=INNODB
 ## Navicat Premium 导入 sql 文件
 
 点击连接，选择要连接的数据库类型，连接名随意设置，主机填 localhost 或者远程的地址，端口、用户名、密码均是 mysql 设置的，点击测试连接
-![image](/blog/img/be/navicat.png)
+![image](/img/be/navicat.png)
 
 然后新建一个数据库，字符集选择 UTF-8 编码，然后右击新建的数据库，点击运行 SQL 文件即可
 
@@ -105,4 +105,4 @@ select host,user from user;
 flush privileges;
 ```
 
-![image](/blog/img/be/mysql.png)
+![image](/img/be/mysql.png)
