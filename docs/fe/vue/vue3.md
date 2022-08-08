@@ -265,7 +265,7 @@ export default defineComponent({
 
 vue2 和 vue3 生命周期对比：
 
-```null
+```sh
 beforeCreate  -> setup()
 created       -> setup()
 beforeMount   -> onBeforeMount
