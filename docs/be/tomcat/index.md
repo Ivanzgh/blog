@@ -55,8 +55,8 @@ java.util.logging.ConsoleHandler.encoding = GBK
 
 找到 Tomcat 安装位置 bin 目录下的 `catalina.bat` 文件，添加如下内容：
 
+![image](/blog/img/be/tomcat.png)
+
 ```sh
 set JAVA_OPTS=%JAVA_OPTS% -server -Xmx1024M -Xms512m -XX:MaxNewSize=256m -XX:PermSize=512M -XX:MaxPermSize=512m
 ```
-
-![image](/blog/img/be/tomcat.png)
