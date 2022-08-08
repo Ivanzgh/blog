@@ -8,7 +8,7 @@
 
 在这种投影模式下，无论物体距离相机距离远或者近，在最终渲染的图片中物体的大小都保持不变。
 
-```null
+```sh
 OrthographicCamera( left, right, top, bottom, near, far)
 ```
 
@@ -33,7 +33,7 @@ camera.lookAt(scene.position)
 
 这一投影模式被用来模拟人眼所看到的景象
 
-```null
+```sh
 PerspectiveCamera( fov, aspect, near, far )
 ```
 

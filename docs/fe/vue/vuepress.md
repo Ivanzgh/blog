@@ -140,7 +140,7 @@ on:
 
 如果出现如下问题，
 
-```null
+```sh
 No url found for submodule path 'docs/.vuepress/dist' in .gitmodules
 ```
 
