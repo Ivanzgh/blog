@@ -2,7 +2,7 @@
 
 ## 数据类型
 
-![image](/blog/img/fe/js1.png)
+![image](/img/fe/js1.png)
 
 基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
 

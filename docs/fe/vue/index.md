@@ -100,7 +100,7 @@ MDN 地址： [Object.defineProperty()
 
 ### 3、如何实现
 
-![image](/blog/img/fe/vue1.png)
+![image](/img/fe/vue1.png)
 
 `observer` 用来实现对每个组件中的 data 中定义的属性，循环用`Object.defineProperty()`实现数据劫持，以便利用其中的 setter 和 getter，然后通知订阅者，订阅者会触发它的 update 方法，对视图进行更新。
 

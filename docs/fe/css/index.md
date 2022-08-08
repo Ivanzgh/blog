@@ -4,7 +4,7 @@
 
 页面中的每个标签元素都由几个部分组成：内容(content)、内边距(padding)、边框(border)、外边距(margin)
 
-![image](/blog/img/fe/css1.png)
+![image](/img/fe/css1.png)
 
 标准盒模型：`width = content`
 
