@@ -84,11 +84,11 @@ MDN : <https://developer.mozilla.org/zh-CN/docs/Web/Guide/AJAX>
 
 Axios 请求头中的`Content-Type`常见的有三种：
 
-- Content-Type: application/json
+- Content-Type: `application/json`
 
-- Content-Type: application/x-www-form-urlencoded
+- Content-Type: `application/x-www-form-urlencoded`
 
-- Content-Type: multipart/form-data
+- Content-Type: `multipart/form-data`
 
 请求头配置：
 

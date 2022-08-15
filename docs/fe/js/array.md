@@ -15,18 +15,43 @@ arr.join('-') // '2-1-3'
 
 对数组的元素排序，接收一个函数作为参数，影响原数组。
 
-如果省略参数，元素按照转换为字符串的各个字符的Unicode位点进行排序。
+如果省略参数，元素按照转换为字符串的各个字符的 `Unicode` 位点进行排序。
+
+- 字符串排序
 
 ```js
-let arr = [3, 5, 2, 4, 1]
-let newarr1 = arr.sort()
+const arr2 = ['zgh', '唔西迪西', 'ivan']
+arr2.sort() // ['ivan', 'zgh', '唔西迪西']
+arr2.sort((a, b) => a - b) // ['zgh', '唔西迪西', 'ivan']
+```
+
+- 数字排序
+
+```js
+const arr = [3, 5, 2, 4, 1]
+arr.sort() // [1,2,3,4,5]
 // 比较的数字会先被转换为字符串，比较Unicode顺序
-console.log(newarr1) // [1,2,3,4,5]
-let arr1 = [5, 10, 20]
+const arr1 = [5, 10, 20]
 arr1.sort() // [10, 20, 5]
 
-let newarr2 = arr.sort((a, b) => b - a)
-console.log(newarr2) // [5, 4, 3, 2, 1]
+arr.sort((a, b) => a - b) // 正序 [1, 2, 3, 4, 5]
+arr.sort((a, b) => b - a) // 倒序 [5, 4, 3, 2, 1]
+```
+
+- 对象数组排序
+
+```js
+const arr = [
+  { name: '玛卡巴卡', desc: 'one' },
+  { name: '唔西迪西', desc: 'two' },
+  { name: '桥豆麻袋', desc: 'three' }
+]
+arr.sort((a, b) => a.name.localeCompare(b.name))
+
+// 结果
+0: {name: '玛卡巴卡', desc: 'one'}
+1: {name: '桥豆麻袋', desc: 'three'}
+2: {name: '唔西迪西', desc: 'two'}
 ```
 
 ## reverse()
@@ -152,7 +177,7 @@ filter()接收的回调函数，可以有多个参数。通常仅使用第一个
 
 ```js
 let arr = ['A', 'B', 'C']
-let r = arr.filter(function (element, index, self) {
+let r = arr.filter((element, index, self) => {
   console.log(element) // 依次打印'A', 'B', 'C'
   console.log(index) // 依次打印0, 1, 2
   console.log(self) // self就是变量arr
@@ -160,16 +185,22 @@ let r = arr.filter(function (element, index, self) {
 })
 ```
 
-实例：数据去重
+例子：
+
+- 数据去重
 
 ```js
-const arr = ['apple', 'strawberry', 'banana', 'pear', 'apple', 'orange', 'orange', 'strawberry']
-const r = arr.filter(function (element, index, self) {
-  return self.indexOf(element) === index
-})
-console.log(r.toString()) //apple,strawberry,banana,pear,orange
+const arr = ['a', 's', 'b', 'p', 'a', 'k', 'k', 's']
+arr.filter((ele, index, self) => self.indexOf(ele) === index) // ['a', 's', 'b', 'p', 'k']
 
-//indexOf总是返回某个元素第一次出现的位置，后续的重复元素位置与indexOf返回的位置不相等，因此被filter滤掉了。
+// indexOf总是返回某个元素第一次出现的位置，后续重复元素的位置与indexOf返回的位置不相等，因此被filter滤掉了
+```
+
+- 过滤虚假值，即 `0`，`undefined`，`null`，`false`，`""`，`''`
+
+```js
+const array = [3, 0, 6, 7, '', false]
+array.filter(Boolean) // [1, 3, 5]
 ```
 
 ## indexOf()
@@ -234,14 +265,19 @@ console.log(rs) // [11, 12, 13]
 
 ## reduce()
 
-不断地将前一项和后一项的值进行运算（具体规则是由回调函数决定的，每次的运算会涉及两项），把前一轮运算的结果作为当前运算的前一项
+不断地将前一项和后一项的值进行运算，把前一轮运算的结果作为当前运算的前一项。具体规则由回调函数决定，每次的运算会涉及两项
 
 ```js
-let arr = [1, 2, 3]
-let sum = arr.reduce((prev, next) => {
-  return prev + next
-})
-console.log(sum) // 6
+const arr = [2, 1, 5, 3, 4]
+
+// 求和运算
+arr.reduce((a, b) => a + b)
+
+// 求最大值
+arr.reduce((a, b) => (a > b ? a : b))
+
+// 求最小值
+arr.reduce((a, b) => (a < b ? a : b))
 ```
 
 带初值
@@ -251,17 +287,6 @@ console.log(sum) // 6
 let arr = [1, 2, 3]
 let sum = arr.reduce((prev, next) => prev + next, 4)
 console.log(sum) // 10
-```
-
-示例：求和运算
-
-```js
-function add(...args) {
-  return args.reduce((prev, next) => prev + next)
-}
-
-let res = add(1, 2, 3, 4, 5, 6)
-console.log(res) // 21
 ```
 
 ## some()

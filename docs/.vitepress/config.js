@@ -1,18 +1,11 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'zghIvan',
+  title: 'const',
   description: 'Blog',
   base: '/blog/',
   lastUpdated: true,
   head: [['link', { rel: 'icon', href: '/img/logo.png' }]],
-  // plugins: [
-  //   'reading-progress',
-  //   '@vuepress/back-to-top',
-  //   'img-lazy',
-  //   'vuepress-plugin-baidu-autopush',
-  //   [{ name: 'page-plugin', globalUIComponents: ['global-Cat'] }]
-  // ],
   markdown: { theme: 'dracula' },
   themeConfig: {
     logo: '/img/logo.png',
@@ -106,7 +99,8 @@ export default defineConfig({
             { text: 'vue3', link: '/fe/vue/vue3' },
             { text: 'UI库', link: '/fe/vue/ui' },
             { text: 'vuex', link: '/fe/vue/vuex' },
-            { text: 'vue-router', link: '/fe/vue/vue-router' }
+            { text: 'vue-router', link: '/fe/vue/vue-router' },
+            { text: 'vuepress', link: '/fe/vue/vuepress' }
           ]
         }
       ],

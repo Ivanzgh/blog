@@ -8,23 +8,23 @@
 
 ## 传输协议
 
-### hls
+### HLS
 
-### http-flv
+### HTTP-FLV
 
-### rtp
+### RTP
 
-### rtcp
+### RTCP
 
-### rtsp
+### RTSP
 
-### rtmp
+### RTMP
 
 ## 封装格式
 
-### mp4
+### MP4
 
-### flv
+### FLV
 
 ## 点播/直播编转码
 

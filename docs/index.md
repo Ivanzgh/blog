@@ -9,7 +9,7 @@ hero:
     alt: VitePress
   actions:
     - theme: brand
-      text: Get Started
+      text: 快速开始 →
       link: /fe/js/
     - theme: alt
       text: View on GitHub

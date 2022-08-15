@@ -301,9 +301,10 @@ import SockJS from 'sockjs-client'
 import Stomp from 'stompjs'
 
 let stompClient
-
 const WSURL = 'ws://192.168.8.210:8083'
 const token = 'jifodsjaoifjsf12345'
+const serialNo = 's12345'
+const uuid = 'ffsdfjsdlkaf'
 
 export function connectMonitorWs() {
   let socket = new SockJS(WSURL + '?token=' + token, '', { timeout: 10000 })

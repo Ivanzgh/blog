@@ -1,4 +1,4 @@
-# 介绍
+# JS
 
 ## 数据类型
 
@@ -32,9 +32,11 @@ console.log(d) // { x: 4 }
 
 ## 类型判断
 
-typeof
+- typeof
 
-instanceof
+  特殊：`typeof null`结果是`object`
+
+- instanceof
 
 ## 类型转换
 
@@ -347,4 +349,57 @@ document.addEventListener('mozfullscreenchange', () => {
     this.isFullScreen = false
   }
 })
+```
+
+## 空值合并运算符
+
+写法：`a ?? b`，如果第一个参数是`null/undefined`，则`??`返回第一个参数，否则返回第二个参数。
+效果等同于`(a !== null && a !== undefined) ? a : b`
+
+```js
+let a
+let b = a ?? 1 // 1
+```
+
+- `??`运算符的优先级非常低，仅略高于 `?` 和 `=`，使用时要考虑是否添加括号
+- 如果没有明确添加括号，不能将其与`||`或`&&`一起使用
+
+### 与`||`的区别
+
+- `||` 返回第一个真值
+- `??` 返回第一个已定义的值
+
+`||` 无法区分 `false`、`0`、空字符串`""`、`NaN`和`null/undefined`
+
+```js
+let a = 0
+a || 1 // 1
+a ?? 1 // 0
+```
+
+## 可选链
+
+当位于 `?.` 前面的值为 `undefined` 或 `null` 时，会立即阻止代码的执行，并返回 `undefined`
+
+```js
+const obj = { name: 'zgh' }
+obj?.a
+```
+
+三种形式：
+
+- `obj?.pron`
+- `obj?.[pron]`
+- `obj.method?.()`
+
+## 将十进制转为二进制或十六进制
+
+[Number.prototype.toString()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/toString)
+
+```js
+const num = 10
+
+num.toString(2) // "1010"
+num.toString(16) // "a"
+num.toString(8) // "12"
 ```

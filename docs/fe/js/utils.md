@@ -91,6 +91,83 @@ function trim(str) {
 }
 ```
 
+## 时间处理
+
+### 获取一天以 5 分钟为间隔的时间数组
+
+```js
+const minute = 5 //间隔分钟
+const seconds = minute * 60
+const len = (60 * 24 * 60) / seconds //数组长度
+let newArr = []
+let total = 0
+for (let i = 0; i < len; i++) {
+  let h = parseInt(total / 3600),
+    min = parseInt((total % 3600) / 60)
+  newArr.push((h < 10 ? '0' + h : h) + ':' + (min < 10 ? '0' + min : min))
+  total += seconds
+}
+console.log(newArr) // ['00:00', '00:05', '00:10', ..., '23:55']
+```
+
+### 获取一分钟内以 2s 间隔组成的时间
+
+```sh
+npm install dayjs --save
+```
+
+```js
+import dayjs from 'dayjs'
+
+const nowTime = dayjs().format('HH:mm:ss')
+let key = []
+for (let i = 60; i > 0; i--) {
+  if (i % 2 == 0) {
+    key.push(i)
+  }
+}
+let arr = [],
+  time = ''
+for (let i = 0; i < key.length; i++) {
+  time = dayjs().subtract(key[i], 's').format('HH:mm:ss')
+  arr.push(time)
+}
+const res = [...arr, nowTime]
+```
+
+### 实时显示当前日期时间
+
+```js
+import dayjs from 'dayjs'
+const formatWeek = ['日', '一', '二', '三', '四', '五', '六']
+
+function showNowTime() {
+  this.timer = setInterval(() => {
+    let year = dayjs().format('YYYY')
+    let month = dayjs().format('MM').substring(0, 1) === '0' ? dayjs().format('MM').substring(1) : dayjs().format('MM')
+    let day = dayjs().format('DD').substring(0, 1) === '0' ? dayjs().format('DD').substring(1) : dayjs().format('DD')
+    this.nowDate = `${year}年${month}月${day}日`
+    this.nowTime = dayjs().format('HH:mm:ss')
+    this.nowDay = '星期' + formatWeek[dayjs().day()]
+  }, 1000)
+}
+```
+
+## 分钟格式化转为天、时、分
+
+```js
+function formatMinutes(minutes) {
+  const day = parseInt(Math.floor(minutes / 1440))
+  const hour = day > 0 ? Math.floor((minutes - day * 1440) / 60) : Math.floor(minutes / 60)
+  const minute = hour > 0 ? Math.floor(minutes - day * 1440 - hour * 60) : minutes
+  let time = ''
+  if (day > 0) time += day + 'd'
+  if (hour > 0) time += hour + 'h'
+  if (minute > 0) time += minute + 'm'
+  return time
+}
+```
+
 ## Date 日期对象与时间戳互相转换
 
 ### 将 Date 对象转换成时间戳
@@ -442,21 +519,6 @@ function lonlat(coordinate) {
 }
 ```
 
-## 分钟格式化转为天、时、分
-
-```js
-function formatMinutes(minutes) {
-  const day = parseInt(Math.floor(minutes / 1440))
-  const hour = day > 0 ? Math.floor((minutes - day * 1440) / 60) : Math.floor(minutes / 60)
-  const minute = hour > 0 ? Math.floor(minutes - day * 1440 - hour * 60) : minutes
-  let time = ''
-  if (day > 0) time += day + 'd'
-  if (hour > 0) time += hour + 'h'
-  if (minute > 0) time += minute + 'm'
-  return time
-}
-```
-
 ## js 实现拖拽功能
 
 - 当鼠标移点击元素时，触发`mousedown`事件，让元素变为可移动状态
@@ -567,68 +629,6 @@ getCount([1,2,3,1,2,5,2,4,1,2,6,2,1,3,2],3,1)//传参（rank=3，ranktype=1）�
       }
       return arr1.slice(0, arr1.length)
     }
-```
-
-## 时间
-
-### 获取一天以 5 分钟为间隔的时间数组
-
-```js
-const minute = 5 //间隔分钟
-const seconds = minute * 60
-const len = (60 * 24 * 60) / seconds //数组长度
-let newArr = []
-let total = 0
-for (let i = 0; i < len; i++) {
-  let h = parseInt(total / 3600),
-    min = parseInt((total % 3600) / 60)
-  newArr.push((h < 10 ? '0' + h : h) + ':' + (min < 10 ? '0' + min : min))
-  total += seconds
-}
-console.log(newArr) // ['00:00', '00:05', '00:10', ..., '23:55']
-```
-
-### 获取一分钟内以 2s 间隔组成的时间
-
-```sh
-npm install dayjs --save
-```
-
-```js
-import dayjs from 'dayjs'
-
-const nowTime = dayjs().format('HH:mm:ss')
-let key = []
-for (let i = 60; i > 0; i--) {
-  if (i % 2 == 0) {
-    key.push(i)
-  }
-}
-let arr = [],
-  time = ''
-for (let i = 0; i < key.length; i++) {
-  time = dayjs().subtract(key[i], 's').format('HH:mm:ss')
-  arr.push(time)
-}
-const res = [...arr, nowTime]
-```
-
-### 实时显示当前日期时间
-
-```js
-import dayjs from 'dayjs'
-const formatWeek = ['日', '一', '二', '三', '四', '五', '六']
-
-function showNowTime() {
-  this.timer = setInterval(() => {
-    let year = dayjs().format('YYYY')
-    let month = dayjs().format('MM').substring(0, 1) === '0' ? dayjs().format('MM').substring(1) : dayjs().format('MM')
-    let day = dayjs().format('DD').substring(0, 1) === '0' ? dayjs().format('DD').substring(1) : dayjs().format('DD')
-    this.nowDate = `${year}年${month}月${day}日`
-    this.nowTime = dayjs().format('HH:mm:ss')
-    this.nowDay = '星期' + formatWeek[dayjs().day()]
-  }, 1000)
-}
 ```
 
 ## 获取范围内的随机整数
