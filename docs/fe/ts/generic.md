@@ -6,7 +6,7 @@
 
 先看一个联合类型的例子，函数参数可以是字符串或者数字
 
-```typescript
+```ts
 function foo1(first: string | number, last: string | number) {
   return `${first}-${last}`
 }
@@ -15,7 +15,7 @@ foo1('hello', 'world')
 
 使用泛型后的例子如下，定义了一个`<Fan>`泛型，在调用函数时要声明泛型的具体类型
 
-```typescript
+```ts
 function foo2<Fan>(first: Fan, last: Fan) {
   return `${first}-${last}`
 }
@@ -41,7 +41,7 @@ const obj: Fan<number> = {
 
 有两种表示方式：`Array<T>` 和 `T[]`
 
-```typescript
+```ts
 function foo3<T>(first: T[]) {
   return first.length
 }
@@ -57,7 +57,7 @@ foo4<string>(['hello', 'world'])
 
 比如定义两个泛型 T、P
 
-```typescript
+```ts
 function foo5<T, P>(first: T, second: P) {
   return `${first}-${second}`
 }
@@ -66,7 +66,7 @@ foo5<string, number>('hi', 666)
 
 ## 泛型在类中的使用
 
-```typescript
+```ts
 class Foo<T> {
   constructor(private first: T[]) {}
   say(index: number): T {
@@ -83,7 +83,7 @@ gen.say(1) // 'world'
 上个例子中，假如传入对象数组，希望调用 say 方法返回传入的 name 值，直接改成`this.first[index].name`会报错
 `Property 'name' does not exist on type 'T'.`，这时就要用到泛型的继承了
 
-```typescript
+```ts
 interface Person {
   name: string
 }
@@ -99,13 +99,13 @@ fff.say(1) // 'g'
 
 这里省略了参数类型，因为泛型的类型推断，所以也不会报错，完整的写法如下
 
-```typescript
+```ts
 const fff = new Foo<{ name: string }>([{ name: 'z' }, { name: 'g' }, { name: 'h' }])
 ```
 
 ## 泛型约束
 
-```typescript
+```ts
 class Foo<T> {
   constructor(private first: T[]) {}
   say(index: number): T {
@@ -121,7 +121,7 @@ const gen3 = new Foo<number>([1, 2])
 上面的例子可以看到泛型可以是`string`、`number`、`boolean`等类型，
 现在进行泛型约束，使其类型只能是`number`或者`string`
 
-```typescript
+```ts
 class Foo<T extends number | string> {
   constructor(private first: T[]) {}
   say(index: number): T {

@@ -4,7 +4,7 @@
 
 地址： <http://nginx.org/en/download.html>
 
-![image](/img/be/nginx_download.png)
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661154093.png)
 
 Mainline version：最新版本
 
@@ -18,7 +18,7 @@ Nginx 就是反向代理服务器。
 
 代理服务器一般是指局域网内部的机器通过代理服务发送请求到互联网上的服务器，代理服务器一般作用于客户端。
 
-![image](/img/be/nginx1.png)
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661154114.png)
 
 简单的说：
 
@@ -30,7 +30,7 @@ Nginx 就是反向代理服务器。
 
 ```sh
 # 重新加载资源
-nginx -s reload 
+nginx -s reload
 
 # 重启
 nginx -s reopen
@@ -108,7 +108,7 @@ gzip_vary off;
 gzip_disable "MSIE [1-6]\.";
 ```
 
-> **alias D:\data** 指定文件路径，即本地要托管的数据。如果文件名以n开头，因为\n会导致换行和路径错误，所以要使用\\n或者使用斜杠，如 D:/ndata
+> **alias D:\data** 指定文件路径，即本地要托管的数据。如果文件名以 n 开头，因为\n 会导致换行和路径错误，所以要使用\\n 或者使用斜杠，如 D:/ndata
 
 启动 nginx，比如要模拟生产环境，将项目打包后的文件托管到 nginx 服务，打开<http://127.0.0.1>即可查看。
 

@@ -59,4 +59,4 @@ java.util.logging.ConsoleHandler.encoding = GBK
 set JAVA_OPTS=%JAVA_OPTS% -server -Xmx1024M -Xms512m -XX:MaxNewSize=256m -XX:PermSize=512M -XX:MaxPermSize=512m
 ```
 
-![image](/img/be/tomcat_perm.png)
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661154131.png)

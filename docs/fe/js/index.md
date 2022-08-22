@@ -2,7 +2,7 @@
 
 ## 数据类型
 
-![image](/img/fe/js1.png)
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661153891.png)
 
 基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
 

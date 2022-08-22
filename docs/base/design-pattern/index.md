@@ -1,6 +1,6 @@
 # 设计模式
 
-![image](/img/fe/js2.png)
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661153917.png)
 
 ## SOLID 设计原则
 

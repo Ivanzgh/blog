@@ -355,13 +355,13 @@ free -h  #查看内存
 
 最后在浏览器输入`192.168.18.10:9200`、`192.168.18.11:9200`或者`192.168.18.12:9200`均可看到下图所示内容：
 
-![image](/img/be/es_cluster.png)
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661154048.png)
 
 查看集群状态
 
 <http://192.168.18.12:9200/_cluster/health>
 
-![image](/img/be/es_cluster_health.png)
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661154022.png)
 
 `status`字段是 `green` 表示集群正常可用
 

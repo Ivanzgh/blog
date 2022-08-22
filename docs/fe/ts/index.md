@@ -81,7 +81,7 @@ const arr: { name: string; age: number }[] = [
 ]
 ```
 
-如果有同样类型的数组，可以用 类型别名
+如果有同样类型的数组，可以用 **类型别名**
 
 ```typescript
 type user = { name: string; age: number }
@@ -92,7 +92,7 @@ const arr: user[] = [
 ]
 ```
 
-也可以使用 类
+也可以使用 **类**
 
 ```typescript
 class user {
