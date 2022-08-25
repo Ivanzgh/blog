@@ -10,7 +10,7 @@
 npm install --global gulp
 ```
 
-### 2. 作为项目的开发依赖（devDependencies）安装
+### 2. 作为项目的开发依赖安装
 
 ```sh
 npm install --save-dev gulp

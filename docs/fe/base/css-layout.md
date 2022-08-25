@@ -2,13 +2,47 @@
 
 ## flex 布局
 
-<https://www.processon.com/embed/62e696b45653bb071617d8d0>
+<https://www.processon.com/view/link/62ecd60ae401fd1b18071d48>
 
 <https://the-echoplex.net/flexyboxes/>
 
 <https://www.yuque.com/linxz/flex>
 
 ## grid 布局
+
+## 两栏布局
+
+左侧定宽，右侧自适应
+
+```html
+<style>
+  .box {
+    height: 200px;
+  }
+
+  .box > div {
+    height: 100%;
+  }
+
+  .left {
+    float: left;
+    width: 200px;
+    background: pink;
+  }
+
+  .right {
+    margin-left: 200px;
+    background: yellow;
+  }
+</style>
+
+<div class="box">
+  <div class="left"></div>
+  <div class="right"></div>
+</div>
+```
+
+### 三栏布局
 
 ## 多列等高布局
 

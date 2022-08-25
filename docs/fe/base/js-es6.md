@@ -245,7 +245,7 @@ let person = function (name) {
 
 - 使用`call，apply，bind`都不能改变 this 指向
 - 箭头函数没有原型属性`prototype`
-- 不能用作构造函数，即new指令
+- 不能用作构造函数，即 new 指令
 
 ```js
 let obj = {
@@ -895,3 +895,44 @@ let proxyAccount = new Proxy(account, {
 proxyAccount.num = '666'
 console.log(proxyAccount.num) // Uncaught TypeError: The num is not an number
 ```
+
+## 空值合并运算符
+
+写法：`a ?? b`，如果第一个参数是`null/undefined`，则`??`返回第一个参数，否则返回第二个参数。
+效果等同于`(a !== null && a !== undefined) ? a : b`
+
+```js
+let a
+let b = a ?? 1 // 1
+```
+
+- `??`运算符的优先级非常低，仅略高于 `?` 和 `=`，使用时要考虑是否添加括号
+- 如果没有明确添加括号，不能将其与`||`或`&&`一起使用
+
+### 与`||`的区别
+
+- `||` 返回第一个真值
+- `??` 返回第一个已定义的值
+
+`||` 无法区分 `false`、`0`、空字符串`""`、`NaN`和`null/undefined`
+
+```js
+let a = 0
+a || 1 // 1
+a ?? 1 // 0
+```
+
+## 可选链
+
+当位于 `?.` 前面的值为 `undefined` 或 `null` 时，会立即阻止代码的执行，并返回 `undefined`
+
+```js
+const obj = { name: 'zgh' }
+obj?.a
+```
+
+三种形式：
+
+- `obj?.pron`
+- `obj?.[pron]`
+- `obj.method?.()`

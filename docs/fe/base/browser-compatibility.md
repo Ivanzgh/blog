@@ -32,15 +32,11 @@
 <![endif]-->
 ```
 
-gt : greater than，大于
-
-lt : less than，小于
-
-gte : greater than or equal，大于等于
-
-lte : less than or equal，小于等于
-
-! : 选择条件版本以外所有版本，无论高低
+- `gt` : `greater than`，大于
+- `lt` : `less than`，小于
+- `gte` : `greater than or equal`，大于等于
+- `lte` : `less than or equal`，小于等于
+- `!` : 选择条件版本以外所有版本，无论高低
 
 ## 兼容性插件
 

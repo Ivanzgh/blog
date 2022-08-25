@@ -123,11 +123,42 @@ video::cue(.red) {
 
 `paypal`的开源项目：[accessible-html5-video-player](https://github.com/paypal/accessible-html5-video-player)，可以对原生的`video`进行 UI 定制，会把`WebVTT`文件中`html`片段直接完整输出到页面中，这样所有的 CSS 属性都可以使用了
 
-## 标准规范
+## 编码标准
 
 ### H.264/AVC
 
 ### H.265/HEVC
+
+更好的编码标准，但目前硬件支持度很低，相对于`H.264`优点包括：提高压缩效率、提高鲁棒性和错误恢复能力、减少实时的时延、减少信道获取时间和随机接入时延、降低复杂度等
+
+## 播放器架构
+
+播放器由播放器内核和 UI 界面组成，用于读取、解析渲染流文件
+
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661311721.jpg)
+
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661313473.jpg)
+
+- 分离器`demux`
+
+媒体文件和网络流是将音视频压缩编码后和其他数据一起打包传输的，即编码器`mux`。解封装与上述过程正好相反，是把视频轨和音频轨分离出来。
+支持的常见格式如`mp4`、`flv`、`m3u8`、`avi`等
+
+- 解码器`decoder`
+
+负责对压缩的音视频数据进行解码，拿到原始的`YUV`和`PCM`数据，常见的视频压缩格式如：`H.264`、`MPEG4`、`VP8/VP9`，
+音频压缩格式如 `G.711`、`AAC`、`Speex`等
+
+## 解码方式
+
+- 硬解码
+
+借助显卡硬件进行解码工作，优点是功耗低，解码速度快。
+但目前 H.265 编码在浏览器中的硬件解码支持情况并不普及，而且硬件解码需要用户的显卡支持
+
+- 软解码
+  - 一种是基于`Flash`的`H.265`解码方案
+  - 主流方案是使用 [WebAssembly](https://webassembly.org/) 技术将金山云自研的高性能解码器编译为`wasm`库，`wasm`文件是以二进制形式存在的，其中包含平台无关的虚拟指令（类似汇编指令）。
 
 ## 传输协议
 
@@ -148,6 +179,8 @@ video::cue(.red) {
 ### MP4
 
 ### FLV
+
+### M3U8
 
 ## 点播/直播编转码
 

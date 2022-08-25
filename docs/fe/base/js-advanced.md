@@ -103,26 +103,6 @@ console.log(Person === Person.prototype.constructor) // true
 
 函数 Person 的 prototype 属性指向了一个对象，这个对象正是调用构造函数时创建的实例 person1 的原型
 
-## bind、call、apply
-
-三者都能改变 `this` 的指向
-
-`call` 接收的是一个参数列表，`apply` 接收的是一个参数数组
-
-`bind` 接收的也是一个参数列表，返回一个新的函数，必须调用才会执行
-
-```js
-let a = { value: 1 }
-function getValue(name, age) {
-  console.log(name)
-  console.log(age)
-  console.log(this.value) // 1
-}
-getValue.call(a, 'zgh', '23') // this指向a
-getValue.apply(a, ['zgh', '23'])
-getValue.bind(a, 'zgh', '23')()
-```
-
 ## 作用域
 
 作用域指变量的有效范围。分为全局作用域、局部作用域、块级作用域。
@@ -152,6 +132,97 @@ ES6 增加的`let`、`const`可以声明块级作用域，只在`let`和`const`�
 ### 执行上下文
 
 执行上下文是执行 JavaScript 代码的环境
+
+## 闭包
+
+闭包就是能够读取其他函数内部变量的函数
+
+如果一个函数 f()内部定义了一个函数 g()，并且 g()引用了 f()中的变量，那么函数 g()就是一个闭包
+
+```js
+function f() {
+  let a = 1
+  function g() {
+    a += 1
+    console.log(a)
+  }
+  g()
+}
+f()
+```
+
+优点：延长变量生命周期
+
+缺点：造成内存泄漏
+
+示例一、打印点击了哪个数字
+
+```js
+/**
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+</ul>
+*/
+
+let lis = document.getElementsByTagName('li')
+for (var i = 0; i < lis.length; i++) {
+  ;(function (i) {
+    lis[i].onclick = function () {
+      console.log(i)
+    }
+  })(i)
+}
+
+//或者
+for (var i = 0; i < lis.length; i++) {
+  lis[i].onclick = (function (i) {
+    return function () {
+      console.log(i)
+    }
+  })(i)
+}
+```
+
+如果不使用闭包将会一直打印出 5，使用闭包后正常显示，也可直接将`var`改为`let`
+
+示例二、每隔 1 秒输出 1~5
+
+```js
+for (var i = 1; i <= 5; i++) {
+  setTimeout(function timer() {
+    console.log(i)
+  }, i * 1000)
+}
+```
+
+上面代码会输出 5 次 6，延迟函数的回调会在循环结束时才执行。
+
+```js
+for (var i = 1; i <= 5; i++) {
+  ;(function (j) {
+    setTimeout(function timer() {
+      console.log(j)
+    }, j * 1000)
+  })(i)
+}
+```
+
+在迭代内使用`IIFE`会为每个迭代都生成一个新的作用域，使得延迟函数的回调函数可以将新的作用域封闭在每个迭代的内部，
+每个迭代中都会有一个正确的变量值供我们访问。
+
+还有一种更方便的方式，就是使用块作用域，将`var`换成`let`
+
+```js
+for (let i = 1; i <= 5; i++) {
+  setTimeout(function timer() {
+    console.log(i)
+  }, i * 1000)
+}
+```
 
 ## this 指向
 
@@ -366,6 +437,26 @@ console.log(user.ref().cool) // zgh
 
 此处 `user.ref()` 是一个方法，this 指向 user 对象
 
+## bind、call、apply
+
+三者都能改变 `this` 的指向
+
+`call` 接收的是一个参数列表，`apply` 接收的是一个参数数组
+
+`bind` 接收的也是一个参数列表，返回一个新的函数，必须调用才会执行
+
+```js
+let a = { value: 1 }
+function getValue(name, age) {
+  console.log(name)
+  console.log(age)
+  console.log(this.value) // 1
+}
+getValue.call(a, 'zgh', '23') // this指向a
+getValue.apply(a, ['zgh', '23'])
+getValue.bind(a, 'zgh', '23')()
+```
+
 ## IIFE
 
 ### 立即执行函数表达式
@@ -456,97 +547,6 @@ function deepClone(obj) {
 
 深拷贝是在引用方面不同，深拷贝就是创建一个新的和原始字段的内容相同的字段，是两个一样大的数据段，所以两者的引用是不同的，
 之后的新对象中的引用型字段发生改变，不会引起原始对象中的字段发生改变。
-
-## 闭包
-
-闭包就是能够读取其他函数内部变量的函数
-
-如果一个函数 f()内部定义了一个函数 g()，并且 g()引用了 f()中的变量，那么函数 g()就是一个闭包
-
-```js
-function f() {
-  let a = 1
-  function g() {
-    a += 1
-    console.log(a)
-  }
-  g()
-}
-f()
-```
-
-优点：延长变量生命周期
-
-缺点：造成内存泄漏
-
-示例一、打印点击了哪个数字
-
-```js
-/**
-<ul>
-    <li>1</li>
-    <li>2</li>
-    <li>3</li>
-    <li>4</li>
-    <li>5</li>
-</ul>
-*/
-
-let lis = document.getElementsByTagName('li')
-for (var i = 0; i < lis.length; i++) {
-  ;(function (i) {
-    lis[i].onclick = function () {
-      console.log(i)
-    }
-  })(i)
-}
-
-//或者
-for (var i = 0; i < lis.length; i++) {
-  lis[i].onclick = (function (i) {
-    return function () {
-      console.log(i)
-    }
-  })(i)
-}
-```
-
-如果不使用闭包将会一直打印出 5，使用闭包后正常显示，也可直接将`var`改为`let`
-
-示例二、每隔 1 秒输出 1~5
-
-```js
-for (var i = 1; i <= 5; i++) {
-  setTimeout(function timer() {
-    console.log(i)
-  }, i * 1000)
-}
-```
-
-上面代码会输出 5 次 6，延迟函数的回调会在循环结束时才执行。
-
-```js
-for (var i = 1; i <= 5; i++) {
-  ;(function (j) {
-    setTimeout(function timer() {
-      console.log(j)
-    }, j * 1000)
-  })(i)
-}
-```
-
-在迭代内使用`IIFE`会为每个迭代都生成一个新的作用域，使得延迟函数的回调函数可以将新的作用域封闭在每个迭代的内部，
-每个迭代中都会有一个正确的变量值供我们访问。
-
-还有一种更方便的方式，就是使用块作用域，将`var`换成`let`
-
-```js
-for (let i = 1; i <= 5; i++) {
-  setTimeout(function timer() {
-    console.log(i)
-  }, i * 1000)
-}
-```
 
 ## 节流和防抖
 

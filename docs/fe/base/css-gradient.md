@@ -28,6 +28,29 @@ direction 表示渐变方向，后面表示多个渐变颜色。若需要透明�
 background-image: repeating-linear-gradient(90deg, #f00, #0f0 8%, #00f 20%);
 ```
 
+示例：变色的文字
+
+```css
+/* <div class="box">天下无敌</div> */
+
+.box {
+  font-weight: 700;
+  -webkit-text-fill-color: transparent;
+  background-image: -webkit-linear-gradient(left, #007eef, #dc5cb6 25%, #007eef 50%, #dc5cb6 75%, #007eef);
+  background-size: 200%, 100%;
+  -webkit-background-clip: text;
+  -webkit-animation: word 3s linear infinite;
+}
+@keyframes word {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+```
+
 ## 径向渐变
 
 默认情况下，渐变的中心是 center（表示在中心点），渐变的形状是 ellipse（表示椭圆形），渐变的大小是 farthest-corner（表示到最远的角落）。

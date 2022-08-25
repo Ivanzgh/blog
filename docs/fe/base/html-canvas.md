@@ -51,7 +51,7 @@ ctx.width = 1000 // 可以不写单位px
 ctx.height = 800
 ```
 
-如果想动态设置宽高，比如想让 canvas 的宽度占据屏幕的 70%，根据 16:9 的比例计算高度
+如果想动态设置宽高，比如想让 canvas 的宽度占据屏幕的 70%，根据`16:9`的比例计算高度
 
 ```js
 const canvasWidth = window.innerWidth * 0.7

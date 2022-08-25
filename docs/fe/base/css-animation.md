@@ -1,6 +1,87 @@
 # 动画
 
-## 兼容性
+## transition
+
+transition: <过度属性> <过渡时间> <过度模式>
+
+```css
+transition: background 6s linear;
+```
+
+过度模式：transition-timing-function
+
+- ease 缓慢开始，缓慢结束
+- linear 匀速
+- ease-in 缓慢开始
+- ease-out 缓慢结束
+- ease-in-out 缓慢开始，缓慢结束(与 ease 稍有区别)
+
+```css
+.box {
+  width: 300px;
+  height: 400px;
+  background-color: #ff0;
+  opacity: 0;
+  transition: all 1s ease;
+}
+
+.box:hover {
+  opacity: 1;
+}
+```
+
+## transform
+
+### 设置 3D 场景
+
+#### 使用 transform 属性调整元素
+
+使用 3D 场景：`transform-style: preserve-3d;`
+
+#### transition(位移操作)
+
+- translateX(x px)
+- translateY(y px)
+- translateZ(z px)
+
+#### rotate(旋转操作)
+
+- rotateX(x deg)
+- rotateY(y deg)
+- rotateZ(z deg)
+
+`perspective` 设置从何处查看一个元素的角度：
+
+`perspective-origin` 设置一个 3D 元素的基数位置：
+
+```css
+/* <div class="box">
+  <div class="content"></div>
+</div> */
+
+.box {
+  perspective: 800px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+}
+.content {
+  width: 300px;
+  height: 300px;
+  background: #0f0;
+  margin: 100px auto;
+  transform: rotateX(45deg);
+}
+```
+
+#### 使用 transform-origin 调整旋转中心
+
+- X 轴：left , center, right
+- Y 轴：top , center , bottom
+- Z 轴：length px
+
+## animation
+
+兼容性
 
 IE10 + 、Firefox 以及 Opera 支持 `@keyframes` 规则和 `animation` 属性。
 
@@ -70,7 +151,7 @@ Chrome 和 Safari 需要前缀 `-webkit-`
 
 0% 是动画的开始，100% 是动画的完成。或用关键词 "from" 和 "to"，等同于 0% 和 100%。
 
-## 动画属性
+### 动画属性
 
 `animation` 所有动画属性的简写属性，除了 `animation-play-state` 属性。
 
@@ -90,7 +171,7 @@ Chrome 和 Safari 需要前缀 `-webkit-`
 
 `animation-fill-mode` 规定对象动画时间之外的状态。
 
-### animation
+### 简写
 
 animation 属性是一个简写属性，用于设置六个动画属性
 

@@ -126,7 +126,7 @@ scene.add(spotLightHelper)
 <https://github.com/mrdoob/stats.js>
 
 ```js
-;<script src="https://cdn.jsdelivr.net/npm/three@0.97.0/examples/js/libs/stats.min.js"></script>
+// <script src="https://cdn.jsdelivr.net/npm/three@0.97.0/examples/js/libs/stats.min.js"></script>
 
 const stats = new Stats()
 stats.domElement.style.zIndex = 100

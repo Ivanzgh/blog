@@ -190,7 +190,7 @@ module.exports = {
 
 `markdownlint`
 
-语法规则：
+<details><summary>点击显示语法规则</summary>
 
 - MD001 - Heading levels should only increment by one level at a time（标题级数只能逐级扩大）
 - MD002 - First heading should be a top level heading（文档的第一个标题必须是最高级的标题，即 h1）
@@ -235,6 +235,8 @@ module.exports = {
 - MD045 - Images should have alternate text (alt text)（图片链接必须包含描述文本）
 - MD046 - Code block style（整篇文档采用一致的代码格式）
 - MD047 - Files should end with a single newline character（文档末尾需要一个空行）
+
+</details>
 
 ## Chrome
 

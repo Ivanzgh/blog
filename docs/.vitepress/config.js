@@ -15,59 +15,62 @@ export default defineConfig({
       copyright: 'Copyright © 2020-present ZGH'
     },
     algolia: {
-      appId: 'L87Y8ET2MP',
-      apiKey: '6be3321f6faf70967ed208d822aaccc8',
-      indexName: 'ZGHBLOG'
+      appId: '0QPOEAMUZK',
+      apiKey: '3c1f70ed4dca0ad41775f35548a1b525',
+      indexName: 'ivanzghio'
     },
     nav: nav(),
     sidebar: {
-      '/fe/html/': [
+      '/fe/base/': [
         {
           text: 'HTML',
           collapsible: true,
           items: [
-            { text: 'HTML', link: '/fe/html/' },
-            { text: 'Canvas', link: '/fe/html/canvas' },
-            { text: 'SVG', link: '/fe/html/svg' }
+            { text: 'HTML', link: '/fe/base/html' },
+            { text: 'Canvas', link: '/fe/base/html-canvas' },
+            { text: 'SVG', link: '/fe/base/html-svg' }
           ]
-        }
-      ],
-      '/fe/css/': [
+        },
         {
           text: 'CSS',
           collapsible: true,
           items: [
-            { text: 'CSS', link: '/fe/css/' },
-            { text: '常用布局', link: '/fe/css/layout' },
-            { text: '业务效果', link: '/fe/css/business' },
-            { text: '阴影', link: '/fe/css/box-shadow' },
-            { text: '渐变', link: '/fe/css/gradient' },
-            { text: '动画', link: '/fe/css/animation' },
-            { text: '媒体查询', link: '/fe/css/media-queries' },
-            { text: '裁剪', link: '/fe/css/clip-path' },
-            { text: 'Sass', link: '/fe/css/sass' },
-            { text: 'Less', link: '/fe/css/less' }
+            { text: 'CSS', link: '/fe/base/css' },
+            { text: '常用布局', link: '/fe/base/css-layout' },
+            { text: '业务效果', link: '/fe/base/css-business' },
+            { text: '阴影', link: '/fe/base/css-box-shadow' },
+            { text: '渐变', link: '/fe/base/css-gradient' },
+            { text: '动画', link: '/fe/base/css-animation' },
+            { text: '媒体查询', link: '/fe/base/css-media-queries' },
+            { text: '裁剪', link: '/fe/base/css-clip-path' },
+            { text: 'Sass', link: '/fe/base/css-sass' },
+            { text: 'Less', link: '/fe/base/css-less' }
           ]
-        }
-      ],
-      '/fe/js/': [
+        },
         {
           text: 'JavaScript',
           collapsible: true,
           items: [
-            { text: 'JS', link: '/fe/js/' },
-            { text: 'DOM', link: '/fe/js/dom' },
-            { text: 'JSON', link: '/fe/js/json' },
-            { text: '数组', link: '/fe/js/array' },
-            { text: '字符串', link: '/fe/js/string' },
-            { text: '对象', link: '/fe/js/object' },
-            { text: 'AJAX', link: '/fe/js/ajax' },
-            { text: 'advanced', link: '/fe/js/advanced' },
-            { text: 'oop', link: '/fe/js/oop' },
-            { text: 'ES6', link: '/fe/js/es6' },
-            { text: '模块化', link: '/fe/js/module' },
-            { text: '工具', link: '/fe/js/utils' },
-            { text: 'utilsArray', link: '/fe/js/utilsArray' }
+            { text: 'JS', link: '/fe/base/js' },
+            { text: '字符串', link: '/fe/base/js-string' },
+            { text: '数组', link: '/fe/base/js-array' },
+            { text: '对象', link: '/fe/base/js-object' },
+            { text: '进阶', link: '/fe/base/js-advanced' },
+            { text: 'ES6', link: '/fe/base/js-es6' },
+            { text: 'DOM', link: '/fe/base/js-dom' },
+            { text: 'JSON', link: '/fe/base/js-json' },
+            { text: 'AJAX', link: '/fe/base/js-ajax' },
+            { text: '模块化', link: '/fe/base/js-module' },
+            { text: '工具', link: '/fe/base/js-utils' }
+          ]
+        },
+        {
+          text: '浏览器',
+          collapsible: true,
+          items: [
+            { text: '介绍', link: '/fe/base/browser' },
+            { text: 'window', link: '/fe/base/browser-window' },
+            { text: '兼容性', link: '/fe/base/browser-compatibility' }
           ]
         }
       ],
@@ -124,14 +127,14 @@ export default defineConfig({
         { text: 'Koa', collapsible: true, items: [{ text: 'Koa', link: '/fe/node/koa' }] },
         { text: 'MongoDB', collapsible: true, items: [{ text: 'MongoDB', link: '/fe/node/mongodb' }] }
       ],
-      '/fe/browser/': [
+      '/mini-program/': [
         {
-          text: '浏览器',
+          text: '小程序',
           collapsible: true,
           items: [
-            { text: '浏览器', link: '/fe/browser/' },
-            { text: 'window', link: '/fe/browser/window' },
-            { text: '兼容性', link: '/fe/browser/compatibility' }
+            { text: '微信小程序', link: '/mini-program/wx' },
+            { text: 'Taro', link: '/mini-program/taro' },
+            { text: 'uniapp', link: '/mini-program/uniapp' }
           ]
         }
       ],
@@ -157,27 +160,24 @@ function nav() {
     {
       text: '前端',
       items: [
-        { text: 'HTML', link: '/fe/html/' },
-        { text: 'CSS', link: '/fe/css/' },
-        { text: 'JavaScript', link: '/fe/js/' },
+        { text: '基础', link: '/fe/base/js' },
         { text: 'TypeScript', link: '/fe/ts/' },
         { text: 'Vue', link: '/fe/vue/' },
         { text: 'React', link: '/fe/react/' },
         { text: 'Node', link: '/fe/node/' },
-        { text: '微信小程序', link: '/fe/wx/' },
-        { text: '浏览器', link: '/fe/browser/' },
-        { text: '前端插件', link: '/fe/plugin/' }
+        { text: '小程序', link: '/mini-program/wx' },
+        { text: '插件', link: '/plugin' }
       ]
     },
     {
-      text: '工具',
+      text: '工程化',
       items: [
-        { text: 'NPM', link: '/fe/npm/' },
-        { text: 'Git', link: '/fe/git/' },
+        { text: 'NPM', link: '/npm' },
+        { text: 'Git', link: '/git' },
         { text: 'Webpack', link: '/build/webpack/' },
         { text: 'Gulp', link: '/build/gulp/' },
         { text: 'rollup', link: '/build/rollup/' },
-        { text: 'Others', link: '/utils/' }
+        { text: 'Others', link: '/utils' }
       ]
     },
     {
@@ -198,10 +198,10 @@ function nav() {
         { text: 'GeoServer', link: '/vis/geoserver/' },
         { text: 'Cesium', link: '/vis/cesium/' },
         { text: 'Three', link: '/vis/three/' },
-        { text: 'Maptalks', link: '/vis/maptalks/' }
+        { text: 'Maptalks', link: '/vis/maptalks/' },
+        { text: '流媒体', link: '/media/' }
       ]
     },
-    { text: '流媒体', link: '/media/' },
     {
       text: '计算机基础',
       items: [
@@ -212,6 +212,6 @@ function nav() {
         { text: '设计模式', link: '/base/design-pattern/' }
       ]
     },
-    { text: '随笔', link: '/thought/' }
+    { text: '随笔', link: '/thought' }
   ]
 }

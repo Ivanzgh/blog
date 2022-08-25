@@ -10,10 +10,10 @@ hero:
   actions:
     - theme: brand
       text: 快速开始 →
-      link: /fe/js/
+      link: /fe/base/js
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/Ivanzgh/blog
+      text: 知识图谱
+      link: https://www.processon.com/view/link/6305d5a00e3e74074be5a309
 features:
   - icon: ⚡️
     title: 能用健壮的代码去解决具体的问题

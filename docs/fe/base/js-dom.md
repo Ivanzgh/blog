@@ -152,7 +152,7 @@ dom 对象.事件 = 事件的处理程序（通常是一个匿名函数）
 ```html
 <input id="demo" type="button" value="点击我，显示 type 属性" />
 <script type="text/javascript">
-  document.getElementById('demo').onclick = function() {
+  document.getElementById('demo').onclick = function () {
     alert(this.getAttribute('type')) // this 指当前发生事件的HTML元素，这里是<div>标签
   }
 </script>
@@ -180,3 +180,11 @@ IE8.0 及其以下版本不支持`addEventListener()` ，它使用`attachEvent()
 事件委托利用了事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件。
 
 <https://www.cnblogs.com/Chen-XiaoJun/p/6210987.html>
+
+## getBoundingClientRect
+
+获取元素的大小及其相对于视口的位置
+
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661333955.png)
+
+## scrollHeight、clientHeight、innerHeight
