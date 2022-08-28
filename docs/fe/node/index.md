@@ -37,7 +37,7 @@ const myapp = require('../com/my.js')
 
 > require 引入和 es6 的 import 引入的区别？
 
-## fs文件系统
+## fs 文件系统
 
 复制文件夹
 
@@ -48,7 +48,7 @@ let fs = require('fs')
 function copyFile({ src, dest }) {
   fs.readdir(path.resolve(src), (err, files) => {
     if (err) {
-      console.log('获取文件夹失败');
+      console.log('获取文件夹失败')
       throw err
     } else {
       files.forEach((item) => {
@@ -65,7 +65,7 @@ function copyFile({ src, dest }) {
 
 const params = {
   src: './src/beijing', // 要复制的源文件名
-  dest: './src/shanghai', // 复制操作的目标文件名
+  dest: './src/shanghai' // 复制操作的目标文件名
 }
 copyFile(params)
 ```
@@ -79,7 +79,7 @@ let fs = require('fs')
 function rename({ dest, from, to }) {
   fs.readdir(path.resolve(dest), (err, files) => {
     if (err) {
-      console.log('获取文件夹失败');
+      console.log('获取文件夹失败')
       throw err
     } else {
       files.forEach((item) => {
@@ -96,8 +96,13 @@ function rename({ dest, from, to }) {
 
 const params = {
   dest: './src/shanghai', // 要更改的文件夹
-  from: 'jhyj_dc',    // 要更改的源文件名
-  to: 'jhyj_sh'     // 要更改的目标文件名
+  from: 'jhyj_dc', // 要更改的源文件名
+  to: 'jhyj_sh' // 要更改的目标文件名
 }
 rename(params)
 ```
+
+## process 模块
+
+`process.argv` 可以获得命令行调用的信息，以空格分隔。假设执行一个脚本 test.js，运行`node test.js`，
+那么`process.argv`的结果是`['node', 'test.js']`

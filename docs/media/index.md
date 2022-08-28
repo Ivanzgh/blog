@@ -2,6 +2,8 @@
 
 ## video 标签
 
+用于播放视频或直播流，可以通过 JS HTMLVideoElement 对象访问
+
 ```html
 <video controls width="250" src="/media/test.mp4"></video>
 
@@ -22,7 +24,12 @@
 - `src` 视频链接，可选，可使用`video`块内的`<source>`元素代替
 - `poster` 视频封面
 
+`<source>` 标签放在 `<audio>` 或者 `<video>` 内部，以指定播放的媒体源，可以添加多个不同格式、大小、分辨率的媒体源，
+通过 JS HTMLSourceElement 对象访问
+
 ## audio 标签
+
+播放音频，可以通过 JS HTMLAudioElement 对象访问
 
 ```html
 <audio controls>
@@ -34,7 +41,7 @@
 
 ## 字幕
 
-使用`<track>`可以给`<video>`和`<audio>`添加字幕。
+使用`<track>`可以给`<video>`和`<audio>`添加字幕
 
 ```html
 <video controls>
@@ -123,7 +130,21 @@ video::cue(.red) {
 
 `paypal`的开源项目：[accessible-html5-video-player](https://github.com/paypal/accessible-html5-video-player)，可以对原生的`video`进行 UI 定制，会把`WebVTT`文件中`html`片段直接完整输出到页面中，这样所有的 CSS 属性都可以使用了
 
+## 媒体 API
+
+- 媒体源扩展 API
+  MSE (Media Source Extension) 扩展了浏览器的媒体播放功能，允许用 JS 动态构造媒体流 MediaSource 对象，然后喂给`<video>`和`<audio>`标签进行更精细化的播放控制。也可以用 JS 把一些不支持的视频流格式转封装为支持的格式，flv.js 就是基于此实现，使用 MSE 技术将 FLV 源用 JS 实时转封装成 HTML5 支持的视频格式
+- 网络音频 API
+  Web Audio API 用于处理和合成 Web 应用程序中的音频，可以声音合成、添加音频特效、音频可视化等，使用 Web Audio API 可以完成专业的 Web 音频处理软件（如节拍器、调音器等）
+- 媒体捕获和流媒体 API
+  Media Stream API 可以使用本地摄像头和麦克风来采集录制音视频，或者捕获电脑屏幕，或者读取本地视频做合成，常用于 Web 摄像头、拍照、录屏、视频通话等，MediaStream 是连接 WebRTC API 和底层物理流的中间层，WebRTC 将音视频经过语音或视频引擎进行处理后，再通过 MediaStream API 暴露给上层使用
+- WebRTC
+  WebRTC 是一套支持浏览器进行实时音视频对话的 API，它包括了音视频的采集、编解码、网络传输、显示等功能，使互联网上任意两位用户在**无需服务器**的情况下实现实时的音频、视频和任意数据的通信
+
 ## 编码标准
+
+为了便于传输和存储，需要对原视频文件通过编码来压缩文件大小，再通过容器封装将压缩后的音视频、字幕组合到一个容器内，这就是**编码**和**容器封装**的过程。
+在播放时就要**解封装**和**解码**，`<video>`标签只支持特定格式的媒体内容对其解封装和解码
 
 ### H.264/AVC
 
@@ -193,7 +214,7 @@ video::cue(.red) {
 
 ### WebRTC
 
-## 工具
+## 播放器
 
 ### chrome 音视频工具
 
@@ -211,3 +232,16 @@ video::cue(.red) {
 - `video_buffering_state`和`audio_buffering_state`来确定当前视频的`Buffer`状态
 
 Log 包含了常规的多媒体日志信息和网络日志信息
+
+### flv.js
+
+基于 HTTP-FLV 流媒体协议，通过纯 JS 实现 FLV 转封装，使 flv 格式文件能在 Web 上进行播放。
+但视频仅支持 H.264 编码，音频支持 AAC 和 MP3 编码
+
+### hls.js
+
+基于 Http Live Stream 协议开发，利用MSE，用于实现 HLS 在 web 上播放
+
+### Aliplayer
+
+阿里支持HTML5和Flash两种播放模式

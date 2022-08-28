@@ -10,39 +10,318 @@
 
 ## grid 布局
 
+## 水平垂直居中
+
+### 已知容器的宽高
+
+- 负`margin`，设置外边距为自身宽高的一半
+
+```css
+.box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 200px;
+  margin: -100px 0 0 -200px;
+}
+```
+
+- margin 设为`auto`
+
+```css
+.box {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+```
+
+- 通过`calc`计算属性减去自身宽高的一半
+
+```css
+.box {
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  top: calc(50% - 50px);
+  left: calc(50% - 100px);
+}
+```
+
+### 未知容器的宽高
+
+- 利用`transform`属性，移动自身长度的一半
+
+```css
+.box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+```
+
+- flex 布局
+
+```css
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+```
+
+- grid 布局
+
+```css
+.box {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+```
+
+- `display: table-cell`，把元素变为`table`元素，不推荐
+
+```css
+.container {
+  width: 500px;
+  height: 300px;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.box-center {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  display: inline-block;
+}
+```
+
 ## 两栏布局
 
 左侧定宽，右侧自适应
 
+假设结构如下：
+
 ```html
 <style>
-  .box {
-    height: 200px;
-  }
-
-  .box > div {
-    height: 100%;
-  }
-
   .left {
-    float: left;
-    width: 200px;
-    background: pink;
+    background-color: #0ff;
   }
-
   .right {
-    margin-left: 200px;
-    background: yellow;
+    background: #0f0;
   }
 </style>
 
 <div class="box">
-  <div class="left"></div>
-  <div class="right"></div>
+  <div class="left">11111</div>
+  <div class="right">
+    33333
+    <div class="info">22222</div>
+  </div>
 </div>
+44444
+```
+
+1. flex 布局
+
+```css
+.box {
+  display: flex;
+  height: 300px;
+}
+.left {
+  width: 200px;
+}
+.right {
+  flex: 1;
+}
+```
+
+2. grid 布局
+
+```css
+.box {
+  height: 300px;
+  display: grid;
+  grid-template-columns: 200px auto;
+  grid-template-rows: 300px;
+}
+```
+
+3. 浮动布局
+
+```css
+.box {
+  height: 300px;
+  /* 创建BFC，防止父元素高度塌陷 */
+  overflow: hidden;
+}
+
+.left {
+  float: left;
+  width: 200px;
+  height: 100%;
+}
+
+.right {
+  height: 100%;
+  margin-left: 200px;
+}
+```
+
+4. 定位
+
+```css
+.box {
+  height: 300px;
+  position: relative;
+}
+.left,
+.right {
+  position: absolute;
+  top: 0;
+  height: 100%;
+}
+.left {
+  left: 0;
+  width: 200px;
+}
+.right {
+  left: 200px;
+  right: 0;
+}
 ```
 
 ### 三栏布局
+
+两边定宽，中间自适应
+
+假设结构如下：
+
+```html
+<style>
+  .left {
+    background-color: #f00;
+  }
+  .middle {
+    background-color: #0f0;
+  }
+  .right {
+    background-color: #00f;
+  }
+</style>
+
+<div class="box">
+  <div class="left">1</div>
+  <div class="middle">2</div>
+  <div class="right">3</div>
+</div>
+```
+
+1. flex 布局
+
+```css
+.box {
+  display: flex;
+  height: 300px;
+}
+.left {
+  width: 200px;
+  min-width: 200px;
+}
+.middle {
+  flex: 1;
+}
+.right {
+  width: 200px;
+}
+```
+
+2. grid 布局
+
+```css
+.box {
+  display: grid;
+  grid-template-columns: 200px auto 200px;
+  grid-template-rows: 300px;
+}
+```
+
+3. 浮动布局
+
+```css
+.box {
+  /* 创建BFC，防止父元素高度塌陷 */
+  overflow: hidden;
+}
+
+.left {
+  float: left;
+  width: 200px;
+  height: 300px;
+}
+.middle {
+  height: 300px;
+  margin-left: 200px;
+  margin-right: 200px;
+}
+.right {
+  float: right;
+  width: 200px;
+  height: 300px;
+}
+```
+
+此时要调整 Dom 结构
+
+```html
+<div class="box">
+  <div class="left">1</div>
+  <div class="right">3</div>
+  <div class="middle">2</div>
+</div>
+```
+
+4. 定位
+
+```css
+.box {
+  position: relative;
+  height: 300px;
+}
+.left {
+  position: absolute;
+  left: 0;
+  width: 200px;
+  height: 100%;
+}
+.middle {
+  position: absolute;
+  left: 200px;
+  right: 200px;
+  height: 100%;
+
+  /* 也可以使用 margin
+  margin-left: 200px;
+  margin-right: 200px; */
+}
+.right {
+  position: absolute;
+  right: 0;
+  width: 200px;
+  height: 100%;
+}
+```
 
 ## 多列等高布局
 

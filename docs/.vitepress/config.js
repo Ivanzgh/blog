@@ -36,7 +36,7 @@ export default defineConfig({
           collapsible: true,
           items: [
             { text: 'CSS', link: '/fe/base/css' },
-            { text: '常用布局', link: '/fe/base/css-layout' },
+            { text: '布局', link: '/fe/base/css-layout' },
             { text: '业务效果', link: '/fe/base/css-business' },
             { text: '阴影', link: '/fe/base/css-box-shadow' },
             { text: '渐变', link: '/fe/base/css-gradient' },

@@ -70,6 +70,28 @@ w3school 介绍网址： <http://www.w3school.com.cn/css/css_margin_collapsing.a
 - `.class1 div {}`，权重为 10+1=11
 - `.class1 .class2 div {}`，权重为 10+10+1=21
 
+## 清除浮动
+
+**浮动元素会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素**
+
+清除浮动是为了清除使用浮动元素产生的影响。浮动会导致父元素高度坍塌，而高度的塌陷使我们页面后面的布局不能正常显示
+
+主推采用`::after`伪元素方法清理浮动
+
+```css
+.clearfix {
+  /*触发IE6中的 hasLayout*/
+  zoom: 1;
+}
+.clearfix::after {
+  content: '';
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+```
+
 ## BFC 规范
 
 ### 块级格式化上下文：block formatting context
@@ -208,101 +230,7 @@ BFC 还有一条重要特性：BFC 的区域不会与 float box 重叠。试想�
 </html>
 ```
 
-## 水平垂直居中
 
-### 已知容器的宽高
-
-- 负`margin`，设置外边距为自身宽高的一半
-
-```css
-.box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  height: 200px;
-  margin: -100px 0 0 -200px;
-}
-```
-
-- margin 设为`auto`
-
-```css
-.box {
-  width: 100px;
-  height: 100px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-```
-
-- 通过`calc`计算属性减去自身宽高的一半
-
-```css
-.box {
-  position: absolute;
-  width: 200px;
-  height: 100px;
-  top: calc(50% - 50px);
-  left: calc(50% - 100px);
-}
-```
-
-### 未知容器的宽高
-
-- 利用`transform`属性，移动自身长度的一半
-
-```css
-.box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-```
-
-- flex 布局
-
-```css
-.box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-```
-
-- grid 布局
-
-```css
-.box {
-  display: grid;
-  justify-items: center;
-  align-items: center;
-}
-```
-
-- `display: table-cell`，把元素变为`table`元素，不推荐
-
-```css
-.container {
-  width: 500px;
-  height: 300px;
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.box-center {
-  width: 100px;
-  height: 100px;
-  background-color: red;
-  display: inline-block;
-}
-```
 
 ## 隐藏元素
 
@@ -375,28 +303,6 @@ calc 是 css3 提供的一个在 css 文件中计算值的函数,用于动态计
 元素高度是否可以用百分比显示取决于父级元素。在浏览器默认状态下没有给 body 高度，
 设置`html,body { height: 100%; }`，子元素才能正常显示
 :::
-
-## 清除浮动
-
-**浮动元素会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素。**
-
-清除浮动是为了清除使用浮动元素产生的影响。浮动会导致父元素高度坍塌，而高度的塌陷使我们页面后面的布局不能正常显示。
-
-主推采用`::after`伪元素方法清理浮动
-
-```css
-.clearfix {
-  /*触发IE6中的 hasLayout*/
-  zoom: 1;
-}
-.clearfix::after {
-  content: '';
-  display: block;
-  height: 0;
-  visibility: hidden;
-  clear: both;
-}
-```
 
 ## 设置页面小图标
 
