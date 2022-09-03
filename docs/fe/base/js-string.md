@@ -12,9 +12,7 @@ const s2 = 'How are you doing today?'
 console.log(s2.length) // 24
 ```
 
-## 截取字符串
-
-### 单个值可直接获取
+单个值可直接获取
 
 ```js
 let str = '1,3'
@@ -23,9 +21,26 @@ console.log(str[1]) // ,
 console.log(str[2]) // 3
 ```
 
-### substring()
+## split()
 
-截取字符串中介于两个指定下标之间的字符。
+把一个字符串分割成字符串数组
+
+语法 `str.split(separator,howmany)`
+
+```js
+let str = 'hello world'
+
+str.split(' ') // ['hello', 'world']
+str.split('') // ['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
+str.split(' ', 1) // ['hello']
+
+'2:3:4:5'.split(':') // ['2', '3', '4', '5']
+'|a|b|c'.split('|') // ['', 'a', 'b', 'c']
+```
+
+## substring()
+
+截取字符串中介于两个指定下标之间的字符
 
 语法：`str.substring(start,end)`
 参数|描述
@@ -44,7 +59,7 @@ let res = str.substring(0, str.indexOf('.') + 3)
 console.log(res) // 22.12
 ```
 
-### substr()
+## substr()
 
 截取从 start 下标开始的指定数目的字符。作为遗留函数尽量避免使用，使用`substring()`代替
 
@@ -60,7 +75,7 @@ a.substr(1, 3) // bcd
 a.substr() // abcdef，这里无参数
 ```
 
-### slice()
+## slice()
 
 语法：`str.slice(start, end)`
 参数|描述|
@@ -75,23 +90,6 @@ let str = '330102197807280020'
 let res = str.slice(4)
 let res1 = str.replace(res, '**************')
 console.log(res1) // 3301**************
-```
-
-### split()
-
-把一个字符串分割成字符串数组
-
-语法 `str.split(separator,howmany)`
-
-```js
-let str = 'hello world'
-
-str.split(' ') // ['hello', 'world']
-str.split('') // ['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
-str.split(' ', 1) // ['hello']
-
-'2:3:4:5'.split(':') // ['2', '3', '4', '5']
-'|a|b|c'.split('|') // ['', 'a', 'b', 'c']
 ```
 
 ## charAt()
@@ -132,23 +130,21 @@ let week = new Date().getDay()
 let day = '今天是星期' + arr[week]
 ```
 
-## 常见场景
+## 单双引号转换
 
-### 单双引号转换
-
-#### 1.双引号替换成单引号
+- 双引号替换成单引号
 
 ```js
 let _adrobj = JSON.stringify(address).replace(/\"/g, "'")
 ```
 
-#### 2、单引号替换成双引号
+- 单引号替换成双引号
 
 ```js
 let _nstr = _adrdata.replace(/'/g, '"')
 ```
 
-### 手机号校验
+## 手机号校验
 
 校验手机号，号段主要有(不包括上网卡)：130~139、150~153，155~159，180~189、170~171、176~178。14 号段为上网卡专属号段
 
@@ -167,7 +163,7 @@ if (str.length == 0) {
 }
 ```
 
-### UTC 时间格式转化为本地时间
+## UTC 时间格式转化为本地时间
 
 ```js
 function convertUTCTimeToLocalTime(UTCDateString) {
@@ -189,11 +185,11 @@ function convertUTCTimeToLocalTime(UTCDateString) {
 }
 ```
 
-### 截取时间日期
+## 截取时间日期
 
-将“yy-mm-dd HH:mm:ss”日期时间格式分割分别得到日期和时间
+将`yy-mm-dd HH:mm:ss`日期时间格式分割，得到日期和时间
 
-#### 方法一、split
+1. split
 
 ```js
 let time = '2009-12-30 13:28:29'
@@ -202,10 +198,9 @@ let date = res[0]
 let time = res[1]
 ```
 
-#### 方法二、slice
+2. slice
 
 ```js
 let str = '2019-08-18  00:00:00'
-let res = str.slice(0, 10)
-console.log(res) // 2019-08-18
+str.slice(0, 10) // 2019-08-18
 ```

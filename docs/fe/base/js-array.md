@@ -125,15 +125,24 @@ console.log(arr.toString()) //1,2,3
 ```js
 let arr = [1, 2, 3, 4, 5]
 
-let rs1 = arr.slice(0, 3)
-console.log(rs1) // [1, 2, 3]
-
-let rs2 = arr.slice(-5, -1)
-console.log(rs2) // [1, 2, 3, 4]
-
-let rs3 = arr.slice(1)
-console.log(rs3) //[2, 3, 4, 5]
+arr.slice(0, 3) // [1, 2, 3]
+arr.slice(-5, -1) // [1, 2, 3, 4]
+arr.slice(1) // [2, 3, 4, 5]
+arr.slice() // [1, 2, 3, 4, 5]
+arr.slice(-1) // 5，可以很方便的拿到数组最后一项元素
 ```
+
+为什么说新数组是对原数组的浅拷贝？
+
+```js
+const arr1 = [{ a: 1 }, 2, 3]
+const arr2 = arr1.slice(0, 1) // [{ a: 1 }]
+arr1[0].a = 9
+
+console.log(arr2) // [{ a: 9 }]
+```
+
+可以看到改变原数组的值，新数组也随之改变，复制到的对象只是一个引用
 
 ## splice()
 
@@ -207,7 +216,7 @@ array.filter(Boolean) // [1, 3, 5]
 
 返回数组中某个指定的元素位置，可用来判断数组中是否包含指定元素
 
-语法 `array.indexOf(item,start)`，`item`查找的元素，`start`开始检索的位置(可选)
+语法 `array.indexOf(item,start)`，`item`查找的元素，`start`开始检索的位置(可选，默认是 0)
 
 ```js
 let fruits = ['Banana', 'Orange', 'Apple', 'Mango']
@@ -224,6 +233,63 @@ if (fruits.indexOf('Apple') > -1) {
 如果在数组中没找到指定元素则返回 -1
 
 若查找字符串最后出现的位置，用 `lastIndexOf()` 方法
+
+使用严格相等`===`匹配数组中的元素
+
+## includes()
+
+判断元素是否在数组中存在。返回值是 `true`或`false`
+
+语法 `array.includes(item,start)`，`item`查找的元素，`start`开始检索的位置(可选，默认是 0)，正向查找
+
+```js
+let arr = [1, 2, 3]
+arr.includes(1) // true
+arr.includes(2, -1) // false
+```
+
+## find 和 findIndex
+
+find 用于找出第一个符合条件的数组元素。找不到则是`undefined`。注意，它不会返回多个，只找一个，找到了就返回。
+
+findIndex 返回第一个符合条件的数组元素的索引,找不到则是-1
+
+```js
+let arr = [
+  { name: 'z', score: 90 },
+  { name: 'g', score: 95 },
+  { name: 'h', score: 99 }
+]
+let rs1 = arr.find((item) => {
+  return item.name == 'g'
+})
+console.log(rs1) // {name: "g", score: 90}
+
+let rs2 = arr.findIndex((item) => {
+  return item.name == 'g'
+})
+console.log(rs2) // 1
+```
+
+## some()
+
+表示一些，只要数组中的某一个元素符合指定的条件，就会返回真，否则返回假。
+
+```js
+let arr = [
+  { name: 'z', score: 90 },
+  { name: 'g', score: 95 },
+  { name: 'h', score: 99 }
+]
+let rs = arr.some((item) => {
+  return item.score > 90
+})
+console.log(rs) // true
+```
+
+## every()
+
+如果数组中的所有元素都符合指定的条件，才返回 true，否则返回 false
 
 ## forEach()
 
@@ -289,26 +355,6 @@ let sum = arr.reduce((prev, next) => prev + next, 4)
 console.log(sum) // 10
 ```
 
-## some()
-
-表示一些，只要数组中的某一个元素符合指定的条件，就会返回真，否则返回假。
-
-```js
-let arr = [
-  { name: 'z', score: 90 },
-  { name: 'g', score: 95 },
-  { name: 'h', score: 99 }
-]
-let rs = arr.some((item) => {
-  return item.score > 90
-})
-console.log(rs) // true
-```
-
-## every()
-
-如果数组中的所有元素都符合指定的条件，才返回 true，否则返回 false
-
 ## Array.isArray()
 
 判断是否是数组类型
@@ -340,39 +386,6 @@ console.log(arr1, arr2) // [empty × 3] ["3"]
 let arr1 = Array.of(3)
 let arr2 = Array.of('3')
 console.log(arr1, arr2) // [3] ["3"]
-```
-
-## find 和 findIndex
-
-find 用于找出第一个符合条件的数组元素。找不到则是`undefined`。注意，它不会返回多个，只找一个，找到了就返回。
-
-findIndex 返回第一个符合条件的数组元素的索引,找不到则是-1
-
-```js
-let arr = [
-  { name: 'z', score: 90 },
-  { name: 'g', score: 95 },
-  { name: 'h', score: 99 }
-]
-let rs1 = arr.find((item) => {
-  return item.name == 'g'
-})
-console.log(rs1) // {name: "g", score: 90}
-
-let rs2 = arr.findIndex((item) => {
-  return item.name == 'g'
-})
-console.log(rs2) // 1
-```
-
-## includes
-
-判断元素是否在数组中存在。返回值是 `true`或`false`
-
-```js
-let arr = [1, 2, 3]
-let rs = arr.includes(1)
-console.log(rs) // true
 ```
 
 ## fill

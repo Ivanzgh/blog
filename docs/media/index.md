@@ -177,23 +177,22 @@ video::cue(.red) {
 借助显卡硬件进行解码工作，优点是功耗低，解码速度快。
 但目前 H.265 编码在浏览器中的硬件解码支持情况并不普及，而且硬件解码需要用户的显卡支持
 
-- 软解码
+- 软解码，通过CPU运行解码软件来进行解码
   - 一种是基于`Flash`的`H.265`解码方案
-  - 主流方案是使用 [WebAssembly](https://webassembly.org/) 技术将金山云自研的高性能解码器编译为`wasm`库，`wasm`文件是以二进制形式存在的，其中包含平台无关的虚拟指令（类似汇编指令）。
+  - 主流方案是使用 [WebAssembly](https://webassembly.org/) 技术将金山云自研的高性能解码器编译为`wasm`库，`wasm`文件是以二进制形式存在的，其中包含平台无关的虚拟指令（类似汇编指令）
+  - 在 WEB 端是绘制到 canvas 上
 
-## 传输协议
+## 点播/直播编转码
 
-### HLS
+- 点播（video on demand），简称`VOD`，提前录制好的视频，常见格式有`mp4`、`flv`、`m3u8`等
+- 直播（live broadcast），时效性高，正在发生的
 
-### HTTP-FLV
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661832466.png)
 
-### RTP
+发起直播的客户端，向上连着流媒体服务器，直播产生的视频流会被实时的推送到服务端，这个过程就是**推流**。
+其他客户端从流媒体服务器实时拉取直播客户端的视频流，这个过程就是**拉流**
 
-### RTCP
-
-### RTSP
-
-### RTMP
+**流数据**是二进制数据，是一帧一帧的，每帧数据很小，很适合实时传输，如直播时的音视频数据
 
 ## 封装格式
 
@@ -201,12 +200,31 @@ video::cue(.red) {
 
 ### FLV
 
+很适合浏览器直播，但是 video 标签不能直接播放 flv 格式
+
 ### M3U8
 
-## 点播/直播编转码
+## 传输协议
 
-- 点播（video on demand），简称`VOD`，提前录制好的视频，常见格式有`mp4`、`flv`、`m3u8`等
-- 直播（live broadcast），时效性高，正在发生的
+### HLS
+
+http live streaming，苹果提出的基于 HTTP 的流媒体协议，H5 可以直接播放，对应的视频格式就是 m3u8
+
+### HTTP-FLV
+
+目前的主流方案，基于 HTTP 流式 IO 传输 FLV，还有 **WebSocket-FLV**协议
+
+### RTP
+
+### RTCP
+
+### RTSP
+
+是一种双向实时数据传输协议，允许客户端向服务器端发送请求，如回放、快进、倒退等操作
+
+### RTMP
+
+底层基于 TCP，在浏览器端依赖 Flash
 
 ## 开源架构
 
@@ -240,8 +258,12 @@ Log 包含了常规的多媒体日志信息和网络日志信息
 
 ### hls.js
 
-基于 Http Live Stream 协议开发，利用MSE，用于实现 HLS 在 web 上播放
+基于 Http Live Stream 协议开发，利用 MSE，用于实现 HLS 在 web 上播放
+
+### ffmpeg.js
+
+文件解码转码库
 
 ### Aliplayer
 
-阿里支持HTML5和Flash两种播放模式
+阿里支持 HTML5 和 Flash 两种播放模式

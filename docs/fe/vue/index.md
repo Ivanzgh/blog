@@ -13,12 +13,12 @@ data 声明为对象：
 ```js
 function VueComponent() {}
 VueComponent.prototype.$options = {
-  data: { name: "Vue" },
-};
-let f1 = new VueComponent();
-f1.$options.data.name = "React";
-let f2 = new VueComponent();
-console.log(f2.$options.data.name); // React
+  data: { name: 'Vue' }
+}
+let f1 = new VueComponent()
+f1.$options.data.name = 'React'
+let f2 = new VueComponent()
+console.log(f2.$options.data.name) // React
 ```
 
 data 声明为函数：
@@ -26,14 +26,14 @@ data 声明为函数：
 ```js
 function VueComponent() {}
 VueComponent.prototype.$options = {
-  data: () => ({ name: "Vue" }),
-};
-let f11 = new VueComponent();
-let res1 = f11.$options.data();
-res1.name = "React";
-console.log(res1); // {name: "React"}
-let f22 = new VueComponent();
-console.log(f22.$options.data()); // {name: "Vue"}
+  data: () => ({ name: 'Vue' })
+}
+let f11 = new VueComponent()
+let res1 = f11.$options.data()
+res1.name = 'React'
+console.log(res1) // {name: "React"}
+let f22 = new VueComponent()
+console.log(f22.$options.data()) // {name: "Vue"}
 ```
 
 `new Vue()`可以将`data`声明为一个普通对象是因为这个类创建的实例不会被复用，只会 new 一次。
@@ -48,24 +48,25 @@ console.log(f22.$options.data()); // {name: "Vue"}
 一般来说，`v-if` 有更高的切换开销，而 `v-show` 有更高的初始渲染开销。
 因此，如果需要非常频繁地切换，则使用 `v-show` 较好；如果在运行时条件很少改变，则使用 `v-if` 较好
 
-## v-model原理
+## v-model 原理
 
 ```html
 <input placeholder="请输入" id="username" />
-内容：<span id="uName"></span>
+内容：
+<span id="uName"></span>
 
 <script>
   let obj = {}
-  Object.defineProperty(obj, "username", {
+  Object.defineProperty(obj, 'username', {
     get() {
       return this
     },
     set(val) {
-      document.getElementById("uName").innerText = val;
+      document.getElementById('uName').innerText = val
     }
   })
-  const el = document.getElementById("username")
-  el.addEventListener("keyup", function () {
+  const el = document.getElementById('username')
+  el.addEventListener('keyup', function () {
     obj.username = event.target.value
   })
 </script>
@@ -75,7 +76,7 @@ console.log(f22.$options.data()); // {name: "Vue"}
 
 ### 1、双向绑定原理
 
-vue2是采用**数据劫持**结合**发布者-订阅者模式**，通过`Object.defineProperty()`来劫持各个属性的`setter`、`getter`，在数据变动时发布消息给订阅者，触发响应的监听回调。
+vue2 是采用**数据劫持**结合**发布者-订阅者模式**，通过`Object.defineProperty()`来劫持各个属性的`setter`、`getter`，在数据变动时发布消息给订阅者，触发响应的监听回调。
 
 ### 2、Object.defineProperty()
 
@@ -110,28 +111,28 @@ MDN 地址： [Object.defineProperty()
 
 ```js
 function defineReactive(obj, key, val) {
-  let dep = new Dep();
+  let dep = new Dep()
   Object.defineProperty(obj, key, {
     get() {
       //添加订阅者watcher到主题对象Dep
       if (Dep.target) {
         // JS的浏览器单线程特性，保证这个全局变量在同一时间内，只会有同一个监听器使用
-        dep.addSub(Dep.target);
+        dep.addSub(Dep.target)
       }
-      return val;
+      return val
     },
     set(newVal) {
-      if (newVal === val) return;
-      val = newVal;
+      if (newVal === val) return
+      val = newVal
       // 作为发布者发出通知
-      dep.notify(); // 通知后dep会循环调用各自的update方法更新视图
-    },
-  });
+      dep.notify() // 通知后dep会循环调用各自的update方法更新视图
+    }
+  })
 }
 function observe(obj, vm) {
   Object.keys(obj).forEach((key) => {
-    defineReactive(vm, key, obj[key]);
-  });
+    defineReactive(vm, key, obj[key])
+  })
 }
 ```
 
@@ -142,94 +143,94 @@ compile 的目的就是解析各种指令成为真正的 html
 ```js
 function Compile(node, vm) {
   if (node) {
-    this.$frag = this.nodeToFragment(node, vm);
-    return this.$frag;
+    this.$frag = this.nodeToFragment(node, vm)
+    return this.$frag
   }
 }
 Compile.prototype = {
-  nodeToFragment: function(node, vm) {
-    var self = this;
-    var frag = document.createDocumentFragment();
-    var child;
+  nodeToFragment: function (node, vm) {
+    var self = this
+    var frag = document.createDocumentFragment()
+    var child
     while ((child = node.firstChild)) {
-      console.log([child]);
-      self.compileElement(child, vm);
-      frag.append(child); // 将所有子节点添加到fragment中
+      console.log([child])
+      self.compileElement(child, vm)
+      frag.append(child) // 将所有子节点添加到fragment中
     }
-    return frag;
+    return frag
   },
-  compileElement: function(node, vm) {
-    var reg = /\{\{(.*)\}\}/;
+  compileElement: function (node, vm) {
+    var reg = /\{\{(.*)\}\}/
     //节点类型为元素(input元素这里)
     if (node.nodeType === 1) {
-      var attr = node.attributes;
+      var attr = node.attributes
       // 解析属性
       for (var i = 0; i < attr.length; i++) {
-        if (attr[i].nodeName == "v-model") {
+        if (attr[i].nodeName == 'v-model') {
           //遍历属性节点找到v-model的属性
-          var name = attr[i].nodeValue; // 获取v-model绑定的属性名
-          node.addEventListener("input", function(e) {
+          var name = attr[i].nodeValue // 获取v-model绑定的属性名
+          node.addEventListener('input', function (e) {
             // 给相应的data属性赋值，进而触发该属性的set方法
-            vm[name] = e.target.value;
-          });
-          new Watcher(vm, node, name, "value"); //创建新的watcher，会触发函数向对应属性的dep数组中添加订阅者，
+            vm[name] = e.target.value
+          })
+          new Watcher(vm, node, name, 'value') //创建新的watcher，会触发函数向对应属性的dep数组中添加订阅者，
         }
       }
     }
     //节点类型为text
     if (node.nodeType === 3) {
       if (reg.test(node.nodeValue)) {
-        var name = RegExp.$1; // 获取匹配到的字符串
-        name = name.trim();
-        new Watcher(vm, node, name, "nodeValue");
+        var name = RegExp.$1 // 获取匹配到的字符串
+        name = name.trim()
+        new Watcher(vm, node, name, 'nodeValue')
       }
     }
-  },
-};
+  }
+}
 ```
 
 4.3 watcher 实现
 
 ```js
 function Watcher(vm, node, name, type) {
-  Dep.target = this;
-  this.name = name;
-  this.node = node;
-  this.vm = vm;
-  this.type = type;
-  this.update();
-  Dep.target = null;
+  Dep.target = this
+  this.name = name
+  this.node = node
+  this.vm = vm
+  this.type = type
+  this.update()
+  Dep.target = null
 }
 
 Watcher.prototype = {
-  update: function() {
-    this.get();
-    this.node[this.type] = this.value; // 订阅者执行相应操作
+  update: function () {
+    this.get()
+    this.node[this.type] = this.value // 订阅者执行相应操作
   },
   // 获取data的属性值
-  get: function() {
-    console.log(1);
-    this.value = this.vm[this.name]; //触发相应属性的get
-  },
-};
+  get: function () {
+    console.log(1)
+    this.value = this.vm[this.name] //触发相应属性的get
+  }
+}
 ```
 
 4.4 实现 Dep 来为每个属性添加订阅者
 
 ```js
 function Dep() {
-  this.subs = [];
+  this.subs = []
 }
 Dep.prototype = {
-  addSub: function(sub) {
-    this.subs.push(sub);
+  addSub: function (sub) {
+    this.subs.push(sub)
   },
-  notify: function() {
-    this.subs.forEach(function(sub) {
-      sub.update();
-    });
-  },
-};
+  notify: function () {
+    this.subs.forEach(function (sub) {
+      sub.update()
+    })
+  }
+}
 ```
 
 ### 5、总结
@@ -242,8 +243,10 @@ Dep.prototype = {
 
 ```html
 <div id="app">
-  订阅视图1：<span class="box1"></span>
-  订阅视图2：<span class="box2"></span>
+  订阅视图1：
+  <span class="box1"></span>
+  订阅视图2：
+  <span class="box2"></span>
 </div>
 
 <script src="index.js"></script>
@@ -264,7 +267,7 @@ const Dep = {
   container: {},
   // 添加订阅
   listen(key, fn) {
-    (this.container[key] || (this.container[key] = [])).push(fn)
+    ;(this.container[key] || (this.container[key] = [])).push(fn)
   },
   // 发布
   trigger() {
@@ -376,7 +379,7 @@ import Button from './Button.vue'
 Vue.component('st-button', Button)
 ```
 
-在mian.js文件中引入
+在 mian.js 文件中引入
 
 ```js
 import '@/components/selfComponents'
@@ -404,3 +407,29 @@ import '@/components/selfComponents'
   font-family: SourceHanSans;
 }
 ```
+
+## 单页面应用和多页面应用的优缺点
+
+### 单页应用 SPA
+
+- 优点：页面切换快
+  页面每次切换跳转时，页面局部刷新，JS、CSS 等公共资源仅加载一次
+- 缺点：
+  - 首屏时间慢
+    首屏时需要请求 HTML，要加载公共资源
+  - SEO 效果差
+    搜索引擎只认识 HTML 里的内容，不认识 JS 的内容，而单页应用的内容都是靠 JS 渲染生成出来的，搜索引擎不识别这部分内容
+
+### 多页应用 MPA
+
+- 优点：
+
+  - 首屏时间快
+    访问页面的时候，发送一个 HTTP 请求返回一个 HTML，页面就会展示出来
+  - SEO 效果好
+    搜索引擎通过识别 HTML 内容来给网页排名
+
+- 缺点：页面切换慢
+  多页面跳转需要刷新所有资源
+
+## 服务端渲染 SSR

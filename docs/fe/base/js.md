@@ -8,13 +8,13 @@
 
 引用类型： `Object`、`Array`、`Function`
 
-基本数据类型将数据名和值存储在栈中
+基本数据类型将数据名和值存储在**栈**中
 
-引用类型在栈中存入地址，该地址指向堆内存，将具体值存储在堆中。访问时先从栈中获取地址，再从堆中获取相应值
+引用类型在栈中存入地址，该地址指向**堆**内存，将具体值存储在堆中。访问时先从栈中获取地址，再从堆中获取相应值
 
-::: tip
-在拷贝时，基本数据类型拷贝的是具体值，引用类型拷贝的是指向堆内存的地址
-:::
+![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1662017613.png)
+
+闭包中的变量并不保存在栈中，而是保存在堆中
 
 ```js
 let a = 1 // 在内存中开辟一块空间存储a的值 1
@@ -29,6 +29,10 @@ c.x = 4
 console.log(c) // { x: 4 }
 console.log(d) // { x: 4 }
 ```
+
+::: tip
+关于存储位置是栈内存还是堆内存这里存在争议
+:::
 
 ## 类型判断
 
@@ -65,9 +69,9 @@ console.log([] instanceof Object) // true
 `[].__proto__ === Array.prototype`、`Array.prototype.__proto__ === Object.prototype`二者的结果都是 true，
 因此 `Object` 构造函数在 `[]` 的原型链上
 
-- `Array.isArray()`
+- `Array.isArray()`，可以判断参数是否是数组
 
-可以判断参数是否是数组
+- `isNaN()`，可以判断 NaN
 
 - `Object.prototype.toString.call()`
 
@@ -84,7 +88,7 @@ Object.prototype.toString.call(undefined) // '[object Undefined]'
 Object.prototype.toString.call(new Date()) // '[object Date]'
 ```
 
-平时使用时可以封装一下
+- 返回具体类型
 
 ```js
 const dataType = (data) => {
@@ -94,6 +98,12 @@ const dataType = (data) => {
     .replace(/\[object\s(.+)\]/, '$1')
     .toLowerCase()
 }
+```
+
+- 验证是不是某种类型，返回 true/false
+
+```js
+const isType = (target, type) => `[object ${type}]` === Object.prototype.toString.call(target)
 ```
 
 特殊示例：
@@ -246,6 +256,13 @@ var m = function () {
 
 原型也是一个对象，所以也有原型。当我们访问一个对象的属性或方法时，会先在对象自身中寻找，如果找不到则在原型中寻找，如果还找不到，则继续在原型的原型中寻找，
 以此类推，直到找到为止，若找不到则返回`undefined`，这就是原型链。
+
+函数也有`__proto__`属性
+
+```js
+let fn = function () {}
+fn.__proto__ === Function.prototype // true
+```
 
 ```js
 let obj = {}
@@ -672,9 +689,7 @@ console.log(res) // hehe
 浅拷贝：
 
 ```js
-const obj = {
-  name: 'zgh'
-}
+const obj = { name: 'zgh' }
 function shallowClone(obj) {
   const newObj = {}
   for (let i in obj) {
@@ -699,6 +714,16 @@ function deepClone(obj) {
   }
   return obj
 }
+```
+
+`JSON.parse(JSON.stringify())`就是有一些局限性的深拷贝
+
+```js
+let arr = [1, 2, { name: 'zgh' }]
+let newArr = JSON.parse(JSON.stringify(arr))
+newArr[2].name = 'lrx'
+console.log(newArr) // [1, 2, { name: 'lrx' }]
+console.log(arr) // [1, 2, { name: 'zgh' }]]
 ```
 
 <https://juejin.im/post/59ac1c4ef265da248e75892b>
@@ -834,9 +859,12 @@ function throttle(fun, delay) {
 
 ## 递归
 
-程序调用自身的编程技巧叫做递归(recursion)
+在一个函数定义的内部调用自身就是递归
 
-求 5 的累加
+要注意界限值，不要无限递归，存在堆栈溢出的风险。函数调用会使用栈来保存临时变量，每调用一次函数，
+都会将临时变量存入栈中，函数执行完成后才出栈，如果调用层次很深，就会有堆栈溢出的风险
+
+- 求 5 的累加
 
 ```js
 function f(n) {
@@ -848,7 +876,7 @@ function f(n) {
 console.log(f(5))
 ```
 
-斐波那契数列
+- 斐波那契数列
 
 ```js
 // F(1)=1，F(2)=1, F(n)=F(n-1)+F(n-2)（n>=3，n∈N*）
@@ -896,8 +924,7 @@ function add(a) {
   }
   return sum // 返回一个函数
 }
-const res = add(1)(2)(3)
-console.log(res)
+add(1)(2)(3)
 ```
 
 ## Math.floor、Math.round、Math.ceil
@@ -963,27 +990,9 @@ for (let k in arr) {
 
 `for in` 循环遍历键名，遍历数组下标的类型是`string`，不要使用这种方式遍历数组！仅适用于遍历普通对象的 key
 
-`for`循环 无法用于循环对象，获取不到`obj.length`;
+`for`循环 无法用于循环对象，获取不到`obj.length`
 
-`for in`循环遍历对象的属性时，原型链上的所有属性都将被访问，
-
-解决方案：使用`hasOwnProperty`方法过滤或`Object.keys`会返回自身可枚举属性组成的数组
-
-## if in
-
-`if ( key in obj)` 意为判断对象`obj`中是否有 `key` 属性 ，有则返回 `true`， 没有则返回 `false`
-
-## innerHTML 和 innerText
-
-都能获取 document 对象文本内容，`innerHTML`能获取 html 标签，而`innerText`不能获取
-
-```html
-<!-- innerHTML -->
-<p>666</p>
-
-<!-- innerText -->
-666
-```
+`for in`循环遍历对象的属性时，原型链上的所有属性都将被访问，可以使用`hasOwnProperty`方法过滤或`Object.keys`会返回自身可枚举属性组成的数组
 
 ## not defined 和 undefined
 

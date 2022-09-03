@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/Ivanzgh/blog#readme",
   "dependencies": {
-    "vitepress": "^1.0.0-alpha.4"
+    "vitepress": "^1.0.0-alpha.13"
   }
 }

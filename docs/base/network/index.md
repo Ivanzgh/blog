@@ -1,4 +1,3 @@
-
 # 计算机网络
 
 ## OSI 的七层协议
@@ -69,6 +68,37 @@
 ## HTTP、HTTPS、HTTP2.0
 
 ## DNS
+
+## 强缓存和协商缓存
+
+浏览器缓存是浏览器对之前请求过的文件进行缓存，以便下一次访问时重复使用，节省带宽，提高访问速度，降低服务器压力
+
+http 缓存机制主要是在 http 响应头中设定，响应头中相关字段为 Expires、Cache-Control、Last-Modified、Etag
+
+### 强缓存
+
+浏览器不会向服务器发送请求，直接从本地缓存中读取文件，并返回`Status Code: 200 OK`，这里也有两种情况：
+
+- `form memory cache`，从内存读取资源，关闭浏览器后数据就没了
+- `form disk cache`，从磁盘读取资源，关闭浏览器后数据仍然存在
+
+优先访问内存里的缓存、然后是磁盘里的缓存，最后是请求网络资源
+
+相关的响应头
+
+- Expires 过期时间
+- Cache-Control
+  - max-age，假如值为3600，表示当前时间后的3600秒内，不向服务器请求新的数据
+  - no-cache
+  - no-store，不缓存任何数据
+
+Expires 是 http1.0 规范，是绝对时间，当客户端本地时间和服务器时间不一致时会产生误差，浏览器会向服务器请求新的资源
+Cache-Control 是 http1.1 规范，是相对时间，优先级高于 Expires
+
+### 协商缓存
+
+向服务器发送请求，服务器会根据请求头来判断是否命中协商缓存，如果命中则返回 304 状态码并带上新的响应头，通知浏览器从缓存中读取资源，
+否则返回新的数据资源
 
 ## 浏览器输入 url 到页面展现的过程
 
@@ -295,6 +325,11 @@ export default {
 ### SockJS 和 Stomp
 
 [stomp-websocket](http://jmesnil.net/stomp-websocket/doc/)
+
+SockJS 是设计在浏览器中使用的，支持三种方式传输数据：WebSocket，HTTP Streaming，HTTP 长轮询
+
+当 SockJS 发送 GET /info 请求的时候，服务端需要决定使用哪种传输格式，首先会检查 WebSocket，如果不行则使用 HTTP Streaming，
+如果还是不行就使用 HTTP 的长轮询
 
 ```js
 import SockJS from 'sockjs-client'

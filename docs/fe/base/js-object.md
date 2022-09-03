@@ -79,6 +79,23 @@ console.log(person1, person2)
 
 可以看出，混合模式共享着对相同方法的引用，又保证了每个实例有自己的私有属性。最大限度的节省了内存
 
+## 空对象判断
+
+1. `Object.getOwnPropertyNames()`，返回对象中属性名称组成的数组
+
+2. `Object.keys()`，返回对象中属性名称组成的数组
+
+3. 转为 json 字符串
+
+```js
+let obj = {}
+Object.getOwnPropertyNames(obj).length === 0 // true
+
+Object.keys(obj).length === 0 // true
+
+JSON.stringify({}) === '{}' // true
+```
+
 ## new 的过程
 
 new 一个对象：

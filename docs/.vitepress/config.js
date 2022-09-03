@@ -138,6 +138,20 @@ export default defineConfig({
           ]
         }
       ],
+      '/vis/gis/': [
+        {
+          text: 'GIS',
+          collapsible: true,
+          items: [
+            { text: '介绍', link: '/vis/gis/' },
+            { text: 'Maptalks', link: '/vis/gis/maptalks' },
+            { text: 'OpenLayers', link: '/vis/gis/openlayers' },
+            { text: 'Leaflet', link: '/vis/gis/leaflet' },
+            { text: 'GeoServer', link: '/vis/gis/geoServer' },
+            { text: 'Cesium', link: '/vis/gis/cesium' },
+          ]
+        }
+      ],
       '/base/design-pattern/': [
         {
           text: '设计模式',
@@ -193,12 +207,8 @@ function nav() {
     {
       text: '可视化',
       items: [
-        { text: 'OpenLayers', link: '/vis/openlayers/' },
-        { text: 'Leaflet', link: '/vis/leaflet/' },
-        { text: 'GeoServer', link: '/vis/geoserver/' },
-        { text: 'Cesium', link: '/vis/cesium/' },
+        { text: 'GIS', link: '/vis/gis/' },
         { text: 'Three', link: '/vis/three/' },
-        { text: 'Maptalks', link: '/vis/maptalks/' },
         { text: '流媒体', link: '/media/' }
       ]
     },

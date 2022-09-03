@@ -72,6 +72,33 @@ GetRequest()
 console.log(GetRequest()) //{index: "1", item: "2"}
 ```
 
+### 获取参数对象
+
+node.js中有一个queryString模块，可以将参数转化为一个对象，键相同就合并成数组
+
+```js
+let url = 'http://www.baidu.com?name=zgh&appearance=cool&appearance=handsome'
+// 期待结果： { name: 'zgh', appearance: [ 'cool', 'handsome' ] }
+
+function handsome(url) {
+  let arr = url.split('?')[1].split('&')
+  let obj = {}
+  arr.forEach((e) => {
+    let param = e.split('=')
+    let key = param[0]
+    let value = param[1]
+    if (obj[key]) {
+      obj[key] = Array.isArray(obj[key]) ? obj[key] : [obj[key]]
+      obj[key].push(value)
+    } else {
+      obj[key] = value
+    }
+  })
+  return obj
+}
+handsome(url)
+```
+
 ## 路由跳转
 
 `location` 和 `history` 接口

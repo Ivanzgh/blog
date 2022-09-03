@@ -12,4 +12,4 @@
 
 中文版：<https://www.osgeo.cn/geoserver-user-manual/styling/ysld/index.html>
 
-在 geoserver 中使用 `YSLD`样式需要安装插件
+在 geoserver 中使用 `YSLD`样式需要安装插件，找到[YSLD Styling](https://geoserver.org/release/stable/)点击下载
