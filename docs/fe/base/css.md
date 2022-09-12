@@ -230,8 +230,6 @@ BFC 还有一条重要特性：BFC 的区域不会与 float box 重叠。试想�
 </html>
 ```
 
-
-
 ## 隐藏元素
 
 以下方式都能隐藏元素，而且 Dom 元素还在
@@ -378,6 +376,41 @@ p::selection {
     opacity: 0;
   }
 }
+```
+
+## 文本
+
+- 首行缩进 2 个字
+
+```css
+text-indent: 2em;
+```
+
+- 文字加下划线
+
+```css
+text-decoration: underline;
+```
+
+- 字体设置
+
+```css
+font: 600 16px/30px 微软雅黑;
+```
+
+表示字体粗 600，字体大小 16px，行高 30px，微软雅黑字体
+
+- 文字换行
+  - 强制换行，行尾会将一个完整的单词拆开
+
+```css
+word-break: break-all;
+```
+
+- 行尾不会拆解单词，如果宽度不够会放到下一行，尾部会有空白
+
+```css
+word-wrap: break-word;
 ```
 
 ## 文本超出显示省略号

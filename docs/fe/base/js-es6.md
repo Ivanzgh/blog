@@ -4,7 +4,7 @@
 
 ### let
 
-用来声明变量，**只在`let`命令所在的代码块内有效**，即**块级作用域**。不存在变量提升，它所声明的变量一定要在声明后使用，不允许重复声明，否则报错。 举个例子：
+用来声明变量，**只在`let`命令所在的代码块内有效**，即[块级作用域](https://ivanzgh.github.io/blog/fe/base/js.html#%E5%9D%97%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F)。不存在变量提升，不允许重复声明
 
 ```js
 function varTest() {
@@ -28,17 +28,20 @@ function letTest() {
 }
 ```
 
-在`letTest()`的 if 语句中，可以再次声明变量 b，是因为变量 b 只在这个 if 语句中有效，即块级作用域，所以最后打印出来的是 1。
-如果在 if 语句中使用`var`声明变量 b，会报错。`let`在 for 循环和 if 中使用是同规则的
+在`letTest()`的 if 语句中，可以再次声明变量 b，是因为变量 b 只在这个 if 语句中有效。
+如果在 if 语句中使用`var`声明变量 b，会报错
+
+let 很适合在 for 循环时声明索引变量
 
 ### const
 
-`const`声明一个只读的常量。一旦声明，常量的值就不能改变。必须立即初始化，不能留到后面赋值。只在声明所在的块级作用域内有效。
+`const`声明一个只读的常量，必须初始化赋值。一旦声明，常量的值就不能改变，只在声明所在的块级作用域内有效。
 不存在变量提升，不允许重复声明。**复杂类型(数组、对象等)指针指向的地址不能更改，内部数据可以更改**
 
 ```js
 const a = '123'
-a = '234' // TypeError: Assignment to constant letiable.
+a = '234' // TypeError: Assignment to constant letiable
+
 const arr = [1, 2, 3]
 arr.push(4)
 console.log(arr) // [1,2,3,4]
@@ -110,7 +113,7 @@ console.log(str.endsWith('!')) // true
 
 ### 数组的解构赋值
 
-可以从数组中提取值，按照对应位置，对变量赋值。这种写法属于“模式匹配”，只要等号两边的模式相同，左边的变量就会被赋予对应的值。
+可以从数组中提取值，按照对应位置，对变量赋值。这种写法属**模式匹配**，只要等号两边的模式相同，左边的变量就会被赋予对应的值
 
 ```js
 let [a, b, c] = [1, 2, 3]
@@ -173,31 +176,24 @@ let f = ([a, b]) => a + b
 f([1, 2]) // 3
 ```
 
-上述代码可将数组`[1, 2]`看作一个参数`param`，即`param = [1, 2]`，外面的小括号不能去掉
+上述代码可将数组`[1, 2]`看作一个参数`param`，即`param = [1, 2]`
 
 ## 函数
 
 ### 为函数的参数设置默认值
 
-在 ES6 里，可以给定义的函数接收的参数设置默认值，如果不指定该函数的参数的值，就会使用默认参数值。
+可以给函数的参数设置默认值，如果不指定该函数的参数值，就会使用默认参数值
 
 ```js
-function Person(name = 'zgh', age = 22) {
-  console.log(name) //  zgh
-  console.log(age) // 22
+function Person(name = 'zgh', num = 22) {
+  const name = name || 'zgh'
+  const num = num || 22
 }
 Person()
-```
-
-如果在调用函数的时候传入实参，则会改变默认参数的值。
-
-```js
-function Person(name = 'zgh', age = 22) {
-  console.log(name) //  Jack
-  console.log(age) // 20
-}
 Person('Jack', 20)
 ```
+
+如果没有设置默认值，调用时 num 传入 0，0 为 false，那么例子中的 num 结果就为 22 而不是 0
 
 ### 箭头函数
 
@@ -266,9 +262,9 @@ let Person = (name) => {
 
 ## 对象
 
-### 对象的简洁表示法
+### 对象简写
 
-#### 属性的简写
+- 属性的简写
 
 条件：属性的值是一个变量，且变量名称和键名是一致的
 
@@ -276,24 +272,24 @@ let Person = (name) => {
 let name = 'zgh'
 let age = 22
 
-//ES5写法
+// ES5写法
 let obj = { name: name, age: age }
 
-//ES6写法
+// ES6写法
 let obj = { name, age }
 ```
 
-#### 方法的简写
+- 方法的简写
 
 ```js
-//ES5写法
+// ES5写法
 let obj = {
   hello: function () {
     console.log('hello')
   }
 }
 
-//ES6写法
+// ES6写法
 let obj = {
   hello() {
     console.log('hello')
@@ -421,9 +417,9 @@ console.log(str) // 'abc'
 
 ## ...操作符
 
-...是 ES6 中新添加的一种操作符，可以叫做 spread（扩展）或者 rest（剩余）
+`...`可以叫做 spread（扩展）或者 rest（剩余）操作符
 
-rest (剩余操作符)一般会用在函数的参数里面。比如:想让一个函数支持更多的参数，参数的数量不受限制，这个时候就可以使用剩余操作符。
+剩余运算符一般会用在函数的参数里面。比如想让一个函数支持更多的参数，参数的数量不受限制，这个时候就可以使用剩余操作符
 
 ```js
 function Name(x, y, ...z) {
@@ -434,31 +430,37 @@ function Name(x, y, ...z) {
 Name('a', 'b', 'c', 'd', 'e')
 ```
 
-剩余操作符后面的变量会变成一个数组，多余的参数会被放入这个数组中。
+剩余操作符后面的变量会变成一个数组，多余的参数会被放入这个数组中
 
-spread（扩展运算符）用在数组的前面，作用就是将这个数组展开，展开后就变成了字符串。
+扩展运算符用在数组的前面，作用就是将这个数组展开
 
 ```js
-let arr1 = ['a', 'b', 'c', 'd', 'e']
-let arr2 = ['f', 'g']
-let arr3 = [...arr1, ...arr2]
-console.log(arr3) // ["a", "b", "c", "d", "e", "f", "g"]
-console.log(...arr1) // a b c d e
+const arr1 = ['a', 'b', 'c', 'd', 'e']
+const arr2 = ['f', 'g']
+const arr3 = [...arr1, ...arr2] // ["a", "b", "c", "d", "e", "f", "g"]
+
+// 等同于concat
+const arr4 = arr1.concat(arr2)
 ```
 
-使用拓展运算符展开一个新的对象，第二个对象的属性值会改写第一个对象的同名属性值
+```js
+const obj1 = { a: 1, b: 2 }
+const obj2 = { ...obj1, c: 3 } // {a: 1, b: 2, c: 3}
+```
+
+使用扩展运算符展开一个新的对象，第二个对象的属性值会覆盖第一个对象的同名属性值
 
 ```js
-let object1 = { a:1, b:2,c:3 }
-let object2 = { b:30, c:40, d:50}
-let merged = {…object1, …object2}
-console.log(merged) // {a:1, b:30, c:40, d:50}
+const obj1 = { a: 1, b: 2, c: 3 }
+const obj2 = { b: 30, c: 40, d: 50 }
+const merged = { ...obj1, ...obj2 }
+console.log(merged) // {a: 1, b: 30, c: 40, d: 50}
 ```
 
 ## Class
 
-ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过 `class` 关键字，可以定义类。基本上，ES6 的 class 可以看作只是一个语法糖，
-它的绝大部分功能，ES5 都可以做到，新的 class 写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。
+通过 `class` 关键字，可以定义**类**。class 可以看作只是一个**语法糖**，
+它的绝大部分功能，ES5 都可以做到，新的 class 写法让对象原型的写法更加清晰、更像面向对象编程的语法
 
 ```js
 //ES5 中使用面向对象
@@ -486,7 +488,7 @@ let obj = new Person('zgh', 22)
 obj.say()
 ```
 
-上面代码定义了一个“类”，里面有一个`constructor`方法，这就是构造方法，而`this`关键字则代表实例对象。也就是说，ES5 的构造函数 `Person`，
+上面代码定义了一个**类**，里面有一个`constructor`方法，这就是构造方法，而`this`关键字则代表实例对象。即 ES5 的构造函数 `Person`，
 对应 ES6 的 `Person` 类的构造方法。
 
 Person 类除了构造方法，还定义了一个`say`方法。注意，定义“类”的方法的时候，前面不需要加上`function`这个关键字，直接把函数定义放进去了就可以了。
@@ -501,7 +503,7 @@ fo.constructor === Foo // true
 ```
 
 `Foo.prototype`默认有一个公有且不可枚举的`construetor`属性，这个属性引用的是对象关联的函数（上例中是 Foo）。
-“构造函数”调用`new Foo()`创建的对象在`__proto__`上也有`construetor`属性，指向“创建这个对象的函数”
+**构造函数**调用`new Foo()`创建的对象在`__proto__`上也有`construetor`属性，指向**创建这个对象的函数**
 
 <https://segmentfault.com/a/1190000023516545>
 
@@ -537,7 +539,7 @@ r2.showMVP()
 
 ### 静态方法、静态属性
 
-类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前加上`static`关键字，则这个方法不会被实例继承，
+类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前加上`static`关键字，则这个方法**不会被实例继承**，
 而是直接通过类来调用，这就是静态方法。
 
 ```js
@@ -551,7 +553,7 @@ let person = new Foo()
 person.f() // TypeError: person.f is not a function
 ```
 
-父类的静态方法可以被子类继承
+父类的静态方法**可以被子类继承**
 
 ```js
 class Foo {

@@ -216,7 +216,7 @@ array.filter(Boolean) // [1, 3, 5]
 
 返回数组中某个指定的元素位置，可用来判断数组中是否包含指定元素
 
-语法 `array.indexOf(item,start)`，`item`查找的元素，`start`开始检索的位置(可选，默认是 0)
+语法 `array.indexOf(item, start)`，`item`查找的元素，`start`开始检索的位置(可选，默认是 0)
 
 ```js
 let fruits = ['Banana', 'Orange', 'Apple', 'Mango']
@@ -238,9 +238,9 @@ if (fruits.indexOf('Apple') > -1) {
 
 ## includes()
 
-判断元素是否在数组中存在。返回值是 `true`或`false`
+判断元素是否在数组中存在，返回值是 `true`或`false`
 
-语法 `array.includes(item,start)`，`item`查找的元素，`start`开始检索的位置(可选，默认是 0)，正向查找
+语法 `array.includes(item, start)`，`item`查找的元素，`start`开始检索的位置(可选，默认是 0)，正向查找
 
 ```js
 let arr = [1, 2, 3]

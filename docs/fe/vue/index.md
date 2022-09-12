@@ -2,11 +2,9 @@
 
 ## data 为何声明为函数
 
-普通组件中的 data 为何声明为函数？
+因为组件可能被用来创建多个实例，若 data 声明为对象则所有的实例将共享引用同一个数据对象
 
-当一个组件被定义，`data`必须声明为返回一个初始数据对象的函数，因为组件可能被用来创建多个实例。
-如果 data 仍然是一个纯粹的对象，则所有的实例将共享引用同一个数据对象！
-通过提供 data 函数，每次创建一个新实例后，我们能够调用 data 函数，从而返回初始数据的一个全新副本数据对象。
+data 声明为函数则每次创建一个新实例后，调用 data 函数会返回初始数据的一个全新副本数据对象
 
 data 声明为对象：
 
@@ -386,27 +384,6 @@ import '@/components/selfComponents'
 ```
 
 在需要公共组件的界面使用`<st-button />`
-
-## 使用其他字体
-
-在项目的`assets`文件夹下新建`fonts`文件夹，将字体文件放在这里，新建`font.css`
-
-```css
-@font-face {
-  font-family: 'SourceHanSans'; /* 字体名称 */
-  src: url('./SourceHanSansCN-Normal.otf'); /* 字体路径 */
-  font-weight: normal;
-  font-style: normal;
-}
-```
-
-然后在`main.js`里引入`import './assets/fonts/font.css'`，如果要全局用就在`App.vue`里引入
-
-```css
-#app {
-  font-family: SourceHanSans;
-}
-```
 
 ## 单页面应用和多页面应用的优缺点
 

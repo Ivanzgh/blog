@@ -164,7 +164,25 @@ console.log(demo2.girl) // [1, 2, 3, 4, 5, 6]
 
 ### 拷贝继承
 
-原型`prototype`机制或`apply`和`call`方法去实现较简单，建议使用构造函数与原型混合方式。
+原型`prototype`机制或`apply`和`call`方法去实现较简单，建议使用构造函数与原型混合方式
+
+## Object.keys()
+
+返回对象中属性名称组成的数组
+
+```js
+const obj = { a: 1, b: 2 }
+Object.keys(obj) // ['a', 'b']
+```
+
+## Object.values()
+
+返回对象中属性的值组成的数组
+
+```js
+const obj = { a: 1, b: 2 }
+Object.values(obj) // [1, 2]
+```
 
 ## Object.assign()
 
@@ -250,6 +268,15 @@ console.log(me.hasOwnProperty('p2')) // true
 const proto = {}
 const obj = Object.create(proto)
 Object.getPrototypeOf(obj) === proto // true
+```
+
+## Object.setPrototypeOf()
+
+设置对象的原型
+
+```js
+const obj = { a: 1 }
+Object.setPrototypeOf(obj, { b: 2 })
 ```
 
 ## Object.defineProperty()

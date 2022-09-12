@@ -11,14 +11,14 @@
 
 不受同源策略限制的：
 
-- 页面中的链接，重定向以及表单提交
-- 跨域资源的引入是可以的。但是 js 不能读写加载的内容。如嵌入到页面中的`<script src="..."></script>`，`<img>`，`<link>`，`<iframe>`等。
+- 页面中的链接、重定向以及表单提交
+- 跨域资源的引入是可以的，但是 js 不能读写加载的内容。如嵌入到页面中的`<script src="..."></script>`，`<img>`，`<link>`，`<iframe>`等
 
 ## 跨域方案
 
-跨域，指的是浏览器不能执行其他网站的脚本。它是由浏览器的同源策略造成的，是浏览器施加的安全限制。
+跨域，指的是浏览器不能执行其他网站的脚本。它是由浏览器的同源策略造成的，是浏览器施加的安全限制
 
-跨域名访问又分为二级域名跨域、多级域名跨域、以及协议跨域、端口号跨域。
+跨域名访问又分为二级域名跨域、多级域名跨域、以及协议跨域、端口号跨域
 
 ### jsonp
 
@@ -48,7 +48,7 @@ document.body.appendChild(jsonp)
 jsonp 的优势：
 
 - 使用简单
-- 兼容性极好。几乎所有的浏览器都支持 script 标签
+- 兼容性极好，几乎所有的浏览器都支持 script 标签
 
 jsonp 的劣势：
 
@@ -177,6 +177,24 @@ app.use(express.static('dist'))
 
 app.use('/', createProxyMiddleware(options))
 app.listen(3000)
+```
+
+### liveServer
+
+在 vscode 里安装 liveServer 插件，在项目根目录新建`.vscode`文件夹，接着在里面创建`setting.json`，写入如下内容：
+
+```json
+{
+  "liveServer.settings.host": "127.0.0.1",
+  "liveServer.settings.port": 8083,
+  "liveServer.settings.proxy": {
+    "enable": true,
+    "baseUri": "/api",
+    "proxyUri": "http://192.168.31.77:8081" // 测试
+  },
+  "liveServer.settings.donotVerifyTags": true,
+  "window.zoomLevel": 0
+}
 ```
 
 ## 回流与重绘

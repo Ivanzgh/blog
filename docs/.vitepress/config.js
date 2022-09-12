@@ -23,10 +23,26 @@ export default defineConfig({
     sidebar: {
       '/fe/base/': [
         {
+          text: 'JavaScript',
+          collapsible: true,
+          items: [
+            { text: '基础', link: '/fe/base/js' },
+            { text: '字符串', link: '/fe/base/js-string' },
+            { text: '数组', link: '/fe/base/js-array' },
+            { text: '对象', link: '/fe/base/js-object' },
+            { text: 'ES6', link: '/fe/base/js-es6' },
+            { text: 'DOM', link: '/fe/base/js-dom' },
+            { text: 'JSON', link: '/fe/base/js-json' },
+            { text: 'AJAX', link: '/fe/base/js-ajax' },
+            { text: '模块化', link: '/fe/base/js-module' },
+            { text: '工具', link: '/fe/base/js-utils' }
+          ]
+        },
+        {
           text: 'HTML',
           collapsible: true,
           items: [
-            { text: 'HTML', link: '/fe/base/html' },
+            { text: '基础', link: '/fe/base/html' },
             { text: 'Canvas', link: '/fe/base/html-canvas' },
             { text: 'SVG', link: '/fe/base/html-svg' }
           ]
@@ -35,7 +51,7 @@ export default defineConfig({
           text: 'CSS',
           collapsible: true,
           items: [
-            { text: 'CSS', link: '/fe/base/css' },
+            { text: '基础', link: '/fe/base/css' },
             { text: '布局', link: '/fe/base/css-layout' },
             { text: '业务效果', link: '/fe/base/css-business' },
             { text: '阴影', link: '/fe/base/css-box-shadow' },
@@ -48,27 +64,10 @@ export default defineConfig({
           ]
         },
         {
-          text: 'JavaScript',
-          collapsible: true,
-          items: [
-            { text: 'JS', link: '/fe/base/js' },
-            { text: '字符串', link: '/fe/base/js-string' },
-            { text: '数组', link: '/fe/base/js-array' },
-            { text: '对象', link: '/fe/base/js-object' },
-            { text: '进阶', link: '/fe/base/js-advanced' },
-            { text: 'ES6', link: '/fe/base/js-es6' },
-            { text: 'DOM', link: '/fe/base/js-dom' },
-            { text: 'JSON', link: '/fe/base/js-json' },
-            { text: 'AJAX', link: '/fe/base/js-ajax' },
-            { text: '模块化', link: '/fe/base/js-module' },
-            { text: '工具', link: '/fe/base/js-utils' }
-          ]
-        },
-        {
           text: '浏览器',
           collapsible: true,
           items: [
-            { text: '介绍', link: '/fe/base/browser' },
+            { text: '基础', link: '/fe/base/browser' },
             { text: 'window', link: '/fe/base/browser-window' },
             { text: '兼容性', link: '/fe/base/browser-compatibility' }
           ]
@@ -144,11 +143,12 @@ export default defineConfig({
           collapsible: true,
           items: [
             { text: '介绍', link: '/vis/gis/' },
+            { text: '电子海图', link: '/vis/gis/enc' },
             { text: 'Maptalks', link: '/vis/gis/maptalks' },
             { text: 'OpenLayers', link: '/vis/gis/openlayers' },
             { text: 'Leaflet', link: '/vis/gis/leaflet' },
             { text: 'GeoServer', link: '/vis/gis/geoServer' },
-            { text: 'Cesium', link: '/vis/gis/cesium' },
+            { text: 'Cesium', link: '/vis/gis/cesium' }
           ]
         }
       ],

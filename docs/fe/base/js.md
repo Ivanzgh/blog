@@ -289,6 +289,12 @@ console.log(Person === Person.prototype.constructor) // true
 
 函数 Person 的 prototype 属性指向了一个对象，这个对象正是调用构造函数时创建的实例 person1 的原型
 
+::: tip
+要获取原型推荐使用`Object.getPrototypeOf()`，不要使用`__proto__`
+
+`Object.getPrototypeOf(obj) === obj.__proto__`为 true
+:::
+
 ## 作用域
 
 作用域指变量的有效范围。分为全局作用域、局部作用域、块级作用域。
@@ -306,7 +312,29 @@ console.log(Person === Person.prototype.constructor) // true
 
 ### 块级作用域
 
-ES6 增加的`let`、`const`可以声明块级作用域，只在`let`和`const`命令所在的代码块内有效
+变量只在所在的代码块内有效。ES6 增加的`let`、`const`可以声明块级作用域，可在 for 循环和 if 中使用
+
+```js
+if (true) {
+  var a = 1
+}
+console.log(a) // 1
+
+if (true) {
+  const b = 1
+}
+console.log(b) // ReferenceError: b is not defined
+
+for (let i = 0; i < 3; i++) {
+  var c = 1
+}
+console.log(c) // 1
+
+for (let i = 0; i < 3; i++) {
+  let d = 1
+}
+console.log(d) // ReferenceError: d is not defined
+```
 
 ### 作用域链
 

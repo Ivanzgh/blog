@@ -568,73 +568,25 @@ returnPage() {
 }
 ```
 
-## uniapp 横屏配置
 
-在`pages.json`中配置 [pageOrientation: "auto"](https://uniapp.dcloud.io/collocation/pages.html#globalstyle)
 
-```json
-"globalStyle": {
-  "pageOrientation": "auto"
-}
-```
+## 使用其他字体
 
-此时已经可以全局切换横竖屏了，再分别给横竖屏各写一套样式
-
-方式一、css 控制
+在项目的`assets`文件夹下新建`fonts`文件夹，将字体文件放在这里，新建`font.css`
 
 ```css
-/* <view class="landscape">666</view> */
-
-/* 竖屏 */
-@media screen and (orientation: portrait) {
-  .landscape {
-    color: #f00;
-  }
-}
-
-/* 横屏 */
-@media screen and (orientation: landscape) {
-  .landscape {
-    color: #00f;
-  }
+@font-face {
+  font-family: 'SourceHanSans'; /* 字体名称 */
+  src: url('./SourceHanSansCN-Normal.otf'); /* 字体路径 */
+  font-weight: normal;
+  font-style: normal;
 }
 ```
 
-方式二、js 控制
+然后在`main.js`里引入`import './assets/fonts/font.css'`，如果要全局用就在`App.vue`里引入
 
-在 data 里定义`isLandScape: false`表示是否横屏，默认为竖屏
-
-```js
-// <view :class="{'landscape': isLandScape}">666</view>
-// .landscape { color: #00f; }
-
-onResize() {
-  uni.getSystemInfo({
-    success: (res) => {
-      if (res.windowWidth > res.windowHeight) {
-        // 横屏
-        this.isLandScape = true
-      } else {
-        // 竖屏
-        this.isLandScape = false
-      }
-    }
-  })
-}
-```
-
-还有一种是使用`uni.onWindowResize()`，但是在`onLoad()`和`onShow()`中，在切换时都会触发两次
-
-```js
-onLoad() {
-  uni.onWindowResize((res) => {
-    if (res.size.windowWidth > res.size.windowHeight) {
-      this.isLandScape = true
-      console.log(123)
-    } else {
-      this.isLandScape = false
-      console.log(456)
-    }
-  })
+```css
+#app {
+  font-family: SourceHanSans;
 }
 ```

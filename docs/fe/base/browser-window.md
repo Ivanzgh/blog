@@ -68,8 +68,7 @@ function GetRequest() {
   }
   return theRequest
 }
-GetRequest()
-console.log(GetRequest()) //{index: "1", item: "2"}
+GetRequest() // {index: "1", item: "2"}
 ```
 
 ### 获取参数对象
