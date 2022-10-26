@@ -101,3 +101,28 @@ flex-flow: row wrap;
 - flex: auto 相当于`flex: 1 1 auto`，可拉伸，可收缩
 - flex: none 相当于`flex: 0 0 auto`，不可伸缩
 - flex: 正整数 `flex: 1`或者`flex: 2`等，相当于`flex: 1 1 0`，元素可以在`flex-basis: 0`的基础上伸缩
+
+## gird
+
+```css
+.container {
+  display: grid;
+  /* grid-template-columns属性定义每一列的列宽，grid-template-rows属性定义每一行的行高。 */
+  grid-template-columns: repeat(4, 60px);
+  grid-template-rows: repeat(2, 60px);
+  /* grid-gap属性是grid-column-gap和grid-row-gap的合并简写形式， 
+        grid-row-gap属性设置行与行的间隔（行间距），grid-column-gap属性设置列与列的间隔（列间距）
+        我设置的是10 行与行之间 列与列之间 都是10*/
+  grid-gap: 10px;
+  /* item在这个单元格中的位置justify-items属性设置单元格内容的水平位置（左中右），align-items属性设置单元格内容的垂直位置（上中下） */
+  align-items: center;
+  justify-items: center;
+  /* justify-content属性是整个内容区域在容器里面的水平位置（左中右），align-content属性是整个内容区域的垂直位置（上中下）。 */
+  justify-content: center;
+  align-content: center;
+
+  width: 100%;
+  height: 500px;
+  background: #f3f3f3;
+}
+```

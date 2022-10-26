@@ -156,9 +156,9 @@ video::cue(.red) {
 
 播放器由播放器内核和 UI 界面组成，用于读取、解析渲染流文件
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661311721.jpg)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418685.jpg)
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661313473.jpg)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418711.jpg)
 
 - 分离器`demux`
 
@@ -187,7 +187,7 @@ video::cue(.red) {
 - 点播（video on demand），简称`VOD`，提前录制好的视频，常见格式有`mp4`、`flv`、`m3u8`等
 - 直播（live broadcast），时效性高，正在发生的
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661832466.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418734.png)
 
 发起直播的客户端，向上连着流媒体服务器，直播产生的视频流会被实时的推送到服务端，这个过程就是**推流**。
 其他客户端从流媒体服务器实时拉取直播客户端的视频流，这个过程就是**拉流**

@@ -2,7 +2,7 @@
 
 ## 数据类型
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661153891.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666417923.png)
 
 基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
 
@@ -12,7 +12,7 @@
 
 引用类型在栈中存入地址，该地址指向**堆**内存，将具体值存储在堆中。访问时先从栈中获取地址，再从堆中获取相应值
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1662017613.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418036.png)
 
 闭包中的变量并不保存在栈中，而是保存在堆中
 

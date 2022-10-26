@@ -99,7 +99,7 @@ MDN 地址： [Object.defineProperty()
 
 ### 3、如何实现
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661153967.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418273.png)
 
 `observer` 用来实现对每个组件中的 data 中定义的属性，循环用`Object.defineProperty()`实现数据劫持，以便利用其中的 setter 和 getter，然后通知订阅者，订阅者会触发它的 update 方法，对视图进行更新。
 
@@ -410,3 +410,76 @@ import '@/components/selfComponents'
   多页面跳转需要刷新所有资源
 
 ## 服务端渲染 SSR
+
+## keep-alive
+
+场景：从列表页进入详情页，返回时要保持以前的搜索条件和页数。即从详情页返回列表页不刷新，从其他菜单页面进入列表页要刷新
+
+方式一： 使用 keep-alive
+
+router.js
+
+```js
+{
+  path: 'device',
+  name: 'device',
+  component: () => import('@/views/device/index'),
+  meta: { title: '设备列表', keepAlive: true, isBack: false }
+}
+```
+
+在列表页
+
+```js
+  activated() {
+    // 从其他菜单页面进入
+    if (!this.$route.meta.isBack) {
+      this.getList()
+    } else {
+      //详情页返回操作
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    if (from.path === '/list/detail') {
+      to.meta.isBack = true
+    } else {
+      to.meta.isBack = false
+    }
+    next()
+  },
+```
+
+详情页
+
+```js
+returnPage() {
+  this.$router.go(-1)
+}
+```
+
+方式二、将参数传递给详情页，返回时将参数带回列表页
+
+```js
+// listQuery是查询参数
+intoDetail(row) {
+  this.$router.push({ name: 'detail', params: { id: row.id, ...this.listQuery } })
+},
+```
+
+```js
+created() {
+  if (Object.keys(this.$route.params).length > 0) {
+    this.listQuery = this.$route.params.listQuery
+  }
+  this.getList()
+},
+```
+
+详情页
+
+```js
+returnPage() {
+  delete this.$route.params.id
+  this.$router.push({ name: 'list', params: { listQuery: this.$route.params } })
+}
+```

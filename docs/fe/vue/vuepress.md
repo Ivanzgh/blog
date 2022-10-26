@@ -78,7 +78,7 @@ cd -
 
 进入`Actions`点击`Set up this workflow`创建一个新的`action`
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661154358.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418654.png)
 
 创建`.github/workflows/ci.yml`文件，名称随意。
 这里用了[deploy-to-github-pages](https://github.com/marketplace/actions/deploy-to-github-pages)这个 action，

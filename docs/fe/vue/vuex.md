@@ -105,7 +105,7 @@ export default {
 import { mapMutations } from 'vuex'
 export default {
   methods: {
-    ...mapMutations('account', ['setUser'])  // account表示模块命名空间，后面数组表示mutations里的方法
+    ...mapMutations('account', ['setUser']),  // account表示模块命名空间，后面数组表示mutations里的方法
 
     init() {
       this.setUser({ name: 'zgh', age: 23 })

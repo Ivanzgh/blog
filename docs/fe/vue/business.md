@@ -495,81 +495,6 @@ module.exports = {
 }
 ```
 
-## keep-alive
-
-场景：从列表页进入详情页，返回时要保持以前的搜索条件和页数。即从详情页返回列表页不刷新，从其他菜单页面进入列表页要刷新
-
-方式一： 使用 keep-alive
-
-router.js
-
-```js
-{
-  path: 'device',
-  name: 'device',
-  component: () => import('@/views/device/index'),
-  meta: { title: '设备列表', keepAlive: true, isBack: false }
-}
-```
-
-在列表页
-
-```js
-  activated() {
-    // 从其他菜单页面进入
-    if (!this.$route.meta.isBack) {
-      this.getList()
-    } else {
-      //详情页返回操作
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    if (from.path === '/list/detail') {
-      to.meta.isBack = true
-    } else {
-      to.meta.isBack = false
-    }
-    next()
-  },
-```
-
-详情页
-
-```js
-returnPage() {
-  this.$router.go(-1)
-}
-```
-
-方式二、将参数传递给详情页，返回时将参数带回列表页
-
-```js
-// listQuery是查询参数
-intoDetail(row) {
-  this.$router.push({ name: 'detail', params: { id: row.id, ...this.listQuery } })
-},
-```
-
-```js
-created() {
-  if (Object.keys(this.$route.params).length > 0) {
-    this.listQuery = this.$route.params.listQuery
-  }
-  this.getList()
-},
-```
-
-详情页
-
-```js
-returnPage() {
-  delete this.$route.params.id
-  this.$router.push({ name: 'list', params: { listQuery: this.$route.params } })
-}
-```
-
-
-
 ## 使用其他字体
 
 在项目的`assets`文件夹下新建`fonts`文件夹，将字体文件放在这里，新建`font.css`
@@ -589,4 +514,312 @@ returnPage() {
 #app {
   font-family: SourceHanSans;
 }
+```
+
+## 国际化
+
+当前主流方案采用 vue-i18n
+
+简化版：将需要翻译的内容放到一个数据源里，切换语言时改变默认语言，传入 key 值返回内容，如下例子
+
+```vue
+<template>
+  <button @click="changeLanguage('zh')">中文</button>
+  <button @click="changeLanguage('en')">英文</button>
+  <h1>{{ t('msg') }}</h1>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const locale = {
+  zh: {
+    msg: '你好世界'
+  },
+  en: {
+    msg: 'hello world'
+  }
+}
+const defaultLocale = ref('zh')
+const changeLanguage = (type: string) => {
+  defaultLocale.value = type
+}
+const t = (key: string) => {
+  return locale[defaultLocale.value][key]
+}
+</script>
+```
+
+## 树形组件封装
+
+下拉显示树形结构，可搜索
+
+使用：
+
+```vue
+<template>
+  <organize-tree v-model="data" :options="orgOptions"></organize-tree>
+</template>
+
+<script>
+import OrganizeTree from '@/components/OrganizeTree.vue'
+
+export default {
+  name: 'Tree',
+  components: { OrganizeTree },
+  data() {
+    return {
+      data: [],
+      orgOptions: [] // 树形数据源
+    }
+  }
+}
+</script>
+```
+
+封装
+
+```vue
+<template>
+  <div class="root">
+    <el-select
+      v-model="selectShowLabel"
+      :clearable="clearable"
+      :placeholder="placeholder"
+      multiple
+      :collapse-tags="collapseTags"
+      @clear="clear"
+      @remove-tag="removeTag"
+    >
+      <el-option disabled :style="'margin:5px'" value="">
+        <el-input
+          v-model="filterText"
+          size="small"
+          prefix-icon="el-icon-search"
+          clearable
+          placeholder="输入关键字进行查找"
+        />
+      </el-option>
+      <el-tree
+        ref="tree"
+        :data="options"
+        show-checkbox
+        :node-key="defaultProps.value"
+        :props="defaultProps"
+        :default-expand-all="expandAll"
+        :filter-node-method="filterNode"
+        @check-change="checkChange"
+      />
+    </el-select>
+  </div>
+</template>
+<script>
+export default {
+  name: 'OrganizeTree',
+  model: {
+    prop: 'checkedArray', // 把父组件传过来的值重命名为checkedArray
+    event: 'changeChecked' // 把父组件传过来的方法重命名为changeChecked 其实就是 input
+  },
+  props: {
+    // 选中节点的值
+    checkedArray: { type: Array, default: () => [] },
+    // 树数据
+    options: { type: Array, required: true },
+    // 设置指定的label,value,children
+    nodeConfig: {
+      type: Object,
+      default: () => {
+        return { label: 'label', value: 'id', children: 'children' }
+      }
+    },
+    // 是否展开所有节点
+    expandAll: { type: Boolean, default: false },
+    // 下拉框tag是否折叠
+    collapseTags: { type: Boolean, default: true },
+    // 开启下拉框一键清空
+    clearable: { type: Boolean, default: true },
+    placeholder: { type: String, default: '请选择' }
+  },
+  data() {
+    return {
+      timer: null,
+      selectShowLabel: '', // 用于下拉列表展示
+      filterText: '' // 筛选输入框绑定值
+    }
+  },
+  computed: {
+    defaultProps() {
+      return Object.assign({ label: 'label', value: 'id', children: 'children' }, this.nodeConfig)
+    }
+  },
+  watch: {
+    // 设置回显
+    checkedArray: {
+      handler(val) {
+        if (val && val.length > 0) {
+          this.setCheckedNodes(val)
+        }
+      },
+      // 监听第一次数据更改
+      immediate: true
+    },
+    // 筛选符合条件选项
+    filterText(val) {
+      this.$refs.tree.filter(val)
+    }
+  },
+  destory() {
+    clearTimeout(this.timer)
+  },
+  methods: {
+    // 清空树选择的内容
+    clear() {
+      this.$refs.tree.setCheckedKeys([])
+    },
+    // select移除选中标签
+    removeTag(label) {
+      // 选中项的value
+      const selectedValueArray = this.getCheckedNodes()
+        .filter((o) => o[this.defaultProps.label] !== label)
+        .map((o) => o[this.defaultProps.value])
+      // 移除的节点
+      const removeNode = this.$refs.tree.getCheckedNodes(true).filter((o) => o[this.defaultProps.label] === label)
+      // 更新树选中节点
+      removeNode.forEach((o) => {
+        this.$refs.tree.setChecked(o, false, true)
+      })
+      // 更新父组件绑定值
+      this.$emit('changeChecked', selectedValueArray)
+    },
+    // 树节点过滤方法
+    filterNode(value, data) {
+      if (!value) return true
+      return data[this.defaultProps.label].indexOf(value) !== -1
+    },
+    // 获取选中节点
+    getCheckedNodes() {
+      return this.$refs.tree.getCheckedNodes(true).map((node) => ({
+        [this.defaultProps.label]: node[this.defaultProps.label],
+        [this.defaultProps.value]: node[this.defaultProps.value]
+      }))
+    },
+    // 设置选中节点
+    async setCheckedNodes(selectedArray) {
+      if (!selectedArray || selectedArray.length === 0) {
+        this.clear()
+        return
+      }
+
+      // 第一次回显dom可能未加载导致setCheckedKeys报错
+      this.$nextTick(() => {
+        this.$refs.tree.setCheckedKeys(selectedArray)
+        this.timer = setTimeout(() => {
+          this.checkChange()
+        }, 500)
+      })
+    },
+    // 节点选中状态更改
+    checkChange() {
+      // 获取选中的node节点
+      const selectedArray = this.getCheckedNodes()
+      // 设置select展示的label
+      this.selectShowLabel = selectedArray.map((node) => node[this.defaultProps.label])
+      // 更新model绑定值
+      const selectValueArray = selectedArray.map((node) => node[this.defaultProps.value])
+      this.$emit('changeChecked', selectValueArray)
+    }
+  }
+}
+</script>
+```
+
+## 下拉框单选多选
+
+使用：
+
+```
+<project-search v-model="data" :options="projectSearchOptions" @change="selectChange" />
+```
+
+```vue
+<template>
+  <div>
+    <el-select
+      v-model="childSelectedValue"
+      :style="{ width }"
+      :multiple="multiple"
+      :collapse-tags="collapseTags"
+      v-bind="attrs"
+      v-on="$listeners"
+    >
+      <el-checkbox v-if="multiple" v-model="selectChecked" class="all-checkbox" @change="selectAll">全选</el-checkbox>
+      <el-option v-for="(item, index) in options" :key="index" :label="item[labelKey]" :value="item[valueKey]" />
+    </el-select>
+  </div>
+</template>
+<script>
+export default {
+  name: 'ProjectSearch',
+  props: {
+    value: { type: [String, Number, Array] },
+    multiple: { type: Boolean, default: false }, // 是否多选
+    collapseTags: { type: Boolean, default: false }, // 选中的标签是否折叠
+    width: { type: String, default: '100%' }, // 选择框宽度
+    labelKey: { type: String, default: 'label' }, // 显示项的名称
+    valueKey: { type: String, default: 'value' }, // 显示项的结果
+    options: { type: Array, default: () => [] } // 数据
+  },
+  computed: {
+    childSelectedValue: {
+      get() {
+        return this.value
+      },
+      set(val) {
+        this.$emit('input', val)
+      }
+    },
+    attrs() {
+      return {
+        // 'popper-append-to-body': false,
+        clearable: true,
+        filterable: true,
+        ...this.$attrs
+      }
+    },
+    selectChecked: {
+      get() {
+        return this.childSelectedValue?.length === this.options?.length
+      },
+      set(val) {
+        this.$emit('input', val)
+      }
+    }
+  },
+  watch: {
+    childSelectedValue(val) {
+      this.childSelectedValue = val
+    }
+  },
+  methods: {
+    // 点击全选
+    selectAll(val) {
+      const options = JSON.parse(JSON.stringify(this.options))
+      if (val) {
+        this.childSelectedValue = options.map((item) => {
+          return item[this.valueKey]
+        })
+      } else {
+        this.childSelectedValue = null
+      }
+    }
+  }
+}
+</script>
+<style lang="scss">
+.el-select-dropdown {
+  .all-checkbox {
+    margin-left: 20px;
+  }
+}
+</style>
 ```

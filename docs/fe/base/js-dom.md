@@ -185,6 +185,6 @@ IE8.0 及其以下版本不支持`addEventListener()` ，它使用`attachEvent()
 
 获取元素的大小及其相对于视口的位置
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661333955.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418111.png)
 
 ## scrollHeight、clientHeight、innerHeight

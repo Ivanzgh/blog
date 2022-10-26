@@ -1,6 +1,6 @@
 # 设计模式
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661153917.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418201.png)
 
 ## SOLID 设计原则
 

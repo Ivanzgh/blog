@@ -352,8 +352,8 @@ function picRun() {
 window.setInterval(picRun, 30)
 ```
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661153824.png)
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661153858.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666417775.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666417881.png)
 
 类似于精灵图切割图片，图片宽 515px，高 135px，每一个小图是四分之一即 129px，高度不用切。
 

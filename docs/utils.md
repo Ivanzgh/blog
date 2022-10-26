@@ -56,7 +56,7 @@
 还有一种方式是导入外部主题，[http://www.themesmap.com/](http://www.themesmap.com/)，
 下载喜欢的主题，Editor --> Color Scheme 点击右侧的小齿轮，选择 import Scheme 即可
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661154239.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418549.png)
 
 ## VScode
 
@@ -110,7 +110,7 @@
 - `Snazzy Operator`
 - `Dracula Official`
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1661154215.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418526.png)
 
 #### 代码格式化
 

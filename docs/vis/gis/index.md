@@ -25,7 +25,7 @@ WMS 提供如下操作:
 
 TMS（Tile Map Service），瓦片地图服务，将地图切割成多个级别的图片金字塔。瓦片是正方形，每张瓦片都可通过级别、行列号唯一标记。
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1662100389.png)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418839.png)
 
 在平移、缩放地图时，浏览器根据金字塔规则，计算出所需的瓦片，从服务器获取并拼接
 
@@ -229,7 +229,7 @@ EPSG（European Petroleum Survey Group），欧洲石油调查组织
 
 墨卡托投影，又称正轴等角圆柱投影，由荷兰地图学家墨卡托(G.Mercator)于 1569 年创拟。假设地球被套在一个圆柱中，赤道与圆柱相切，然后在地球中心放一盏灯，把球面上的图形投影到圆柱体上，再把圆柱体展开，就形成以一幅墨卡托投影的世界地图（如下图）。因其等角特性，广泛应用与航空、航海中。
 
-![image](https://cdn.jsdelivr.net/gh/Ivanzgh/ossimg@main/blog/1662100029.gif)
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418811.gif)
 
 伪墨卡托投影是基于墨卡托投影的，把`WGS84`坐标系投影到正方形上，也被称为球体墨卡托、web 墨卡托投影。
 它以整个世界范围，赤道作为标准纬线，本初子午线作为中央经线，两者交点为坐标原点，向东向北为正，向西向南为负，形成一个正方形
