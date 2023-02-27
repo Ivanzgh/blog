@@ -483,3 +483,108 @@ returnPage() {
   this.$router.push({ name: 'list', params: { listQuery: this.$route.params } })
 }
 ```
+
+## 插槽 slot
+
+在组件中用来分发内容，简单说就是在组件内部可以扩展内容
+
+### 匿名插槽
+
+```vue
+// TestOne.vue
+<template>
+  <div>
+    <slot></slot>
+  </div>
+</template>
+
+// 在别的组件使用
+<template>
+  <div>
+    <TestOne>
+      <h1>可以放任意内容</h1>
+    </TestOne>
+  </div>
+</template>
+```
+
+### 具名插槽
+
+```vue
+// TestTwo.vue
+<template>
+  <div>
+    // 具名插槽
+    <h1>
+      <slot name="hName"></slot>
+    </h1>
+    <span>
+      <slot name="spanName"></slot>
+    </span>
+  </div>
+</template>
+
+// 在别的组件使用
+<template>
+  <div>
+    <TestTwo>
+      <template #hName>111</template>
+      <template #spanName>222</template>
+    </TestTwo>
+  </div>
+</template>
+```
+
+## 动态绑定样式
+
+### 动态绑定 class
+
+```
+// 对象形式
+:class="{'p1' : true}"
+:class="{'p1' : false, 'p': true}"
+
+// 数组形式
+:class="['p1', 'p2']"
+:class="[{ 'p1': true }]"
+:class="[{ 'p1': false }, 'p2']
+
+// 三元表达式
+:class="[ 1 < 2 ? 'p1' : 'p2' ]"
+
+// 回调函数
+:class="setClass"
+
+method: {
+  setclass () {
+    return 'p1';
+  }
+}
+```
+
+### 动态绑定style
+
+```
+// 对象形式
+:style="{ color: activeColor, fontSize: fontSize + 'px' }"
+:style="{ color: index == 0 ? '#f00' : '#000' }"
+
+// 数组形式
+:style="[style1, style2]"
+:style="[{ color: index == 0  '#f00': '#000' }, { fontSize: '20px' }]"
+
+// 三元表达式，参考前两个
+
+// 浏览器会根据运行支持情况进行选择
+:style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }"
+
+
+// 绑定data对象
+:style="styleObject"
+
+data() {
+  return{
+    styleObject: { color: '#f00', fontSize: '18px' }  
+  }
+}
+```

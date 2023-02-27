@@ -432,3 +432,64 @@ flex 布局时显示省略号
   </div>
 </div>
 ```
+
+## 兼容性
+
+### 清除默认样式
+
+每个浏览器的 CSS 默认样式不尽相同，最简单直接的就是使用通配符，但是有性能问题
+
+```css
+* {
+  margin: 0;
+  padding: 0;
+}
+```
+
+也可以使用第三方库清除默认样式，如[normailze.css](https://github.com/necolas/normalize.css)
+
+### 添加浏览器私有属性
+
+在一些 CSS3 属性前加入`-webkit-`、`-moz-`、`-ms-`或`-o-`
+
+```css
+.box {
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+}
+```
+
+在 vscode 中可以使用 Autoprefixer 插件
+
+## 回流与重绘
+
+回流必定引发重绘，重绘不一定引发回流
+
+### 回流(reflow)
+
+若改变了 DOM 元素的形状、大小或页面布局就会触发 reflow
+
+触发条件：
+
+- 添加或删除可见的 DOM 元素
+- 元素位置发生变化
+- 元素尺寸发生变化（width height padding margin border）
+- 浏览器窗口尺寸变化
+- 内容变化（如文本变化）
+- 页面初始渲染（无法避免）
+
+### 重绘(repaint)
+
+只是改变了样式，不影响周围元素或布局，如`color`或`background-color`，会引起浏览器的重绘。触发重绘的行为：
+
+- 修改颜色
+- 修改文本方向
+- 修改阴影
+
+### 减少回流
+
+- 动画设置`position:fixed`或 `absolute`，尽可能地使元素脱离文档流，从而减少对其他元素的影响
+- 避免使用`table`布局，`table`中每个元素的大小以及内容的改动，都会导致整个`table`的重新计算
+- 使用 visibility:hidden 替换 display:none
+- 使用 requestAnimationFrame 作为动画帧。动画速度越快，回流次数越多

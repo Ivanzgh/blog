@@ -212,3 +212,29 @@ Page({
   }
 })
 ```
+
+## 文件下载
+
+```js
+
+<view style="color: #1990FF" wx:for="{{fileList}}" wx:key="fileUUid" data-url="{{item.fileUrl}}" bindtap="downloadFile">{{item.name}}</view>
+
+
+ downloadFile(e) {
+    const url = this.data.fileServer + e.currentTarget.dataset.url
+    wx.downloadFile({
+      url: url,
+      success(res) {
+        if (res.statusCode === 200) {
+          wx.openDocument({
+            filePath: res.tempFilePath,
+            showMenu: true,
+            success(res) {
+              console.log('打开文档成功')
+            }
+          })
+        }
+      }
+    })
+  }
+```

@@ -112,7 +112,9 @@ export default defineConfig({
           collapsible: true,
           items: [
             { text: 'React', link: '/fe/react/' },
-            { text: 'Redux', link: '/fe/react/redux' }
+            { text: 'Hook', link: '/fe/react/hook' },
+            { text: 'Redux', link: '/fe/react/redux' },
+            { text: 'React-Router', link: '/fe/react/router' }
           ]
         }
       ],
@@ -126,14 +128,14 @@ export default defineConfig({
         { text: 'Koa', collapsible: true, items: [{ text: 'Koa', link: '/fe/node/koa' }] },
         { text: 'MongoDB', collapsible: true, items: [{ text: 'MongoDB', link: '/fe/node/mongodb' }] }
       ],
-      '/mini-program/': [
+      '/miniProgram/': [
         {
           text: '小程序',
           collapsible: true,
           items: [
-            { text: '微信小程序', link: '/mini-program/wx' },
-            { text: 'Taro', link: '/mini-program/taro' },
-            { text: 'uniapp', link: '/mini-program/uniapp' }
+            { text: '微信小程序', link: '/miniProgram/wx' },
+            { text: 'Taro', link: '/miniProgram/taro' },
+            { text: 'uniapp', link: '/miniProgram/uniapp' }
           ]
         }
       ],
@@ -179,7 +181,7 @@ function nav() {
         { text: 'Vue', link: '/fe/vue/' },
         { text: 'React', link: '/fe/react/' },
         { text: 'Node', link: '/fe/node/' },
-        { text: '小程序', link: '/mini-program/wx' },
+        { text: '小程序', link: '/miniProgram/wx' },
         { text: '插件', link: '/plugin' }
       ]
     },

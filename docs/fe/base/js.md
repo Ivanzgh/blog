@@ -1188,3 +1188,18 @@ num.toString(2) // "1010"
 num.toString(16) // "a"
 num.toString(8) // "12"
 ```
+
+## 谷歌浏览器监听三次点击
+
+监听 click 事件，detail 为 3 就是三击
+
+```js
+// <button id='btn'>click</button>
+
+const dom = document.querySelector('#btn')
+dom.addEventListener('click', (evt) => {
+  if (evt.detail === 3) {
+    window.open(url.href, '_blank')
+  }
+})
+```
