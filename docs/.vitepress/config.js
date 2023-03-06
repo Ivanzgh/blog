@@ -223,7 +223,6 @@ function nav() {
         { text: '操作系统', link: '/base/os/' },
         { text: '设计模式', link: '/base/design-pattern/' }
       ]
-    },
-    { text: '随笔', link: '/thought' }
+    }
   ]
 }

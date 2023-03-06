@@ -219,4 +219,6 @@ app.listen(3000)
 
 ## Chrome 历史版本下载
 
-<https://www.chromedownloads.net/chrome64osx>，使用的时候关掉新版浏览器
+<https://www.chromedownloads.net/chrome64osx>
+
+chrome 80 版本下载地址：<https://www.chromedownloads.net/chrome64osx-stable/989.html>，使用的时候关掉新版浏览器

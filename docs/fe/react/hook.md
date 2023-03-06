@@ -145,12 +145,12 @@ function Counter() {
 ```jsx
 import React, { useState, createContext, useContext } from 'react'
 
-const numContext = createContext(null)
+const ContentContext = createContext(null)
 
-function Num() {
+function Children() {
   // 如果父组件传入了多个值
-  // const {num, setNum} = useContext(numContext)
-  const getNum = useContext(numContext)
+  // const {num, setNum} = useContext(ContentContext)
+  const getNum = useContext(ContentContext)
   return <h1>{getNum}</h1>
 }
 
@@ -158,18 +158,67 @@ function Home() {
   const [num, setNum] = useState(0)
 
   return (
-    <div className="home">
-      <p>Welcome to React~{num}</p>
+    <div>
+      <p>{num}</p>
       <button onClick={() => setNum(num + 1)}>click me</button>
-      // 如果要传入多个值就传入一个对象，value={{ num, setNum }}
-      <numContext.Provider value={num}>
-        <Num />
-      </numContext.Provider>
+      {/* 如果要传入多个值就传入一个对象，value={{ num, setNum }} */}
+      <ContentContext.Provider value={num}>
+        <Children />
+      </ContentContext.Provider>
     </div>
   )
 }
 
 export default Home
+```
+
+也可以使用 useReducer，在子组件中触发 dispatch
+
+```jsx
+// 父组件
+import { createContext, useReducer } from 'react'
+import Children from './Children'
+
+export const ContentContext = createContext(null)
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'decrement':
+      return { count: state.count + 1 }
+    case 'increment':
+      return { count: state.count - 1 }
+    default:
+      return state
+  }
+}
+
+export default function Home() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 })
+  return (
+    <>
+      <ContentContext.Provider value={{ state, dispatch }}>
+        <Children />
+      </ContentContext.Provider>
+    </>
+  )
+}
+```
+
+子组件
+
+```jsx
+import { useContext } from 'react'
+import { ContentContext } from './Home'
+
+export default function Children() {
+  const { state, dispatch } = useContext(ContentContext)
+  return (
+    <>
+      <p>{state.count}</p>
+      <button onClick={() => dispatch({ type: 'decrement' })}>click</button>
+    </>
+  )
+}
 ```
 
 ## useReducer
@@ -303,7 +352,11 @@ export default function App4() {
 
 ## useMemo
 
-useMemo 和 useCallback 很类似，需要继续返回一个回调函数
+useMemo 和 useCallback 很类似，需要继续返回一个回调函数。
+
+把依赖项作为参数传入，仅会在某个依赖项改变时才重新计算，类似计算属性，避免在每次渲染时都进行高开销的计算
+
+如果没有提供依赖项数组，useMemo 在每次渲染时都会计算新的值
 
 ```jsx
 import React, { useState, memo, useMemo } from 'react'
@@ -315,10 +368,18 @@ const Child = memo((props) => {
 
 export default function App() {
   const [num, setNum] = useState(0)
+  const [resData, setResData] = useState([])
 
   const doSomeThing = useMemo(() => {
     return () => setNum((num) => num + 1)
   }, [])
+
+  const memoRes = useMemo(() => {
+    // 会监听resData的变化
+    if (!resData) return
+    // 省略处理过程，返回处理后的结果
+    return resData
+  }, [resData])
 
   // const doSomeThing = useCallback(() => setNum((num) => num + 1), [])
 

@@ -15,6 +15,8 @@ npm 中文文档：[https://www.npmjs.cn/](https://www.npmjs.cn/)
 | npm install npm -g                   | npm 升级                               |
 | npm config get registry              | 查看镜像地址                           |
 | npm list -g                          | 查看所有全局安装的模块                 |
+| npm i --legacy-peer-deps             | -                                      |
+| npm cache clear --force              | 清除 npm 缓存                          |
 
 ## 安装参数区别
 
@@ -137,60 +139,3 @@ node 从 package.json 文件读取模块名称，从 package-lock.json 文件中
 项目中引入的包版本号之前经常会加^号，每次在执行`npm install`之后，下载的包都会发生变化，
 为了系统的稳定性考虑，每次执行完`npm install`之后会创建或者更新 package-lock 文件。
 该文件记录了上一次安装的具体的版本号，相当于是提供了一个参考，在出现版本兼容性问题的时候，就可以参考这个文件来修改版本号即可。
-
-## 管理 node 版本
-
-在维护一些老项目时通常需要降低 node 的版本，如遇到 node-gyp 报错、node-sass 报错等
-
-## node 命令
-
-```sh
-# 查看node版本
-node -v
-
-# 查看npm版本，
-npm -v
-
-# 查看node安装目录
-which node
-
-# 查看官方所有的node版本
-npm view node versions
-```
-
-### 使用 n 模块管理
-
-```sh
-# 清除npm缓存
-sudo npm cache clean -f
-
-# 全局安装 n 模块
-sudo npm install -g n
-
-# 查看是否安装成功
-n -V
-
-# 查看已安装的node版本
-n ls
-
-# 安装指定版本，如 14.12.0
-sudo n 14.12.0
-
-# 更新到最新的稳定版
-sudo n stable
-
-# 更新到最新版本
-sudo n latest
-
-# 切换版本，输入 n 回车，上下键选择版本，回车安装
-sudo n
-
-# 删除指定版本，如 14.12.0，删除后用 n 切换一下版本
-sudo n rm 14.12.0
-
-# 卸载 n
-sudo npm uninstall n -g
-```
-
-node 官网下载地址：<https://nodejs.org/en/download/>
-node 和 node-sass 对应版本，<https://www.npmjs.com/package/node-sass>

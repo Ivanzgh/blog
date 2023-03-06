@@ -191,16 +191,31 @@ function convertUTCTimeToLocalTime(UTCDateString) {
 
 1. split
 
-```js
-let time = '2009-12-30 13:28:29'
-let res = time.split(' ')
-let date = res[0]
-let time = res[1]
-```
+   ```js
+   const fullTime = '2009-12-30 13:28:29'
+   const res = fullTime.split(' ')
+   const date = res[0]
+   const time = res[1]
+   ```
 
 2. slice
 
+   ```js
+   const str = '2019-08-18  00:00:00'
+   str.slice(0, 10) // 2019-08-18
+   ```
+
+## 截取文件后缀
+
 ```js
-let str = '2019-08-18  00:00:00'
-str.slice(0, 10) // 2019-08-18
+const fileName = 'file.pdf'
+
+// 方法1
+const fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1)
+
+// 方法2
+const fileExtension = fileName.substring(fileName.length - 3, fileName.length).toLowerCase()
+
+// 方法3
+const fileExtension = fileName.split('.').pop().toLowerCase()
 ```

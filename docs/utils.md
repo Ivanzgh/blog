@@ -190,6 +190,8 @@ module.exports = {
 
 `markdownlint`
 
+<https://github.com/DavidAnson/markdownlint>
+
 <details><summary>点击显示语法规则</summary>
 
 - MD001 - Heading levels should only increment by one level at a time（标题级数只能逐级扩大）

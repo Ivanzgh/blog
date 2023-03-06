@@ -112,7 +112,7 @@ flex-flow: row wrap;
   grid-template-rows: repeat(2, 60px);
   /* grid-gap属性是grid-column-gap和grid-row-gap的合并简写形式， 
         grid-row-gap属性设置行与行的间隔（行间距），grid-column-gap属性设置列与列的间隔（列间距）
-        我设置的是10 行与行之间 列与列之间 都是10*/
+        我设置的是10 行与行之间 列与列之间 都是10 */
   grid-gap: 10px;
   /* item在这个单元格中的位置justify-items属性设置单元格内容的水平位置（左中右），align-items属性设置单元格内容的垂直位置（上中下） */
   align-items: center;
