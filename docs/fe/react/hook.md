@@ -11,46 +11,78 @@
 
 ## useState
 
-`useState`就是一个 Hook，类似`class`组件的`this.setState`，`useState()`方法里面唯一的参数就是初始`state`，返回值为当前`state`以及更新`state`的函数
-
-使用`Hook`实现点击按钮数值增加
+`useState()`用于在函数组件中添加状态。接受一个初始值作为参数，返回一个由**当前状态**和**更新状态的函数**组成的数组，当调用这个函数去修改状态时，会触发组件重新渲染。
+useState 针对每个组件实例都有自己的状态，不会共享状态。
 
 ```jsx
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-function Home() {
-  // 定义一个num变量，初始值是0，setNum是更新num的函数
-  const [num, setNum] = useState(0)
+export default function Home() {
+  const [count, setCount] = useState(0)
+  const decrement = () => {
+    setCount((prev) => prev + 1)
+  }
   return (
-    <div className="home">
-      <p>Welcome to React~{num}</p>
-      <button onClick={() => setNum(num + 1)}>click me</button>
+    <div>
+      <p>{count}</p>
+      <button onClick={decrement}>decrement</button>
+      <button onClick={() => setCount(count - 1)}>increment</button>
     </div>
   )
 }
-
-export default Home
 ```
 
-使用`class`组件能实现同样的功能，但是`Hook`不能在`class`组件中使用
+1、为什么要使用 useState，直接声明变量不行吗？
+
+假设直接声明变量，点击按钮后能看到 count 打印出来的值是变了，但是页面却没有变化。因为没有触发组件重新渲染，详见 React 渲染原理
+
+```js
+export default function Home() {
+  let count = 0
+  const increase = () => {
+    count = count + 1
+    console.log(count)
+  }
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={increase}>click</button>
+    </div>
+  )
+}
+```
+
+2、为什么 `setCount(count + 1)`和 `setCount(prev => prev + 1)`都可以实现功能？
+
+在 React18+，useState 返回的更新状态的函数**setCount 是一个异步函数**，即使在连续多次调用时，也不能保证它们的值是最新的。因此，如果在调用 setCount 函数时，需要使用先前状态的值来计算新状态，那么使用回调函数的方式会更可靠。
+
+在 `setCount(count + 1)` 的写法中，count 的值依次加一。但是，由于 setCount 是异步函数，实际上可能存在多次点击只触发一次更新的情况，此时计算新状态的值 `count + 1` 就会出现问题。
+
+相比之下，`setCount(prev => prev + 1)` 的写法更可靠。在这种写法中，使用回调函数的方式来计算新状态的值，这个回调函数的参数 prev 是当前状态的值，可以保证它是最新的。因此，无论 setCount 函数是否被合并，都可以正确地计算新状态的值。
+
+综上所述，虽然 `setCount(count + 1)` 在某些情况下可以正常工作，但是使用回调函数的方式 `setCount(prev => prev + 1)` 更可靠，建议在使用 useState 时采用这种写法。
+
+3、为什么说组件状态的更新是异步的？
+
+例子中，点击一次后，页面上显示 1，但是打印出来的还是 0。如果是同步的，执行`setCount((prev) => prev + 1)`会将 count 的值变为 1，那么之后的打印结果就应该是 1，因此组件状态的更新是异步的。
+
+在 React18+之后，所有的 setState 都是异步批量执行的。<https://juejin.cn/post/7108362046369955847>
 
 ```jsx
-import React, { Component } from 'react'
+import { useState } from 'react'
 
-class Home extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { num: 0 }
+export default function Home() {
+  const [count, setCount] = useState(0)
+  const decrement = () => {
+    setCount((prev) => prev + 1)
+    console.log(count)
   }
-
-  render() {
-    return (
-      <div className="home">
-        <p>Welcome to React~{num}</p>
-        <button onClick={() => this.setState({ num: this.state.num + 1 })}>click me</button>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={decrement}>decrement</button>
+    </div>
+  )
 }
 ```
 

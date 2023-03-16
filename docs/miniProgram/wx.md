@@ -1,5 +1,26 @@
 # 微信小程序
 
+## 更改数据
+
+通过`this.setData`更改
+
+```js
+Page({
+  data: {
+    detailData: { a: 1 }
+  }
+})
+
+updateData(){
+ const newData = { a: 2 }
+ // 整体替换
+ this.setData({ detailData: newData })
+
+ // 如果只想更改对象里面的属性
+  this.setData({ ['detailData.a']: 2 })
+}
+```
+
 ## 路由
 
 `<navigator url="/pages/zghDetail/index?id=1">点击跳转去详情页</navigator>`
@@ -278,3 +299,61 @@ Page({
     })
   }
 ```
+
+## 生成随机数
+
+[文档地址](https://developers.weixin.qq.com/miniprogram/dev/api/device/crypto/wx.getRandomValues.html)
+
+```js
+wx.getRandomValues({
+  length: 30, // 生成 30 个字节长度的随机数
+  success(res) {
+    that.setData({ inspectFileUuid: wx.arrayBufferToBase64(res.randomValues) })
+  }
+})
+```
+
+## Echarts
+
+使用 [echarts-for-weixin](https://github.com/ecomfe/echarts-for-weixin)
+
+```html
+<ec-canvas id="mychart-dom" canvas-id="mychart-pie" ec="{{ ecZL }}"></ec-canvas>
+```
+
+```js
+import * as echarts from '../../components/ec-canvas/echarts'
+
+Page({
+  data: {
+    ecZL: {
+      lazyLoad: true // 延迟加载图表,可以在获取数据后再初始化数据
+    }
+  },
+
+  onLoad(option) {
+    this.getBarData()
+  },
+
+  getBarData() {
+    getStatistic().then((res) => {
+      this.initChart(res.data)
+    })
+  },
+
+  initChart(data) {
+    const chartDom = this.selectComponent('#mychart-dom')
+    chartDom.init((canvas, width, height, dpr) => {
+      const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr })
+      canvas.setChart(chart)
+      const option = {
+        // ....
+      }
+      chart.setOption(option)
+      return chart
+    })
+  }
+})
+```
+
+## d

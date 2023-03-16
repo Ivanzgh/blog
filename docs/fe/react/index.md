@@ -83,15 +83,11 @@ const bg = { background: '#f00' }
 
 ### css in js
 
-## 创建组件的方式
+## 组件
 
-创建组件有函数组件和 class 组件两种方式，效果等同，但是推荐使用函数组件。
+### 创建组件的方式
 
-所有 React 组件都必须像纯函数一样保护它们的`props`不被更改
-
-组件名称必须以**大写字母开头**，React 会将以小写字母开头的组件视为原生 DOM 标签
-
-### 函数式
+创建组件有函数组件和类组件两种方式，React18 之后，全面使用函数组件，类组件会退出历史舞台
 
 ```jsx
 function Home(props) {
@@ -103,19 +99,49 @@ const Home = () => {
 }
 ```
 
-### class
+### 对组件的要求
+
+1. 组件名称必须以**大写字母开头**，否则 React 会将以小写字母开头的组件视为原生 DOM 标签
+2. 必须返回可以渲染的元素
+
+- react 元素
+- null
+- 组件
+- 可迭代的对象，包括数组、Set、Map 等
 
 ```jsx
-class Home extends Component {
-  constructor(props) {
-    super(props)
-  }
+function App1() {
+  return null
+}
 
-  render() {
-    return <div className="home">Welcome to React~</div>
-  }
+function App2() {
+  return [1, 2, 3]
+}
+
+// 如果直接返回对象，会报错：Uncaught Error: Objects are not valid as a React child
+function App3() {
+  return { a: 1 }
 }
 ```
+
+那么是否可以说 React 组件不能返回对象？不能，可以返回一个迭代器
+
+```jsx
+const obj = { a: 1 }
+obj[Symbol.iterator] = function* () {
+  for (let prop in obj) {
+    yield [prop, obj[prop]]
+  }
+}
+
+function App() {
+  return obj
+}
+```
+
+### 数据
+
+所有 React 组件都必须像纯函数一样保护它们的`props`不被更改
 
 ## 事件绑定
 
@@ -358,5 +384,5 @@ function f2(props) {
 f1()
 ```
 
+## 渲染原理
 
-## d

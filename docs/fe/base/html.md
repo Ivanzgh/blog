@@ -152,3 +152,96 @@ select.size = 6
 #### 通过 ajax 动态加载 select 控件下拉框的 option
 
 [参考](https://blog.csdn.net/zhengxiangwen/article/details/46480687)
+
+## figure、figcaption
+
+figure 元素代表一段独立的内容，可能包含 figcaption 元素定义的说明元素。通常，figure 的内容为图像、插图、图表、代码片段等，figcaption 用于为 figure 元素添加标题和描述信息
+
+- IE8 以下不支持
+- figure 可以有多个子元素，figcaption 最好只有一个
+
+常用于插图卡片的 hover 特效，鼠标移入显示文字、图片放大、遮罩层等
+
+```html
+<figure>
+  <img src="https://interactive-examples.mdn.mozilla.net/media/cc0-images/elephant-660-480.jpg" alt="" />
+  <figcaption>
+    <h2>
+      标签
+      <span>Figure</span>
+    </h2>
+    <p>Figure标签真不错，Figcaption也很棒！</p>
+  </figcaption>
+</figure>
+```
+
+```css
+figure {
+  margin: auto;
+  min-width: 320px;
+  max-width: 480px;
+  max-height: 360px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(-45deg, #34495e 0%, #cc6055 100%);
+  cursor: pointer;
+}
+
+figcaption {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 2em;
+  box-sizing: border-box;
+  color: #fff;
+  text-align: center;
+}
+
+figure h2 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 300;
+  text-transform: uppercase;
+  transform: scale(0.8);
+  transition: transform 0.35s;
+}
+
+figure h2 span {
+  font-weight: 600;
+}
+
+figure p {
+  position: absolute;
+  left: 0;
+  bottom: 30px;
+  margin: 20px;
+  padding: 30px;
+  border: 2px solid #fff;
+  font-size: 18px;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: opacity 0.35s, transform 0.35s, bottom 0.35s;
+}
+
+figure img {
+  opacity: 0.8;
+  transition: opacity 0.35s, transform 0.35s;
+}
+
+figure:hover img {
+  opacity: 0.1;
+  transform: scale(2);
+}
+
+figure:hover h2 {
+  transform: scale(1);
+}
+
+figure:hover p {
+  transform: scale(1);
+  bottom: 0;
+  opacity: 1;
+}
+```
