@@ -21,6 +21,8 @@ console.log(str[1]) // ,
 console.log(str[2]) // 3
 ```
 
+## 获取字符串指定位置的值
+
 ## split()
 
 把一个字符串分割成字符串数组

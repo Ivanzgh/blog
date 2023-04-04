@@ -23,7 +23,11 @@ updateData(){
 
 ## 路由
 
-`<navigator url="/pages/zghDetail/index?id=1">点击跳转去详情页</navigator>`
+### wx.navigateTo
+
+在 wxml 中使用：`<navigator url="/pages/list/detail?id=1">点击跳转去详情页</navigator>`
+
+在 js 中使用：`wx.navigateTo({ url: '/pages/list/detail' })`
 
 接收参数：在生命周期函数 onLoad 中监听页面加载
 
@@ -34,6 +38,27 @@ onLoad(options) {
   this.setData({ routerParams: options.id })
 },
 ```
+
+### wx.switchTab
+
+跳转到 tab 页面：`wx.switchTab({ url: '/pages/index/index' });`
+
+1、如何传递参数？
+
+可以在跳转之前将参数存储到全局对象：
+
+```js
+const app = getApp()
+
+Page({
+  goToLink() {
+    app.globalData.searchValue = 123
+    wx.switchTab({ url: '/pages/index/index' })
+  }
+})
+```
+
+在要使用的页面获取数据：`app.globalData.searchValue`
 
 ## 图片上传
 
@@ -356,4 +381,197 @@ Page({
 })
 ```
 
-## d
+## 踩坑记录
+
+### 请求失败
+
+1. 检查是否在微信公众平台配置了服务器域名，和本地请求的域名是否一致
+2. 开发者工具右上角点击详情，打开本地配置，勾选上“不校验合法域名、web-view（业务域名）、TLS 版本以及 HTTPS 证书”
+
+### 真机调试拿不到数据
+
+在开发者工具和浏览器都能正常获取数据，但是在真机调试时拿不到数据，请求失败，这时可以考虑证书是否过期
+
+### 真机调试连接状态一直在正常和未连接之间跳转
+
+可以尝试以下方式：
+
+- 重新打开项目
+- 重启开发者工具
+- 升级版本
+- 版本降级
+
+### 用 code 换取 openID 报错
+
+通过`wx.login()`可以获取用户的登录凭证（code），这个临时登录凭证一般只有 5 分钟有效期，可以将该凭证发送到自己的服务器，用于获取用户信息、进行用户认证等操作。
+
+报错信息：`errcode: 40029 errmsg: "invalid code, rid: 64180ee9-5771befc-2c5bd655"`
+
+出现上面的报错，考虑 code 是否被多次调用，还有自己的服务端是否部署正确
+
+### 绑定数据大小写问题
+
+如果想在点击事件里传递参数，可以使用`data-`，但是要全部小写，如果使用驼峰写法会被小程序全部转为小写
+
+这里如果绑定`data-isOpen="0"`，获取值`e.target.dataset.isOpen`会报错，需要小写：`e.target.dataset.isopen`
+
+```html
+<van-button round type="info" data-isopen="0" bind:tap="handleSubmit">保存</van-button>
+```
+
+### 路由传递布尔值类型错误
+
+通过路由传递给其他页面的布尔值会被转换为字符串格式：'true'、'false'。可以自己转换一下：`const a = b === 'true' ? true : false`
+
+## 列表通用模板
+
+小程序列表通用模板代码：首部搜索框，下方数据列表，无数据就显示暂无数据
+
+- 如果数据全部返回，在前端搜索过滤
+- 如果数据分页返回，上拉加载、下拉刷新，搜索、清空
+- 顶部项目选择
+
+### 1、数据全部返回，搜索过滤由前端处理
+
+小程序 UI 组件库：[Vant Weapp](https://vant-contrib.gitee.io/vant-weapp/#/home)
+
+index.wxml
+
+```html
+<van-search
+  value="{{ searchValue }}"
+  placeholder="请输入项目名称"
+  shape="round"
+  bind:search="onSearch"
+  bind:change="onSearch"
+  bind:clear="onClear"
+/>
+<view wx:if="{{projectList.length>0}}">
+  <van-cell-group>
+    <navigator wx:for="{{projectList}}" wx:key="id" url="/pages/project/detail?proId={{item.id}}">
+      <van-cell title="{{item.proName}}" label="{{item.proNo}}" />
+    </navigator>
+  </van-cell-group>
+</view>
+<van-empty wx:else description="暂无数据" />
+```
+
+index.json
+
+```json
+{
+  "navigationBarTitleText": "项目管理",
+  "usingComponents": {
+    "van-search": "@vant/weapp/search/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-empty": "@vant/weapp/empty/index"
+  }
+}
+```
+
+index.js
+
+```js
+import { getProjectList } from '../../utils/api.js'
+
+Page({
+  data: {
+    searchValue: '',
+    projectList: [],
+    originProList: [],
+    loading: false
+  },
+  onLoad() {
+    this.searchProjectList()
+  },
+  searchProjectList() {
+    this.setData({ loading: true })
+    getProjectList().then((res) => {
+      this.setData({ loading: false, projectList: res.data.data, originProList: res.data.data })
+    })
+  },
+  onSearch(e) {
+    this.setData({ searchValue: e.detail })
+    if (!e.detail) {
+      this.setData({ projectList: this.data.originProList })
+    } else {
+      const arr = this.data.projectList.filter((ele) => ele.proName.indexOf(e.detail) !== -1)
+      this.setData({ projectList: arr })
+    }
+  },
+  onClear() {
+    this.setData({ projectList: this.data.originProList })
+  }
+})
+```
+
+### 2、分页返回数据
+
+index.wxml 去掉了`bind:change="onSearch"`，其余同上。index.json 如果要开启下拉刷新，需要添加：`"enablePullDownRefresh": true`
+
+index.js
+
+```js
+import { getProjectList } from '../../utils/api.js'
+
+Page({
+  data: {
+    searchValue: '',
+    listData: [],
+    pageNum: 1,
+    total: 0,
+    loading: false
+  },
+
+  onLoad() {
+    this.getList(1)
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom() {
+    if (!this.data.loading && this.data.pageNum < Math.ceil(this.data.total / 10)) {
+      this.getList(this.data.pageNum + 1)
+    }
+  },
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh() {
+    //启用标题栏显示加载状态
+    wx.showNavigationBarLoading()
+    //调用相关方法
+    this.setData({ listData: [], searchValue: '', pageNum: 1, total: 0 })
+    this.getList(1)
+
+    setTimeout(() => {
+      wx.hideNavigationBarLoading() //隐藏标题栏显示加载状态
+      wx.stopPullDownRefresh() //结束刷新
+    }, 2000) //设置执行时间
+  },
+
+  getList(pageNum) {
+    this.setData({ loading: true })
+    getProjectList({ pageNum, pageSize: 10, proName: this.data.searchValue }).then((res) => {
+      this.setData({
+        loading: false,
+        listData: this.data.listData.concat(res.data.rows),
+        pageNum,
+        total: res.data.total
+      })
+    })
+  },
+
+  onSearch(e) {
+    this.setData({ listData: [], searchValue: e.detail, pageNum: 1, total: 0 })
+    this.getList(1)
+  },
+
+  onClear() {
+    this.setData({ listData: [], searchValue: '', pageNum: 1, total: 0 })
+    this.getList(1)
+  }
+})
+```

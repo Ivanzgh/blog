@@ -143,6 +143,35 @@ function App() {
 
 所有 React 组件都必须像纯函数一样保护它们的`props`不被更改
 
+改变数据核心思想：先拷贝这个对象或数组，再改变这个拷贝后的值
+
+更新对象：创建一个新的对象，通常使用展开运算符
+
+```js
+const [person, setPerson] = useState({
+  name: 'Niki de Saint Phalle',
+  artwork: {
+    title: 'Blue Nana',
+    city: 'Hamburg',
+    image: 'https://i.imgur.com/Sd1AgUOm.jpg'
+  }
+})
+```
+
+如果要更新 person.artwork.city 的值
+
+```js
+setPerson(...person, artwork: { ...person.artwork, city: 'beijing'})
+```
+
+更新数组：
+
+添加 `setList([...list, 666])`
+
+删除，需要生成一个不包含该元素的新数组，通常使用 filter 方法
+
+更新，map()
+
 ## 事件绑定
 
 1、在调用的时候使用`bind`绑定`this`
@@ -385,4 +414,3 @@ f1()
 ```
 
 ## 渲染原理
-

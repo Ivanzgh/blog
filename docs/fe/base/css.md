@@ -2,7 +2,7 @@
 
 ## 盒模型
 
-页面中的每个标签元素都由几个部分组成：内容(content)、内边距(padding)、边框(border)、外边距(margin)
+页面中的每个标签元素都由几个部分组成：内容`content`、内边距`padding`、边框`border`、外边距`margin`
 
 ![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666417350.png)
 
@@ -12,31 +12,26 @@ IE 盒模型：`width = content + padding + border`
 
 盒模型可通过`box-sizing`设置，支持到 IE8
 
-- `box-sizing: content-box` 标准盒模型
+- `box-sizing: content-box` 标准盒模型，默认值
 - `box-sizing: border-box` IE 的怪异盒模型
 
 ### margin 特性
 
-margin 始终是透明的
+1、给子盒子设置 margin-top 后，父盒子也跟着子盒子一块向下移动
 
-<http://www.hicss.net/do-not-tell-me-you-understand-margin/>
+一个盒子如果没有`padding-top`和`border-top`，那么这个盒子的上边距会和其内部文档流中的第一个子元素的上边距重叠
 
-#### 1、给子盒子设置 margin-top 后，父盒子也跟着子盒子一块向下移动
+解决办法：给父盒子设置 `border-top` 或者 `padding-top`
 
-这个问题发生的原因是根据规范，一个盒子如果没有上补白(padding-top)和上边框(border-top)，
-那么这个盒子的上边距会和其内部文档流中的第一个子元素的上边距重叠。
-
-解决办法：给父 div 设置 `border-top` 或者 `padding-top`。
+2、`margin: 0 auto;`会让元素水平居中
 
 ### padding 特性
 
-行内元素的内边距对左、右、下起作用。
+- 行内元素的内边距对左、右、下起作用。
+- 行内元素的外边距只对左、右起作用。
+- 给行内元素加上绝对定位后，行内元素的内边距和外边距对上下左右均起作用
 
-行内元素的外边距只对左、右起作用。
-
-给行内元素加上绝对定位后，行内元素的内边距和外边距对左、右、上、下均起作用
-
-## 外边距合并
+### 外边距合并
 
 当两个垂直外边距相遇时，它们将形成一个外边距。
 
@@ -44,11 +39,95 @@ margin 始终是透明的
 
 ![image](http://www.w3school.com.cn/i/ct_css_margin_collapsing_example_1.gif)
 
-w3school 介绍网址： <http://www.w3school.com.cn/css/css_margin_collapsing.asp>
-
 解决方法: 统一设置 margin-top 或者 margin-bottom，不要混合使用
 
-## 优先级算法
+## 伪类、伪元素
+
+### 伪类
+
+是选择器的一种，用于选择处于特定状态的元素，用一个冒号表示，例如`:first-child`、`:last-child`、`:hover`、`:focus`、`:link`、`:visited`等
+
+### 伪元素
+
+用两个冒号表示，`::before`、`::after`
+
+例如，给激活的菜单项底部添加下划线
+
+```css
+.menu-active::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  width: 30px;
+  height: 3px;
+  transform: translateX(-15px);
+  background-color: #3c82f3;
+}
+```
+
+## CSS 变量
+
+CSS 变量（也称为自定义属性）是一种在 CSS 中定义并重复使用的值的方式
+
+- 使用两个横线`--`前缀来定义变量
+- 可以在任何 CSS 属性中使用，更加灵活和可维护
+- 可快速更改整个网站的样式
+
+例如，以下代码定义了一个名为`primary-color`的变量，并将其用作背景颜色和字体颜色的值：
+
+```css
+:root {
+  --primary-color: #007bff; /* 定义全局变量 */
+}
+
+body {
+  background-color: var(--primary-color); /* 引用全局变量 */
+  color: var(--primary-color);
+}
+```
+
+### :root{}是什么
+
+`:root{}` 是一个 CSS 伪类选择器，用于选取文档树的根元素，即 html 元素。通常用于定义全局 CSS 变量和全局样式
+
+由于根元素是文档中唯一的元素，因此在 :root 中定义的任何样式都将应用于整个文档中的所有元素，除非被覆盖或继承覆盖
+
+### var()函数
+
+var() 函数是用于引用 CSS 变量的 CSS 函数，它接受一个参数，即要引用的 CSS 变量的名称，并且还可以接受一个可选参数，即当引用的变量未定义时要使用的备用值。例如：
+
+```css
+button {
+  background-color: var(--main-color, #ccc);
+}
+```
+
+### css 变量只能在:root{}中定义吗
+
+CSS 变量可以在任何选择器中定义，但变量的作用域将限制在定义它们的规则块内
+
+在 :root 选择器中定义的变量可以在任何规则块中引用。在其他选择器中定义的变量通常用于当前元素和子元素的样式，不能在父元素和兄弟元素中使用
+
+### 如何通过 js 更改 css 变量
+
+```js
+document.documentElement.style.setProperty('--primary-color', '#ff6347')
+```
+
+### 使用 css 变量有什么需要注意的地方
+
+1. 兼容性：CSS 变量是 CSS3 中的特性，不是所有的浏览器都支持。在使用 CSS 变量之前，需要仔细考虑浏览器兼容性问题，并提供备用方案
+
+2. 作用域：CSS 变量的作用域是它们被定义的规则块的作用域，即它们只在定义它们的规则块中可见
+
+3. 命名规范：变量的名称需要有意义和明确，并避免与现有样式属性冲突。变量名称需要使用双连字符`--`前缀，并且不能以数字开头
+
+4. 变量的值类型：注意变量值的类型和它们被引用的属性的类型是否相匹配。比如变量值是 color 类型，就不能用在 width 上
+
+5. 动态更新：CSS 变量的值可以在运行时通过 js 动态更新，这可能会导致样式的意外更改
+
+## 样式优先级算法
 
 - 就近原则，同权重情况下样式定义最近者为准
 - 载入样式以最后载入的定位为准
@@ -56,8 +135,8 @@ w3school 介绍网址： <http://www.w3school.com.cn/css/css_margin_collapsing.a
 优先级为:
 
 - 同权重: 内联样式表（标签内部）> 嵌入样式表（当前文件中）> 外部样式表（外部文件中）。
-- !important > id > class > tag
-- !important 比 内联优先级高
+- `!important` > id > class > html 标签
+- `!important` 比 内联优先级高
 
 ### 权重的规则
 
@@ -66,31 +145,9 @@ w3school 介绍网址： <http://www.w3school.com.cn/css/css_margin_collapsing.a
 - `div {}`，权重为 1
 - `.class1 {}`，权重为 10
 - `#id1 {}`，权重为 100
-- `#id1 div {}`，权重为 100+1=101
-- `.class1 div {}`，权重为 10+1=11
-- `.class1 .class2 div {}`，权重为 10+10+1=21
-
-## 清除浮动
-
-**浮动元素会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素**
-
-清除浮动是为了清除使用浮动元素产生的影响。浮动会导致父元素高度坍塌，而高度的塌陷使我们页面后面的布局不能正常显示
-
-主推采用`::after`伪元素方法清理浮动
-
-```css
-.clearfix {
-  /*触发IE6中的 hasLayout*/
-  zoom: 1;
-}
-.clearfix::after {
-  content: '';
-  display: block;
-  height: 0;
-  visibility: hidden;
-  clear: both;
-}
-```
+- `#id1 div {}`，权重为 100 + 1 = 101
+- `.class1 div {}`，权重为 10 + 1 = 11
+- `.class1 .class2 div {}`，权重为 10 + 10 + 1 = 21
 
 ## BFC 规范
 
@@ -230,7 +287,74 @@ BFC 还有一条重要特性：BFC 的区域不会与 float box 重叠。试想�
 </html>
 ```
 
-## 隐藏元素
+## 清除浮动
+
+**浮动元素会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素**
+
+清除浮动是为了清除使用浮动元素产生的影响。浮动会导致父元素高度坍塌，而高度的塌陷使我们页面后面的布局不能正常显示
+
+主推采用`::after`伪元素方法清理浮动
+
+```css
+.clearfix {
+  /*触发IE6中的 hasLayout*/
+  zoom: 1;
+}
+.clearfix::after {
+  content: '';
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+```
+
+## 像素单位
+
+- px：绝对单位，页面按精确像素展示。
+- em：相对单位，基准点为父节点字体的大小，如果自身定义了 font-size 按自身来计算（浏览器默认字体是 16px）
+- rem：以根元素的字体大小为基准。例如 html 的 font-size: 16px，则子级 1rem = 16px
+- vw、vh：针对当前浏览器窗口大小而言，1vw 就等于可视窗口宽度的百分之一
+
+## 如何设置文字小于 12px
+
+可以使用 scale 缩小，这个属性只可以缩放可以定义宽高的元素
+
+```css
+/* <span class="box">好小的文字呀</span> */
+
+.box {
+  font-size: 10px;
+  display: inline-block;
+  transform: scale(0.7);
+}
+```
+
+## 元素竖向的百分比设定
+
+对于一些表示竖向距离的属性，例如 `padding-top`、`padding-bottom`、`margin-top`、`margin-bottom`等，当按百分比设定，依据的是父容器的**宽度**，而不是高度
+
+```css
+/*
+<div class="box1">
+  <div class="box2"></div>
+</div> 
+*/
+
+.box1 {
+  width: 200px;
+  height: 100px;
+  background-color: #eee;
+}
+.box2 {
+  width: 10px;
+  height: 10px;
+  padding-top: 30%;
+  background-color: #f00;
+}
+```
+
+## 隐藏元素的方式
 
 以下方式都能隐藏元素，而且 Dom 元素还在
 
@@ -261,14 +385,6 @@ ie9 以下使用滤镜 `filter:alpha(opacity=x)`，x 取值从 0 到 100，值�
 
 rgba 是 rgb 的扩展，增加透明度，`alpha`参数介于 `0.0 ~ 1.0`之间，值越小越透明。
 示例`background-color: rgba(0, 0, 0, 0.5);`，小数点前的 0 可以省略。ie9 以下不兼容
-
-## 改变页面鼠标样式
-
-```css
-* {
-  cursor: url(https://chokcoco.github.io/demo/boom/cd_glowsword.cur), auto !important;
-}
-```
 
 ## calc()设置流式布局宽高
 
@@ -310,28 +426,11 @@ calc 是 css3 提供的一个在 css 文件中计算值的函数,用于动态计
 <link rel="shortcut icon" type="image/x-icon" href="cxp.ico" />
 ```
 
-## 伪类、伪元素
-
-### 伪类
-
-是选择器的一种，用于选择处于特定状态的元素，用一个冒号表示，例如`:first-child`、`:last-child`、`:hover`、`:focus`、`:link`、`:visited`等
-
-### 伪元素
-
-用两个冒号表示，`::before`、`::after`
-
-例如，给激活的菜单项底部添加下划线
+## 改变页面鼠标样式
 
 ```css
-.menu-active::after {
-  content: '';
-  position: absolute;
-  bottom: 1px;
-  left: 50%;
-  width: 30px;
-  height: 3px;
-  transform: translateX(-15px);
-  background-color: #3c82f3;
+* {
+  cursor: url(https://chokcoco.github.io/demo/boom/cd_glowsword.cur), auto !important;
 }
 ```
 
@@ -411,26 +510,6 @@ word-break: break-all;
 
 ```css
 word-wrap: break-word;
-```
-
-## 文本超出显示省略号
-
-当文本内容为数字或者字母时候，flex 布局无法将数字或字母截断实现换行，需要强制换行`word-break: break-all;`
-
-flex 布局时显示省略号
-
-```html
-<div style="display: flex; border: 1px solid red">
-  <div style="min-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
-    好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊
-  </div>
-  <div style="min-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
-    好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊
-  </div>
-  <div style="min-width: 0; text-overflow: ellipsis; overflow: hidden; white-space: nowrap">
-    好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊好多蚊子啊
-  </div>
-</div>
 ```
 
 ## 兼容性

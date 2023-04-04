@@ -2,6 +2,8 @@
 
 `Hook`是一些可以让你在函数组件里“钩入” React state 及生命周期等特性的函数。
 
+推荐安装 [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+
 ## Hook 规则
 
 - 只在 React 函数最顶层使用 Hook

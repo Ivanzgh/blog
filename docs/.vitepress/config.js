@@ -53,11 +53,11 @@ export default defineConfig({
           items: [
             { text: '基础', link: '/fe/base/css' },
             { text: '布局', link: '/fe/base/css-layout' },
+            { text: '响应式布局', link: '/fe/base/css-responsive' },
             { text: '业务效果', link: '/fe/base/css-business' },
             { text: '阴影', link: '/fe/base/css-box-shadow' },
             { text: '渐变', link: '/fe/base/css-gradient' },
             { text: '动画', link: '/fe/base/css-animation' },
-            { text: '媒体查询', link: '/fe/base/css-media-queries' },
             { text: '裁剪', link: '/fe/base/css-clip-path' },
             { text: 'Sass', link: '/fe/base/css-sass' },
             { text: 'Less', link: '/fe/base/css-less' }

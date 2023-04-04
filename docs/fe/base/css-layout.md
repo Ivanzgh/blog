@@ -6,9 +6,69 @@
 
 <https://the-echoplex.net/flexyboxes/>
 
-<https://www.yuque.com/linxz/flex>
+<https://www.cnblogs.com/nuannuan7362/p/5823381.html>
 
-## grid 布局
+<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block; width:100%; height:500px;" src="https://www.processon.com/embed/62e696b45653bb071617d8d0"></iframe>
+
+### flex 属性
+
+假设在 1 个 500px 的容器中，我们有 3 个 100px 宽的元素，那么这 3 个元素需要占 300px 的宽，剩下 200px 的**可用空间**。
+
+#### flex-basis
+
+定义元素的空间大小，默认值是`auto`，例子中的元素空间大小就是 100px
+
+#### flex-grow
+
+元素会以`flex-basis`为基础，沿主轴方向增长尺寸，可以按比例分配可用空间
+
+假如所有元素都设置`flex-basis: 1`，则可用空间被平分
+
+示例中，假如第一个元素设置`flex-basis: 2`，其余两个设置为`flex-basis: 1`，则第一个元素分配到 100px，其余元素各分配到 50px
+
+#### flex-shrink
+
+元素收缩，只有在 flex 元素总和超出主轴才会生效
+
+#### flex 简写
+
+简写按这个顺序书写: `flex-grow`、`flex-shrink`、`flex-basis`
+
+预定义的简写形式：
+
+- `flex: initial`： 相当于`flex: 0 1 auto`，不拉伸，可收缩
+- `flex: auto`： 相当于`flex: 1 1 auto`，可拉伸，可收缩
+- `flex: none`： 相当于`flex: 0 0 auto`，不可伸缩
+- `flex: 正整数`：`flex: 1`或者`flex: 2`等，相当于`flex: 1 1 0`，元素可以在`flex-basis: 0`的基础上伸缩
+
+## gird 布局
+
+是一个基于二维网格的布局系统
+
+<https://juejin.cn/post/6854573220306255880> (有些属性已废弃，要筛选)
+
+```css
+.container {
+  display: grid;
+  /* grid-template-columns属性定义每一列的列宽，grid-template-rows属性定义每一行的行高。 */
+  grid-template-columns: repeat(4, 60px);
+  grid-template-rows: repeat(2, 60px);
+  /* grid-gap属性是grid-column-gap和grid-row-gap的合并简写形式， 
+        grid-row-gap属性设置行与行的间隔（行间距），grid-column-gap属性设置列与列的间隔（列间距）
+        这里设置的是10 行与行之间 列与列之间 都是10 */
+  grid-gap: 10px;
+  /* item在这个单元格中的位置，justify-items属性设置单元格内容的水平位置（左中右），align-items属性设置单元格内容的垂直位置（上中下） */
+  align-items: center;
+  justify-items: center;
+  /* justify-content属性是整个内容区域在容器里面的水平位置（左中右），align-content属性是整个内容区域的垂直位置（上中下）。 */
+  justify-content: center;
+  align-content: center;
+
+  width: 100%;
+  height: 500px;
+  background: #f3f3f3;
+}
+```
 
 ## 水平垂直居中
 
@@ -202,7 +262,7 @@
 }
 ```
 
-### 三栏布局
+## 三栏布局
 
 两边定宽，中间自适应
 
@@ -344,7 +404,7 @@
     <h1>article</h1>
   </div>
 </div>
-<!--....................-->
+
 <style>
   .box8 {
     margin: 0 auto;
@@ -377,46 +437,6 @@
 display: flex;
 align-items: stretch;
 ```
-
-## 两边宽度固定，中间自适应
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <style>
-      .left {
-        width: 200px;
-        height: 100px;
-        background-color: #f00;
-        float: left;
-      }
-      .right {
-        width: 200px;
-        height: 100px;
-        background-color: #f0f;
-        float: right;
-      }
-      .middle {
-        height: 200px;
-        background-color: #00f;
-        margin: 0 200px 0 200px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="left">left</div>
-    <div class="right">right</div>
-    <div class="middle">middle</div>
-  </body>
-</html>
-```
-
-关键点在于中间部分设置左右 margin 等于左右两边的宽度，middle 部分放到最后渲染
 
 ## 图片和文字等高
 
@@ -499,4 +519,92 @@ align-items: stretch;
 .child {
   flex: auto;
 }
+```
+
+## 文本超出显示省略号
+
+### 单行文本
+
+`<div class="box">单行文本显示省略号</div>`
+
+```css
+.box {
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+```
+
+分别设置：不换行、隐藏超出部分、显示省略号。宽度必须固定
+
+### 多行文本
+
+1、使用`-webkit-line-clamp`属性（需要浏览器支持），可以限制行数
+
+```css
+.box {
+  width: 100px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+```
+
+2、利用伪元素实现，兼容性好，但是需要知道文本容器的高度
+
+```css
+.box {
+  width: 100px;
+  overflow: hidden;
+  height: 70px;
+  position: relative;
+}
+.box::after {
+  content: '...';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0 4px;
+  background-color: white;
+}
+```
+
+3、如果文本容器高度不固定，可以通过 js 动态计算高度，再配合伪元素实现
+
+### flex 布局时显示省略号
+
+当文本内容为数字或者字母时候，flex 布局无法将数字或字母截断实现换行，需要强制换行`word-break: break-all;`
+
+```html
+<div class="box">
+  <div class="text">文本超出显示省略号文本超出显示省略号文本超出显示省略号文本超出显示省略号文本超出显示省略号</div>
+  <div class="text">文本超出显示省略号文本超出显示省略号文本超出显示省略号文本超出显示省略号文本超出显示省略号</div>
+  <div class="text">文本超出显示省略号文本超出显示省略号文本超出显示省略号文本超出显示省略号文本超出显示省略号</div>
+</div>
+
+<style>
+  .box {
+    display: flex;
+    border: 1px solid red;
+  }
+  .text {
+    min-width: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+</style>
+```
+
+### 展示全文
+
+使用 title 属性
+
+```html
+<div title="文本超出显示省略号文本超出显示省略号文本超出显示省略号">
+  文本超出显示省略号文本超出显示省略号文本超出显示省略号
+</div>
 ```

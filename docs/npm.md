@@ -139,3 +139,36 @@ node 从 package.json 文件读取模块名称，从 package-lock.json 文件中
 项目中引入的包版本号之前经常会加^号，每次在执行`npm install`之后，下载的包都会发生变化，
 为了系统的稳定性考虑，每次执行完`npm install`之后会创建或者更新 package-lock 文件。
 该文件记录了上一次安装的具体的版本号，相当于是提供了一个参考，在出现版本兼容性问题的时候，就可以参考这个文件来修改版本号即可。
+
+## npx
+
+npx 是 npm 5.2.0 及以上版本中附带的工具，可以在命令行中运行本地安装的 npm 包，而不需要在全局安装它们。
+
+npx 会在当前目录下的`./node_modules/.bin` 里去查找是否有可执行的命令，没有找到的话再从全局里查找是否有安装对应的模块，全局也没有的话就会自动下载对应的模块，npx 会将依赖包下载到一个临时目录，执行完成后删除本地缓存
+
+例如使用`create-react-app`脚手架创建 react 项目
+
+```sh
+# 第一步，安装create-react-app
+npm i -g create-react-app
+# 第二步，执行命令
+create-react-app my-app
+
+# 使用npx只需一行命令
+npx create-react-app my-app
+```
+
+npx 参数：
+
+- -p, --package: 指定要使用的 npm 包名称或路径，可以与其他参数组合使用
+- -c, --call: 直接调用 JS 代码片段，可以与其他参数组合使用
+- -q, --quiet: 在输出中禁用 npx 的额外信息，只输出命令的输出结果
+- -v, --version: 显示 npx 的版本号
+- -h, --help: 显示 npx 的帮助文档
+- --ignore-existing: 忽略本地已经安装的同名命令，强制使用最新的版本
+- --no-install: 强制使用本地缓存中已经存在的包，不会执行任何安装操作
+- --no-optional: 不会安装可选依赖项
+- --no-peer: 不会安装对等依赖项
+- --no-install-peer-deps: 在安装包时不会安装对等依赖项
+- --npm: 指定要使用的 npm 可执行文件路径
+- --node-arg: 将额外的参数传递给 node 运行时
