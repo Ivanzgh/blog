@@ -41,3 +41,9 @@ text-shadow: h-shadow v-shadow blur color;
 ```
 
 ## filter
+
+```css
+.box {
+  filter: blur(1px);
+}
+```

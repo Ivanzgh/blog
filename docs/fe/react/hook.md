@@ -169,6 +169,42 @@ function Counter() {
 }
 ```
 
+## useReducer
+
+`useReducer`是`useState`的替代品。接收一个形如`(state, action) => newState` 的 `reducer`，并返回当前的`state`和`dispatch`方法。
+通过`action`的传递，更新复杂逻辑的状态
+
+```jsx
+import React, { useReducer } from 'react'
+
+const initialState = { count: 0 }
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'decrement':
+      return { count: state.count + 1 }
+    case 'increment':
+      return { count: state.count - 1 }
+    default:
+      return state
+  }
+}
+
+function Home() {
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  return (
+    <div className="home">
+      <h1>{state.count}</h1>
+      <button onClick={() => dispatch({ type: 'decrement' })}>decrement</button>
+      <button onClick={() => dispatch({ type: 'increment' })}>increment</button>
+    </div>
+  )
+}
+
+export default Home
+```
+
 ## useContext
 
 接收一个`context`对象（`React.createContext`的返回值）并返回该`context`的当前值。
@@ -177,7 +213,7 @@ function Counter() {
 当组件上层最近的`<MyContext.Provider>`更新时，该`Hook`会触发重渲染，并使用最新传递的值。
 
 ```jsx
-import React, { useState, createContext, useContext } from 'react'
+import { useState, createContext, useContext } from 'react'
 
 const ContentContext = createContext(null)
 
@@ -255,48 +291,14 @@ export default function Children() {
 }
 ```
 
-## useReducer
-
-`useReducer`是`useState`的替代品。接收一个形如`(state, action) => newState` 的 `reducer`，并返回当前的`state`和`dispatch`方法。
-通过`action`的传递，更新复杂逻辑的状态
-
-```jsx
-import React, { useReducer } from 'react'
-
-const initialState = { count: 0 }
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'decrement':
-      return { count: state.count + 1 }
-    case 'increment':
-      return { count: state.count - 1 }
-    default:
-      return state
-  }
-}
-
-function Home() {
-  const [state, dispatch] = useReducer(reducer, initialState)
-
-  return (
-    <div className="home">
-      <h1>{state.count}</h1>
-      <button onClick={() => dispatch({ type: 'decrement' })}>decrement</button>
-      <button onClick={() => dispatch({ type: 'increment' })}>increment</button>
-    </div>
-  )
-}
-
-export default Home
-```
-
 ## useCallback
+
+useCallback 的作用是缓存函数，避免重复生成新函数，引起组件重新渲染
 
 首先看一个现象，如下，当点击父组件的按钮改变 num 的值，会发现打印出 123，即子组件也跟着更新了，这样会影响性能
 
 ```jsx
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
 function Child() {
   console.log(123)
@@ -319,7 +321,7 @@ export default function App() {
 这时可以使用 memo 在某些情况下避免这种性能损耗，用 memo 方法把子组件包裹起来即可
 
 ```js
-import React, { useState, memo } from 'react'
+import { memo } from 'react'
 
 const Child = memo(() => {
   console.log(123)
@@ -327,10 +329,10 @@ const Child = memo(() => {
 })
 ```
 
-接着上面的例子，如果想让子组件更新父组件的 num，第一种方式把 num 也传给子组件，很明显很繁琐。第二种方式是在父组件中定义改变的方法，子组件调用即可
+接着上面的例子，如果想让子组件更新父组件的 num，第一种方式把 num 也传给子组件，这样很繁琐。第二种方式是在父组件中定义改变的方法，子组件调用即可
 
 ```jsx
-import React, { useState, memo } from 'react'
+import { memo } from 'react'
 
 const Child = memo((props) => {
   console.log(123)
@@ -340,7 +342,7 @@ const Child = memo((props) => {
   return <button onClick={() => props.setNum()}>child</button>
 })
 
-export default function App4() {
+export default function App() {
   const [num, setNum] = useState(0)
 
   const doSomeThing = () => setNum(num + 1)
@@ -360,14 +362,14 @@ export default function App4() {
 上面的例子由子组件触发父组件的更新，但是又同时触发了子组件的更新，memo 不管用了。这时就要使用 useCallback
 
 ```jsx
-import React, { useState, memo, useCallback } from 'react'
+import { useState, memo, useCallback } from 'react'
 
 const Child = memo((props) => {
   console.log(123)
   return <button onClick={() => props.doSth()}>child</button>
 })
 
-export default function App4() {
+export default function App() {
   const [num, setNum] = useState(0)
 
   // 注意：useCallback(() => setNum(num + 1), [])
@@ -433,7 +435,7 @@ export default function App() {
 ```jsx
 import React, { useState, useRef } from 'react'
 
-export default function App5() {
+export default function App() {
   const el = useRef(null)
   const [val, setVal] = useState()
 

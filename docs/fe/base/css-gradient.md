@@ -51,6 +51,12 @@ background-image: repeating-linear-gradient(90deg, #f00, #0f0 8%, #00f 20%);
 }
 ```
 
+```css
+.box {
+  background-image: linear-gradient(135deg, rgb(54, 62, 75, 0.59) 0%, rgb(36, 45, 61.59) 100%);
+}
+```
+
 ## 径向渐变
 
 默认情况下，渐变的中心是 center（表示在中心点），渐变的形状是 ellipse（表示椭圆形），渐变的大小是 farthest-corner（表示到最远的角落）。

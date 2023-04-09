@@ -1,15 +1,18 @@
 import { defineConfig } from 'vitepress'
 
+// https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'const',
   description: 'Blog',
   base: '/blog/',
   lastUpdated: true,
+  cleanUrls: true,
   head: [['link', { rel: 'icon', href: '/img/logo.png' }]],
   markdown: { theme: 'dracula' },
   themeConfig: {
     logo: '/img/logo.png',
     lastUpdatedText: '更新日期',
+    // outline: 'deep',
     footer: {
       message: 'Released under the MIT License.',
       copyright: 'Copyright © 2020-present ZGH'
@@ -24,7 +27,7 @@ export default defineConfig({
       '/fe/base/': [
         {
           text: 'JavaScript',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: '基础', link: '/fe/base/js' },
             { text: '字符串', link: '/fe/base/js-string' },
@@ -40,7 +43,7 @@ export default defineConfig({
         },
         {
           text: 'HTML',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: '基础', link: '/fe/base/html' },
             { text: 'Canvas', link: '/fe/base/html-canvas' },
@@ -49,7 +52,7 @@ export default defineConfig({
         },
         {
           text: 'CSS',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: '基础', link: '/fe/base/css' },
             { text: '布局', link: '/fe/base/css-layout' },
@@ -65,7 +68,7 @@ export default defineConfig({
         },
         {
           text: '浏览器',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: '基础', link: '/fe/base/browser' },
             { text: 'window', link: '/fe/base/browser-window' },
@@ -76,7 +79,7 @@ export default defineConfig({
       '/fe/ts/': [
         {
           text: 'TypeScript',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: '介绍', link: '/fe/ts/' },
             { text: '接口', link: '/fe/ts/interface' },
@@ -93,7 +96,7 @@ export default defineConfig({
       '/fe/vue/': [
         {
           text: 'Vue',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: 'Vue', link: '/fe/vue/' },
             { text: '组件通信', link: '/fe/vue/contact' },
@@ -109,7 +112,7 @@ export default defineConfig({
       '/fe/react/': [
         {
           text: 'React',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: 'React', link: '/fe/react/' },
             { text: 'Hook', link: '/fe/react/hook' },
@@ -121,17 +124,17 @@ export default defineConfig({
       '/fe/node/': [
         {
           text: 'Node',
-          collapsible: true,
+          collapsed: false,
           items: [{ text: 'Node', link: '/fe/node/' }]
         },
-        { text: 'Express', collapsible: true, items: [{ text: 'Express', link: '/fe/node/express' }] },
-        { text: 'Koa', collapsible: true, items: [{ text: 'Koa', link: '/fe/node/koa' }] },
-        { text: 'MongoDB', collapsible: true, items: [{ text: 'MongoDB', link: '/fe/node/mongodb' }] }
+        { text: 'Express', collapsed: false, items: [{ text: 'Express', link: '/fe/node/express' }] },
+        { text: 'Koa', collapsed: false, items: [{ text: 'Koa', link: '/fe/node/koa' }] },
+        { text: 'MongoDB', collapsed: false, items: [{ text: 'MongoDB', link: '/fe/node/mongodb' }] }
       ],
       '/miniProgram/': [
         {
           text: '小程序',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: '微信小程序', link: '/miniProgram/wx' },
             { text: 'Taro', link: '/miniProgram/taro' },
@@ -142,7 +145,7 @@ export default defineConfig({
       '/vis/gis/': [
         {
           text: 'GIS',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: '介绍', link: '/vis/gis/' },
             { text: '电子海图', link: '/vis/gis/enc' },
@@ -157,7 +160,7 @@ export default defineConfig({
       '/base/design-pattern/': [
         {
           text: '设计模式',
-          collapsible: true,
+          collapsed: false,
           items: [
             { text: '设计模式', link: '/base/design-pattern/' },
             { text: '策略模式', link: '/base/design-pattern/strategy' },

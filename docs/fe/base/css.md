@@ -418,6 +418,45 @@ calc 是 css3 提供的一个在 css 文件中计算值的函数,用于动态计
 设置`html,body { height: 100%; }`，子元素才能正常显示
 :::
 
+## boder 图片
+
+```css
+.box {
+  border-image: linear-gradient(#1be9f5, #2c7074) 2 2;
+}
+```
+
+## 圆角
+
+## 背景
+
+## 文本效果
+
+```css
+.box {
+  text-shadow: 0 0 10px rgb(68, 217, 236), 0 0 30px rgb(84, 203, 247), 0 0 50px rgb(32, 180, 230), 0 0 70px rgb(23, 162, 231),
+    0 0 90px rgb(19, 125, 224), 0 0 110px rgb(7, 80, 122), 0 0 130px rgba(14, 62, 158, 1);
+}
+```
+
+## 边框角线
+
+## object-fit
+
+```css
+.box {
+  object-fit: cover;
+}
+```
+
+## object-position
+
+```css
+.box {
+  object-position: top center;
+}
+```
+
 ## 设置页面小图标
 
 在 head 标签引入

@@ -2,13 +2,9 @@
 
 ## flex 布局
 
-<https://www.processon.com/view/link/62ecd60ae401fd1b18071d48>
-
-<https://the-echoplex.net/flexyboxes/>
-
-<https://www.cnblogs.com/nuannuan7362/p/5823381.html>
-
 <iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block; width:100%; height:500px;" src="https://www.processon.com/embed/62e696b45653bb071617d8d0"></iframe>
+
+在线体验：<https://the-echoplex.net/flexyboxes/>
 
 ### flex 属性
 
@@ -45,28 +41,250 @@
 
 是一个基于二维网格的布局系统
 
-<https://juejin.cn/post/6854573220306255880> (有些属性已废弃，要筛选)
+<iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:100%; height:500px;" src="https://www.processon.com/embed/642aa37a3aff4d5813d340cf"></iframe>
+
+### 网格容器
+
+使用`display: grid`或`display: inline-grid`创建一个网格容器，这个元素的所有**直系子元素**将成为网格元素
+
+一个网格元素也可以成为一个网格容器
+
+- 网格单元：单元格，行列线交叉形成
+- 网格区域：网格元素向行或列的方向扩展一个或多个单元，形成网格区域，是矩形
+
+### 网格轨道
+
+一个网格轨道就是网格中任意两条线之间的空间
+
+- `grid-template-rows`：定义行轨道，设置行高
+- `grid-template-columns`：定义列轨道，设置列宽
+
+以下是关键字和函数：
+
+1、 `grid-template-rows: 100px 100px;` 表示 2 行，每行高度是 100px
+
+2、 repeat 函数，可以简化重复的值，第一个参数是重复的次数，第二个参数是要重复的值
+
+`grid-template-columns: repeat(2, 100px)`
+
+3、 `fr` 代表网格容器中可用空间的一等份
+
+`grid-template-columns: 200px 1fr 2fr` 表示第一个列宽为 200px，后面剩余的宽度分为两部分，宽度分别为剩余宽度的 1/3 和 2/3
+
+4、 `auto-fill` 表示自动填充，让一行或者一列中尽可能的容纳更多的单元格
+
+`grid-template-columns: repeat(auto-fill, 200px)` 表示列宽是 200px，但列的数量是不固定的
+
+5、 `minmax`函数，设置长度范围
+
+`grid-template-columns: 1fr 1fr minmax(300px, 2fr)` 表示第三个列宽最小是 300px，最大不能大于前两列宽的两倍
+
+6、 `auto` 由浏览器决定长度，可轻易实现两列或三列布局
+
+`grid-template-columns: 100px auto 100px` 表示第一、第三列为 100px，中间由浏览器决定长度
+
+### 网格线
+
+在定义网格时，定义的是网格轨道，而不是网格线。利用网格线可以灵活的生成复杂的布局
+
+- `grid-row-start: 1;` 表示行线开始位置，这里是 1
+- `grid-row-end: 3;` 表示行线结束位置，这里是 3
+- `grid-column-start: 1;` 表示列线开始位置，这里是 1
+- `grid-column-end: 4;` 表示列线结束位置，这里是 4
+- `grid-row: 1 / 3;` 表示行线的简写形式
+- `grid-column: 1 / 4;` 表示列线的简写形式
+
+示例：
+
+1. 从左至右，第一个元素从行线 1 延伸到行线 3，占据了两个行轨道。从列线 1 开始，延伸至列线 4，即独占一行
+2. 第二个元素从行线 3 到行线 5，跨越了两个行轨道
+3. 第三个元素从列线 2 到列线 4，跨越了两个列轨道
+4. 剩下的元素会自动放到网格剩余的空间中
+
+```html
+<div class="wrapper">
+  <div class="box1">One</div>
+  <div class="box2">Two</div>
+  <div class="box3">Three</div>
+  <div class="box4">Four</div>
+  <div class="box5">Five</div>
+</div>
+```
 
 ```css
-.container {
+.wrapper {
   display: grid;
-  /* grid-template-columns属性定义每一列的列宽，grid-template-rows属性定义每一行的行高。 */
-  grid-template-columns: repeat(4, 60px);
-  grid-template-rows: repeat(2, 60px);
-  /* grid-gap属性是grid-column-gap和grid-row-gap的合并简写形式， 
-        grid-row-gap属性设置行与行的间隔（行间距），grid-column-gap属性设置列与列的间隔（列间距）
-        这里设置的是10 行与行之间 列与列之间 都是10 */
-  grid-gap: 10px;
-  /* item在这个单元格中的位置，justify-items属性设置单元格内容的水平位置（左中右），align-items属性设置单元格内容的垂直位置（上中下） */
-  align-items: center;
-  justify-items: center;
-  /* justify-content属性是整个内容区域在容器里面的水平位置（左中右），align-content属性是整个内容区域的垂直位置（上中下）。 */
-  justify-content: center;
-  align-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 100px;
+}
+.wrapper div {
+  background-color: #f2f2f2;
+  border: 1px solid #333;
+}
+.box1 {
+  grid-row: 1 / 3;
+  grid-column: 1 / 4;
+}
+.box2 {
+  grid-row: 3 / 5;
+}
+.box3 {
+  grid-column: 2 / 4;
+}
+```
 
+### 网格间距
+
+- `gap`：简写形式
+- `gap-row`：行间距
+- `gap-column`：列间距
+
+注意：`grid-gap`、`grid-row-gap`、`grid-column-gap`应避免使用，即将废弃
+
+### 显隐式网格
+
+如果用 `grid-template-columns` 属性定义了列轨道，让网格按所需的内容创建行，这些行会被创建在隐式网格中
+
+显式网格包含了在 `grid-template-columns` 和 `grid-template-rows` 属性中定义的行和列
+
+指定隐式创建的行轨道大小：
+
+- `grid-auto-rows`：隐式行的大小
+- `grid-auto-columns`：隐式列的大小
+
+示例：`grid-auto-rows: minmax(100px, auto);` 表示行高最小 100px，高度随内容撑开
+
+### grid-auto-flow
+
+控制着自动布局算法怎样运作，精确指定在网格中被自动布局的元素怎样排列
+
+- `row`：按照逐行填充来排列元素，在必要时增加新行
+- `column`：按照逐列填充来排列元素，在必要时增加新列
+- `dense`：使用一种“稠密”堆积算法，如果后面出现了稍小的元素，则会试图去填充网格中前面留下的空白。这样做会填上稍大元素留下的空白，但同时也可能导致原来出现的次序被打乱
+- `row dense`：行优先的“稠密”堆积算法，表示尽可能填充，而不留空白
+- `column dense`：列优先的行有限的“稠密”堆积算法
+
+### grid-template-areas
+
+```html
+<div class="box">
+  <div class="a">a</div>
+  <div class="b">b</div>
+  <div class="c">c</div>
+  <div class="d">d</div>
+</div>
+```
+
+```css
+.box {
+  display: grid;
   width: 100%;
-  height: 500px;
-  background: #f3f3f3;
+  /* 给定高度，撑开内容 */
+  height: 250px;
+  grid-template-areas:
+    'a a'
+    'b c'
+    'b d'; /* 2.区域划分 当前为 三行 两列 */
+  grid-template-rows: 50px 1fr 30px; /* 3.各区域 宽高设置 */
+  grid-template-columns: 150px 1fr;
+}
+.box div {
+  border: 1px solid #333;
+}
+.a {
+  /* 指定当前元素所在的区域位置，从 grid-template-areas 选取值 */
+  grid-area: a;
+  background-color: #f00;
+}
+.b {
+  grid-area: b;
+  background-color: #ff0;
+}
+.c {
+  grid-area: c;
+  background-color: #f0f;
+}
+.d {
+  grid-area: d;
+  background-color: #00f;
+}
+```
+
+如果需要空白，就写一个点 `.`
+
+```css
+.box {
+  grid-template-areas:
+    'a a .'
+    'b . c'
+    'b d .';
+}
+```
+
+### 对齐位置
+
+1、整个内容区域在容器里面的位置
+
+- `justify-content`：水平位置
+- `align-content`：垂直位置
+- `place-content`：简写
+
+```css
+.box {
+  justify-content: start | end | center | stretch | space-around | space-between | space-evenly;
+  align-content: start | end | center | stretch | space-around | space-between | space-evenly;
+}
+```
+
+2、内容在单元格中的位置
+
+- `justify-items`：水平位置
+- `align-items`：垂直位置
+- `place-items`：简写
+- `justify-self`：用法同`justify-items`，但只作用于单个项目
+- `align-self`：用法同`align-items`，但只作用于单个项目
+- `place-self`：简写
+
+```css
+.box {
+  justify-items: start | end | center | stretch;
+  align-items: start | end | center | stretch;
+}
+```
+
+### grid 实现响应式布局
+
+#### fr 实现等分响应式布局
+
+```css
+.box {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+```
+
+#### 固定列宽、改变列数量
+
+网格固定列宽，并根据容器的宽度来改变列的数量
+
+```css
+.box {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 200px);
+  gap: 10px 20px;
+  grid-auto-rows: 50px;
+}
+```
+
+#### 列宽度自适应
+
+上个例子中，右侧一般会留下空白，下方示例可以让列的宽度能在某个范围自适应
+
+```css
+.box {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px 20px;
+  grid-auto-rows: 50px;
 }
 ```
 
@@ -385,7 +603,7 @@
 
 ## 多列等高布局
 
-### 方法一、内外边距相抵消
+### 1、内外边距相抵消
 
 父元素要设置`overflow:hidden;`子元素里边要有内容撑开高度
 
@@ -428,7 +646,7 @@
 </style>
 ```
 
-### 方法二、flex 布局
+### 2、flex 布局
 
 给父元素加上`display:flex`即可，不用设置浮动属性，这依赖于`align-items`属性，它的默认值是 `stretch`，
 也就是在辅轴上将所有子项目拉伸为同一高度（或宽度）以保持对齐。下面还有子内容还需设置`height: 100%`
