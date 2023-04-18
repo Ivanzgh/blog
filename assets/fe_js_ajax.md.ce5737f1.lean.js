@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as n,Q as l}from"./chunks/framework.f14b72c3.js";const u=JSON.parse('{"title":"AJAX","description":"","frontmatter":{},"headers":[],"relativePath":"fe/js/ajax.md","lastUpdated":1681829744000}'),p={name:"fe/js/ajax.md"},o=l("",27),e=[o];function F(t,c,r,y,i,d){return n(),a("div",null,e)}const C=s(p,[["render",F]]);export{u as __pageData,C as default};

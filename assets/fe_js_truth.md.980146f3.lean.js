@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,Q as o}from"./chunks/framework.f14b72c3.js";const h=JSON.parse('{"title":"手写 JS","description":"","frontmatter":{},"headers":[],"relativePath":"fe/js/truth.md","lastUpdated":1681829744000}'),l={name:"fe/js/truth.md"},p=o("",5),F=[p];function e(t,c,r,y,i,f){return a(),n("div",null,F)}const u=s(l,[["render",e]]);export{h as __pageData,u as default};
