@@ -112,7 +112,7 @@ CSS 变量可以在任何选择器中定义，但变量的作用域将限制在�
 ### 如何通过 js 更改 css 变量
 
 ```js
-document.documentElement.style.setProperty('--primary-color', '#ff6347')
+document.documentElement.style.setProperty('--primary-color', '#ff6347');
 ```
 
 ### 使用 css 变量有什么需要注意的地方
@@ -611,3 +611,20 @@ word-wrap: break-word;
 - 避免使用`table`布局，`table`中每个元素的大小以及内容的改动，都会导致整个`table`的重新计算
 - 使用 visibility:hidden 替换 display:none
 - 使用 requestAnimationFrame 作为动画帧。动画速度越快，回流次数越多
+
+## aspect-ratio
+
+可以定义盒子的宽高比。假如想始终保持元素的宽高比，在响应式布局中等比放大缩小，就可以使用该属性
+
+```css
+aspect-ratio: auto;
+aspect-ratio: 0.5;
+aspect-ratio: 1 / 2;
+aspect-ratio: 16 / 9;
+```
+
+## 混合模式
+
+## 波浪效果
+
+## 3D

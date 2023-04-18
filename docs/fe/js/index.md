@@ -6,7 +6,7 @@
 
 基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
 
-引用类型： `Object`、`Array`、`Function`
+引用类型： `Object`，如`Array`、`Function`、`RegExp`、`Date`、`Math`
 
 基本数据类型将数据名和值存储在**栈**中
 
@@ -17,17 +17,17 @@
 闭包中的变量并不保存在栈中，而是保存在堆中
 
 ```js
-let a = 1 // 在内存中开辟一块空间存储a的值 1
-let b = a // 开辟一块新的内存空间，将a的值拷贝一份存储到新的内存里
-a = 2
-console.log(a) // 2
-console.log(b) // 1
+let a = 1; // 在内存中开辟一块空间存储a的值 1
+let b = a; // 开辟一块新的内存空间，将a的值拷贝一份存储到新的内存里
+a = 2;
+console.log(a); // 2
+console.log(b); // 1
 
-let c = { x: 3 }
-let d = c
-c.x = 4
-console.log(c) // { x: 4 }
-console.log(d) // { x: 4 }
+let c = { x: 3 };
+let d = c;
+c.x = 4;
+console.log(c); // { x: 4 }
+console.log(d); // { x: 4 }
 ```
 
 ::: tip
@@ -36,32 +36,32 @@ console.log(d) // { x: 4 }
 
 ## 类型判断
 
-- `typeof`
+### `typeof`
 
 ```js
-typeof 'js' // 'string'
-typeof 666 // 'number'
-typeof true // 'boolean'
-typeof null // 'object'
-typeof undefined // 'undefined'
-typeof Symbol() // 'symbol'
-typeof {} // 'object'
-typeof [] // 'object'
-typeof (() => {}) // 'function'
+typeof 'js'; // 'string'
+typeof 666; // 'number'
+typeof true; // 'boolean'
+typeof null; // 'object'
+typeof undefined; // 'undefined'
+typeof Symbol(); // 'symbol'
+typeof {}; // 'object'
+typeof []; // 'object'
+typeof (() => {}); // 'function'
 ```
 
 可以看出`typeof null`结果是`object`，对于数组无法精确判断
 
-- `instanceof`
+### `instanceof`
 
-通过`instanceof`操作符也可以对对象类型进行判定，其原理就是**测试构造函数的`prototype`是否出现在被检测对象的原型链上**
+通过`instanceof`操作符可以对引用数据类型进行判定，不能正确判断基本数据类型，其原理就是**测试构造函数的`prototype`是否出现在被检测对象的原型链上**
 
 ```js
-console.log([] instanceof Array) // true
-console.log({} instanceof Object) // true
-console.log((() => {}) instanceof Function) // true
+console.log([] instanceof Array); // true
+console.log({} instanceof Object); // true
+console.log((() => {}) instanceof Function); // true
 
-console.log([] instanceof Object) // true
+console.log([] instanceof Object); // true
 ```
 
 那么为何会出现`[] instanceof Object`为 true 呢？
@@ -69,115 +69,125 @@ console.log([] instanceof Object) // true
 `[].__proto__ === Array.prototype`、`Array.prototype.__proto__ === Object.prototype`二者的结果都是 true，
 因此 `Object` 构造函数在 `[]` 的原型链上
 
-- `Array.isArray()`，可以判断参数是否是数组
+### `Array.isArray()`
 
-- `isNaN()`，可以判断 NaN
+可以判断参数是否是数组
 
-- `Object.prototype.toString.call()`
+### `isNaN()`
+
+可以判断 NaN
+
+### `Object.prototype.toString.call()`
 
 全类型都可判断，推荐使用该方法
 
 ```js
-Object.prototype.toString.call('js') // '[object String]'
-Object.prototype.toString.call(666) // '[object Number]'
-Object.prototype.toString.call(true) // '[object Boolean]'
-Object.prototype.toString.call({}) // '[object Object]'
-Object.prototype.toString.call([]) // '[object Array]'
-Object.prototype.toString.call(null) // '[object Null]'
-Object.prototype.toString.call(undefined) // '[object Undefined]'
-Object.prototype.toString.call(new Date()) // '[object Date]'
+Object.prototype.toString.call('js'); // '[object String]'
+Object.prototype.toString.call(666); // '[object Number]'
+Object.prototype.toString.call(true); // '[object Boolean]'
+Object.prototype.toString.call({}); // '[object Object]'
+Object.prototype.toString.call([]); // '[object Array]'
+Object.prototype.toString.call(null); // '[object Null]'
+Object.prototype.toString.call(undefined); // '[object Undefined]'
+Object.prototype.toString.call(new Date()); // '[object Date]'
+Object.prototype.toString.call(window); // '[object Window]'
+Object.prototype.toString.call(document); // '[object HTMLDocument]'
+Object.prototype.toString.call(/123/g); // '[object RegExp]'
 ```
 
-- 返回具体类型
+1、返回具体类型
 
 ```js
 const dataType = (data) => {
-  const toString = Object.prototype.toString
-  return toString
+  return Object.prototype.toString
     .call(data)
     .replace(/\[object\s(.+)\]/, '$1')
-    .toLowerCase()
-}
+    .toLowerCase();
+};
 ```
 
-- 验证是不是某种类型，返回 true/false
+2、验证是不是某种类型，返回 true 或 false
 
 ```js
-const isType = (target, type) => `[object ${type}]` === Object.prototype.toString.call(target)
-```
-
-特殊示例：
-
-```js
-0 == []     // true
-
-0 == "0"    // true
-
-"0" == []   // false
-
-0 == ""     // true
-
-[] == ""    // true
+const isType = (target, type) => `[object ${type}]` === Object.prototype.toString.call(target);
 ```
 
 ## 类型转换
 
-### 数字转化为字符串
-
-1、toString()
-
-```js
-let a = 123
-let b = a.toString()
-console.log(typeof b)
-```
-
-2、String()
-
-```js
-let b = String(123)
-console.log(typeof b)
-```
-
-### 字符串转化为数字
+### 强制类型转换
 
 1、Number()
 
 ```js
-let b = Number('12.3')
-console.log(b)
+Number(1); // 1
+Number(true); // 1
+Number(false); // 0
+Number(null); // 0
+Number(undefined); // NaN
+Number(''); // 0
+Number('1'); // 1
+Number('01'); // 1
+Number('1.23'); // 1.23
+Number('1a'); // NaN
+Number('0x10'); // 16
 ```
 
-2、parseInt()和 parseFloat()
+2、toString()
 
 ```js
-parseInt('1234blue') // 1234
-parseInt('0xA') // 10
-parseInt('22.5') // 22
-parseInt('blue') // NaN
+let a = 123;
+let b = a.toString();
 ```
 
-3、在字符串前面加上 `+`
+3、String()
 
 ```js
-let res1 = parseInt('1')
-let res2 = parseFloat('1.23')
-
-console.log(typeof +'1') // "number"
+let a = String(123);
 ```
+
+4、parseInt()和 parseFloat()
+
+```js
+parseInt('1.99'); // 1
+parseInt('1234blue'); // 1234
+parseInt('0xA'); // 10
+parseInt('22.5'); // 22
+parseInt('blue'); // NaN
+
+parseFloat('1.23'); // 1.23
+```
+
+5、Boolean()
+
+除了 undefined、null、''、NaN、0、false 转换出来是 false，其他都是 true
 
 ### 隐式类型转换
 
-<https://blog.csdn.net/qq_33120763/article/details/88296955>
-
-<https://www.cnblogs.com/superlizhao/p/8945432.html>
-
 ```js
-console.log('1' + 1) // '11'   string
-console.log('1' - 1) //  0    number
+'1' + 1 // '11'   string 字符串连接
+'1' - 1 //  0    number
++'1' // 1   number
+-'1' // -1    number
+++'1' // SyntaxError
+true + true // 2
 
-console.log([] == []) // false
+'1' == 1 // true
+0 == false // true
+1 == true // true
+
+0 == []     // true
+0 == "0"    // true
+"0" == []   // false
+0 == ""     // true
+[] == ""    // true
+[] == []   // false
+
+null == undefined // true
+null == 0     // false
+null == ''    // false
 ```
+
+[参考链接](https://blog.csdn.net/qq_33120763/article/details/88296955)
 
 ## 提升
 
@@ -188,26 +198,26 @@ console.log([] == []) // false
 变量提升，就是把变量提升到**函数的顶部**，只是提升变量的声明，不会把变量的值也提升上来
 
 ```js
-var name = 'haha'
+var name = 'haha';
 function changeName() {
-  console.log(name)
-  var name = 'xixi'
+  console.log(name);
+  var name = 'xixi';
 }
-changeName() // undefined
-console.log(name) // haha
+changeName(); // undefined
+console.log(name); // haha
 ```
 
 提升后如下
 
 ```js
-var name = 'haha'
+var name = 'haha';
 function changeName() {
-  var name
-  console.log(name)
-  name = 'xixi'
+  var name;
+  console.log(name);
+  name = 'xixi';
 }
-changeName()
-console.log(name)
+changeName();
+console.log(name);
 ```
 
 ### 函数提升
@@ -219,31 +229,31 @@ console.log(name)
 函数表达式的形式如下：
 
 ```js
-var fun1 = function (n1, n2) {}
+var fun1 = function (n1, n2) {};
 ```
 
 构造函数的形式如下:
 
 ```js
-var fun2 = new Function('param1', 'param2')
+var fun2 = new Function('param1', 'param2');
 ```
 
 只有函数声明形式才能被真正提升，函数表达式形式提升的只是一个没有值的变量
 
 ```js
 function f() {
-  g()
+  g();
   function g() {
-    console.log('我可以被提升')
+    console.log('我可以被提升');
   }
 }
-f()
+f();
 
-console.log(m) // undefined
-m() // TypeError: m is not a function
+console.log(m); // undefined
+m(); // TypeError: m is not a function
 var m = function () {
-  console.log(1)
-}
+  console.log(1);
+};
 ```
 
 ## 原型链
@@ -260,31 +270,31 @@ var m = function () {
 函数也有`__proto__`属性
 
 ```js
-let fn = function () {}
-fn.__proto__ === Function.prototype // true
+let fn = function () {};
+fn.__proto__ === Function.prototype; // true
 ```
 
 ```js
-let obj = {}
-console.log(obj)
-console.log(obj.constructor.prototype === obj.__proto__) // true
+let obj = {};
+console.log(obj);
+console.log(obj.constructor.prototype === obj.__proto__); // true
 
-let arr = []
-console.log(arr)
+let arr = [];
+console.log(arr);
 
 function Person(name) {
-  this.name = name
+  this.name = name;
 }
-console.log(Person.prototype) // {constructor: ƒ}
-Person.prototype.age = 23
+console.log(Person.prototype); // {constructor: ƒ}
+Person.prototype.age = 23;
 
-let person1 = new Person('zgh')
-console.log(person1) // Person {name: "zgh"}
-console.log(person1.age) // 23
+let person1 = new Person('zgh');
+console.log(person1); // Person {name: "zgh"}
+console.log(person1.age); // 23
 
-console.log(person1.__proto__ === Person.prototype) // true
+console.log(person1.__proto__ === Person.prototype); // true
 
-console.log(Person === Person.prototype.constructor) // true
+console.log(Person === Person.prototype.constructor); // true
 ```
 
 函数 Person 的 prototype 属性指向了一个对象，这个对象正是调用构造函数时创建的实例 person1 的原型
@@ -316,24 +326,24 @@ console.log(Person === Person.prototype.constructor) // true
 
 ```js
 if (true) {
-  var a = 1
+  var a = 1;
 }
-console.log(a) // 1
+console.log(a); // 1
 
 if (true) {
-  const b = 1
+  const b = 1;
 }
-console.log(b) // ReferenceError: b is not defined
+console.log(b); // ReferenceError: b is not defined
 
 for (let i = 0; i < 3; i++) {
-  var c = 1
+  var c = 1;
 }
-console.log(c) // 1
+console.log(c); // 1
 
 for (let i = 0; i < 3; i++) {
-  let d = 1
+  let d = 1;
 }
-console.log(d) // ReferenceError: d is not defined
+console.log(d); // ReferenceError: d is not defined
 ```
 
 ### 作用域链
@@ -355,14 +365,14 @@ console.log(d) // ReferenceError: d is not defined
 
 ```js
 function f() {
-  let a = 1
+  let a = 1;
   function g() {
-    a += 1
-    console.log(a)
+    a += 1;
+    console.log(a);
   }
-  g()
+  g();
 }
-f()
+f();
 ```
 
 优点：延长变量生命周期
@@ -382,22 +392,22 @@ f()
 </ul>
 */
 
-let lis = document.getElementsByTagName('li')
+let lis = document.getElementsByTagName('li');
 for (var i = 0; i < lis.length; i++) {
-  ;(function (i) {
+  (function (i) {
     lis[i].onclick = function () {
-      console.log(i)
-    }
-  })(i)
+      console.log(i);
+    };
+  })(i);
 }
 
 //或者
 for (var i = 0; i < lis.length; i++) {
   lis[i].onclick = (function (i) {
     return function () {
-      console.log(i)
-    }
-  })(i)
+      console.log(i);
+    };
+  })(i);
 }
 ```
 
@@ -408,8 +418,8 @@ for (var i = 0; i < lis.length; i++) {
 ```js
 for (var i = 1; i <= 5; i++) {
   setTimeout(function timer() {
-    console.log(i)
-  }, i * 1000)
+    console.log(i);
+  }, i * 1000);
 }
 ```
 
@@ -417,11 +427,11 @@ for (var i = 1; i <= 5; i++) {
 
 ```js
 for (var i = 1; i <= 5; i++) {
-  ;(function (j) {
+  (function (j) {
     setTimeout(function timer() {
-      console.log(j)
-    }, j * 1000)
-  })(i)
+      console.log(j);
+    }, j * 1000);
+  })(i);
 }
 ```
 
@@ -433,8 +443,8 @@ for (var i = 1; i <= 5; i++) {
 ```js
 for (let i = 1; i <= 5; i++) {
   setTimeout(function timer() {
-    console.log(i)
-  }, i * 1000)
+    console.log(i);
+  }, i * 1000);
 }
 ```
 
@@ -443,7 +453,7 @@ for (let i = 1; i <= 5; i++) {
 ### 全局执行
 
 ```js
-console.log(this) //  window
+console.log(this); //  window
 ```
 
 ### 函数中执行
@@ -452,19 +462,19 @@ console.log(this) //  window
 
 ```js
 function f() {
-  console.log(this) // window
+  console.log(this); // window
 }
-f()
+f();
 ```
 
 #### 2、严格模式
 
 ```js
-'use strict'
+'use strict';
 function f() {
-  console.log(this) // undefined
+  console.log(this); // undefined
 }
-f()
+f();
 ```
 
 ### 作为对象的方法调用
@@ -472,28 +482,28 @@ f()
 this 指向当前对象 obj
 
 ```js
-let name = 'js'
+let name = 'js';
 let obj = {
   name: 'zgh',
   fun: function () {
-    console.log(this.name) // zgh
+    console.log(this.name); // zgh
   }
-}
-obj.fun()
+};
+obj.fun();
 ```
 
 如果把对象方法赋值给变量，调用该方法时，this 指向 `window`
 
 ```js
-let dd = 'js' // 若 var dd = 'js',则 this.dd结果为 js
+let dd = 'js'; // 若 var dd = 'js',则 this.dd结果为 js
 let obj = {
   dd: 'zgh',
   fun: function () {
-    console.log(this.dd) // undefined
+    console.log(this.dd); // undefined
   }
-}
-let res = obj.fun
-res()
+};
+let res = obj.fun;
+res();
 ```
 
 ### 作为构造函数调用
@@ -502,11 +512,11 @@ res()
 
 ```js
 function f(name) {
-  this.name = name
-  console.log(this) // f {name: "zgh"}
+  this.name = name;
+  console.log(this); // f {name: "zgh"}
 }
-let res = new f('zgh')
-console.log(typeof res) // object
+let res = new f('zgh');
+console.log(typeof res); // object
 ```
 
 ### 定时器中使用
@@ -515,12 +525,12 @@ js 中的定时器都是定义在 `window` 下的，所以二者都是指向 `wi
 
 ```js
 setInterval(function f() {
-  console.log(this) // window
-}, 2000)
+  console.log(this); // window
+}, 2000);
 
 setTimeout(function g() {
-  console.log(this) // window
-}, 0)
+  console.log(this); // window
+}, 0);
 ```
 
 ### 箭头函数中使用
@@ -529,20 +539,20 @@ setTimeout(function g() {
 且不能通过 `call`、`apply` 和 `bind` 方法来改变 `this` 的值。
 
 ```js
-let obj = { val: '1' }
+let obj = { val: '1' };
 let fun = () => {
-  console.log(this) // window
-}
-fun.call(obj)
+  console.log(this); // window
+};
+fun.call(obj);
 ```
 
 全局调用指向 `window`
 
 ```js
 let fun = () => {
-  console.log(this) // window
-}
-fun()
+  console.log(this); // window
+};
+fun();
 ```
 
 作为对象的方法调用，this 指向 `window`
@@ -551,27 +561,27 @@ fun()
 let obj1 = {
   age: 23,
   fun: () => {
-    console.log(this) // window
+    console.log(this); // window
   }
-}
-obj1.fun()
+};
+obj1.fun();
 
 let obj2 = {
   age: 23,
   fun: function () {
-    console.log(this) // {age: 23, fun: ƒ}
+    console.log(this); // {age: 23, fun: ƒ}
   }
-}
-obj2.fun()
+};
+obj2.fun();
 
 // 推荐使用方法简写
 let obj3 = {
   age: 23,
   fun() {
-    console.log(this) // {age: 23, fun: ƒ}
+    console.log(this); // {age: 23, fun: ƒ}
   }
-}
-obj3.fun()
+};
+obj3.fun();
 ```
 
 箭头函数作为定时器延时执行的函数调用，this 指向定义时所在的对象
@@ -580,14 +590,14 @@ obj3.fun()
 let obj = {
   fun: function () {
     setTimeout(() => {
-      console.log(this) // obj
-    }, 0)
+      console.log(this); // obj
+    }, 0);
     // setTimeout(function() {
     // console.log(this);  // window
     // },0)
   }
-}
-obj.fun()
+};
+obj.fun();
 ```
 
 #### 小测试
@@ -598,9 +608,9 @@ obj.fun()
 let user = {
   name: 'zgh',
   go() {
-    console.log(this.name)
+    console.log(this.name);
   }
-}(user.go)()
+}(user.go)();
 ```
 
 结果：ReferenceError
@@ -618,10 +628,10 @@ let user = { go:... }(user.go)()
 
 ```js
 function setUser() {
-  return { cool: 'zgh', ref: this }
+  return { cool: 'zgh', ref: this };
 }
-let user = setUser()
-console.log(user.ref.cool)
+let user = setUser();
+console.log(user.ref.cool);
 ```
 
 结果： undefined
@@ -641,12 +651,12 @@ function setUser() {
   return {
     cool: 'zgh',
     ref() {
-      return this
+      return this;
     }
-  }
+  };
 }
-let user = setUser()
-console.log(user.ref().cool) // zgh
+let user = setUser();
+console.log(user.ref().cool); // zgh
 ```
 
 此处 `user.ref()` 是一个方法，this 指向 user 对象
@@ -660,15 +670,15 @@ console.log(user.ref().cool) // zgh
 `bind` 接收的也是一个参数列表，返回一个新的函数，必须调用才会执行
 
 ```js
-let a = { value: 1 }
+let a = { value: 1 };
 function getValue(name, age) {
-  console.log(name)
-  console.log(age)
-  console.log(this.value) // 1
+  console.log(name);
+  console.log(age);
+  console.log(this.value); // 1
 }
-getValue.call(a, 'zgh', '23') // this指向a
-getValue.apply(a, ['zgh', '23'])
-getValue.bind(a, 'zgh', '23')()
+getValue.call(a, 'zgh', '23'); // this指向a
+getValue.apply(a, ['zgh', '23']);
+getValue.bind(a, 'zgh', '23')();
 ```
 
 ## IIFE
@@ -682,34 +692,34 @@ IIFE（Immediately-invoked function expression）
 #### 方式一
 
 ```js
-;(function f(x) {
-  console.log(x) // 1
-})('1')
+(function f(x) {
+  console.log(x); // 1
+})('1');
 ```
 
 #### 方式二
 
 ```js
-;(function g(x) {
-  console.log(x) // 2
-})('2')
+(function g(x) {
+  console.log(x); // 2
+})('2');
 ```
 
 示例
 
 ```js
-;(function f() {
-  var iife = 'zgh'
-})()
-console.log(iife) // Uncaught ReferenceError: iife is not defined
+(function f() {
+  var iife = 'zgh';
+})();
+console.log(iife); // Uncaught ReferenceError: iife is not defined
 ```
 
 ```js
 var res = (function () {
-  var fe = 'hehe'
-  return fe
-})()
-console.log(res) // hehe
+  var fe = 'hehe';
+  return fe;
+})();
+console.log(res); // hehe
 ```
 
 ## 深拷贝、浅拷贝
@@ -717,15 +727,15 @@ console.log(res) // hehe
 浅拷贝：
 
 ```js
-const obj = { name: 'zgh' }
+const obj = { name: 'zgh' };
 function shallowClone(obj) {
-  const newObj = {}
+  const newObj = {};
   for (let i in obj) {
-    newObj[i] = obj[i]
+    newObj[i] = obj[i];
   }
-  return newObj
+  return newObj;
 }
-shallowClone(obj) // {name: "zgh"}
+shallowClone(obj); // {name: "zgh"}
 ```
 
 深拷贝：
@@ -733,25 +743,25 @@ shallowClone(obj) // {name: "zgh"}
 ```js
 function deepClone(obj) {
   if (typeof obj === 'object') {
-    let res = obj.constructor === Array ? [] : {}
+    let res = obj.constructor === Array ? [] : {};
     for (let i in obj) {
-      res[i] = typeof obj[i] === 'object' ? deepClone(obj[i]) : obj[i]
+      res[i] = typeof obj[i] === 'object' ? deepClone(obj[i]) : obj[i];
     }
   } else {
-    let res = obj
+    let res = obj;
   }
-  return obj
+  return obj;
 }
 ```
 
 `JSON.parse(JSON.stringify())`就是有一些局限性的深拷贝
 
 ```js
-let arr = [1, 2, { name: 'zgh' }]
-let newArr = JSON.parse(JSON.stringify(arr))
-newArr[2].name = 'lrx'
-console.log(newArr) // [1, 2, { name: 'lrx' }]
-console.log(arr) // [1, 2, { name: 'zgh' }]]
+let arr = [1, 2, { name: 'zgh' }];
+let newArr = JSON.parse(JSON.stringify(arr));
+newArr[2].name = 'lrx';
+console.log(newArr); // [1, 2, { name: 'lrx' }]
+console.log(arr); // [1, 2, { name: 'zgh' }]]
 ```
 
 <https://juejin.im/post/59ac1c4ef265da248e75892b>
@@ -780,13 +790,13 @@ console.log(arr) // [1, 2, { name: 'zgh' }]]
 <input type="text" id="my-input" />
 
 <script>
-  let inp = document.getElementById('my-input')
+  let inp = document.getElementById('my-input');
   function ajaxTest(a) {
-    console.log(a)
+    console.log(a);
   }
   inp.addEventListener('keyup', (e) => {
-    ajaxTest(e.target.value)
-  })
+    ajaxTest(e.target.value);
+  });
 </script>
 ```
 
@@ -796,23 +806,23 @@ console.log(arr) // [1, 2, { name: 'zgh' }]]
 
 ```js
 function ajaxTest(a) {
-  console.log(a)
+  console.log(a);
 }
 
 function debounce(fn, delay) {
-  let timer = null
+  let timer = null;
   return function () {
-    clearTimeout(timer)
+    clearTimeout(timer);
     timer = setTimeout(() => {
-      fn.apply(this, arguments)
-    }, delay)
-  }
+      fn.apply(this, arguments);
+    }, delay);
+  };
 }
-let debounceAjax = debounce(ajaxTest, 500)
-let inp = document.getElementById('my-input')
+let debounceAjax = debounce(ajaxTest, 500);
+let inp = document.getElementById('my-input');
 inp.addEventListener('keyup', (e) => {
-  debounceAjax(e.target.value)
-})
+  debounceAjax(e.target.value);
+});
 ```
 
 使用防抖后，当用户在频繁的输入时，并不会发送请求，只有当用户在指定间隔内没有输入时，才会执行函数。如果停止输入但是在指定间隔内又输入，会重新触发计时。
@@ -825,51 +835,51 @@ inp.addEventListener('keyup', (e) => {
 
 ```js
 function throttle(func, delay) {
-  let last = 0
+  let last = 0;
   return function () {
-    let now = Date.now()
+    let now = Date.now();
     if (now - last >= delay) {
-      func.apply(this, arguments)
-      last = now
+      func.apply(this, arguments);
+      last = now;
     } else {
-      console.log('距离上次调用的时间差不满足要求')
+      console.log('距离上次调用的时间差不满足要求');
     }
-  }
+  };
 }
 
 function ajaxTest(a) {
-  console.log(a)
+  console.log(a);
 }
 
-let throttleAjax = throttle(ajaxTest, 1000) // 函数在每 1s 内执行一次
-let inputs = document.getElementById('my-input')
+let throttleAjax = throttle(ajaxTest, 1000); // 函数在每 1s 内执行一次
+let inputs = document.getElementById('my-input');
 inputs.addEventListener('keyup', function (e) {
-  throttleAjax(e.target.value)
-})
+  throttleAjax(e.target.value);
+});
 ```
 
 定时器版
 
 ```js
 function throttle(fun, delay) {
-  let last, deferTimer
+  let last, deferTimer;
   return function (args) {
-    let that = this
-    let _args = arguments
-    let now = +new Date()
+    let that = this;
+    let _args = arguments;
+    let now = +new Date();
 
-    clearTimeout(deferTimer)
+    clearTimeout(deferTimer);
 
     if (last && now < last + delay) {
       deferTimer = setTimeout(function () {
-        last = now
-        fun.apply(that, _args)
-      }, delay)
+        last = now;
+        fun.apply(that, _args);
+      }, delay);
     } else {
-      last = now
-      fun.apply(that, _args)
+      last = now;
+      fun.apply(that, _args);
     }
-  }
+  };
 }
 ```
 
@@ -897,11 +907,11 @@ function throttle(fun, delay) {
 ```js
 function f(n) {
   if (n === 1) {
-    return 1
+    return 1;
   }
-  return f(n - 1) + n
+  return f(n - 1) + n;
 }
-console.log(f(5))
+console.log(f(5));
 ```
 
 - 斐波那契数列
@@ -911,12 +921,12 @@ console.log(f(5))
 //1,1,2,3,5,8,13,21......
 function f(n) {
   if (n === 1 || n === 2) {
-    return 1
+    return 1;
   } else {
-    return f(n - 1) + f(n - 2)
+    return f(n - 1) + f(n - 2);
   }
 }
-console.log(f(3))
+console.log(f(3));
 ```
 
 ## 函数柯里化
@@ -925,16 +935,16 @@ console.log(f(3))
 
 ```js
 function f(x, y) {
-  return x + y
+  return x + y;
 }
-f(1, 2)
+f(1, 2);
 
 function g(x) {
   return function (y) {
-    return x + y
-  }
+    return x + y;
+  };
 }
-g(1)(2)
+g(1)(2);
 ```
 
 示例：实现 `add(1)(2)(3) => 6`
@@ -943,16 +953,16 @@ g(1)(2)
 function add(a) {
   function sum(b) {
     // 使用闭包
-    a = a + b // 累加
-    return sum
+    a = a + b; // 累加
+    return sum;
   }
   sum.toString = function () {
     // 重写toSting() 方法
-    return a
-  }
-  return sum // 返回一个函数
+    return a;
+  };
+  return sum; // 返回一个函数
 }
-add(1)(2)(3)
+add(1)(2)(3);
 ```
 
 ## Math.floor、Math.round、Math.ceil
@@ -964,30 +974,30 @@ add(1)(2)(3)
 - `Math.abs(x)` 取 x 的绝对值
 
 ```js
-Math.round(1.23) // 1
-Math.round(1.78) // 2
-Math.round(-1.23) // -1
-Math.round(-1.78) // -2
+Math.round(1.23); // 1
+Math.round(1.78); // 2
+Math.round(-1.23); // -1
+Math.round(-1.78); // -2
 
-Math.ceil(1.23) // 2
-Math.ceil(1.78) // 2
-Math.ceil(-1.23) // -1
-Math.ceil(-1.78) // -1
+Math.ceil(1.23); // 2
+Math.ceil(1.78); // 2
+Math.ceil(-1.23); // -1
+Math.ceil(-1.78); // -1
 
-Math.floor(1.23) // 1
-Math.floor(1.78) // 1
-Math.floor(-1.23) // -2
-Math.floor(-1.78) // -2
+Math.floor(1.23); // 1
+Math.floor(1.78); // 1
+Math.floor(-1.23); // -2
+Math.floor(-1.78); // -2
 
 // 获取[n,m]之间的随机整数
-Math.round(Math.random() * (m - n) + n)
+Math.round(Math.random() * (m - n) + n);
 ```
 
 由于 js 数字精度的问题，当位数太多时会有误差
 
 ```js
-let c = 2.999999999999999999999999999999
-Math.floor(c) // 3
+let c = 2.999999999999999999999999999999;
+Math.floor(c); // 3
 ```
 
 ## for 循环
@@ -1000,17 +1010,17 @@ Math.floor(c) // 3
 - `for of`，推荐
 
 ```js
-let arr = ['zgh', 22, 180, 125]
+let arr = ['zgh', 22, 180, 125];
 for (let i = 0, len = arr.length; i < len; i++) {
-  console.log(typeof i) // number
+  console.log(typeof i); // number
 }
 
 for (let m of arr) {
 }
 
 for (let k in arr) {
-  console.log(k) // 0 1 2 3，返回的是数组下标
-  console.log(typeof k) // string
+  console.log(k); // 0 1 2 3，返回的是数组下标
+  console.log(typeof k); // string
 }
 ```
 
@@ -1027,9 +1037,9 @@ for (let k in arr) {
 如果定义了一个变量，但未赋值，则是`undefined`; 如果未定义，则是`not defined`
 
 ```js
-let a
-console.log(a) // undefined
-console.log(b) // b is not defined
+let a;
+console.log(a); // undefined
+console.log(b); // b is not defined
 ```
 
 ## 锚点链接
@@ -1073,7 +1083,7 @@ console.log(b) // b is not defined
 `toLocaleString()`
 
 ```js
-;(386485473.88).toLocaleString('en-US') // 386,485,473.88
+(386485473.88).toLocaleString('en-US'); // 386,485,473.88
 ```
 
 小数部分会根据四舍五入只留下三位
@@ -1085,19 +1095,19 @@ console.log(b) // b is not defined
 前置自增，先执行后运算
 
 ```js
-let a = 1
-let b = a++
-console.log(a) // 2
-console.log(b) // 1
+let a = 1;
+let b = a++;
+console.log(a); // 2
+console.log(b); // 1
 ```
 
 后置自增，先运算后执行
 
 ```js
-let a = 1
-let b = ++a
-console.log(a) // 2
-console.log(b) // 2
+let a = 1;
+let b = ++a;
+console.log(a); // 2
+console.log(b); // 2
 ```
 
 ## 禁用网页中的单击右键
@@ -1110,10 +1120,10 @@ console.log(b) // 2
 
 ```js
 // 获取标题
-document.title
+document.title;
 
 // 更改标题
-document.title = 'hello world'
+document.title = 'hello world';
 ```
 
 ## 全屏事件
@@ -1121,29 +1131,29 @@ document.title = 'hello world'
 ```js
 function requestFullscreen(el) {
   if (el.requestFullscreen) {
-    el.requestFullscreen()
+    el.requestFullscreen();
   } else if (el.msRequestFullscreen) {
-    el.msRequestFullscreen()
+    el.msRequestFullscreen();
   } else if (el.mozRequestFullScreen) {
-    el.mozRequestFullScreen()
+    el.mozRequestFullScreen();
   } else if (el.webkitRequestFullscreen) {
-    el.webkitRequestFullscreen()
+    el.webkitRequestFullscreen();
   } else {
-    console.log('no Fullscreen Support')
+    console.log('no Fullscreen Support');
   }
 }
 
 function exitFullscreen() {
   if (document.exitFullscreen) {
-    document.exitFullscreen()
+    document.exitFullscreen();
   } else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen()
+    document.webkitExitFullscreen();
   } else if (document.msExitFullscreen) {
-    document.msExitFullscreen()
+    document.msExitFullscreen();
   } else if (document.mozCancelFullScreen) {
-    document.mozCancelFullScreen()
+    document.mozCancelFullScreen();
   } else {
-    console.log('no Fullscreen Support')
+    console.log('no Fullscreen Support');
   }
 }
 ```
@@ -1154,27 +1164,27 @@ function exitFullscreen() {
 // W3C
 document.addEventListener('fullscreenchange', () => {
   if (!document.fullscreenElement) {
-    this.isFullScreen = false
+    this.isFullScreen = false;
   }
-})
+});
 // webkit
 document.addEventListener('webkitfullscreenchange', (e) => {
   if (!e.currentTarget.webkitIsFullScreen) {
-    this.isFullScreen = false
+    this.isFullScreen = false;
   }
-})
+});
 // IE
 document.addEventListener('MSFullscreenChange', () => {
   if (!document.msFullscreenElement) {
-    this.isFullScreen = false
+    this.isFullScreen = false;
   }
-})
+});
 // firefox
 document.addEventListener('mozfullscreenchange', () => {
   if (!document.mozFullScreenElement) {
-    this.isFullScreen = false
+    this.isFullScreen = false;
   }
-})
+});
 ```
 
 ## 将十进制转为二进制或十六进制
@@ -1182,11 +1192,11 @@ document.addEventListener('mozfullscreenchange', () => {
 [Number.prototype.toString()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/toString)
 
 ```js
-const num = 10
+const num = 10;
 
-num.toString(2) // "1010"
-num.toString(16) // "a"
-num.toString(8) // "12"
+num.toString(2); // "1010"
+num.toString(16); // "a"
+num.toString(8); // "12"
 ```
 
 ## 谷歌浏览器监听三次点击
@@ -1196,10 +1206,10 @@ num.toString(8) // "12"
 ```js
 // <button id='btn'>click</button>
 
-const dom = document.querySelector('#btn')
+const dom = document.querySelector('#btn');
 dom.addEventListener('click', (evt) => {
   if (evt.detail === 3) {
-    window.open(url.href, '_blank')
+    window.open(url.href, '_blank');
   }
-})
+});
 ```

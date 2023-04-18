@@ -22,11 +22,11 @@ export default {
   methods: {
     getId() {
       if (this.id) {
-        this.ecs_id = this.id
+        this.ecs_id = this.id;
       }
     }
   }
-}
+};
 ```
 
 还有一种方式可获取路由参数 `this.$route.params.id`
@@ -195,7 +195,7 @@ export default {
   <wangEditor ref="editor" v-model="editorContent" :isClear="isClear" @change="getEditor"></wangEditor>
 </template>
 <script>
-import wangEditor from '@/components/editor/wangeditor'
+import wangEditor from '@/components/editor/wangeditor';
 export default {
   components: { wangEditor },
   data() {
@@ -203,25 +203,25 @@ export default {
       visible: false,
       editorContent: null,
       isClear: false
-    }
+    };
   },
   methods: {
     // 获取富文本内容
     getEditor(val) {
-      this.editorContent = val
+      this.editorContent = val;
     },
     showModal() {
-      this.visible = true
+      this.visible = true;
       // 打开对话框时都要清空富文本内容
       this.$nextTick(() => {
         setTimeout(() => {
-          this.editorContent = ''
-          this.$refs.editor.setHtml(this.editorContent)
-        })
-      })
+          this.editorContent = '';
+          this.$refs.editor.setHtml(this.editorContent);
+        });
+      });
     }
   }
-}
+};
 </script>
 ```
 
@@ -252,8 +252,8 @@ npm install swiper@5.3.6 vue-awesome-swiper@4.1.0
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
-import 'swiper/css/swiper.css'
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+import 'swiper/css/swiper.css';
 
 export default {
   props: {},
@@ -290,17 +290,17 @@ export default {
         touchRatio: 0.2,
         slideToClickedSlide: true
       }
-    }
+    };
   },
   mounted() {
     this.$nextTick(() => {
-      const swiperTop = this.$refs.swiperTop.$swiper
-      const swiperThumbs = this.$refs.swiperThumbs.$swiper
-      swiperTop.controller.control = swiperThumbs
-      swiperThumbs.controller.control = swiperTop
-    })
+      const swiperTop = this.$refs.swiperTop.$swiper;
+      const swiperThumbs = this.$refs.swiperThumbs.$swiper;
+      swiperTop.controller.control = swiperThumbs;
+      swiperThumbs.controller.control = swiperTop;
+    });
   }
-}
+};
 </script>
 
 <style scoped lang="less">
@@ -367,21 +367,21 @@ export default {
   data() {
     return {
       visible: false
-    }
+    };
   },
   watch: {
     showWeatherMark(v) {
       if (v) {
-        this.visible = true
+        this.visible = true;
       }
     }
   },
   methods: {
     cancelShow() {
-      this.$emit('changeWeatherMark')
+      this.$emit('changeWeatherMark');
     }
   }
-}
+};
 </script>
 
 <style scoped lang="less">
@@ -402,7 +402,7 @@ export default {
 </template>
 
 <script>
-import WeatherSite from './weatherSite'
+import WeatherSite from './weatherSite';
 
 export default {
   props: { showWeatherMark: Boolean },
@@ -410,17 +410,17 @@ export default {
   data() {
     return {
       showWeatherMark: false
-    }
+    };
   },
   methods: {
     showWeather() {
-      this.showWeatherMark = true
+      this.showWeatherMark = true;
     },
     changeWeatherMark() {
-      this.showWeatherMark = false
+      this.showWeatherMark = false;
     }
   }
-}
+};
 </script>
 ```
 
@@ -433,7 +433,7 @@ export default {
   <div style="height:200px" id="container"></div>
 </template>
 <script>
-import { Line } from '@antv/g2plot'
+import { Line } from '@antv/g2plot';
 export default {
   drawCanview() {
     this.$nextTick(() => {
@@ -444,12 +444,12 @@ export default {
           xField: 'Date',
           yField: 'scales',
           smooth: true
-        })
-        line.render()
-      }, 500)
-    })
+        });
+        line.render();
+      }, 500);
+    });
   }
-}
+};
 </script>
 ```
 
@@ -483,16 +483,16 @@ export default {
 除了直接改`<title>名称</title>`，也可以更改`vue.config.js`配置`webpack`
 
 ```js
-const CONFIG = require('./src/config')
+const CONFIG = require('./src/config');
 
 module.exports = {
   chainWebpack: (config) => {
     config.plugin('html').tap((args) => {
-      args[0].title = CONFIG.title
-      return args
-    })
+      args[0].title = CONFIG.title;
+      return args;
+    });
   }
-}
+};
 ```
 
 ## 使用其他字体
@@ -530,7 +530,7 @@ module.exports = {
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 const locale = {
   zh: {
@@ -539,14 +539,14 @@ const locale = {
   en: {
     msg: 'hello world'
   }
-}
-const defaultLocale = ref('zh')
+};
+const defaultLocale = ref('zh');
 const changeLanguage = (type: string) => {
-  defaultLocale.value = type
-}
+  defaultLocale.value = type;
+};
 const t = (key: string) => {
-  return locale[defaultLocale.value][key]
-}
+  return locale[defaultLocale.value][key];
+};
 </script>
 ```
 
@@ -562,7 +562,7 @@ const t = (key: string) => {
 </template>
 
 <script>
-import OrganizeTree from '@/components/OrganizeTree.vue'
+import OrganizeTree from '@/components/OrganizeTree.vue';
 
 export default {
   name: 'Tree',
@@ -571,9 +571,9 @@ export default {
     return {
       data: [],
       orgOptions: [] // 树形数据源
-    }
+    };
   }
-}
+};
 </script>
 ```
 
@@ -629,7 +629,7 @@ export default {
     nodeConfig: {
       type: Object,
       default: () => {
-        return { label: 'label', value: 'id', children: 'children' }
+        return { label: 'label', value: 'id', children: 'children' };
       }
     },
     // 是否展开所有节点
@@ -645,11 +645,11 @@ export default {
       timer: null,
       selectShowLabel: '', // 用于下拉列表展示
       filterText: '' // 筛选输入框绑定值
-    }
+    };
   },
   computed: {
     defaultProps() {
-      return Object.assign({ label: 'label', value: 'id', children: 'children' }, this.nodeConfig)
+      return Object.assign({ label: 'label', value: 'id', children: 'children' }, this.nodeConfig);
     }
   },
   watch: {
@@ -657,7 +657,7 @@ export default {
     checkedArray: {
       handler(val) {
         if (val && val.length > 0) {
-          this.setCheckedNodes(val)
+          this.setCheckedNodes(val);
         }
       },
       // 监听第一次数据更改
@@ -665,71 +665,71 @@ export default {
     },
     // 筛选符合条件选项
     filterText(val) {
-      this.$refs.tree.filter(val)
+      this.$refs.tree.filter(val);
     }
   },
   destory() {
-    clearTimeout(this.timer)
+    clearTimeout(this.timer);
   },
   methods: {
     // 清空树选择的内容
     clear() {
-      this.$refs.tree.setCheckedKeys([])
+      this.$refs.tree.setCheckedKeys([]);
     },
     // select移除选中标签
     removeTag(label) {
       // 选中项的value
       const selectedValueArray = this.getCheckedNodes()
         .filter((o) => o[this.defaultProps.label] !== label)
-        .map((o) => o[this.defaultProps.value])
+        .map((o) => o[this.defaultProps.value]);
       // 移除的节点
-      const removeNode = this.$refs.tree.getCheckedNodes(true).filter((o) => o[this.defaultProps.label] === label)
+      const removeNode = this.$refs.tree.getCheckedNodes(true).filter((o) => o[this.defaultProps.label] === label);
       // 更新树选中节点
       removeNode.forEach((o) => {
-        this.$refs.tree.setChecked(o, false, true)
-      })
+        this.$refs.tree.setChecked(o, false, true);
+      });
       // 更新父组件绑定值
-      this.$emit('changeChecked', selectedValueArray)
+      this.$emit('changeChecked', selectedValueArray);
     },
     // 树节点过滤方法
     filterNode(value, data) {
-      if (!value) return true
-      return data[this.defaultProps.label].indexOf(value) !== -1
+      if (!value) return true;
+      return data[this.defaultProps.label].indexOf(value) !== -1;
     },
     // 获取选中节点
     getCheckedNodes() {
       return this.$refs.tree.getCheckedNodes(true).map((node) => ({
         [this.defaultProps.label]: node[this.defaultProps.label],
         [this.defaultProps.value]: node[this.defaultProps.value]
-      }))
+      }));
     },
     // 设置选中节点
     async setCheckedNodes(selectedArray) {
       if (!selectedArray || selectedArray.length === 0) {
-        this.clear()
-        return
+        this.clear();
+        return;
       }
 
       // 第一次回显dom可能未加载导致setCheckedKeys报错
       this.$nextTick(() => {
-        this.$refs.tree.setCheckedKeys(selectedArray)
+        this.$refs.tree.setCheckedKeys(selectedArray);
         this.timer = setTimeout(() => {
-          this.checkChange()
-        }, 500)
-      })
+          this.checkChange();
+        }, 500);
+      });
     },
     // 节点选中状态更改
     checkChange() {
       // 获取选中的node节点
-      const selectedArray = this.getCheckedNodes()
+      const selectedArray = this.getCheckedNodes();
       // 设置select展示的label
-      this.selectShowLabel = selectedArray.map((node) => node[this.defaultProps.label])
+      this.selectShowLabel = selectedArray.map((node) => node[this.defaultProps.label]);
       // 更新model绑定值
-      const selectValueArray = selectedArray.map((node) => node[this.defaultProps.value])
-      this.$emit('changeChecked', selectValueArray)
+      const selectValueArray = selectedArray.map((node) => node[this.defaultProps.value]);
+      this.$emit('changeChecked', selectValueArray);
     }
   }
-}
+};
 </script>
 ```
 
@@ -772,10 +772,10 @@ export default {
   computed: {
     childSelectedValue: {
       get() {
-        return this.value
+        return this.value;
       },
       set(val) {
-        this.$emit('input', val)
+        this.$emit('input', val);
       }
     },
     attrs() {
@@ -784,36 +784,36 @@ export default {
         clearable: true,
         filterable: true,
         ...this.$attrs
-      }
+      };
     },
     selectChecked: {
       get() {
-        return this.childSelectedValue?.length === this.options?.length
+        return this.childSelectedValue?.length === this.options?.length;
       },
       set(val) {
-        this.$emit('input', val)
+        this.$emit('input', val);
       }
     }
   },
   watch: {
     childSelectedValue(val) {
-      this.childSelectedValue = val
+      this.childSelectedValue = val;
     }
   },
   methods: {
     // 点击全选
     selectAll(val) {
-      const options = JSON.parse(JSON.stringify(this.options))
+      const options = JSON.parse(JSON.stringify(this.options));
       if (val) {
         this.childSelectedValue = options.map((item) => {
-          return item[this.valueKey]
-        })
+          return item[this.valueKey];
+        });
       } else {
-        this.childSelectedValue = null
+        this.childSelectedValue = null;
       }
     }
   }
-}
+};
 </script>
 <style lang="scss">
 .el-select-dropdown {
@@ -822,4 +822,22 @@ export default {
   }
 }
 </style>
+```
+
+## el-tooltip
+
+文字超出显示省略号和提示，没超出时不显示
+
+```html
+<el-tooltip effect="light" :content="item.name" placement="right" :disabled="isShowTooltip">
+  <span @mouseover="mouseOver($event)">{{ item.name }}</span>
+</el-tooltip>
+```
+
+```js
+isShowTooltip: false
+
+mouseOver(event) {
+  this.isShowTooltip = event.target.scrollWidth <= event.target.clientWidth
+}
 ```

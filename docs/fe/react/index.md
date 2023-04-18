@@ -22,7 +22,7 @@
 
 ```jsx
 function List() {
-  const arr = ['a', 'b', 'c']
+  const arr = ['a', 'b', 'c'];
   return (
     <>
       <ul>
@@ -31,16 +31,16 @@ function List() {
         ))}
       </ul>
     </>
-  )
+  );
 }
 ```
 
 也可以把遍历的逻辑抽离出来
 
 ```js
-const arr = ['a', 'b', 'c']
+const arr = ['a', 'b', 'c'];
 function Li() {
-  return arr.map((item, index) => <li key={index}>{item}</li>)
+  return arr.map((item, index) => <li key={index}>{item}</li>);
 }
 
 function List() {
@@ -50,7 +50,7 @@ function List() {
         <Li />
       </ul>
     </>
-  )
+  );
 }
 ```
 
@@ -91,12 +91,12 @@ const bg = { background: '#f00' }
 
 ```jsx
 function Home(props) {
-  return <div className="home">Welcome to React~</div>
+  return <div className="home">Welcome to React~</div>;
 }
 
 const Home = () => {
-  return <div className="home">Welcome to React~</div>
-}
+  return <div className="home">Welcome to React~</div>;
+};
 ```
 
 ### 对组件的要求
@@ -111,31 +111,31 @@ const Home = () => {
 
 ```jsx
 function App1() {
-  return null
+  return null;
 }
 
 function App2() {
-  return [1, 2, 3]
+  return [1, 2, 3];
 }
 
 // 如果直接返回对象，会报错：Uncaught Error: Objects are not valid as a React child
 function App3() {
-  return { a: 1 }
+  return { a: 1 };
 }
 ```
 
 那么是否可以说 React 组件不能返回对象？不能，可以返回一个迭代器
 
 ```jsx
-const obj = { a: 1 }
+const obj = { a: 1 };
 obj[Symbol.iterator] = function* () {
   for (let prop in obj) {
-    yield [prop, obj[prop]]
+    yield [prop, obj[prop]];
   }
-}
+};
 
 function App() {
-  return obj
+  return obj;
 }
 ```
 
@@ -160,7 +160,7 @@ const [person, setPerson] = useState({
     city: 'Hamburg',
     image: 'https://i.imgur.com/Sd1AgUOm.jpg'
   }
-})
+});
 ```
 
 如果要更新 person.artwork.city 的值
@@ -184,7 +184,7 @@ setPerson(...person, artwork: { ...person.artwork, city: 'beijing'})
 ```jsx
 class Order extends React.Component {
   handleSearch() {
-    console.log(this.props)
+    console.log(this.props);
   }
 
   render() {
@@ -192,7 +192,7 @@ class Order extends React.Component {
       <Button htmlType="button" onClick={this.handleSearch.bind(this)}>
         重置
       </Button>
-    )
+    );
   }
 }
 ```
@@ -202,11 +202,11 @@ class Order extends React.Component {
 ```jsx
 class Order extends React.Component {
   constructor(props) {
-    super(props)
-    this.handleSearch = this.handleSearch.bind(this)
+    super(props);
+    this.handleSearch = this.handleSearch.bind(this);
   }
   handleSearch() {
-    console.log(this.props)
+    console.log(this.props);
   }
 
   render() {
@@ -214,7 +214,7 @@ class Order extends React.Component {
       <Button htmlType="button" onClick={this.handleSearch}>
         重置
       </Button>
-    )
+    );
   }
 }
 ```
@@ -224,7 +224,7 @@ class Order extends React.Component {
 ```jsx
 class Order extends React.Component {
   handleSearch() {
-    console.log(this.props)
+    console.log(this.props);
   }
 
   render() {
@@ -232,7 +232,7 @@ class Order extends React.Component {
       <Button htmlType="button" onClick={() => this.handleSearch()}>
         重置
       </Button>
-    )
+    );
   }
 }
 ```
@@ -242,15 +242,15 @@ class Order extends React.Component {
 ```jsx
 class Order extends React.Component {
   handleSearch = () => {
-    console.log(this.props)
-  }
+    console.log(this.props);
+  };
 
   render() {
     return (
       <Button htmlType="button" onClick={this.handleSearch}>
         重置
       </Button>
-    )
+    );
   }
 }
 ```
@@ -271,7 +271,7 @@ class Columns extends React.Component {
         <td>Hello</td>
         <td>World</td>
       </div>
-    )
+    );
   }
 }
 ```
@@ -287,7 +287,7 @@ class Table extends React.Component {
           <Columns />
         </tr>
       </table>
-    )
+    );
   }
 }
 ```
@@ -315,7 +315,7 @@ class Columns extends React.Component {
         <td>Hello</td>
         <td>World</td>
       </React.Fragment>
-    )
+    );
   }
 }
 ```
@@ -330,7 +330,7 @@ class Columns extends React.Component {
         <td>Hello</td>
         <td>World</td>
       </>
-    )
+    );
   }
 }
 ```
@@ -343,11 +343,11 @@ class Columns extends React.Component {
 
 ```js
 function Child(props) {
-  return <h1>{props.num}</h1>
+  return <h1>{props.num}</h1>;
 }
 
 export default function Father() {
-  return <Child num={123} />
+  return <Child num={123} />;
 }
 ```
 
@@ -356,7 +356,7 @@ export default function Father() {
 子组件调用父组件的方法，修改父组件的内容，永远都是父组件自己在修改自己，子组件只是通知父组件
 
 ```js
-import { useState } from 'react'
+import { useState } from 'react';
 
 function Child(props) {
   return (
@@ -364,24 +364,24 @@ function Child(props) {
       <h1>{props.num}</h1>
       <button onClick={() => props.changeNum(666)}>change</button>
     </>
-  )
+  );
 }
 
 export default function App() {
-  const [msg, setMsg] = useState('你好')
+  const [msg, setMsg] = useState('你好');
 
   // 这里的 arg 就是接收子组件传过来的值
   const numChange = (arg) => {
-    console.log(arg)
-    setMsg(arg)
-  }
+    console.log(arg);
+    setMsg(arg);
+  };
 
   return (
     <>
       <h1>{msg}</h1>
       <Child num={123} changeNum={numChange} />
     </>
-  )
+  );
 }
 ```
 
@@ -401,21 +401,33 @@ export default function App() {
 
 ```js
 function f1() {
-  const num = 0
+  const num = 0;
   const fn = (msg) => {
-    console.log(msg)
-  }
-  const props = { num, fn }
+    console.log(msg);
+  };
+  const props = { num, fn };
 
-  f2(props)
+  f2(props);
 }
 
 function f2(props) {
-  const num = 1
-  props.fn(num + props.num)
+  const num = 1;
+  props.fn(num + props.num);
 }
 
-f1()
+f1();
 ```
 
 ## 渲染原理
+
+## 事件机制
+
+## fiber 架构
+
+## react 调度机制
+
+## 优先级概念
+
+## commit 和 render 阶段
+
+## hooks 原理

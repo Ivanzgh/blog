@@ -12,7 +12,7 @@ hero:
   actions:
     - theme: brand
       text: 快速开始 →
-      link: /fe/base/js
+      link: /fe/js/
     - theme: alt
       text: 知识图谱
       link: https://www.processon.com/view/link/6305d5a00e3e74074be5a309

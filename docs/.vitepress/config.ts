@@ -1,17 +1,15 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig } from 'vitepress';
 
-// https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'const',
+  title: 'CONST',
   description: 'Blog',
   base: '/blog/',
   lastUpdated: true,
   cleanUrls: true,
-  head: [['link', { rel: 'icon', href: '/img/logo.png' }]],
+  head: [['link', { rel: 'icon', href: '/blog/img/logo.png' }]],
   markdown: { theme: 'dracula' },
   themeConfig: {
     logo: '/img/logo.png',
-    lastUpdatedText: '更新日期',
     // outline: 'deep',
     footer: {
       message: 'Released under the MIT License.',
@@ -22,57 +20,62 @@ export default defineConfig({
       apiKey: '3c1f70ed4dca0ad41775f35548a1b525',
       indexName: 'ivanzghio'
     },
+    socialLinks: [{ icon: 'github', link: 'https://github.com/Ivanzgh' }],
     nav: nav(),
     sidebar: {
-      '/fe/base/': [
+      '/': [
         {
           text: 'JavaScript',
           collapsed: false,
+          link: '/',
           items: [
-            { text: '基础', link: '/fe/base/js' },
-            { text: '字符串', link: '/fe/base/js-string' },
-            { text: '数组', link: '/fe/base/js-array' },
-            { text: '对象', link: '/fe/base/js-object' },
-            { text: 'ES6', link: '/fe/base/js-es6' },
-            { text: 'DOM', link: '/fe/base/js-dom' },
-            { text: 'JSON', link: '/fe/base/js-json' },
-            { text: 'AJAX', link: '/fe/base/js-ajax' },
-            { text: '模块化', link: '/fe/base/js-module' },
-            { text: '工具', link: '/fe/base/js-utils' }
+            { text: '基础', link: '/fe/js/' },
+            { text: '字符串', link: '/fe/js/string' },
+            { text: '数组', link: '/fe/js/array' },
+            { text: '对象', link: '/fe/js/object' },
+            { text: 'ES6', link: '/fe/js/es6' },
+            { text: 'DOM', link: '/fe/js/dom' },
+            { text: 'JSON', link: '/fe/js/json' },
+            { text: 'AJAX', link: '/fe/js/ajax' },
+            { text: '模块化', link: '/fe/js/module' },
+            { text: '手写JS', link: '/fe/js/truth' },
+            { text: '工具', link: '/fe/js/utils' }
           ]
         },
         {
           text: 'HTML',
           collapsed: false,
           items: [
-            { text: '基础', link: '/fe/base/html' },
-            { text: 'Canvas', link: '/fe/base/html-canvas' },
-            { text: 'SVG', link: '/fe/base/html-svg' }
+            { text: '基础', link: '/fe/html/' },
+            { text: 'Canvas', link: '/fe/html/canvas' },
+            { text: 'SVG', link: '/fe/html/svg' }
           ]
         },
         {
           text: 'CSS',
           collapsed: false,
           items: [
-            { text: '基础', link: '/fe/base/css' },
-            { text: '布局', link: '/fe/base/css-layout' },
-            { text: '响应式布局', link: '/fe/base/css-responsive' },
-            { text: '业务效果', link: '/fe/base/css-business' },
-            { text: '阴影', link: '/fe/base/css-box-shadow' },
-            { text: '渐变', link: '/fe/base/css-gradient' },
-            { text: '动画', link: '/fe/base/css-animation' },
-            { text: '裁剪', link: '/fe/base/css-clip-path' },
-            { text: 'Sass', link: '/fe/base/css-sass' },
-            { text: 'Less', link: '/fe/base/css-less' }
+            { text: '基础', link: '/fe/css/' },
+            { text: '布局', link: '/fe/css/ayout' },
+            { text: '响应式布局', link: '/fe/css/responsive' },
+            { text: '阴影', link: '/fe/css/shadow' },
+            { text: '渐变', link: '/fe/css/gradient' },
+            { text: '动画', link: '/fe/css/animation' },
+            { text: '滤镜', link: '/fe/css/filter' },
+            { text: '裁剪', link: '/fe/css/clip-path' },
+            { text: '视差滚动', link: '/fe/css/parallax-scroller' },
+            { text: '业务效果', link: '/fe/css/business' },
+            { text: 'Sass', link: '/fe/css/sass' },
+            { text: 'Less', link: '/fe/css/less' }
           ]
         },
         {
           text: '浏览器',
           collapsed: false,
           items: [
-            { text: '基础', link: '/fe/base/browser' },
-            { text: 'window', link: '/fe/base/browser-window' },
-            { text: '兼容性', link: '/fe/base/browser-compatibility' }
+            { text: '基础', link: '/fe/browser/' },
+            { text: 'window', link: '/fe/browser/window' },
+            { text: '兼容性', link: '/fe/browser/compatibility' }
           ]
         }
       ],
@@ -169,17 +172,16 @@ export default defineConfig({
           ]
         }
       ]
-    },
-    socialLinks: [{ icon: 'github', link: 'https://github.com/Ivanzgh' }]
+    }
   }
-})
+});
 
 function nav() {
   return [
     {
       text: '前端',
       items: [
-        { text: '基础', link: '/fe/base/js' },
+        { text: '基础', link: '/fe/js/' },
         { text: 'TypeScript', link: '/fe/ts/' },
         { text: 'Vue', link: '/fe/vue/' },
         { text: 'React', link: '/fe/react/' },
@@ -227,5 +229,5 @@ function nav() {
         { text: '设计模式', link: '/base/design-pattern/' }
       ]
     }
-  ]
+  ];
 }
