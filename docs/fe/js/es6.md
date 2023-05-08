@@ -8,23 +8,23 @@
 
 ```js
 function varTest() {
-  var a = 1
+  var a = 1;
   if (true) {
-    var a = 2
-    console.log(a) // 2
+    var a = 2;
+    console.log(a); // 2
   }
-  console.log(a) // 2
+  console.log(a); // 2
 }
 
 function letTest() {
-  console.log(b) // ReferenceError: b is not defined
-  let b = 1
+  console.log(b); // ReferenceError: b is not defined
+  let b = 1;
   // let b = 2; // Uncaught SyntaxError: Identifier 'b' has already been declared
   if (true) {
-    let b = 2
-    console.log(b) // 2
+    let b = 2;
+    console.log(b); // 2
   }
-  console.log(b) // 1
+  console.log(b); // 1
 }
 ```
 
@@ -39,24 +39,24 @@ let 很适合在 for 循环时声明索引变量
 不存在变量提升，不允许重复声明。**复杂类型(数组、对象等)指针指向的地址不能更改，内部数据可以更改**
 
 ```js
-const a = '123'
-a = '234' // TypeError: Assignment to constant letiable
+const a = '123';
+a = '234'; // TypeError: Assignment to constant letiable
 
-const arr = [1, 2, 3]
-arr.push(4)
-console.log(arr) // [1,2,3,4]
-arr = []
-console.log(arr) // 改变数组的指向会出错 Uncaught TypeError: Assignment to constant letiable
+const arr = [1, 2, 3];
+arr.push(4);
+console.log(arr); // [1,2,3,4]
+arr = [];
+console.log(arr); // 改变数组的指向会出错 Uncaught TypeError: Assignment to constant letiable
 ```
 
 ::: warning
 let 和 const 声明的全局变量不属于顶层对象的属性，只存在于块级作用域中
 
 ```js
-let a = 1
-const b = 2
-console.log(window.a) // undefined
-console.log(window.b) // undefined
+let a = 1;
+const b = 2;
+console.log(window.a); // undefined
+console.log(window.b); // undefined
 ```
 
 :::
@@ -70,11 +70,11 @@ console.log(window.b) // undefined
 第一个用途，基本的字符串格式化。
 
 ```js
-const name = 'world'
+const name = 'world';
 // ES5
-console.log('hello' + name)
+console.log('hello' + name);
 // ES6
-console.log(`hello${name}`)
+console.log(`hello${name}`);
 ```
 
 第二个用途，做多行字符串或者字符串一行行拼接。
@@ -83,30 +83,30 @@ console.log(`hello${name}`)
 // ES5
 let a =
   'Hi \
-    Girl!'
+    Girl!';
 // ES6
 let say = `<div>
         <p>hello, world</p>
-    </div>`
+    </div>`;
 ```
 
 ES6 还提供了一些字符串方法，如下：
 
 ```js
 // 1.includes：判断是否包含参数字符串，返回布尔值
-const str = 'welcome'
-console.log(str.includes('e')) // true
+const str = 'welcome';
+console.log(str.includes('e')); // true
 
 // 2.repeat: 获取字符串重复n次
-const str = 'he'
-console.log(str.repeat(3)) // 'hehehe'
+const str = 'he';
+console.log(str.repeat(3)); // 'hehehe'
 // 如果带入小数, Math.floor(num) 来处理
 // s.repeat(3.1) 或者 s.repeat(3.9) 都当做 s.repeat(3) 来处理
 
 // 3. startsWith 和 endsWith 判断是否以给定文本开始或者结束
-const str = 'hello world!'
-console.log(str.startsWith('hello')) // true
-console.log(str.endsWith('!')) // true
+const str = 'hello world!';
+console.log(str.startsWith('hello')); // true
+console.log(str.endsWith('!')); // true
 ```
 
 ## 解构赋值
@@ -116,8 +116,8 @@ console.log(str.endsWith('!')) // true
 可以从数组中提取值，按照对应位置，对变量赋值。这种写法属**模式匹配**，只要等号两边的模式相同，左边的变量就会被赋予对应的值
 
 ```js
-let [a, b, c] = [1, 2, 3]
-console.log(a, b, c) // 1 2 3
+let [a, b, c] = [1, 2, 3];
+console.log(a, b, c); // 1 2 3
 ```
 
 **注意细节:**
@@ -125,42 +125,42 @@ console.log(a, b, c) // 1 2 3
 1、左右结构不同
 
 ```js
-let [a, b, c, d] = [1, 2, 3]
-console.log(a, b, c, d) // 1 2 3 undefined
+let [a, b, c, d] = [1, 2, 3];
+console.log(a, b, c, d); // 1 2 3 undefined
 ```
 
 2、跳过部分
 
 ```js
-let [a, , c] = [1, 2, 3]
-console.log(a, c) // 1 3
+let [a, , c] = [1, 2, 3];
+console.log(a, c); // 1 3
 ```
 
 3、默认值
 
 ```js
-let [a, b, c, d = 666] = [1, 2, 3]
-console.log(a, b, c, d) // 1 2 3 666
+let [a, b, c, d = 666] = [1, 2, 3];
+console.log(a, b, c, d); // 1 2 3 666
 
-let [a = 11, b = 22, c, d = 666] = []
-console.log(a, b, c, d) // 11 22 undefined 666
+let [a = 11, b = 22, c, d = 666] = [];
+console.log(a, b, c, d); // 11 22 undefined 666
 ```
 
 4、嵌套
 
 ```js
-let [a, b, c] = [1, 2, [3]]
-console.log(a, b, c) // 1 2 [3]
+let [a, b, c] = [1, 2, [3]];
+console.log(a, b, c); // 1 2 [3]
 
-let [a, b, [c]] = [1, 2, [3]]
-console.log(a, b, c) // 1 2 3
+let [a, b, [c]] = [1, 2, [3]];
+console.log(a, b, c); // 1 2 3
 ```
 
 ### 对象的解构赋值
 
 ```js
-let { name, age } = { name: 'zgh', age: 22 }
-console.log(name, age) // zgh 22
+let { name, age } = { name: 'zgh', age: 22 };
+console.log(name, age); // zgh 22
 ```
 
 ::: tip 对象与数组解构的不同点
@@ -172,8 +172,8 @@ console.log(name, age) // zgh 22
 ### 函数参数的解构赋值
 
 ```js
-let f = ([a, b]) => a + b
-f([1, 2]) // 3
+let f = ([a, b]) => a + b;
+f([1, 2]); // 3
 ```
 
 上述代码可将数组`[1, 2]`看作一个参数`param`，即`param = [1, 2]`
@@ -186,11 +186,11 @@ f([1, 2]) // 3
 
 ```js
 function Person(name = 'zgh', num = 22) {
-  const name = name || 'zgh'
-  const num = num || 22
+  const name = name || 'zgh';
+  const num = num || 22;
 }
-Person()
-Person('Jack', 20)
+Person();
+Person('Jack', 20);
 ```
 
 如果没有设置默认值，调用时 num 传入 0，0 为 false，那么例子中的 num 结果就为 22 而不是 0
@@ -201,38 +201,38 @@ Person('Jack', 20)
 
 ```js
 //1.不带参数
-let sum = () => 1 + 2
+let sum = () => 1 + 2;
 //等同于
 let sum = function () {
-  return 1 + 2
-}
+  return 1 + 2;
+};
 
 //2.带一个参数
-let sum = (a) => a
+let sum = (a) => a;
 //等同于
 let sum = function (a) {
-  return a
-}
+  return a;
+};
 
 //3.带多个参数,需要使用小括号将参数括起来
-let sum = (a, b) => a + b
+let sum = (a, b) => a + b;
 //等同于
 let sum = function (a, b) {
-  return a + b
-}
+  return a + b;
+};
 
 //4.代码块部分多于一条语句需要用大括号将其括起来，并且使用return语句返回。
 let sum = (a, b) => {
-  let c = a + b
-  return c
-}
+  let c = a + b;
+  return c;
+};
 
 //5.返回对象，就必须用小括号把该对象括起来
-let person = (name) => ({ name: 'zgh', age: 22 })
+let person = (name) => ({ name: 'zgh', age: 22 });
 //等同于
 let person = function (name) {
-  return { name: 'zgh', age: 22 }
-}
+  return { name: 'zgh', age: 22 };
+};
 ```
 
 #### 箭头函数的 this 指向
@@ -246,18 +246,18 @@ let person = function (name) {
 ```js
 let obj = {
   say() {
-    let f1 = () => console.log(this)
-    f1()
+    let f1 = () => console.log(this);
+    f1();
   }
-}
-let rs = obj.say
-rs() // f1执行时，say函数指向window，所以f1中的this指向window
-obj.say() // f1执行时，say函数指向obj，所以f1中的this指向obj
+};
+let rs = obj.say;
+rs(); // f1执行时，say函数指向window，所以f1中的this指向window
+obj.say(); // f1执行时，say函数指向obj，所以f1中的this指向obj
 
 // 下面写法错误！
 let Person = (name) => {
-  this.name = name
-}
+  this.name = name;
+};
 ```
 
 ## 对象
@@ -269,14 +269,14 @@ let Person = (name) => {
 条件：属性的值是一个变量，且变量名称和键名是一致的
 
 ```js
-let name = 'zgh'
-let age = 22
+let name = 'zgh';
+let age = 22;
 
 // ES5写法
-let obj = { name: name, age: age }
+let obj = { name: name, age: age };
 
 // ES6写法
-let obj = { name, age }
+let obj = { name, age };
 ```
 
 - 方法的简写
@@ -285,48 +285,267 @@ let obj = { name, age }
 // ES5写法
 let obj = {
   hello: function () {
-    console.log('hello')
+    console.log('hello');
   }
-}
+};
 
 // ES6写法
 let obj = {
   hello() {
-    console.log('hello')
+    console.log('hello');
   }
-}
+};
 ```
 
 ## Map
 
-类似于对象，是键值对的结构，区别在于：对象中的键名只能是字符串或者`Symbol`，而 Map 里面的键可以是任意值。
+类似于对象，可以用来存储键值对的集合
 
 ```js
-//创建一个Map对象
-let myMap = new Map()
+// 创建一个Map对象
+let myMap = new Map();
 
-//添加键值对
-myMap.set('a', 'hello')
-myMap.set([1, 2, 3], { name: 'zgh' })
+// 添加键值对
+myMap.set('a', 'hello');
+myMap.set([1, 2, 3], { name: 'zgh' });
 
 // 也可以在声明时就添加键值对，二维数组
 const user = new Map([
   ['foo', 'zgh'],
   ['baz', 23]
-])
+]);
 
-//查看集合中元素的数量
-myMap.size
+// 查看集合中元素的数量
+myMap.size;
 
-//获取相应的键值
-myMap.get('a')
+// 获取相应的键值
+myMap.get('a');
 
-//删除一个键值对，然后再判断该键值对是否存在
-myMap.delete('a')
-myMap.has('a')
+// 删除一个键值对
+myMap.delete('a');
 
-//删除Map集合中所有的键值对
-myMap.clear()
+// 判断该键值对是否存在
+myMap.has('a');
+
+// 删除集合中所有的键值对
+myMap.clear();
+
+// 可以遍历
+myMap.forEach((value, key) => {
+  console.log(key + ': ' + value);
+});
+```
+
+### Map 和 Object 有什么不同?
+
+- 二者都属于键值对结构
+- Object 中的键名只能是`String`或者`Symbol`类型，而 Map 的键可以是任意值
+- Object 可以从原型链继承属性和方法，而 Map 不具备继承性
+
+### Map 的使用场景
+
+1、**缓存**
+
+Map 可以用来缓存一些计算结果，避免重复计算。比如缓存斐波那契数列的结果
+
+```js
+const fibCache = new Map();
+function fibonacci(n) {
+  if (n < 2) {
+    return n;
+  }
+  if (fibCache.has(n)) {
+    return fibCache.get(n);
+  }
+  const result = fibonacci(n - 1) + fibonacci(n - 2);
+  fibCache.set(n, result);
+  return result;
+}
+
+console.log(fibonacci(6)); // 8
+```
+
+2、**数据结构**
+
+Map 可以用作一些数据结构的基础，比如字典、哈希表等。例如实现哈希表时，可以使用 Map 来存储键值对
+
+```js
+class HashTable {
+  constructor() {
+    this.table = new Map();
+  }
+
+  put(key, value) {
+    this.table.set(key, value);
+  }
+
+  get(key) {
+    return this.table.get(key);
+  }
+
+  remove(key) {
+    this.table.delete(key);
+  }
+}
+
+const hashObj = new HashTable();
+hashObj.put('a', 1);
+console.log(hashObj.get('a'));
+console.log(hashObj);
+```
+
+3、**状态管理**
+
+Map 可以用于管理应用程序的状态。例如在 React 中，可以使用 Map 来存储组件的状态（这里只是例子，在 React 中实际上不要这么做！）
+
+```js
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = new Map([['count', 0]]);
+  }
+
+  increment() {
+    this.setState((state) => {
+      let count = state.get('count') + 1;
+      return new Map([['count', count]]);
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        Count: {this.state.get('count')}
+        <button onClick={() => this.increment()}>Increment</button>
+      </div>
+    );
+  }
+}
+```
+
+### 关于 Map 的编程题
+
+1、编写一个函数，接受一个数组作为参数，返回一个 Map，其中键为数组中的元素，值为元素在数组中出现的次数。例如：
+
+```js
+countOccurrences([1, 2, 3, 2, 3, 3]); // Map { 1 => 1, 2 => 2, 3 => 3 }
+```
+
+2、编写一个函数，接受一个 Map 作为参数，返回一个由 Map 的键值对颠倒后的新 Map。例如：
+
+```js
+invertMap(
+  new Map([
+    ['a', 1],
+    ['b', 2],
+    ['c', 3]
+  ])
+); // Map { 1 => 'a', 2 => 'b', 3 => 'c' }
+```
+
+3、编写一个函数，接受两个 Map 作为参数，返回一个新 Map，其中包含两个 Map 的所有键值对。例如：
+
+```js
+mergeMaps(
+  new Map([
+    ['a', 1],
+    ['b', 2]
+  ]),
+  new Map([
+    ['c', 3],
+    ['d', 4]
+  ])
+); // Map { 'a' => 1, 'b' => 2, 'c' => 3, 'd' => 4 }
+```
+
+4、编写一个函数，接受一个 Map 作为参数，返回一个新 Map，其中包含原始 Map 中所有值大于 10 的键值对。例如：
+
+```js
+filterMap(
+  new Map([
+    ['a', 5],
+    ['b', 10],
+    ['c', 15]
+  ])
+); // Map { 'c' => 15 }
+```
+
+5、编写一个函数，接受一个 Map 作为参数，返回一个新 Map，其中包含原始 Map 中所有键值对的值的平方。例如：
+
+```js
+mapValues(
+  new Map([
+    ['a', 2],
+    ['b', 3],
+    ['c', 4]
+  ])
+); // Map { 'a' => 4, 'b' => 9, 'c' => 16 }
+```
+
+6、编写一个函数，接受一个 Map 作为参数，返回一个新 Map，其中包含原始 Map 中所有键值对的值的和。例如：
+
+```js
+sumValues(
+  new Map([
+    ['a', 2],
+    ['b', 3],
+    ['c', 4]
+  ])
+); // 9
+```
+
+7、编写一个函数，接受一个 Map 作为参数，返回一个新 Map，其中包含原始 Map 中所有键值对的键和值的乘积。例如：
+
+```js
+multiplyKeysAndValues(
+  new Map([
+    ['a', 2],
+    ['b', 3],
+    ['c', 4]
+  ])
+); // Map { 'a' => 2, 'b' => 6, 'c' => 12 }
+```
+
+8、编写一个函数，接受两个 Map 作为参数，返回一个新 Map，其中包含原始 Map1 中所有键值对的键和 Map2 中对应键的值的乘积。例如：
+
+```js
+multiplyMaps(
+  new Map([
+    ['a', 2],
+    ['b', 3],
+    ['c', 4]
+  ]),
+  new Map([
+    ['a', 10],
+    ['c', 20]
+  ])
+); // Map { 'a' => 20, 'c' => 80 }
+```
+
+9、编写一个函数，接受一个 Map 和一个回调函数作为参数，对于 Map 中的每个键值对，使用回调函数将键和值进行操作，并返回一个新 Map。例如：
+
+```js
+mapMapValues(
+  new Map([
+    ['a', 2],
+    ['b', 3],
+    ['c', 4]
+  ]),
+  (key, value) => [key.toUpperCase(), value * 2]
+); // Map { 'A' => 4, 'B' => 6, 'C' => 8 }
+```
+
+10、编写一个函数，接受一个 Map 和一个数组作为参数，将数组中的元素作为键，Map 中对应键的值作为值，返回一个新的 Map。例如：
+
+```js
+mapFromArray(
+  new Map([
+    ['a', 2],
+    ['b', 3],
+    ['c', 4]
+  ]),
+  ['a', 'c']
+); // Map { 'a' => 2, 'c' => 4 }
 ```
 
 ## Set
@@ -340,45 +559,45 @@ myMap.clear()
 
 ```js
 // 声明一个Set对象
-let mySet = new Set()
-let mySet2 = new Set([1, 2, 3])
+let mySet = new Set();
+let mySet2 = new Set([1, 2, 3]);
 
 // 添加元素
-mySet.add(1)
-mySet.add('hi')
-mySet.add([2, 'hello'])
+mySet.add(1);
+mySet.add('hi');
+mySet.add([2, 'hello']);
 
 // 判断集合中是否存在一个元素1
-mySet.has(1) // true
+mySet.has(1); // true
 
 // 删除集合中的字符串
-mySet.delete('hi')
+mySet.delete('hi');
 
 // 获取集合中元素的数量
-mySet.size // 3
+mySet.size; // 3
 
 // 遍历
-mySet.forEach((item) => console.log(item))
+mySet.forEach((item) => console.log(item));
 
 // 删除集合中所有的元素
-mySet.clear()
+mySet.clear();
 
 // 两个对象是不相等的
-const set2 = new Set()
-set2.add({})
-set2.size // 1
-set2.add({})
-set2.size // 2
+const set2 = new Set();
+set2.add({});
+set2.size; // 1
+set2.add({});
+set2.size; // 2
 ```
 
 遍历操作
 
 ```js
-let mySet = new Set(['a', 'b', 'c'])
+let mySet = new Set(['a', 'b', 'c']);
 
 // entries()返回的遍历器同时包括键名和键值，二者一样
 for (let i of mySet.entries()) {
-  console.log(i)
+  console.log(i);
 }
 // ["a", "a"]
 // ["b", "b"]
@@ -386,7 +605,7 @@ for (let i of mySet.entries()) {
 
 // keys()返回键名
 for (let i of mySet.keys()) {
-  console.log(i)
+  console.log(i);
 }
 // 'a'
 // 'b'
@@ -394,25 +613,25 @@ for (let i of mySet.keys()) {
 
 // values()返回键值，结果同keys()
 for (let i of mySet.values()) {
-  console.log(i)
+  console.log(i);
 }
 ```
 
 `Set`只存储唯一值，可用来数组去重
 
 ```js
-let arr = [1, 1, 2, 2, 3, 3]
-let res1 = [...new Set(arr)] // [1, 2, 3]
+let arr = [1, 1, 2, 2, 3, 3];
+let res1 = [...new Set(arr)]; // [1, 2, 3]
 
 // 或者使用 Array.from()
-let res2 = Array.from(new Set(arr)) // [1, 2, 3]
+let res2 = Array.from(new Set(arr)); // [1, 2, 3]
 ```
 
 也可以用来字符串去重
 
 ```js
-const str = [...new Set('ababbc')].join('')
-console.log(str) // 'abc'
+const str = [...new Set('ababbc')].join('');
+console.log(str); // 'abc'
 ```
 
 ## ...操作符
@@ -423,11 +642,11 @@ console.log(str) // 'abc'
 
 ```js
 function Name(x, y, ...z) {
-  console.log(x) // a
-  console.log(y) // b
-  console.log(z) //["c" "d" "e"]
+  console.log(x); // a
+  console.log(y); // b
+  console.log(z); //["c" "d" "e"]
 }
-Name('a', 'b', 'c', 'd', 'e')
+Name('a', 'b', 'c', 'd', 'e');
 ```
 
 剩余操作符后面的变量会变成一个数组，多余的参数会被放入这个数组中
@@ -435,26 +654,26 @@ Name('a', 'b', 'c', 'd', 'e')
 扩展运算符用在数组的前面，作用就是将这个数组展开
 
 ```js
-const arr1 = ['a', 'b', 'c', 'd', 'e']
-const arr2 = ['f', 'g']
-const arr3 = [...arr1, ...arr2] // ["a", "b", "c", "d", "e", "f", "g"]
+const arr1 = ['a', 'b', 'c', 'd', 'e'];
+const arr2 = ['f', 'g'];
+const arr3 = [...arr1, ...arr2]; // ["a", "b", "c", "d", "e", "f", "g"]
 
 // 等同于concat
-const arr4 = arr1.concat(arr2)
+const arr4 = arr1.concat(arr2);
 ```
 
 ```js
-const obj1 = { a: 1, b: 2 }
-const obj2 = { ...obj1, c: 3 } // {a: 1, b: 2, c: 3}
+const obj1 = { a: 1, b: 2 };
+const obj2 = { ...obj1, c: 3 }; // {a: 1, b: 2, c: 3}
 ```
 
 使用扩展运算符展开一个新的对象，第二个对象的属性值会覆盖第一个对象的同名属性值
 
 ```js
-const obj1 = { a: 1, b: 2, c: 3 }
-const obj2 = { b: 30, c: 40, d: 50 }
-const merged = { ...obj1, ...obj2 }
-console.log(merged) // {a: 1, b: 30, c: 40, d: 50}
+const obj1 = { a: 1, b: 2, c: 3 };
+const obj2 = { b: 30, c: 40, d: 50 };
+const merged = { ...obj1, ...obj2 };
+console.log(merged); // {a: 1, b: 30, c: 40, d: 50}
 ```
 
 ## Class
@@ -465,27 +684,27 @@ console.log(merged) // {a: 1, b: 30, c: 40, d: 50}
 ```js
 //ES5 中使用面向对象
 function Person(name, age) {
-  this.name = name
-  this.age = age
+  this.name = name;
+  this.age = age;
   this.say = function () {
-    console.log('hello')
-  }
+    console.log('hello');
+  };
 }
-let obj = new Person('zgh', 22)
-obj.say()
+let obj = new Person('zgh', 22);
+obj.say();
 
 //ES6 中使用面向对象
 class Person {
   constructor(name, age) {
-    this.name = name
-    this.age = age
+    this.name = name;
+    this.age = age;
   }
   say() {
-    console.log('hello')
+    console.log('hello');
   }
 }
-let obj = new Person('zgh', 22)
-obj.say()
+let obj = new Person('zgh', 22);
+obj.say();
 ```
 
 上面代码定义了一个**类**，里面有一个`constructor`方法，这就是构造方法，而`this`关键字则代表实例对象。即 ES5 的构造函数 `Person`，
@@ -496,10 +715,10 @@ Person 类除了构造方法，还定义了一个`say`方法。注意，定义�
 
 ```js
 function Foo() {}
-Foo.prototype.constructor === Foo // true
+Foo.prototype.constructor === Foo; // true
 
-const fo = new Foo()
-fo.constructor === Foo // true
+const fo = new Foo();
+fo.constructor === Foo; // true
 ```
 
 `Foo.prototype`默认有一个公有且不可枚举的`construetor`属性，这个属性引用的是对象关联的函数（上例中是 Foo）。
@@ -512,27 +731,27 @@ fo.constructor === Foo // true
 ```js
 class NBAPlayer {
   constructor(name, age, height) {
-    this.name = name
-    this.age = age
-    this.height = height
+    this.name = name;
+    this.age = age;
+    this.height = height;
   }
   say() {
-    console.log(`我是${this.name},${this.age}岁,身高${this.height}cm`)
+    console.log(`我是${this.name},${this.age}岁,身高${this.height}cm`);
   }
 }
 class MVP extends NBAPlayer {
   constructor(name, age, height, year) {
-    super(name, age, height)
-    this.year = year
+    super(name, age, height);
+    this.year = year;
   }
   showMVP() {
-    console.log(`我是${this.name},在${this.year}获得MVP!`)
+    console.log(`我是${this.name},在${this.year}获得MVP!`);
   }
 }
-let r1 = new NBAPlayer('Jack', '39', '198')
-r1.say()
-let r2 = new MVP('Jack', '39', '198', '2010')
-r2.showMVP()
+let r1 = new NBAPlayer('Jack', '39', '198');
+r1.say();
+let r2 = new MVP('Jack', '39', '198', '2010');
+r2.showMVP();
 ```
 
 `extends`关键字用于实现类之间的继承。子类继承父类的所有属性和方法，使用`super`可以调用父类的方法。
@@ -545,12 +764,12 @@ r2.showMVP()
 ```js
 class Foo {
   static f() {
-    return '666'
+    return '666';
   }
 }
-Foo.f() // '666'
-let person = new Foo()
-person.f() // TypeError: person.f is not a function
+Foo.f(); // '666'
+let person = new Foo();
+person.f(); // TypeError: person.f is not a function
 ```
 
 父类的静态方法**可以被子类继承**
@@ -558,12 +777,12 @@ person.f() // TypeError: person.f is not a function
 ```js
 class Foo {
   static f() {
-    return '666'
+    return '666';
   }
 }
 
 class Bar extends Foo {}
-Bar.f() // "666"
+Bar.f(); // "666"
 ```
 
 静态方法也可以被`super`对象调用
@@ -571,15 +790,15 @@ Bar.f() // "666"
 ```js
 class Foo {
   static f() {
-    return '666'
+    return '666';
   }
 }
 class Bar extends Foo {
   static g() {
-    return super.f()
+    return super.f();
   }
 }
-Bar.g() // "666"
+Bar.g(); // "666"
 ```
 
 #### 类的静态属性
@@ -587,13 +806,13 @@ Bar.g() // "666"
 ```js
 // es6写法
 class Foo {}
-Foo.prop = 1
+Foo.prop = 1;
 
 // es7写法，推荐这一种写法
 class Bar {
-  static prop = 1
+  static prop = 1;
   constructor() {
-    console.log(Bar.prop)
+    console.log(Bar.prop);
   }
 }
 ```
@@ -604,9 +823,9 @@ class Bar {
 
 ```js
 class Foo {
-  state = { value: 1 }
+  state = { value: 1 };
   constructor() {
-    console.log(this.state.value) // 1
+    console.log(this.state.value); // 1
   }
 }
 ```
@@ -616,12 +835,12 @@ class Foo {
 ```js
 class Foo extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       count: 0
-    }
+    };
   }
-  modalRef = null
+  modalRef = null;
 }
 ```
 
@@ -630,7 +849,7 @@ class Foo extends React.Component {
 `promise`用同步编程的方式来编写异步代码，解决回调嵌套问题
 
 ```js
-new Promise((resolve, reject) => {})
+new Promise((resolve, reject) => {});
 ```
 
 ### Promise 的三种状态
@@ -648,18 +867,18 @@ new Promise((resolve, reject) => {})
 function pro(params) {
   return new Promise((resolve, reject) => {
     if (params) {
-      resolve('hahaha')
+      resolve('hahaha');
     } else {
-      reject('error')
+      reject('error');
     }
-  })
+  });
 }
 pro(true).then(
   (res) => {
-    console.log(res)
+    console.log(res);
   },
   (err) => console.log(err)
-)
+);
 ```
 
 ::: warning
@@ -667,11 +886,11 @@ pro(true).then(
 
 ```js
 const p = new Promise((resolve, reject) => {
-  console.log(1)
-  resolve(3)
-})
-p.then((res) => console.log(res))
-console.log(2)
+  console.log(1);
+  resolve(3);
+});
+p.then((res) => console.log(res));
+console.log(2);
 ```
 
 结果是 1、2、3
@@ -683,17 +902,17 @@ console.log(2)
 function Cat(ready) {
   return new Promise((resolve, reject) => {
     if (ready) {
-      resolve('Tom')
+      resolve('Tom');
     } else {
-      reject('Kitty')
+      reject('Kitty');
     }
-  })
+  });
 }
 Cat(false)
   .then((res) => {
-    console.log(res)
+    console.log(res);
   })
-  .catch((err) => console.log(err))
+  .catch((err) => console.log(err));
 ```
 
 `catch`方法可以捕获错误，作用和 `then(onFulfilled, onRejected)` 当中的 `onRejected` 函数类似。
@@ -701,9 +920,9 @@ Cat(false)
 ```js
 Cat(false)
   .then((res) => {
-    console.log(tom)
+    console.log(tom);
   })
-  .catch((err) => console.log(err))
+  .catch((err) => console.log(err));
 ```
 
 示例未定义变量 tom，如果不使用 catch 会直接报错，终止程序。使用后不会报错，但会将错误信息传递到 catch 方法中，方便处理
@@ -716,11 +935,11 @@ Cat(false)
 
 ```js
 try {
-  ;(async function () {
-    a().b().c()
-  })()
+  (async function () {
+    a().b().c();
+  })();
 } catch (e) {
-  console.log(`执行出错：${e.message}`)
+  console.log(`执行出错：${e.message}`);
 }
 ```
 
@@ -738,23 +957,23 @@ try {
 ```js
 let p1 = new Promise(function (resolve) {
   setTimeout(function () {
-    resolve('Hello')
-  }, 3000)
-})
+    resolve('Hello');
+  }, 3000);
+});
 
 let p2 = new Promise(function (resolve) {
   setTimeout(function () {
-    resolve('world')
-  }, 1000)
-})
+    resolve('world');
+  }, 1000);
+});
 
 Promise.all([p1, p2]).then((res) => {
-  console.log(res)
-})
+  console.log(res);
+});
 
 Promise.race([p1, p2]).then((res) => {
-  console.log(res)
-})
+  console.log(res);
+});
 ```
 
 结果是 1 秒后打印出`world`，3 秒后打印出`["Hello", "world"]`，表明`Promise.all` 方法会按照参数数组里面的顺序将结果返回。
@@ -770,10 +989,10 @@ Promise.race([p1, p2]).then((res) => {
 
 ```js
 async function f() {
-  let res = await axios.get(url)
-  return res.data //  等待返回请求结果后才执行
+  let res = await axios.get(url);
+  return res.data; //  等待返回请求结果后才执行
 }
-f()
+f();
 ```
 
 [参考](https://segmentfault.com/a/1190000013292562?utm_source=channel-newest)
@@ -787,17 +1006,17 @@ Generator 是一种异步编程解决方案，执行 Generator 函数会返回�
 
 ```js
 function* g() {
-  yield 'hello'
-  yield 'world'
-  return 'haha'
+  yield 'hello';
+  yield 'world';
+  return 'haha';
 }
-const ee = g() // 函数并不会立即执行
-console.log(ee) // g {<suspended>}
+const ee = g(); // 函数并不会立即执行
+console.log(ee); // g {<suspended>}
 
-console.log(ee.next()) // {value: "hello", done: false}
-console.log(ee.next()) // {value: "world", done: false}
-console.log(ee.next()) // {value: "haha", done: true}
-console.log(ee.next()) // {value: undefined, done: true}
+console.log(ee.next()); // {value: "hello", done: false}
+console.log(ee.next()); // {value: "world", done: false}
+console.log(ee.next()); // {value: "haha", done: true}
+console.log(ee.next()); // {value: undefined, done: true}
 ```
 
 遍历器对象`{value: "hello", done: false}`表示 value 是`yield`表达式的值，`done: false`表示遍历还没有结束
@@ -806,13 +1025,13 @@ Generator 函数可以不用`yield`表达式，这时就变成了一个单纯的
 
 ```js
 function* gg() {
-  console.log('666')
+  console.log('666');
 }
-const g1 = gg()
+const g1 = gg();
 
 setTimeout(() => {
-  g1.next() // 1s后输出666
-}, 1000)
+  g1.next(); // 1s后输出666
+}, 1000);
 ```
 
 `yield`表达式只能用在 Generator 函数里面
@@ -822,7 +1041,7 @@ setTimeout(() => {
 外界对目标对象的访问可以被 Proxy 拦截，进行过滤和改写，意为“代理器”
 
 ```js
-let proxy = new Proxy(target, handler)
+let proxy = new Proxy(target, handler);
 ```
 
 - target 目标对象
@@ -831,7 +1050,7 @@ let proxy = new Proxy(target, handler)
 在 ES6 之前，我们可以使用`Object.defineProperty`去保护对象的私有属性。例如:
 
 ```js
-let sign = { _appid: '12345678', _appkey: '666', desc: 'zgh的密钥' }
+let sign = { _appid: '12345678', _appkey: '666', desc: 'zgh的密钥' };
 
 Object.defineProperties(sign, {
   _appid: {
@@ -840,7 +1059,7 @@ Object.defineProperties(sign, {
   _appkey: {
     writable: false
   }
-})
+});
 ```
 
 但是如果想对多个属性进行保护，就得对多个属性进行声明`writable: false`，显然很麻烦，这时就可以用 Proxy 来解决这个问题
@@ -848,22 +1067,22 @@ Object.defineProperties(sign, {
 Proxy 意味着我们代理了这个对象，该对象所有的属性操作都会经过 Proxy
 
 ```js
-let sign = { _appid: '123456', _appkey: '666', desc: 'zgh的密钥' }
+let sign = { _appid: '123456', _appkey: '666', desc: 'zgh的密钥' };
 let signProxy = new Proxy(sign, {
   get(target, property, receiver) {
-    return target[property]
+    return target[property];
   },
   set(target, propName, value, receiver) {
     if (propName !== 'desc') {
-      console.log('该属性是私有属性，不允许修改!')
+      console.log('该属性是私有属性，不允许修改!');
     } else {
-      target[propName] = value
+      target[propName] = value;
     }
   }
-})
-console.log(signProxy._appid) // "123456"
-signProxy._appkey = 'dd' // 该属性是私有属性，不允许修改!
-console.log(signProxy._appkey) // "666"
+});
+console.log(signProxy._appid); // "123456"
+signProxy._appkey = 'dd'; // 该属性是私有属性，不允许修改!
+console.log(signProxy._appkey); // "666"
 ```
 
 这时依然可以直接修改 sign 对象，如果希望对象完全不可修改，可以直接将 sign 写到 Proxy 的 target
@@ -880,22 +1099,22 @@ console.log(signProxy._appkey) // "666"
 有一个记账的对象，记录着用户的存款金额，为了方便以后计算，要保证存入的数据类型必须为`Number`
 
 ```js
-let account = { num: 8888 }
+let account = { num: 8888 };
 
 let proxyAccount = new Proxy(account, {
   get(target, property) {
-    return target[property]
+    return target[property];
   },
   set(target, propName, propValue) {
     if (propName === 'num' && typeof propValue != 'number') {
-      throw new TypeError('The num is not an number')
+      throw new TypeError('The num is not an number');
     }
-    target[propName] = propValue
+    target[propName] = propValue;
   }
-})
+});
 
-proxyAccount.num = '666'
-console.log(proxyAccount.num) // Uncaught TypeError: The num is not an number
+proxyAccount.num = '666';
+console.log(proxyAccount.num); // Uncaught TypeError: The num is not an number
 ```
 
 ## 空值合并运算符
@@ -904,8 +1123,8 @@ console.log(proxyAccount.num) // Uncaught TypeError: The num is not an number
 效果等同于`(a !== null && a !== undefined) ? a : b`
 
 ```js
-let a
-let b = a ?? 1 // 1
+let a;
+let b = a ?? 1; // 1
 ```
 
 - `??`运算符的优先级非常低，仅略高于 `?` 和 `=`，使用时要考虑是否添加括号
@@ -919,9 +1138,9 @@ let b = a ?? 1 // 1
 `||` 无法区分 `false`、`0`、空字符串`""`、`NaN`和`null/undefined`
 
 ```js
-let a = 0
-a || 1 // 1
-a ?? 1 // 0
+let a = 0;
+a || 1; // 1
+a ?? 1; // 0
 ```
 
 ## 可选链
@@ -929,8 +1148,8 @@ a ?? 1 // 0
 当位于 `?.` 前面的值为 `undefined` 或 `null` 时，会立即阻止代码的执行，并返回 `undefined`
 
 ```js
-const obj = { name: 'zgh' }
-obj?.a
+const obj = { name: 'zgh' };
+obj?.a;
 ```
 
 三种形式：

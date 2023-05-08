@@ -17,44 +17,44 @@
 useState 针对每个组件实例都有自己的状态，不会共享状态。
 
 ```jsx
-import { useState } from 'react'
+import { useState } from 'react';
 
 export default function Home() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
   const decrement = () => {
-    setCount((prev) => prev + 1)
-  }
+    setCount((prev) => prev + 1);
+  };
   return (
     <div>
       <p>{count}</p>
       <button onClick={decrement}>decrement</button>
       <button onClick={() => setCount(count - 1)}>increment</button>
     </div>
-  )
+  );
 }
 ```
 
-1、为什么要使用 useState，直接声明变量不行吗？
+**1、为什么要使用 useState，直接声明变量不行吗？**
 
 假设直接声明变量，点击按钮后能看到 count 打印出来的值是变了，但是页面却没有变化。因为没有触发组件重新渲染，详见 React 渲染原理
 
 ```js
 export default function Home() {
-  let count = 0
+  let count = 0;
   const increase = () => {
-    count = count + 1
-    console.log(count)
-  }
+    count = count + 1;
+    console.log(count);
+  };
   return (
     <div>
       <p>{count}</p>
       <button onClick={increase}>click</button>
     </div>
-  )
+  );
 }
 ```
 
-2、为什么 `setCount(count + 1)`和 `setCount(prev => prev + 1)`都可以实现功能？
+**2、为什么 `setCount(count + 1)`和 `setCount(prev => prev + 1)`都可以实现功能？**
 
 在 React18+，useState 返回的更新状态的函数**setCount 是一个异步函数**，即使在连续多次调用时，也不能保证它们的值是最新的。因此，如果在调用 setCount 函数时，需要使用先前状态的值来计算新状态，那么使用回调函数的方式会更可靠。
 
@@ -64,91 +64,78 @@ export default function Home() {
 
 综上所述，虽然 `setCount(count + 1)` 在某些情况下可以正常工作，但是使用回调函数的方式 `setCount(prev => prev + 1)` 更可靠，建议在使用 useState 时采用这种写法。
 
-3、为什么说组件状态的更新是异步的？
+**3、为什么说组件状态的更新是异步的？**
 
 例子中，点击一次后，页面上显示 1，但是打印出来的还是 0。如果是同步的，执行`setCount((prev) => prev + 1)`会将 count 的值变为 1，那么之后的打印结果就应该是 1，因此组件状态的更新是异步的。
 
 在 React18+之后，所有的 setState 都是异步批量执行的。<https://juejin.cn/post/7108362046369955847>
 
 ```jsx
-import { useState } from 'react'
+import { useState } from 'react';
 
 export default function Home() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
   const decrement = () => {
-    setCount((prev) => prev + 1)
-    console.log(count)
-  }
+    setCount((prev) => prev + 1);
+    console.log(count);
+  };
   return (
     <div>
       <p>{count}</p>
       <button onClick={decrement}>decrement</button>
     </div>
-  )
+  );
 }
 ```
 
 ## useEffect
 
-`useEffect` 是执行副作用操作的，可以将其看做 `componentDidMount`，`componentDidUpdate` 和 `componentWillUnmount` 这三个函数的组合。
+`useEffect`是执行副作用操作的。什么是副作用？
 
-```jsx
-import React, { useState, useEffect } from 'react'
+`useEffect(callback, dependencies)` ，第一个参数是要执行的函数，第二个参数是可选的依赖项数组。
 
-function Home() {
-  const [num, setNum] = useState(0)
-
-  // effect在每次渲染的时候都会执行，React 会在执行当前`effect`之前对上一个`effect`进行清除
-  useEffect(() => {
-    console.log('任一 state 更新即执行')
-  })
-
-  return (
-    <>
-      <p>{num}</p>
-      <button onClick={() => setNum(num + 1)}>click me</button>
-    </>
-  )
-}
-
-export default Home
-```
-
-如果为了性能优化，不需要在每次渲染的时候都执行`effect`，可以添加第二个参数。示例中传入`[num]`，表示当`num`变量更改时才会执行`effect`
-
-```jsx
-function Home() {
-  const [num, setNum] = useState(0)
-
-  useEffect(() => {
-    console.log('num更新了即执行')
-    return () => console.log('999')
-  }, [num])
-}
-```
-
-关于第二个参数简言之，
+关于依赖项参数的说明：
 
 - 无参数，表示每次渲染的时候都执行，即任一 state 更新即执行
 - 空数组，表示挂载执行，只执行一次
-- 加`[]`并且里面有变量，表示这个变量更改了就执行，初始的时候就执行
+- 加`[]`并且里面有变量，表示变量更改了就执行，初始的时候就执行
 
-如果`effect`返回一个回调函数，React 将会在执行清除操作时调用它，即组件卸载时执行
+如果`effect`返回一个回调函数，React 将会在执行清除操作时调用它，即组件销毁时执行
+
+```jsx
+import { useState, useEffect } from 'react';
+
+export default function Counter() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log('num更新了即执行');
+    return () => console.log('清除时调用');
+  }, [count]);
+
+  return (
+    <>
+      <p>{count}</p>
+      <button onClick={() => setCount(count + 1)}>click me</button>
+    </>
+  );
+}
+```
 
 假设做一个数值自增功能
 
 ```jsx
 function Counter() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => {
-      setCount(count + 1)
-    }, 1000)
-    return () => clearInterval(id)
-  }, [count])
+      setCount(count + 1);
+    }, 1000);
+    return () => clearInterval(id);
+  }, [count]);
 
-  return <h1>{count}</h1>
+  return <h1>{count}</h1>;
 }
 ```
 
@@ -156,18 +143,22 @@ function Counter() {
 
 ```jsx
 function Counter() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => {
-      setCount((c) => c + 1)
-    }, 1000)
-    return () => clearInterval(id)
-  }, [])
+      setCount((c) => c + 1);
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
 
-  return <h1>{count}</h1>
+  return <h1>{count}</h1>;
 }
 ```
+
+**1、如果在 useEffect 里使用了某些变量，但是没有在依赖项中指定，会发生什么？**
+
+**2、在 useEffect 中使用的 setCount()是一个函数，本质上也是一个局部变量，为什么它不需要在依赖项中指定？**
 
 ## useReducer
 
@@ -175,23 +166,23 @@ function Counter() {
 通过`action`的传递，更新复杂逻辑的状态
 
 ```jsx
-import React, { useReducer } from 'react'
+import React, { useReducer } from 'react';
 
-const initialState = { count: 0 }
+const initialState = { count: 0 };
 
 function reducer(state, action) {
   switch (action.type) {
     case 'decrement':
-      return { count: state.count + 1 }
+      return { count: state.count + 1 };
     case 'increment':
-      return { count: state.count - 1 }
+      return { count: state.count - 1 };
     default:
-      return state
+      return state;
   }
 }
 
 function Home() {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <div className="home">
@@ -199,10 +190,10 @@ function Home() {
       <button onClick={() => dispatch({ type: 'decrement' })}>decrement</button>
       <button onClick={() => dispatch({ type: 'increment' })}>increment</button>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
 ```
 
 ## useContext
@@ -213,19 +204,19 @@ export default Home
 当组件上层最近的`<MyContext.Provider>`更新时，该`Hook`会触发重渲染，并使用最新传递的值。
 
 ```jsx
-import { useState, createContext, useContext } from 'react'
+import { useState, createContext, useContext } from 'react';
 
-const ContentContext = createContext(null)
+const ContentContext = createContext(null);
 
 function Children() {
   // 如果父组件传入了多个值
   // const {num, setNum} = useContext(ContentContext)
-  const getNum = useContext(ContentContext)
-  return <h1>{getNum}</h1>
+  const getNum = useContext(ContentContext);
+  return <h1>{getNum}</h1>;
 }
 
 function Home() {
-  const [num, setNum] = useState(0)
+  const [num, setNum] = useState(0);
 
   return (
     <div>
@@ -236,77 +227,94 @@ function Home() {
         <Children />
       </ContentContext.Provider>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
 ```
 
 也可以使用 useReducer，在子组件中触发 dispatch
 
 ```jsx
 // 父组件
-import { createContext, useReducer } from 'react'
-import Children from './Children'
+import { createContext, useReducer } from 'react';
+import Children from './Children';
 
-export const ContentContext = createContext(null)
+export const ContentContext = createContext(null);
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'decrement':
-      return { count: state.count + 1 }
+      return { count: state.count + 1 };
     case 'increment':
-      return { count: state.count - 1 }
+      return { count: state.count - 1 };
     default:
-      return state
+      return state;
   }
-}
+};
 
 export default function Home() {
-  const [state, dispatch] = useReducer(reducer, { count: 0 })
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
   return (
     <>
       <ContentContext.Provider value={{ state, dispatch }}>
         <Children />
       </ContentContext.Provider>
     </>
-  )
+  );
 }
 ```
 
 子组件
 
 ```jsx
-import { useContext } from 'react'
-import { ContentContext } from './Home'
+import { useContext } from 'react';
+import { ContentContext } from './Home';
 
 export default function Children() {
-  const { state, dispatch } = useContext(ContentContext)
+  const { state, dispatch } = useContext(ContentContext);
   return (
     <>
       <p>{state.count}</p>
       <button onClick={() => dispatch({ type: 'decrement' })}>click</button>
     </>
-  )
+  );
 }
 ```
 
 ## useCallback
 
-useCallback 的作用是缓存函数，避免重复生成新函数，引起组件重新渲染
+useCallback 的作用是**缓存函数**，避免重复生成新函数导致组件重新渲染
 
-首先看一个现象，如下，当点击父组件的按钮改变 num 的值，会发现打印出 123，即子组件也跟着更新了，这样会影响性能
+```js
+useCallback(fn, deps);
+```
+
+这里 fn 是定义的回调函数，deps 是依赖项（变量数组），只有当某个依赖变量发生变化时，才会重新声明 fn 这个回调函数
 
 ```jsx
-import { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react';
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  const handleIncrement = useCallback(() => setCount((count) => count + 1), [count]);
+
+  return <button onClick={handleIncrement}>increment</button>;
+}
+```
+
+首先看一个现象，如下
+
+```jsx
+import { useState, useCallback } from 'react';
 
 function Child() {
-  console.log(123)
-  return <h1>子组件</h1>
+  console.log(123);
+  return <h1>子组件</h1>;
 }
 
 export default function App() {
-  const [num, setNum] = useState(0)
+  const [num, setNum] = useState(0);
 
   return (
     <>
@@ -314,108 +322,104 @@ export default function App() {
       <button onClick={() => setNum(num + 1)}>add</button>
       <Child />
     </>
-  )
+  );
 }
 ```
 
-这时可以使用 memo 在某些情况下避免这种性能损耗，用 memo 方法把子组件包裹起来即可
+当点击父组件的按钮改变 num 的值，会发现打印出 123，即子组件也跟着更新了，这样会影响性能。这时可以使用 memo 在某些情况下避免这种性能损耗，用 memo 方法把子组件包裹起来
 
 ```js
-import { memo } from 'react'
+import { memo } from 'react';
 
 const Child = memo(() => {
-  console.log(123)
-  return <h1>子组件</h1>
-})
+  console.log(123);
+  return <h1>子组件</h1>;
+});
 ```
 
-接着上面的例子，如果想让子组件更新父组件的 num，第一种方式把 num 也传给子组件，这样很繁琐。第二种方式是在父组件中定义改变的方法，子组件调用即可
+接着上面的例子，如果想让子组件更新父组件的 num，第一种方式把 num 也传给子组件，这样有点繁琐。第二种方式是在父组件中定义改变的方法，子组件调用
 
 ```jsx
-import { memo } from 'react'
+import { memo } from 'react';
 
 const Child = memo((props) => {
-  console.log(123)
-  // 第一种方式
+  console.log(123);
   // return <button onClick={() => props.setNum(props.num + 1)}>add</button>
-  // 第二种方式
-  return <button onClick={() => props.setNum()}>child</button>
-})
+  return <button onClick={() => props.setNum()}>child</button>;
+});
 
 export default function App() {
-  const [num, setNum] = useState(0)
+  const [num, setNum] = useState(0);
 
-  const doSomeThing = () => setNum(num + 1)
+  const doSomeThing = () => setNum(num + 1);
 
   return (
     <>
       <div>{num}</div>
-      // 第一种方式
       {/* <Child num={num} setNum={setNum} /> */}
-      // 第二种方式
       <Child setNum={doSomeThing} />
     </>
-  )
+  );
 }
 ```
 
 上面的例子由子组件触发父组件的更新，但是又同时触发了子组件的更新，memo 不管用了。这时就要使用 useCallback
 
 ```jsx
-import { useState, memo, useCallback } from 'react'
+import { useState, memo, useCallback } from 'react';
 
 const Child = memo((props) => {
-  console.log(123)
-  return <button onClick={() => props.doSth()}>child</button>
-})
+  console.log(123);
+  return <button onClick={() => props.doSth()}>child</button>;
+});
 
 export default function App() {
-  const [num, setNum] = useState(0)
+  const [num, setNum] = useState(0);
 
   // 注意：useCallback(() => setNum(num + 1), [])
   // setNum(num + 1) 使用新值覆盖初始值，更新一次之后就不再更新了
   // setNum((num) => num + 1) 使用回调函数，不断使用新值覆盖旧值
-  const doSomeThing = useCallback(() => setNum((num) => num + 1), [])
+  const doSomeThing = useCallback(() => setNum((num) => num + 1), []);
 
   return (
     <>
       <div>{num}</div>
       <Child doSth={doSomeThing} />
     </>
-  )
+  );
 }
 ```
 
 ## useMemo
 
-useMemo 和 useCallback 很类似，需要继续返回一个回调函数。
+useMemo 和 useCallback 很类似，需要继续返回一个回调函数。useCallback 缓存一个函数，useMemo 缓存计算的结果
 
 把依赖项作为参数传入，仅会在某个依赖项改变时才重新计算，类似计算属性，避免在每次渲染时都进行高开销的计算
 
 如果没有提供依赖项数组，useMemo 在每次渲染时都会计算新的值
 
 ```jsx
-import React, { useState, memo, useMemo } from 'react'
+import React, { useState, memo, useMemo } from 'react';
 
 const Child = memo((props) => {
-  console.log(123)
-  return <button onClick={() => props.doSth()}>child</button>
-})
+  console.log(123);
+  return <button onClick={() => props.doSth()}>child</button>;
+});
 
 export default function App() {
-  const [num, setNum] = useState(0)
-  const [resData, setResData] = useState([])
+  const [num, setNum] = useState(0);
+  const [resData, setResData] = useState([]);
 
   const doSomeThing = useMemo(() => {
-    return () => setNum((num) => num + 1)
-  }, [])
+    return () => setNum((num) => num + 1);
+  }, []);
 
   const memoRes = useMemo(() => {
     // 会监听resData的变化
-    if (!resData) return
+    if (!resData) return;
     // 省略处理过程，返回处理后的结果
-    return resData
-  }, [resData])
+    return resData;
+  }, [resData]);
 
   // const doSomeThing = useCallback(() => setNum((num) => num + 1), [])
 
@@ -424,7 +428,7 @@ export default function App() {
       <div>{num}</div>
       <Child doSth={doSomeThing} />
     </>
-  )
+  );
 }
 ```
 
@@ -433,22 +437,22 @@ export default function App() {
 获取 DOM 元素
 
 ```jsx
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react';
 
 export default function App() {
-  const el = useRef(null)
-  const [val, setVal] = useState()
+  const el = useRef(null);
+  const [val, setVal] = useState();
 
   const clickBtn = () => {
-    console.log(el)
-    setVal(el.current.value)
-  }
+    console.log(el);
+    setVal(el.current.value);
+  };
   return (
     <>
       <h3>input的值：{val}</h3>
       <input ref={el} type="text" />
       <button onClick={clickBtn}>click</button>
     </>
-  )
+  );
 }
 ```

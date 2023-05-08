@@ -56,7 +56,7 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: '基础', link: '/fe/css/' },
-            { text: '布局', link: '/fe/css/ayout' },
+            { text: '布局', link: '/fe/css/layout' },
             { text: '响应式布局', link: '/fe/css/responsive' },
             { text: '阴影', link: '/fe/css/shadow' },
             { text: '渐变', link: '/fe/css/gradient' },
@@ -74,7 +74,9 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: '基础', link: '/fe/browser/' },
-            { text: 'window', link: '/fe/browser/window' },
+            { text: '浏览器跨域', link: '/fe/browser/crossDomain' },
+            { text: '浏览器安全', link: '/fe/browser/safety' },
+            { text: 'Window对象', link: '/fe/browser/window' },
             { text: '兼容性', link: '/fe/browser/compatibility' }
           ]
         }
@@ -96,6 +98,18 @@ export default defineConfig({
           ]
         }
       ],
+      '/fe/react/': [
+        {
+          text: 'React',
+          collapsed: false,
+          items: [
+            { text: 'React', link: '/fe/react/' },
+            { text: 'Hook', link: '/fe/react/hook' },
+            { text: 'Redux', link: '/fe/react/redux' },
+            { text: 'React-Router', link: '/fe/react/router' }
+          ]
+        }
+      ],
       '/fe/vue/': [
         {
           text: 'Vue',
@@ -112,27 +126,38 @@ export default defineConfig({
           ]
         }
       ],
-      '/fe/react/': [
-        {
-          text: 'React',
-          collapsed: false,
-          items: [
-            { text: 'React', link: '/fe/react/' },
-            { text: 'Hook', link: '/fe/react/hook' },
-            { text: 'Redux', link: '/fe/react/redux' },
-            { text: 'React-Router', link: '/fe/react/router' }
-          ]
-        }
-      ],
       '/fe/node/': [
         {
           text: 'Node',
           collapsed: false,
-          items: [{ text: 'Node', link: '/fe/node/' }]
+          items: [
+            { text: '简介', link: '/fe/node/' },
+            { text: 'Buffer 缓冲区', link: '/fe/node/buffer' },
+            { text: 'fs 文件系统', link: '/fe/node/fs' },
+            { text: 'Http', link: '/fe/node/http' }
+          ]
         },
         { text: 'Express', collapsed: false, items: [{ text: 'Express', link: '/fe/node/express' }] },
         { text: 'Koa', collapsed: false, items: [{ text: 'Koa', link: '/fe/node/koa' }] },
+        { text: 'Egg', collapsed: false, items: [{ text: 'Egg', link: '/fe/node/egg' }] },
         { text: 'MongoDB', collapsed: false, items: [{ text: 'MongoDB', link: '/fe/node/mongodb' }] }
+      ],
+      '/automate/': [
+        {
+          text: '前端工程化',
+          items: [
+            { text: 'NPM', link: '/automate/npm' },
+            { text: 'Git', link: '/automate/git' },
+            { text: 'Babel', link: '/automate/babel' },
+            { text: 'Vite', link: '/automate/vite' },
+            { text: 'Webpack', link: '/automate/webpack' },
+            { text: 'Gulp', link: '/automate/gulp' },
+            { text: 'Rollup', link: '/automate/rollup' },
+            { text: 'CI/CD', link: '/automate/cicd' },
+            { text: 'Eslint', link: '/automate/eslint' },
+            { text: 'Prettier', link: '/automate/prettier' }
+          ]
+        }
       ],
       '/miniProgram/': [
         {
@@ -142,6 +167,18 @@ export default defineConfig({
             { text: '微信小程序', link: '/miniProgram/wx' },
             { text: 'Taro', link: '/miniProgram/taro' },
             { text: 'uniapp', link: '/miniProgram/uniapp' }
+          ]
+        }
+      ],
+      '/tools/': [
+        {
+          text: '🧰 工具箱',
+          collapsed: false,
+          items: [
+            { text: 'vscode', link: '/tools/vscode' },
+            { text: 'plugin', link: '/tools/plugin' },
+            { text: 'iTerm2', link: '/tools/iTerm2' },
+            { text: '部署', link: '/tools/deploy' }
           ]
         }
       ],
@@ -157,6 +194,16 @@ export default defineConfig({
             { text: 'Leaflet', link: '/vis/gis/leaflet' },
             { text: 'GeoServer', link: '/vis/gis/geoServer' },
             { text: 'Cesium', link: '/vis/gis/cesium' }
+          ]
+        }
+      ],
+      '/base/network/': [
+        {
+          text: '计算机网络',
+          collapsed: false,
+          items: [
+            { text: '概览', link: '/base/network/' },
+            { text: 'webSocket', link: '/base/network/webSocket' }
           ]
         }
       ],
@@ -183,32 +230,22 @@ function nav() {
       items: [
         { text: '基础', link: '/fe/js/' },
         { text: 'TypeScript', link: '/fe/ts/' },
-        { text: 'Vue', link: '/fe/vue/' },
         { text: 'React', link: '/fe/react/' },
+        { text: 'Vue', link: '/fe/vue/' },
         { text: 'Node', link: '/fe/node/' },
+        { text: '前端工程化', link: '/automate/npm' },
         { text: '小程序', link: '/miniProgram/wx' },
-        { text: '插件', link: '/plugin' }
-      ]
-    },
-    {
-      text: '工程化',
-      items: [
-        { text: 'NPM', link: '/npm' },
-        { text: 'Git', link: '/git' },
-        { text: 'Webpack', link: '/build/webpack/' },
-        { text: 'Gulp', link: '/build/gulp/' },
-        { text: 'rollup', link: '/build/rollup/' },
-        { text: 'Others', link: '/utils' }
+        { text: '工具', link: '/tools/vscode' }
       ]
     },
     {
       text: '后端',
       items: [
-        { text: 'Docker', link: '/be/docker/' },
-        { text: 'Nginx', link: '/be/nginx/' },
-        { text: 'MySQL', link: '/be/mysql/' },
-        { text: 'Tomcat', link: '/be/tomcat/' },
-        { text: 'ElasticSearch', link: '/be/elasticsearch/' }
+        { text: 'Docker', link: '/be/docker' },
+        { text: 'Nginx', link: '/be/nginx' },
+        { text: 'MySQL', link: '/be/mysql' },
+        { text: 'Tomcat', link: '/be/tomcat' },
+        { text: 'ElasticSearch', link: '/be/elasticsearch' }
       ]
     },
     {
@@ -222,11 +259,12 @@ function nav() {
     {
       text: '计算机基础',
       items: [
-        { text: '网络', link: '/base/network/' },
-        { text: '算法', link: '/base/algorithm/' },
+        { text: '计算机网络', link: '/base/network/' },
         { text: '数据结构', link: '/base/data-structure/' },
+        { text: '设计模式', link: '/base/design-pattern/' },
+        { text: '算法', link: '/base/algorithm/' },
         { text: '操作系统', link: '/base/os/' },
-        { text: '设计模式', link: '/base/design-pattern/' }
+        { text: '计算机组成原理', link: '/base/computer-organization/' }
       ]
     }
   ];

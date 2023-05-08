@@ -12,16 +12,12 @@
 <template>
   <a-form :form="form">
     <a-form-item label="姓名">
-      <a-input
-        size="large"
-        placeholder="联系人姓名"
-        v-decorator="['username', personalRegister.username]"
-      ></a-input>
+      <a-input size="large" placeholder="联系人姓名" v-decorator="['username', personalRegister.username]"></a-input>
     </a-form-item>
   </a-form>
 </template>
 <script>
-import { personalRegister } from '@/utils/validator'
+import { personalRegister } from '@/utils/validator';
 </script>
 ```
 
@@ -83,8 +79,8 @@ module.exports = { personalRegister }
 
 ```js
 this.$nextTick(() => {
-  this.form.setFieldsValue({ name: 'zgh', age: 23 })
-})
+  this.form.setFieldsValue({ name: 'zgh', age: 23 });
+});
 ```
 
 如果还不行就加一个`setTimeout()`
@@ -92,9 +88,9 @@ this.$nextTick(() => {
 ```js
 this.$nextTick(() => {
   setTimeout(() => {
-    this.form.setFieldsValue({ name: 'zgh', age: 23 })
-  })
-})
+    this.form.setFieldsValue({ name: 'zgh', age: 23 });
+  });
+});
 ```
 
 2、表单回填数据
@@ -111,9 +107,7 @@ this.$nextTick(() => {
     <a-form-item label="登录密码">
       <a-popover trigger="focus" placement="right">
         <template slot="title">
-          <span :style="passwordLength < 8 ? 'color:#f00' : 'color:#0f0'">
-            强度: {{ passPower }}
-          </span>
+          <span :style="passwordLength < 8 ? 'color:#f00' : 'color:#0f0'">强度: {{ passPower }}</span>
           <a-progress
             :percent="percent"
             size="small"
@@ -152,32 +146,32 @@ export default {
           { min: 6, max: 16, message: '密码长度为6-16位' }
         ]
       }
-    }
+    };
   },
   methods: {
     showTip() {
       this.$nextTick(() => {
-        let val = this.form.getFieldValue('password')
-        this.passwordLength = val.length
-        this.percent = (val.length / 16) * 100
+        let val = this.form.getFieldValue('password');
+        this.passwordLength = val.length;
+        this.percent = (val.length / 16) * 100;
         if (val.length >= 6 && val.length < 8) {
-          this.passPower = '太短'
+          this.passPower = '太短';
         }
         if (val.length >= 8) {
-          this.passPower = '安全'
+          this.passPower = '安全';
         }
-      })
+      });
     },
     handleSubmit(e) {
-      e.preventDefault()
+      e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log(values)
+          console.log(values);
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 
 <style scoped lang="less"></style>
@@ -284,19 +278,19 @@ export default {
   data() {
     return {
       isOpen: false
-    }
+    };
   },
   methods: {
     // 年份选择器
     openChange(e) {
-      this.isOpen = e ? true : false
+      this.isOpen = e ? true : false;
     },
     panelChange(e) {
-      this.form.setFieldsValue({ date: e })
-      this.isOpen = false
+      this.form.setFieldsValue({ date: e });
+      this.isOpen = false;
     }
   }
-}
+};
 </script>
 ```
 
@@ -339,7 +333,7 @@ export default {
 </template>
 
 <script>
-import moment from 'moment'
+import moment from 'moment';
 
 export default {
   data() {
@@ -349,7 +343,7 @@ export default {
       startValue: null,
       endValue: null,
       endOpen: false
-    }
+    };
   },
   methods: {
     disabledDate(current) {
@@ -357,26 +351,26 @@ export default {
       // const monthStart = this.moment().startOf('month')
       // const monthEnd = this.moment().endOf('month')
       // 设置区间之外的日期不可选
-      return current > this.moment() || current < this.moment().subtract(30, 'days')
+      return current > this.moment() || current < this.moment().subtract(30, 'days');
     },
 
     // 设置日期范围
     disabledStartDate(current) {
-      return current > this.moment() || current < this.moment().subtract(30, 'days')
+      return current > this.moment() || current < this.moment().subtract(30, 'days');
     },
     disabledEndDate(current) {
-      return current > this.moment() || current < this.startValue
+      return current > this.moment() || current < this.startValue;
     },
     handleStartOpenChange(open) {
       if (!open) {
-        this.endOpen = true
+        this.endOpen = true;
       }
     },
     handleEndOpenChange(open) {
-      this.endOpen = open
+      this.endOpen = open;
     }
   }
-}
+};
 </script>
 ```
 
@@ -398,3 +392,28 @@ export default {
   </a-descriptions>
 </template>
 ```
+
+## ElementUI
+
+### Dropdown 下拉菜单
+
+**1、手动控制菜单显示隐藏**
+
+[源码地址](https://github.com/ElemeFE/element/blob/dev/packages/dropdown/src/dropdown.vue)，源码里有 show 和 hide 方法，但是官方文档上没有写
+
+`hide-on-click` 是否在点击菜单项后隐藏菜单，默认 true
+
+```
+<el-dropdown
+  ref="msgDrop"
+  trigger="click"
+  placement="bottom"
+  :hide-on-click="false"
+  @command="handleCommand"
+></el-dropdown>
+
+this.$refs.msgDrop.show();
+this.$refs.msgDrop.hide();
+```
+
+有时可以参考一种思路：把自定义内容写在一个`el-dropdown-item`中，在`el-select`中也可使用这种方案

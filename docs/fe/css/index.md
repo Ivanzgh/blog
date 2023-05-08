@@ -441,20 +441,48 @@ calc 是 css3 提供的一个在 css 文件中计算值的函数,用于动态计
 
 ## 边框角线
 
-## object-fit
+## 可替换元素
+
+可替换元素是一种外部对象， CSS 可以影响它的位置，但不会影响到它自身的内容
+
+可替换元素：
+
+- iframe
+- video
+- img
+- embed
+
+### object-fit
+
+指定可替换元素的内容在元素盒区域中的**填充方式**
 
 ```css
-.box {
-  object-fit: cover;
-}
+object-fit: contain;
+object-fit: cover;
+object-fit: fill;
+object-fit: none;
+object-fit: scale-down;
 ```
 
-## object-position
+- `contain` 内容将被缩放，以保持其宽高比。如果宽高比与框的宽高比不匹配，该内容将被添加“黑边”
+- `cover` 在保持宽高比的同时填充元素的整个内容框。如果宽高比与内容框不匹配，将会被**剪裁**
+- `fill` 完全填充，如果宽高比与内容框不匹配，将会被**拉伸**
+- `none` 保持原有尺寸
+- `scale-down` 内容的尺寸与 `none` 或 `contain` 中的一个相同，取决于它们两个之间谁得到的对象尺寸会更小一些
+
+> 黑边：是屏幕中显示的内容除了正常影像外，两侧或四周多出来的未显示区域。因该区域为黑色，故称之为黑边。黑边的产生是由于原始影像与屏幕的尺寸规格不同所造成的
+
+### object-position
+
+指定可替换元素的内容在元素盒区域中的**位置**
 
 ```css
-.box {
-  object-position: top center;
-}
+object-position: top center;
+object-position: right top;
+object-position: left bottom;
+object-position: 50% 50%;
+object-position: 200px 100px;
+object-position: 100px;
 ```
 
 ## 设置页面小图标
@@ -551,6 +579,26 @@ word-break: break-all;
 word-wrap: break-word;
 ```
 
+### text-transform
+
+指定文本大小写
+
+- `capitalize` 每个单词的首字母转换为大写，其他的字符保留不变
+- `uppercase` 所有字符被转换为大写
+- `lowercase` 所有字符被转换为小写
+- `none` 阻止所有字符的大小写被转换
+
+### letter-spacing
+
+设置文本字符的间距。正值会让字符分布的更远，负值会让字符更接近
+
+```css
+letter-spacing: normal;
+letter-spacing: 0.5em;
+letter-spacing: 6px;
+letter-spacing: -1px;
+```
+
 ## 兼容性
 
 ### 清除默认样式
@@ -624,6 +672,31 @@ aspect-ratio: 16 / 9;
 ```
 
 ## 混合模式
+
+`mix-blend-mode`属性描述了 元素的内容 应该与 元素的直系父元素的内容 和 元素的背景 如何混合
+
+```css
+mix-blend-mode: normal;
+mix-blend-mode: multiply;
+mix-blend-mode: screen;
+mix-blend-mode: overlay;
+mix-blend-mode: darken;
+mix-blend-mode: lighten;
+mix-blend-mode: color-dodge
+mix-blend-mode: color-burn;
+mix-blend-mode: hard-light;
+mix-blend-mode: soft-light;
+mix-blend-mode: difference;
+mix-blend-mode: exclusion;
+mix-blend-mode: hue;
+mix-blend-mode: saturation;
+mix-blend-mode: color;
+mix-blend-mode: luminosity;
+
+mix-blend-mode: initial;
+mix-blend-mode: inherit;
+mix-blend-mode: unset;
+```
 
 ## 波浪效果
 

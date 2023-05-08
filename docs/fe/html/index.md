@@ -21,7 +21,9 @@ p 标签里面不能放块级元素，否则渲染时会出现两个 p 元素
 
 行内元素不会独占一行，直接设置宽高无效，常见的有 `<span>`、`<a>`、`<strong>`、`<b>`、`<em>`、`<i>`、`img`等
 
-## cookies，sessionStorage 、 localStorage
+## 本地存储
+
+cookies，sessionStorage、localStorage
 
 - `cookie`是网站为了标示用户身份而储存在用户本地终端上的数据，通常经过加密，`cookie`数据始终在同源的`http`请求中携带，即会在浏览器和服务器间来回传递
 - `sessionStorage`和`localStorage`不会自动把数据发给服务器，仅在本地保存
@@ -115,8 +117,8 @@ dl 标签与 dt（定义项目/名字）和 dd（描述每一个项目/名字）
   $("input[name='planLeave']")
     .trigger('input')
     .bind('input propertychange', function () {
-      alert('hehe')
-    })
+      alert('hehe');
+    });
 </script>
 ```
 
@@ -127,7 +129,7 @@ dl 标签与 dt（定义项目/名字）和 dd（描述每一个项目/名字）
 `select`有一个`size`属性，设置`size`的值即可显示`option`的展开数量
 
 ```js
-select.size = 6
+select.size = 6;
 ```
 
 #### 根据后台数据设置选中项
@@ -143,8 +145,8 @@ select.size = 6
 
 <script>
   function he() {
-    const Flag = '1' //后台返回的数据
-    $("#codeShare option[value='" + Flag + "']").attr('selected', 'selected')
+    const Flag = '1'; //后台返回的数据
+    $("#codeShare option[value='" + Flag + "']").attr('selected', 'selected');
   }
 </script>
 ```

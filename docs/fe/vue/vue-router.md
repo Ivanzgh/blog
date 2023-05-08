@@ -10,7 +10,7 @@ const router = new VueRouter({
     // 动态路径参数 以冒号开头
     { path: '/user/:id', component: detail }
   ]
-})
+});
 ```
 
 这样`/list/1`、`/list/2`都会匹配到同一个组件
@@ -20,9 +20,9 @@ const router = new VueRouter({
 含有通配符的路由一定要放在最后
 
 ```js
-import Vue from 'vue'
-import Router from 'vue-router'
-Vue.use(Router)
+import Vue from 'vue';
+import Router from 'vue-router';
+Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
@@ -41,16 +41,16 @@ const router = new Router({
       redirect: '/404'
     }
   ]
-})
-export default router
+});
+export default router;
 ```
 
 ## 嵌套路由
 
 ```js
-import Vue from 'vue'
-import Router from 'vue-router'
-Vue.use(Router)
+import Vue from 'vue';
+import Router from 'vue-router';
+Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
@@ -74,8 +74,8 @@ const router = new Router({
       ]
     }
   ]
-})
-export default router
+});
+export default router;
 ```
 
 **以 `/` 开头的嵌套路径会被当作根路径**，所以 children 中的路径不用设置成 `path: '/admin/ecs'`，
@@ -94,7 +94,7 @@ export default router
 参数可以是字符串路径或者地址对象
 
 ```js
-this.$router.push('/admin/ecs')
+this.$router.push('/admin/ecs');
 ```
 
 #### 路由传参
@@ -103,10 +103,10 @@ this.$router.push('/admin/ecs')
 
 ```js
 // 传参
-this.$router.push({ path: '/admin/ecs', query: { id: 1 } })
+this.$router.push({ path: '/admin/ecs', query: { id: 1 } });
 
 // 取值
-this.$route.query.id
+this.$route.query.id;
 ```
 
 使用这种方式，参数会拼接在路由后面，出现在地址栏
@@ -114,10 +114,10 @@ this.$route.query.id
 方式二、params
 
 ```js
-this.$router.push({ name: 'ECS', params: { id: 1 } })
+this.$router.push({ name: 'ECS', params: { id: 1 } });
 
 // 取值
-this.$route.params.id
+this.$route.params.id;
 ```
 
 使用这种方式，参数不会拼接在路由后面，地址栏上看不到参数
@@ -130,10 +130,7 @@ this.$route.params.id
 ```js
 this.$router.push({
   name:'second',
-  params: {
-    id:'20180822',
-    name: 'query'
-  }
+  params: {  id:'20180822',  name: 'query' }
 });
 
 //params接收参数
@@ -150,12 +147,14 @@ this.name = this.$route.params.name ;
 
 如果路由后面没有 `/:id/:name`，刷新页面后会发现页面失败
 
+注意点：使用 query 刷新不会丢失数据、使用 params 刷新会丢失 params 里面的数据
+
 ### `router.replace()`
 
 不会向 history 栈中添加记录，而是会替换当前的 history 记录，类似`window.history.replaceState()`
 
 ```js
-this.$router.replace('/admin/ecs')
+this.$router.replace('/admin/ecs');
 ```
 
 声明式 `<router-link :to="..." replace>`
@@ -166,13 +165,13 @@ this.$router.replace('/admin/ecs')
 
 ```js
 // 在浏览器记录中前进一步，等同于 history.forward()
-router.go(1)
+router.go(1);
 
 // 后退一步记录，等同于 history.back()
-router.go(-1)
+router.go(-1);
 
-router.back()
-router.forward()
+router.back();
+router.forward();
 ```
 
 ## 路由组件传参
@@ -184,7 +183,7 @@ router.forward()
 ```js
 const router = new VueRouter({
   routes: [{ path: '/user/:id', component: User, props: true }]
-})
+});
 ```
 
 如果 `props` 被设置为 `true`，`route.params` 将会被设置为组件属性
@@ -197,9 +196,9 @@ export default {
   data() {
     return {
       tableLoading: false
-    }
+    };
   }
-}
+};
 ```
 
 在组件中使用 `$route` 会使之与其对应路由形成高度耦合，从而使组件只能在某些特定的 URL 上使用，限制了其灵活性。
@@ -249,12 +248,12 @@ router.beforeEach((to, from, next) => {
 比如要做路由拦截，用户没登录不让访问控制台
 
 ```js
-import Vue from 'vue'
-import Router from 'vue-router'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+import Vue from 'vue';
+import Router from 'vue-router';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
   routes: [
@@ -269,24 +268,24 @@ const router = new Router({
       children: []
     }
   ]
-})
+});
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(res => res.meta.requireAuth)) {
+  if (to.matched.some((res) => res.meta.requireAuth)) {
     if (sessionStorage.getItem('access_token')) {
-      NProgress.start()
-      next()
+      NProgress.start();
+      next();
     } else {
-      next({ path: '/login' })
+      next({ path: '/login' });
     }
   } else {
-    NProgress.start()
-    next()
+    NProgress.start();
+    next();
   }
-})
+});
 router.afterEach(() => {
-  NProgress.done()
-})
+  NProgress.done();
+});
 ```
 
 此处的 nprogress 是一个可以显示路由加载进度动画的插件，可忽略。
@@ -307,8 +306,8 @@ some()是数组方法，表示一些，只要数组中的某一个元素符合�
 
 ```js
 router.afterEach((to, from) => {
-  NProgress.done()
-})
+  NProgress.done();
+});
 ```
 
 ### 路由独有的守卫
@@ -326,7 +325,7 @@ const router = new VueRouter({
       }
     }
   ]
-})
+});
 ```
 
 ### 组件内的守卫
@@ -350,7 +349,7 @@ const Foo = {
     // 导航离开该组件的对应路由时调用
     // 可以访问组件实例 `this`
   }
-}
+};
 ```
 
 在`beforeRouteEnter`中不能获取实例，但可以通过传一个回调给`next`来访问组件实例
@@ -379,7 +378,7 @@ const router = new Router({
       component: () => import('@/admin/layout')
     }
   ]
-})
+});
 ```
 
 一个路由匹配到的所有路由记录会暴露为`$route`对象 (还有在导航守卫中的路由对象) 的 `$route.matched` 数组。
@@ -398,7 +397,7 @@ const router = new Router({
       component: () => import('@/admin/layout')
     }
   ]
-})
+});
 ```
 
 ### 把组件按组分块
@@ -406,9 +405,9 @@ const router = new Router({
 把某个路由下的所有组件都打包在同个异步块 (chunk) 中
 
 ```js
-const Foo = () => import(/* webpackChunkName: "group-foo" */ './Foo.vue')
-const Bar = () => import(/* webpackChunkName: "group-foo" */ './Bar.vue')
-const Baz = () => import(/* webpackChunkName: "group-foo" */ './Baz.vue')
+const Foo = () => import(/* webpackChunkName: "group-foo" */ './Foo.vue');
+const Bar = () => import(/* webpackChunkName: "group-foo" */ './Bar.vue');
+const Baz = () => import(/* webpackChunkName: "group-foo" */ './Baz.vue');
 ```
 
 ## 滚动行为
@@ -436,7 +435,7 @@ const router = new VueRouter({
 一般采用更多的是第 2 种方式，第 1 种方式可参考[https://segmentfault.com/a/1190000009506097](https://segmentfault.com/a/1190000009506097)
 
 ```js
-router.addRoutes((routes: Array<RouteConfig>))
+router.addRoutes((routes: Array<RouteConfig>));
 ```
 
 动态添加更多的路由规则。参数必须是一个符合 `routes` 选项要求的数组。

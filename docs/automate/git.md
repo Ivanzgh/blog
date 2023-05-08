@@ -610,7 +610,8 @@ git push -u origin main
 如果存在本地项目，想将其推送到 github 上，要先和远程仓库关联，然后推送
 
 ```sh
-git remote add origin git@github.com:Ivanzgh/elasticsearch.git      # 地址换成自己的
+# 地址换成自己的，这里的 origin 可以自定义名称，但是一般不会更改
+git remote add origin git@github.com:Ivanzgh/elasticsearch.git
 
 git branch -M main
 
@@ -673,7 +674,7 @@ Gitflow 工作流(Gitflow Workflow)是目前最流行的 git 团队协作模式
 - develop: 集成分支，专门用来集成开发完成的各种功能的，保存了开发的最新代码，由 main 分支创建而来
 - feature: 功能分支，由 develop 分支创建而来，开发完成后被合并进 develop 分支
 - release: 预发布分支，为发布新的产品版本而设计的分支
-  - 当 develop 分支已经有了本次上线的所有代码的时候，并且已通过全部测试的时候，可以从 develop 分支创建 release 分支了
+  - 当 develop 分支已经有了本次上线的所有代码，并且已通过全部测试的时候，就可以从 develop 分支创建 release 分支了
   - release 分支创建以后，就不允许再有新的功能特性被加入到这个分支了，只有 bug 修复或者文档编辑之类的工作才允许进入该分支
   - 有了 release 分支就可以让 develop 分支空闲出来以接受新的 feature 分支上的代码提交，进入新的软件开发迭代周期
   - 生产上线时将 release 代码合并到 main 分支，并给 main 分支打上带有版本信息的 tag
@@ -683,6 +684,41 @@ Gitflow 工作流(Gitflow Workflow)是目前最流行的 git 团队协作模式
 比如现在需要开发登录功能，首先从 develop 分支拉取最新代码，然后执行`git checkout -b feat-login`，表示新建了`feat-login`分支，并切换到了这个分支的工作区。代码提交后发起合并申请，期望合并到 develop 分支，仓库管理者同意合并后将删除这个分支。
 
 如果是修复测试环境的 bug，例如`fix-login`分支，那么需要合并到对应的 release 分支。release 分支可以有多个版本，如 release1.0.0、release2.0.1 等。
+
+## 同步上游仓库
+
+### 更新 fork 的仓库
+
+如果 fork 了别人的仓库，当仓库更新了需要同步更新自己的仓库
+
+在 GitHub 进入 fork 的仓库，会看到一个 Fetch upstream 按钮，点击 `Fetch and merge` 按钮，就是执行`git fetch`和`git merge`操作。
+这一步只是将你自己 fork 的仓库代码和源仓库代码同步了，但是本地工作区的仓库还没有更新，需要在本地执行`git pull`
+
+### 更新指定的仓库
+
+假设我们基于 ant-design-pro 这个脚手架开发项目，当 antd pro 更新了，我们的项目也想要更新，可以执行以下步骤：
+
+1. 执行`git remote -v`查看远程仓库的信息
+
+2. 在代码仓库中添加 antd 作为远程仓库，执行`git remote add antd git@github.com:ant-design/ant-design-pro.git`
+
+3. 再次执行第一步，会发现多了两条 antd 的记录，上步命令里的 antd 名称可以自定义
+
+4. 创建一个新的分支，在这个新分支执行下面的步骤
+
+5. 从 antd 的远程仓库中拉取最新的代码，执行`git fetch antd master`，表示从上游仓库 antd 拉取 master 分支的代码到本地，如果省略 master 分支表示把所有代码都拉取下来。如果直接执行`git fetch`则还是从默认的 origin 拉取代码，是`git fetch origin master`的简写
+
+6. 合并 antd 的代码，执行`git merge antd/master`，解决冲突
+
+7. 当你完成开发并测试时，就可以将这个新分支合并回你的主分支中，然后执行`git push`推送到远程仓库
+
+如果在第 6 步出现报错：`fatal: refusing to merge unrelated histories`，可以在 `git merge` 命令中添加 `--allow-unrelated-histories` 选项，告诉 Git 允许合并不相关的历史记录
+
+```sh
+git merge test/master --allow-unrelated-histories
+```
+
+当你在本地仓库中创建一个新的分支时，该分支的历史记录是独立的，并且不包含来自 antd 远程仓库的历史记录。因此当你想将来自 antd 的更新合并到本地分支时，Git 会拒绝合并，因为这些历史记录不相关
 
 ## 常见问题
 

@@ -6,13 +6,14 @@ node 官网下载地址: <https://nodejs.org/en/download/>
 
 中文文档: [http://nodejs.cn/api/](http://nodejs.cn/api/)
 
-node 和 node-sass 对应版本: <https://www.npmjs.com/package/node-sass>
-
-Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时。
+Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时
 
 简单说，node 就是一个可以运行 js 代码的环境，不是一门编程语言，可以做服务器端开发
 
-> node 运行的 js 是指 ECMAScript，不能运行 BOM 或 DOM 中的代码
+node 和 node-sass 对应版本: <https://www.npmjs.com/package/node-sass>
+
+> 1. node 运行的 js 是指 ECMAScript，不能运行 BOM 和 DOM 的 API（如`window`、`document`等对象），可以使用 console 和定时器等
+> 2. node 中的顶级对象是`global`，也可以使用`globalThis`（是 ES2020 支持的）
 
 ## 特点
 
@@ -21,7 +22,9 @@ Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时。
 - 事件驱动
 - 跨平台
 
-这里的单线程是指**主线程是单线程**的，主线程还能有其他子线程。因为是单线程，所以只要有一个任务耗时非常长，后面的任务必须要排队等待，会拖延整个程序执行，从而降低了效率，于是提出了**异步**的思想。
+这里的单线程是指**主线程是单线程**的，主线程还能有其他子线程。因为是单线程，所以只要有一个任务耗时非常长，后面的任务必须要排队等待，会拖延整个程序执行，从而降低了效率，于是提出了**异步**的思想。在执行代码的时候，主线程从上往下依次执行，遇到有需要回调的地方，就将此处加入到**事件队列**中，然后主线程继续往下走，直到运行结束以后，才去执行事件队列中的回调
+
+事件驱动，是指在持续事务管理过程中，进行决策的一种策略，即跟随当前时间点上出现的事件，调动可用资源，执行相关任务，使不断出现的问题得以解决，防止事务堆积
 
 ## node 命令
 
@@ -87,79 +90,21 @@ Node.js 默认是使用`CommonJS`规范
 载入系统模块和第三方模块不需要写路径，直接写名称即可，但是载入自定义模块需要写路径
 
 ```js
-const http = require('http')
+const http = require('http');
 
-const myapp = require('../com/my.js')
+const myapp = require('../com/my.js');
 ```
 
 > require 引入和 es6 的 import 引入的区别？
-
-## fs 文件系统
-
-复制文件夹
-
-```js
-let path = require('path')
-let fs = require('fs')
-
-function copyFile({ src, dest }) {
-  fs.readdir(path.resolve(src), (err, files) => {
-    if (err) {
-      console.log('获取文件夹失败')
-      throw err
-    } else {
-      files.forEach((item) => {
-        let oldFile = path.resolve(src, item)
-        let newFile = path.resolve(dest, item)
-        fs.copyFile(oldFile, newFile, (err) => {
-          if (err) throw err
-          console.log(oldFile + '复制到' + newFile)
-        })
-      })
-    }
-  })
-}
-
-const params = {
-  src: './src/beijing', // 要复制的源文件名
-  dest: './src/shanghai' // 复制操作的目标文件名
-}
-copyFile(params)
-```
-
-更改文件名称
-
-```js
-let path = require('path')
-let fs = require('fs')
-
-function rename({ dest, from, to }) {
-  fs.readdir(path.resolve(dest), (err, files) => {
-    if (err) {
-      console.log('获取文件夹失败')
-      throw err
-    } else {
-      files.forEach((item) => {
-        let oldName = path.resolve(dest, item)
-        let newName = oldName.replace(from, to)
-        fs.rename(oldName, newName, (renameErr) => {
-          if (renameErr) throw renameErr
-          console.log(oldName + '文件名称改为:' + newName)
-        })
-      })
-    }
-  })
-}
-
-const params = {
-  dest: './src/shanghai', // 要更改的文件夹
-  from: 'jhyj_dc', // 要更改的源文件名
-  to: 'jhyj_sh' // 要更改的目标文件名
-}
-rename(params)
-```
 
 ## process 模块
 
 `process.argv` 可以获得命令行调用的信息，以空格分隔。假设执行一个脚本 test.js，运行`node test.js`，
 那么`process.argv`的结果是`['node', 'test.js']`
+
+## 库
+
+- [csvtojson](https://www.npmjs.com/package/csvtojson) CSV 格式转为 JSON
+- [randomjson](https://www.npmjs.com/package/randomjson) 生成随机 JSON 数据
+- [http-proxy-agent](https://www.npmjs.com/package/http-proxy-agent) HTTP(s) 代理 HTTP.Agent 实现 HTTP
+- [multiparty](https://www.npmjs.com/package/multiparty) 解析具有`multipart/form-data`类型的 HTTP 请求，如解析上传文件
