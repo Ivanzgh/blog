@@ -1,1 +1,0 @@
-import{_ as e,c as o,o as a,Q as t}from"./chunks/framework.f14b72c3.js";const P=JSON.parse('{"title":"操作系统","description":"","frontmatter":{},"headers":[],"relativePath":"base/os/index.md","lastUpdated":1681829744000}'),r={name:"base/os/index.md"},s=t("",10),i=[s];function l(n,c,d,_,p,h){return a(),o("div",null,i)}const m=e(r,[["render",l]]);export{P as __pageData,m as default};

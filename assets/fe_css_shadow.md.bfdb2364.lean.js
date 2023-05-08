@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,Q as l}from"./chunks/framework.f14b72c3.js";const u=JSON.parse('{"title":"阴影","description":"","frontmatter":{},"headers":[],"relativePath":"fe/css/shadow.md","lastUpdated":1681829744000}'),o={name:"fe/css/shadow.md"},p=l("",17),e=[p];function t(c,F,r,i,d,y){return n(),a("div",null,e)}const b=s(o,[["render",t]]);export{u as __pageData,b as default};

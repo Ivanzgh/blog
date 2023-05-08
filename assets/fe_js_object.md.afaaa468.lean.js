@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,Q as l}from"./chunks/framework.f14b72c3.js";const b=JSON.parse('{"title":"对象","description":"","frontmatter":{},"headers":[],"relativePath":"fe/js/object.md","lastUpdated":1681829744000}'),o={name:"fe/js/object.md"},p=l("",97),e=[p];function F(c,t,r,y,i,d){return n(),a("div",null,e)}const u=s(o,[["render",F]]);export{b as __pageData,u as default};

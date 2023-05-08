@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as l,Q as o}from"./chunks/framework.f14b72c3.js";const u=JSON.parse('{"title":"流媒体","description":"","frontmatter":{},"headers":[],"relativePath":"media/index.md","lastUpdated":1683514170000}'),e={name:"media/index.md"},n=o("",88),p=[n];function t(c,r,F,i,d,y){return l(),a("div",null,p)}const b=s(e,[["render",t]]);export{u as __pageData,b as default};

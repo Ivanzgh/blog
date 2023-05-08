@@ -1,1 +1,0 @@
-import{_ as s,c as n,o as a,Q as l}from"./chunks/framework.f14b72c3.js";const u=JSON.parse('{"title":"枚举","description":"","frontmatter":{},"headers":[],"relativePath":"fe/ts/enum.md","lastUpdated":1681829744000}'),p={name:"fe/ts/enum.md"},o=l("",28),F=[o];function e(c,t,r,y,i,C){return a(),n("div",null,F)}const D=s(p,[["render",e]]);export{u as __pageData,D as default};
