@@ -77,7 +77,8 @@ export default defineConfig({
             { text: '浏览器跨域', link: '/fe/browser/crossDomain' },
             { text: '浏览器安全', link: '/fe/browser/safety' },
             { text: 'Window对象', link: '/fe/browser/window' },
-            { text: '兼容性', link: '/fe/browser/compatibility' }
+            { text: '兼容性', link: '/fe/browser/compatibility' },
+            { text: '调试', link: '/fe/browser/debug' }
           ]
         }
       ],

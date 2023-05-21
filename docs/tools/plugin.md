@@ -10,15 +10,18 @@
 ## 流程图
 
 - [React Flow](https://reactflow.dev/)
-- [vue-flow](https://github.com/bcakmakoglu/vue-flow)
+- [vue-flow](https://github.com/bcakmakoglu/vue-flow) 只支持 vue3
 - [LogicFlow](https://github.com/didi/LogicFlow) 滴滴出品
 
 ## 业务流
 
 - [bpmn-js](https://bpmn.io/toolkit/bpmn-js/)
-  - [bpmn-js 文档](https://bpmn.io/toolkit/bpmn-js/walkthrough/)、[github 仓库](https://github.com/bpmn-io/bpmn-js/tree/master)，在后面两个库之上，bpmn-js 定义了 BPMN 细节，例如外观、建模规则和工具（即调色板）
+  - [bpmn-js 文档](https://bpmn.io/toolkit/bpmn-js/walkthrough/)、[github 仓库](https://github.com/bpmn-io/bpmn-js)，在后面两个库之上，bpmn-js 定义了 BPMN 细节，例如外观、建模规则和工具（即调色板）
   - [bpmn-moddle](https://github.com/bpmn-io/bpmn-moddle)，读写 BPMN 2.0 模式兼容的 XML 文档，并访问图表上绘制的形状和连接背后的 BPMN 相关信息
   - [diagram-js](https://github.com/bpmn-io/diagram-js)，用来绘制形状和连接，提供与图形元素交互的方法以及其他工具
+  - [参考1](https://juejin.cn/post/6844904017567416328)
+  - [参考2](https://gitee.com/zhijiantianya/ruoyi-vue-pro)
+  - [参考3](https://github.com/miyuesc/bpmn-process-designer)
 
 ## 甘特图
 
@@ -54,6 +57,25 @@
 - [vue2-ace-editor](https://github.com/chairuosen/vue2-ace-editor) 基于 ace 的 vue 插件
 - [monaco-editor](https://github.com/microsoft/monaco-editor) 为 vscode 编辑器提供支持
 - [codemirror](https://codemirror.net/)
+
+## 思维导图
+
+- [markmap](https://github.com/markmap/markmap) 将 markdown 格式转为思维导图
+
+## ERP/CMS
+
+- [strapi](https://strapi.io/)、[github](https://github.com/strapi/strapi)
+- [Odoo](https://www.odoo.com/zh_CN)、[github](https://github.com/odoo/odoo)
+
+## OA系统
+
+### O2OA
+
+- [开源免费OA开发平台_移动OA办公系统_电子政务OA_信创国产化OA](https://www.o2oa.net/)
+- [O2OA企业应用开发平台/O2OA - 码云](https://gitee.com/o2oa/O2OA)
+- [O2OA使用手册](https://www.o2oa.net/handbook.html)
+- [示例-企业通用办公平台](https://sample.o2oa.net/x_desktop/index.html)
+- [O2OA开发平台视频讲解](https://www.ixigua.com/home/58158361878)
 
 ## 虚拟列表
 

@@ -1,10 +1,10 @@
 # MongoDB
 
-官网文档：[https://docs.mongodb.com](https://docs.mongodb.com)
+[官网文档](https://docs.mongodb.com)
 
-中文文档：[http://www.mongodb.org.cn/](http://www.mongodb.org.cn/)
+[中文文档](http://www.mongodb.org.cn/)
 
-mongoose 文档：[https://mongoosejs.com/docs/index.html](https://mongoosejs.com/docs/index.html)
+[mongoose 文档](https://mongoosejs.com/docs/index.html)
 
 ## 简介
 
@@ -19,16 +19,11 @@ MongoDB 是一个介于关系数据库和非关系数据库(nosql)之间的产�
 用来指定一个键并更新键值，若键不存在则创建。
 
 ```js
-const { title, content, contentText, category } = req.body
-const data = await article.findById(id)
+const { title, content, contentText, category } = req.body;
+const data = await article.findById(id);
 const updateData = await data.update({
-  $set: {
-    title,
-    content,
-    contentText,
-    category
-  }
-})
+  $set: { title, content, contentText, category }
+});
 ```
 
 ### \$inc
@@ -36,29 +31,27 @@ const updateData = await data.update({
 对文档的某个值为数字型（只能为满足要求的数字）的键进行增减。
 
 ```js
-const data = await article.findOneAndUpdate({_id: id},
-    {
-        $inc: {looknums: 1}
-        <!--阅读量每次增加1-->
-        <!--若需要减少1，可写成 $inc: {looknums: -1}-->
-    })
-res.json({
-    code: 200,
-    data: data,
-    msg: '阅读量修改成功'
-})
+const data = await article.findOneAndUpdate(
+  { _id: id },
+  {
+    $inc: { looknums: 1 }
+    // 阅读量每次增加1
+    // 若需要减少1，可写成 $inc: {looknums: -1}
+  }
+);
+res.json({ code: 200, data: data, msg: '阅读量修改成功' });
 ```
 
 ### \$unset
 
-用来删除一个键。
+用来删除一个键
 
 ### \$push
 
 ```js
 {
   $push: {
-    field: value
+    field: value;
   }
 }
 ```

@@ -417,3 +417,7 @@ this.$refs.msgDrop.hide();
 ```
 
 有时可以参考一种思路：把自定义内容写在一个`el-dropdown-item`中，在`el-select`中也可使用这种方案
+
+### form 表单
+
+`@submit.native.prevent`，阻止浏览器默认行为和事件冒泡，防止页面刷新

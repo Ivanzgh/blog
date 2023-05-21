@@ -161,7 +161,7 @@ parseFloat('1.23'); // 1.23
 
 5、Boolean()
 
-除了 undefined、null、''、NaN、0、false 转换出来是 false，其他都是 true
+除了 undefined、null、' '、NaN、0、false 转换出来是 false，其他都是 true
 
 ### 隐式类型转换
 
@@ -224,7 +224,7 @@ console.log(name);
 
 ### 函数提升
 
-函数提升就是把函数提升到前面。
+函数提升就是把函数提升到前面
 
 在 JavaScript 中函数的创建方式有三种：函数声明（静态的）、函数表达式（函数字面量）、构造函数（动态的，匿名的）。
 
@@ -252,7 +252,7 @@ function f() {
 f();
 
 console.log(m); // undefined
-m(); // TypeError: m is not a function
+m(); // TypeError: m is not a function，因为 m 是 undefined
 var m = function () {
   console.log(1);
 };

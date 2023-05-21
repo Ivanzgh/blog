@@ -1,38 +1,37 @@
 # Gulp
 
-中文官网：[https://v3.gulpjs.com.cn/](https://v3.gulpjs.com.cn/)
+官网：<https://gulpjs.com/>
+中文文档：<https://www.gulpjs.com.cn/>
 
-## 入门指南
+## 快速上手
 
-### 1. 全局安装 gulp
+1、安装
 
 ```sh
+# 全局安装 gulp
 npm install --global gulp
-```
 
-### 2. 作为项目的开发依赖安装
-
-```sh
+# 作为项目的开发依赖安装（推荐）
 npm install --save-dev gulp
 ```
 
-### 3. 在项目根目录下创建一个名为 gulpfile.js 的文件
+2、在项目根目录下创建一个名为 gulpfile.js 的文件
 
 ```js
-const gulp = require('gulp')
+const gulp = require('gulp');
 
-gulp.task('testname', function() {
+gulp.task('testname', function () {
   // 将你的默认的任务代码放在这
-})
+});
 ```
 
-### 4. 运行 gulp
+3、终端运行 gulp
 
 ```sh
 gulp testname
 ```
 
-## API 文档
+## API
 
 ### gulp.src(globs[, options])
 
@@ -43,12 +42,9 @@ gulp testname
 gulp
   .src('src/js/**/*.js')
   .pipe(minify()) // 文件流过管道，经过插件处理
-  .pipe(gulp.dest('dist')) // 写入 'dist/test.js'
+  .pipe(gulp.dest('dist')); // 写入 'dist/test.js'
 
-gulp
-  .src('src/js/**/*.js', { base: 'src' })
-  .pipe(minify())
-  .pipe(gulp.dest('dist')) // 写入 'dist/js/test.js'
+gulp.src('src/js/**/*.js', { base: 'src' }).pipe(minify()).pipe(gulp.dest('dist')); // 写入 'dist/js/test.js'
 ```
 
 ### gulp.dest(path[, options])
@@ -71,8 +67,8 @@ gulp
 gulp.task('portal', () => {
   return gulp
     .src(['./demos/**', './docs/**', './index/**', './demos/**/.npmignore'], { base: './' })
-    .pipe(gulp.dest('portal/' + package.version))
-})
+    .pipe(gulp.dest('portal/' + package.version));
+});
 ```
 
 ## 插件开发
@@ -88,30 +84,30 @@ npm init
 然后在根目录下新建一个入口文件 index.js
 
 ```js
-let through = require('through2')
+let through = require('through2');
 
 function gulp_prefix(prefix) {
   if (!prefix) {
-    prefix = ''
+    prefix = '';
   }
   // 新建buffer
-  var prefix = Buffer.from(prefix)
+  var prefix = Buffer.from(prefix);
 
-  let stream = through.obj(function(file, encoding, callback) {
+  let stream = through.obj(function (file, encoding, callback) {
     // 如果file类型不是buffer 退出不做处理
     if (!file.isBuffer()) {
-      return callback()
+      return callback();
     }
     // 将字符串加到文件数据开头，file.contents.toString()可以将buffer类型转为string类型
-    file.contents = Buffer.concat([prefix, file.contents])
+    file.contents = Buffer.concat([prefix, file.contents]);
     // 确保文件会传给下一个插件
-    this.push(file)
+    this.push(file);
     // 告诉stream引擎，已经处理完成
-    callback()
-  })
-  return stream
+    callback();
+  });
+  return stream;
 }
-module.exports = gulp_prefix
+module.exports = gulp_prefix;
 ```
 
 接着将 index.js 文件复制到项目的 node_modules/gulp-prefix 文件夹下
@@ -119,15 +115,12 @@ module.exports = gulp_prefix
 最后在根目录下新建一个 gulpfile.js 文件
 
 ```js
-const gulp = require('gulp')
-const prefix = require('gulp-prefix')
+const gulp = require('gulp');
+const prefix = require('gulp-prefix');
 
-gulp.task('prefix', function() {
-  return gulp
-    .src('src/*.js')
-    .pipe(prefix('我是要传递给插件到参数'))
-    .pipe(gulp.dest('dist'))
-})
+gulp.task('prefix', function () {
+  return gulp.src('src/*.js').pipe(prefix('我是要传递给插件到参数')).pipe(gulp.dest('dist'));
+});
 ```
 
 运行:
@@ -145,16 +138,16 @@ gulp prefix
 在 gulp-prefix 插件中
 
 ```js
-const minimist = require('minimist')
+const minimist = require('minimist');
 
 let knownOptions = {
   string: 'env',
   default: {
     env: process.env.NODE_ENV || 'prod'
   }
-}
-let options = minimist(process.argv.slice(2), knownOptions)
-let baseEnv = options.env // baseEnv即是命令行传递到参数
+};
+let options = minimist(process.argv.slice(2), knownOptions);
+let baseEnv = options.env; // baseEnv即是命令行传递到参数
 ```
 
 传递参数 dev，运行：

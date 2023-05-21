@@ -139,3 +139,11 @@ DNS 域名：
 <https://segmentfault.com/a/1190000006879700>
 
 <https://www.cnblogs.com/kongxy/p/4615226.html>
+
+## HTTP 协议
+
+超文本传输协议（Hypertext Transfer Protocol），
+
+http 协议默认端口是 80，https 协议默认端口是 443
+
+端口是应用程序的数字标识，主要作用是实现了不同主机应用程序之间的通信

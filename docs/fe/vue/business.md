@@ -841,3 +841,132 @@ mouseOver(event) {
   this.isShowTooltip = event.target.scrollWidth <= event.target.clientWidth
 }
 ```
+
+## svg-sprite-loader
+
+场景：在项目中方便地引入 svg 图标
+
+原理：利用 svg 的 symbol 元素，将每个 icon 包括在 symbol 中，通过 use 元素使用该 symbol
+
+```sh
+npm i -D svg-sprite-loader
+```
+
+### 自动导入
+
+在`src/assets/icons`目录，创建 index.js 和 svg 文件夹，svg 目录下放 svg 图标
+
+index.js
+
+```js
+import Vue from 'vue';
+import SvgIcon from '@/components/SvgIcon'; // svg组件
+
+// 全局注册
+Vue.component('svg-icon', SvgIcon);
+
+// 指定目录及遍历的规则
+// 接受三个参数，第一个是文件夹，第二个是是否使用子文件，第三个是文件匹配的正则
+const req = require.context('./svg', false, /\.svg$/);
+
+// 遍历
+const requireAll = (requireContext) => requireContext.keys().map(requireContext);
+
+// webpack自动导入所有svg
+requireAll(req);
+```
+
+main.js
+
+```js
+import './assets/icons';
+```
+
+### 配置 webpack loader
+
+vue.config.js
+
+```js
+module.exports = {
+  chainWebpack(config) {
+    config.module.rule('svg').exclude.add(resolve('src/assets/icons')).end();
+    config.module
+      .rule('icons')
+      .test(/\.svg$/)
+      .include.add(resolve('src/assets/icons'))
+      .end()
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader')
+      .options({
+        symbolId: 'icon-[name]'
+      })
+      .end();
+  }
+};
+```
+
+### 组件调用
+
+SvgIcon.vue
+
+```vue
+<template>
+  <svg :class="svgClass" aria-hidden="true">
+    <use :xlink:href="iconName" />
+  </svg>
+</template>
+
+<script>
+export default {
+  name: 'SvgIcon',
+  props: {
+    iconClass: { type: String, required: true },
+    className: { type: String, default: '' }
+  },
+  computed: {
+    iconName() {
+      return `#icon-${this.iconClass}`;
+    },
+    svgClass() {
+      return 'svg-icon' + (this.className || '');
+    }
+  }
+};
+</script>
+
+<style scoped>
+.svg-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+</style>
+```
+
+在组件中使用
+
+```html
+<svg-icon icon-class="search" />
+```
+
+## 在 vue-cli 中引入可选链操作符
+
+在 vue-cli 创建的项目中引入可选链、空值合并操作符
+
+```sh
+npm i -D @babel/plugin-proposal-optional-chaining  @babel/plugin-proposal-nullish-coalescing-operator
+```
+
+配置`babel.config.js`
+
+```js
+module.exports = {
+  plugins: ['@babel/plugin-proposal-optional-chaining', '@babel/plugin-proposal-nullish-coalescing-operator']
+};
+```
+
+使用：`a?.b?.c`、`a??b`
+
+注意：目前 Vue 默认是不支持在 template 中使用可选链操作符的

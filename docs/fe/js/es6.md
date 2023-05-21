@@ -1143,7 +1143,7 @@ a || 1; // 1
 a ?? 1; // 0
 ```
 
-## 可选链
+## 可选链和双问号
 
 当位于 `?.` 前面的值为 `undefined` 或 `null` 时，会立即阻止代码的执行，并返回 `undefined`
 
@@ -1152,8 +1152,15 @@ const obj = { name: 'zgh' };
 obj?.a;
 ```
 
-三种形式：
+可选链的三种形式：
 
 - `obj?.pron`
 - `obj?.[pron]`
 - `obj.method?.()`
+
+假设有表达式为：`left ?? right`
+
+- 当 left 是：0、''、false，会返回 left 的值
+- 当 left 是 null、undefined，会返回 right 的值
+
+`||`与双问号的区别是：当 left 是 0、''、false 时，会返回 right 的值

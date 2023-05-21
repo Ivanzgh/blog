@@ -165,21 +165,14 @@ app.listen(3000);
 
 ### 5、req,res 相关方法
 
-req.query&emsp;将查询字符串变成对象
-
-req.path &emsp;得到路径名
-
-res.send&emsp;直接发送响应的内容，普通字符串和 html 标签均可
-
-res.sendFile &emsp;用来发送文件
-
-res.json&emsp;用来发送一个 json 格式的字符串
-
-res.render&emsp;渲染，需要结合模板引擎去使用
-
-res.download&emsp;提供下载的方法
-
-res.redirect &emsp; 重定向方法
+- req.query 将查询字符串变成对象
+- req.path 得到路径名
+- res.send  直接发送响应的内容，普通字符串和 html 标签均可
+- res.sendFile 用来发送文件
+- res.json  用来发送一个 json 格式的字符串
+- res.render  渲染，需要结合模板引擎去使用
+- res.download  提供下载的方法
+- res.redirect  重定向方法
 
 ### 6、ejs 模板引擎
 

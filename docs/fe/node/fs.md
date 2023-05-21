@@ -237,7 +237,7 @@ createWriteStream 适合大文件写入或者频繁写入的场景，writeFile �
 
 语法：`fs.unlink(path, callback)`
 
-异步地删除文件或符号链接。不适用目录，删除目录要使用`fs.rmdir()`
+异步地删除文件或符号链接。删除的文件不会保留在垃圾篓里。不适用目录，删除目录要使用`fs.rmdir()`
 
 ```js
 fs.unlink('./1.txt', (err) => {
@@ -249,7 +249,23 @@ fs.unlink('./1.txt', (err) => {
 ### fs.unlinkSync()
 
 语法：`fs.unlinkSync(path)`
+
 同步删除文件
+
+```js
+fs.unlinkSync('1.txt');
+```
+
+### fs.rm()
+
+```js
+fs.rm('1.txt', (err) => {
+  if (err) throw err;
+  console.log('success');
+});
+```
+
+同步删除：`fs.rmSync()`
 
 ## 打开文件
 
@@ -267,67 +283,94 @@ fs.unlink('./1.txt', (err) => {
 
 打开目录
 
-## 复制文件夹
+## 复制文件
 
 ```js
 let path = require('path');
 let fs = require('fs');
 
+// 要复制的源文件名、复制操作的目标文件名
 function copyFile({ src, dest }) {
   fs.readdir(path.resolve(src), (err, files) => {
-    if (err) {
-      console.log('获取文件夹失败');
-      throw err;
-    } else {
-      files.forEach((item) => {
-        let oldFile = path.resolve(src, item);
-        let newFile = path.resolve(dest, item);
-        fs.copyFile(oldFile, newFile, (err) => {
-          if (err) throw err;
-          console.log(oldFile + '复制到' + newFile);
-        });
+    if (err) throw err;
+    files.forEach((item) => {
+      let oldFile = path.resolve(src, item);
+      let newFile = path.resolve(dest, item);
+      fs.copyFile(oldFile, newFile, (err) => {
+        if (err) throw err;
+        console.log(oldFile + '复制到' + newFile);
       });
-    }
+    });
   });
 }
 
-const params = {
-  src: './src/beijing', // 要复制的源文件名
-  dest: './src/shanghai' // 复制操作的目标文件名
-};
+const params = { src: './src/beijing', dest: './src/shanghai' };
 copyFile(params);
 ```
+
+方式一、readFlie
+
+```js
+const data = fs.readFileSync('./index.mp4');
+fs.writeFileSync('index2.mp4', data);
+```
+
+方式二、流式写入
+
+```js
+const rs = fs.createReadStream('./index.mp4');
+const ws = fs.createWriteStream('./index3.mp4');
+rs.on('data', (chunk) => {
+  ws.write(chunk);
+});
+```
+
+流式写入比 readFile 更好
+
+1. 因为 readFile 会把整个文件读取到内存当中，如果文件很大会占很多内存空间
+2. fs.createReadStream()在理想状态下只会占据 64kb 的内存空间。为什么是理想状态？因为文件读取比文件写入更快，当读取到内存中的一个 64kb 的数据还没有完全写入另一个文件中时，后面多个 64kb 的数据可能已经被读取到内存中了
 
 ## 更改文件名称
 
 ```js
+fs.rename('./index1.txt', 'index2.txt', (err) => {
+  if (err) throw err;
+  console.log('success');
+});
+```
+
+```js
 let path = require('path');
 let fs = require('fs');
 
+// 要更改的文件夹、要更改的源文件名、要更改的目标文件名
 function rename({ dest, from, to }) {
   fs.readdir(path.resolve(dest), (err, files) => {
-    if (err) {
-      console.log('获取文件夹失败');
-      throw err;
-    } else {
-      files.forEach((item) => {
-        let oldName = path.resolve(dest, item);
-        let newName = oldName.replace(from, to);
-        fs.rename(oldName, newName, (renameErr) => {
-          if (renameErr) throw renameErr;
-          console.log(oldName + '文件名称改为:' + newName);
-        });
+    if (err) throw err;
+    files.forEach((item) => {
+      let oldName = path.resolve(dest, item);
+      let newName = oldName.replace(from, to);
+      fs.rename(oldName, newName, (renameErr) => {
+        if (renameErr) throw renameErr;
+        console.log(oldName + '文件名称改为:' + newName);
       });
-    }
+    });
   });
 }
 
-const params = {
-  dest: './src/shanghai', // 要更改的文件夹
-  from: 'jhyj_dc', // 要更改的源文件名
-  to: 'jhyj_sh' // 要更改的目标文件名
-};
+const params = { dest: './src/docs', from: 'a', to: 'b' };
 rename(params);
+```
+
+## 移动文件
+
+例如，想将 1.txt 移动到 docs 文件夹下，注意文件名称不能省略，要在 docs 路径后面写上文件名称
+
+```js
+fs.rename('./1.txt', './docs/1.txt', (err) => {
+  if (err) throw err;
+  console.log('success');
+});
 ```
 
 ## 中文乱码
@@ -348,3 +391,136 @@ stream.on('end', () => {
   const str = iconv.decode(buf, 'GBK');
 });
 ```
+
+## 文件夹操作
+
+### 创建文件夹
+
+异步创建：`fs.mkdir(path[,options],callback)`
+
+同步创建：`fs.mkdirSync(path[,options])`
+
+```js
+fs.mkdir('./node', (err) => {
+  if (err) throw err;
+  console.log('success');
+});
+```
+
+**递归创建**，配置 recursive 为 true，可以递归创建类似`/a/b/c`这样的嵌套文件夹
+
+```js
+fs.mkdir('./node/a/b/c', { recursive: true }, (err) => {
+  if (err) throw err;
+  console.log('success');
+});
+```
+
+在 vscode 中如果创建空的嵌套文件夹，会以紧凑型形式呈现文件夹。如果想要全部展开，可以`command ,`打开 Settings，输入 compact，将`Explorer: Compact Folder`这个选项取消勾选即可
+
+### 读取文件夹
+
+```js
+fs.readdir('./docs/vis', (err, files) => {
+  if (err) throw err;
+  console.log(files);
+});
+```
+
+读取结果是一个数组：`[ '.DS_Store', 'bi', 'gis', 'three' ]`，包括隐藏文件（如`.DS_Store`）都能读取出来
+
+### 删除文件夹
+
+```js
+fs.rmdir('./node/a', (err) => {
+  if (err) throw err;
+  console.log('success');
+});
+```
+
+如果要删除的文件夹不是空的，则会删除失败。这时可以配置使用**递归删除**
+
+方式一、fs.rm()
+
+```js
+fs.rm('./node', { recursive: true }, (err) => {
+  if (err) throw err;
+  console.log('success');
+});
+```
+
+方式二、fs.rmdir()
+
+```js
+fs.rmdir('./node', { recursive: true }, (err) => {
+  if (err) throw err;
+  console.log('success');
+});
+```
+
+虽然`fs.rmdir()`目前可以达到效果，但是不推荐使用，在以后会被废弃。这种方式会在控制台打印警告信息：
+`DeprecationWarning: In future versions of Node.js, fs.rmdir(path, { recursive: true }) will be removed. Use fs.rm(path, { recursive: true }) instead`
+
+## 查看资源信息
+
+```js
+fs.stat('./deploy.sh', (err, stats) => {
+  if (err) throw err;
+  console.log(stats);
+
+  // 检测是否是文件
+  console.log(stats.isFile()); // true
+
+  // 检测是否是文件目录
+  console.log(stats.isDirectory()); // false
+});
+```
+
+打印结果：
+
+```sh
+Stats {
+  dev: 16777231,
+  mode: 33188,
+  nlink: 1,
+  uid: 501,
+  gid: 20,
+  rdev: 0,
+  blksize: 4096,
+  ino: 5261802,
+  size: 509,
+  blocks: 8,
+  atimeMs: 1659754243912.1633,
+  mtimeMs: 1659752696316.591,
+  ctimeMs: 1659752696316.591,
+  birthtimeMs: 1659751221313.8948,
+  atime: 2022-08-06T02:50:43.912Z,
+  mtime: 2022-08-06T02:24:56.317Z,
+  ctime: 2022-08-06T02:24:56.317Z,
+  birthtime: 2022-08-06T02:00:21.314Z
+}
+```
+
+size（文件大小）、birthtime（创建时间）、atime（最后一次访问的时间）、mtime（最后一次修改文件的时间）、ctime（最后一次更改文件状态的时间）
+
+## 相对路径、绝对路径
+
+假设有一个 docs 文件夹，里面有一个 node.js 文件，内容如下，想要在 docs 目录里创建一个 1.txt 的文件
+
+```js
+fs.writeFileSync('./1.txt', 'hello');
+```
+
+在项目根路径下执行 `node ./docs/node.js`，执行完成后发现在项目根目录生成了一个 1.txt 的文件，并没有在 docs 目录里。需要先进入 docs 目录，再执行命令才可以。
+
+这里使用了相对路径，**相对路径参照物：命令行的工作目录**
+
+`__dirname`保存的是**当前文件所在目录的绝对路径**。比如我有一个 index.js 的文件在 docs 目录下，结果就是`/Users/zgh/code/node/docs`
+
+上面的需求就可以按下方写，注意去掉斜杠前面的小点
+
+```js
+fs.writeFileSync(__dirname + '/1.txt', 'hello');
+```
+
+`__filename`保存的是当前文件的绝对路径

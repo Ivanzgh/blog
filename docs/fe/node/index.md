@@ -97,14 +97,57 @@ const myapp = require('../com/my.js');
 
 > require 引入和 es6 的 import 引入的区别？
 
-## process 模块
-
-`process.argv` 可以获得命令行调用的信息，以空格分隔。假设执行一个脚本 test.js，运行`node test.js`，
-那么`process.argv`的结果是`['node', 'test.js']`
-
 ## 库
 
 - [csvtojson](https://www.npmjs.com/package/csvtojson) CSV 格式转为 JSON
 - [randomjson](https://www.npmjs.com/package/randomjson) 生成随机 JSON 数据
 - [http-proxy-agent](https://www.npmjs.com/package/http-proxy-agent) HTTP(s) 代理 HTTP.Agent 实现 HTTP
 - [multiparty](https://www.npmjs.com/package/multiparty) 解析具有`multipart/form-data`类型的 HTTP 请求，如解析上传文件
+
+## process 模块
+
+`process.argv` 可以获得命令行调用的信息，以空格分隔。假设执行一个脚本 test.js，运行`node test.js`，
+那么`process.argv`的结果是`['node', 'test.js']`
+
+## path 模块
+
+可以操作路径
+
+- `path.resolve` 拼接规范的绝对路径
+- `path.sep` 获取操作系统的路径分隔符
+- `path.parse` 解析路径并返回对象
+- `path.basename` 获取路径的基础名称
+- `path.dirname` 获取路径的目录名
+- `path.extname` 获取路径的扩展名
+
+```js
+const path = require('path');
+
+// 结果：Windows下是反斜杠 \ ，linux下是正斜杠 /
+console.log(path.sep);
+
+console.log(path.resolve(__dirname, '1.txt')); // 结果：/Users/zgh/code/blog/1.txt
+
+const pathName = '/Users/zgh/code/blog/1.txt';
+console.log(path.parse(pathName));
+
+console.log(path.basename(pathName)); // 1.txt
+
+console.log(path.dirname(pathName)); // 结果：/Users/zgh/code/blog
+
+console.log(path.extname(pathName)); // .txt
+```
+
+`path.resolve()`这里第二个参数可以写`'1.txt'`或者`'./1.txt'`，但是不能写`'/index'`，即可以写相对路径
+
+上面`path.parse(pathName)`的打印结果如下：
+
+```js
+{
+  root: '/',
+  dir: '/Users/zgh/code/blog',
+  base: '1.txt',
+  ext: '.txt',
+  name: '1'
+}
+```

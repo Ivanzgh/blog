@@ -14,13 +14,48 @@
 
 可以处理异步，通过 dispatch 触发，不能直接修改 state ，首先在组件中通过 dispatch 触发 action，然后在 action 函数内部 commit 触发 mutation，通过 mutation 修改 state 状态值
 
+```js
+<script>
+import { mapActions } from 'vuex';
+export default {
+  methods: {
+    ...mapActions(['setNum']),
+  },
+  async mounted() {
+    await this.setNum({ number: 123 });
+  },
+};
+</script>
+```
+
 ### getter
 
 Vuex 中的计算属性，相当于 vue 中的 computed。依赖于 state 状态值，状态值一旦改变，getter 会重新计算
 
+```js
+// <template>
+//   <h1>{{name}}</h1>
+// </template>
+
+import { mapGetters } from 'vuex';
+
+export default {
+  computed: {
+    ...mapGetters(['name', 'age'])
+  }
+};
+```
+
 ### module
 
 模块化管理
+
+## 解构
+
+state/getters/mutations/actions 这四个属性都能解构出来：mapState、mapGetters、mapMutations、mapActions
+
+- 解构到 computed 中：mapState、mapGetters
+- 解构到 methods 中：mapMutations、mapActions
 
 ## 单独使用
 
@@ -64,7 +99,35 @@ this.$store.commit('SET_USERINFO', userinfo);
 this.$store.state.userInfo;
 ```
 
-## 分模块使用
+## 按属性拆分
+
+目录结构：
+
+```sh
+-- store
+  -- index.js
+  -- state.js
+  -- getters.js
+  -- mutations.js
+  -- actions.js
+```
+
+```js
+import Vue from 'vue';
+import Vuex from 'vuex';
+import { state } from './state';
+import { getters } from './getters';
+import { mutations } from './mutations';
+import { actions } from './actions';
+
+Vue.use(Vuex);
+
+const store = new Vuex.Store({ state, getters, mutations, actions });
+
+export default store;
+```
+
+## 按功能模块拆分
 
 index.js
 
@@ -144,7 +207,18 @@ export default {
 
 先在`computed`中拿到值，然后在`watch`中监听即可
 
-```vue
-computed: { refreshData() { return this.$store.state.ship.shipFocus } }, watch: { refreshData(v) { if (v) {
-this.getData() } } }
+```js
+computed: {
+  refreshData() {
+    return this.$store.state.ship.shipFocus
+  }
+},
+
+watch: {
+  refreshData(v) {
+    if (v) {
+      this.getData()
+    }
+  }
+}
 ```
