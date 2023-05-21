@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,Q as l}from"./chunks/framework.f14b72c3.js";const u=JSON.parse('{"title":"UI 库","description":"","frontmatter":{},"headers":[],"relativePath":"fe/vue/ui.md","lastUpdated":1684684556000}'),p={name:"fe/vue/ui.md"},o=l("",58),F=[o];function e(t,c,r,y,i,C){return a(),n("div",null,F)}const f=s(p,[["render",e]]);export{u as __pageData,f as default};
