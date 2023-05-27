@@ -381,7 +381,7 @@ free -h  #查看内存
 查看分片 http://192.168.18.19:9200/_cluster/health?level=shards
 ```
 
-### 常见问题
+### FAQ
 
 #### 1、报错 `max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]`
 

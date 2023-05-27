@@ -80,7 +80,7 @@ sudo n rm 14.12.0
 sudo npm uninstall n -g
 ```
 
-## 载入模块
+## require 载入模块
 
 Node.js 默认是使用`CommonJS`规范
 
@@ -95,7 +95,12 @@ const http = require('http');
 const myapp = require('../com/my.js');
 ```
 
-> require 引入和 es6 的 import 引入的区别？
+require 加载第三方包的机制：
+
+1. 第三方包安装好后，这个包一般会存放在当前项目的 node_modules 文件夹中。找到这个包的 package.json 文件，并且找到里面的 main 属性对应的入口模块，这个入口模块就是这个包的入口文件
+2. 如果第三方包中没有找到 package.json 文件，或者没有 main 属性，则默认加载第三方包中的 index.js 文件
+3. 如果在 node_modules 文件夹中没有找到这个包，或者以上所有情况都没有找到，则会向上一级父级目录下查找 node_modules 文件夹，查找规则如上一致
+4. 如果一直找到该模块的磁盘根路径都没有找到，则会报错：`can not find module xxx`
 
 ## 库
 

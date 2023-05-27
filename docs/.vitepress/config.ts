@@ -37,7 +37,7 @@ export default defineConfig({
             { text: 'DOM', link: '/fe/js/dom' },
             { text: 'JSON', link: '/fe/js/json' },
             { text: 'AJAX', link: '/fe/js/ajax' },
-            { text: '模块化', link: '/fe/js/module' },
+            { text: '模块化规范', link: '/fe/js/module' },
             { text: '手写JS', link: '/fe/js/truth' },
             { text: '工具', link: '/fe/js/utils' }
           ]
@@ -138,10 +138,16 @@ export default defineConfig({
             { text: 'Http', link: '/fe/node/http' }
           ]
         },
-        { text: 'Express', collapsed: false, items: [{ text: 'Express', link: '/fe/node/express' }] },
-        { text: 'Koa', collapsed: false, items: [{ text: 'Koa', link: '/fe/node/koa' }] },
-        { text: 'Egg', collapsed: false, items: [{ text: 'Egg', link: '/fe/node/egg' }] },
-        { text: 'MongoDB', collapsed: false, items: [{ text: 'MongoDB', link: '/fe/node/mongodb' }] }
+        {
+          text: '框架',
+          collapsed: false,
+          items: [
+            { text: 'Express', link: '/fe/node/express' },
+            { text: 'Koa', link: '/fe/node/koa' },
+            { text: 'Egg', link: '/fe/node/egg' },
+            { text: 'MongoDB', link: '/fe/node/mongodb' }
+          ]
+        }
       ],
       '/automate/': [
         {
@@ -176,8 +182,8 @@ export default defineConfig({
           text: '🧰 工具箱',
           collapsed: false,
           items: [
-            { text: 'vscode', link: '/tools/vscode' },
             { text: 'plugin', link: '/tools/plugin' },
+            { text: 'vscode', link: '/tools/vscode' },
             { text: 'iTerm2', link: '/tools/iTerm2' },
             { text: '部署', link: '/tools/deploy' }
           ]
@@ -236,7 +242,7 @@ function nav() {
         { text: 'Node', link: '/fe/node/' },
         { text: '前端工程化', link: '/automate/npm' },
         { text: '小程序', link: '/miniProgram/wx' },
-        { text: '工具', link: '/tools/vscode' }
+        { text: '工具', link: '/tools/plugin' }
       ]
     },
     {

@@ -1,14 +1,28 @@
 # NPM
 
+> npm 全称是 Node Package Manager ，是 Node.js 官方内置的包管理工具
+
 npm 官网：[https://www.npmjs.com/](https://www.npmjs.com/)
 
 npm 中文文档：[https://www.npmjs.cn/](https://www.npmjs.cn/)
+
+## 安装和初始化
+
+Node.js 在安装时会自动安装 npm ，所以如果已经安装了 Node.js，可以直接使用 npm。可以通过 `npm -v` 查看版本号测试，如果显示版本号说明安装成功，反之安装失败
+
+在一个空目录的终端执行`npm init`初始化。初始化的过程中的注意事项：
+
+- package name 不能使用中文、大写，默认值是文件夹的名称
+- version 要求 x.x.x 的形式定义，x 必须是数字，默认值是 1.0.0
+- ISC 证书与 MIT 证书功能上是相同的
+- package.json 可以手动创建与修改
 
 ## 常用指令
 
 | order                                | Description                            |
 | :----------------------------------- | :------------------------------------- |
 | npm init                             | 初始化，生成 package.json              |
+| npm init -y 或者 npm init --yes      | 快速创建 package.json                  |
 | npm install packname (简写 npm i )   | 安装依赖包，默认将依赖安装到生产环境中 |
 | npm uninstall packnae (简写 npm uni) | 卸载依赖包                             |
 | npm update packname                  | 更新依赖包                             |

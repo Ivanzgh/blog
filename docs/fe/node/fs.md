@@ -178,6 +178,25 @@ fs.writeFile('./1.txt', '异步写入', (err) => {
 fs.writeFileSync('./1.txt', '同步写入');
 ```
 
+示例：修改 package.json 里面的版本号 version
+
+```js
+const fs = require('fs');
+
+const pkgStr = fs.readFileSync('./package.json', { encoding: 'utf-8' });
+const pkg = JSON.parse(pkgStr);
+pkg.version = '1.0.1';
+
+const data = JSON.stringify(pkg, null, '\t');
+
+fs.writeFile('./package.json', data, (err) => {
+  if (err) throw err;
+  console.log('success');
+});
+
+// fs.writeFileSync('./package.json', data);
+```
+
 ### fs.appendFile()
 
 [API](https://nodejs.cn/api/fs.html#fsappendfilepath-data-options-callback)

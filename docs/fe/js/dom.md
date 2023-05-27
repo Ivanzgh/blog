@@ -1,34 +1,26 @@
 # DOM
 
-## 基础操作
+DOM（Document Object Model） 文档对象模型
 
-### 简介
-
-DOM : Document Object Model 文档对象模型
-
-Document : html 文档
-
-Object : html 元素
-
-Model : 树模型(dom 树)
+- Document：html 文档
+- Object：html 元素
+- Model：树模型
 
 是一组用来描述 js 代码怎样与 html 文档进行交互和访问的 web 标准，它定义了一系列对象、方法和属性，用于访问、操作和创建文档中的内容、结构、样式和行为。
 
-#### js 和 dom 的关系
+> JavaScript 包括 DOM，JavaScript 由 ECMAScript、DOM、BOM 组成
 
-js 包括 dom，js 由 ECMAScript、DOM、BOM 组成
-
-#### 节点
+## 节点
 
 ```html
 <a href="http://www.baidu.com">百度</a>
 ```
 
-- 整个元素表示元素节点；
-- href="http://www.baidu.com" 表示属性节点；
+- 整个元素表示元素节点
+- `href="http://www.baidu.com"` 表示属性节点
 - 百度 表示文本节点
 
-### 操作元素节点
+## 操作元素节点
 
 - 创建 createElement
 - 插入 appendChild、insertBefore
@@ -36,49 +28,42 @@ js 包括 dom，js 由 ECMAScript、DOM、BOM 组成
 - 删除 removeChild
 - 替换 replaceChild
 
-#### createElement
+### createElement
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Title</title>
-  </head>
-  <body>
-    <div id="box"></div>
-  </body>
-  <script>
-    let h1 = document.createElement('h1')
-    console.log(h1) // <h1></h1>
-  </script>
-</html>
-```
-
-创建好的元素并未添加进页面
-
-#### appendChild、insertBefore
+创建节点，创建好的元素并未添加进页面
 
 ```js
-let h1 = document.createElement('h1')
-let h2 = document.createElement('h2')
-let box = document.getElementById('box')
-box.appendChild(h1)
-box.insertBefore(h2, h1) //将h2添加到h1的前面
+let h1 = document.createElement('h1');
+console.log(h1); // <h1></h1>
 ```
 
-#### cloneNode
+### appendChild、insertBefore
+
+插入节点
+
+```js
+let h1 = document.createElement('h1');
+let h2 = document.createElement('h2');
+let box = document.getElementById('box');
+box.appendChild(h1);
+box.insertBefore(h2, h1); // 将h2添加到h1的前面
+```
+
+### cloneNode
+
+复制节点
 
 ```js
 // <div id="box">hello</div>
 
-let box = document.getElementById('box')
-let rs = box.cloneNode() //浅复制
-//let rs = box.cloneNode(true) //深复制
-console.log(rs)
+let box = document.getElementById('box');
+let rs = box.cloneNode(); // 浅复制
+// let rs = box.cloneNode(true) // 深复制
 ```
 
-#### removeChild
+### removeChild
+
+移除节点
 
 ```js
 /**
@@ -88,12 +73,14 @@ console.log(rs)
 </div>
 */
 
-let box = document.getElementById('box')
-let rm = document.getElementsByTagName('p')[0]
-box.removeChild(rm) //删除p元素
+let box = document.getElementById('box');
+let rm = document.getElementsByTagName('p')[0];
+box.removeChild(rm); // 删除p元素
 ```
 
-#### replaceChild
+### replaceChild
+
+替换节点
 
 ```js
 /**
@@ -102,26 +89,26 @@ box.removeChild(rm) //删除p元素
 </div>
 */
 
-let box = document.getElementById('box')
-let h1 = box.getElementsByTagName('h1')[0]
-let p = document.createElement('p')
-box.replaceChild(p, h1)
+let box = document.getElementById('box');
+let h1 = box.getElementsByTagName('h1')[0];
+let p = document.createElement('p');
+box.replaceChild(p, h1);
 ```
 
-### 操作属性节点
+## 操作属性节点
 
 两种操作方式：
 
-- 对象.属性
-- setAttribute()、getAttribute()
+- *对象.属性*
+- `setAttribute()`、`getAttribute()`
 
-`对象.属性`方式只对 html 中定义的属性起作用，可获取或修改属性
+*对象.属性* 方式只对 html 中定义的属性起作用，可获取或修改属性
 
 ```js
 // <a href="http://www.baidu.com">百度</a>
 
-let a = document.getElementsByTagName('a')[0]
-console.log(a.href)
+let a = document.getElementsByTagName('a')[0];
+console.log(a.href);
 // a.href = 'xxx'
 ```
 
@@ -129,9 +116,9 @@ console.log(a.href)
 属性节点并没有作为节点出现
 :::
 
-### 操作文本节点
+## 操作文本节点
 
-## JS 事件绑定的方式
+## 事件绑定的方式
 
 - 行内绑定
 - 动态绑定
@@ -139,47 +126,137 @@ console.log(a.href)
 
 ### 行内绑定
 
-<标签 属性列表 事件="事件的处理程序" />
-
 ```html
 <input type="button" onclick="display()" />
 ```
 
 ### 动态绑定
 
-dom 对象.事件 = 事件的处理程序（通常是一个匿名函数）
+```js
+// <input id="demo" type="button" value="点击我，显示 type 属性" />
 
-```html
-<input id="demo" type="button" value="点击我，显示 type 属性" />
-<script type="text/javascript">
-  document.getElementById('demo').onclick = function () {
-    alert(this.getAttribute('type')) // this 指当前发生事件的HTML元素，这里是<div>标签
-  }
-</script>
+document.getElementById('demo').onclick = function () {
+  alert(this.getAttribute('type'));
+};
 ```
 
-### 绑定事件处理函数
+### 事件监听
 
-用 `addEventListener()` 或 `attachEvent()` 来绑定事件监听函数
 用 `addEventListener()` 或 `attachEvent()` 来绑定事件监听函数
 
 IE8.0 及其以下版本不支持`addEventListener()` ，它使用`attachEvent()`来绑定事件监听函数
 
-<https://www.cnblogs.com/javawebstudy/p/5266168.html>
-
 ## target 和 currentTarget 的区别
 
-`e.target` 指向触发事件监听的对象。
+`e.target` 指向触发事件监听的对象
 
-`e.currentTarget` 指向添加监听事件的对象。
+`e.currentTarget` 指向添加监听事件的对象
 
-<https://www.jianshu.com/p/1dd668ccc97a>
+## 事件冒泡、事件捕获、事件委托
 
-## 事件委托
+1、事件冒泡
 
-事件委托利用了事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件。
+当一个元素触发了某个事件后，该事件会向上冒泡到该元素的所有祖先元素，直到 HTML 文档的根元素为止。比如，当点击一个子元素时，点击事件会先在子元素上触发，然后冒泡到父元素，再冒泡到更高级别的祖先元素
 
-<https://www.cnblogs.com/Chen-XiaoJun/p/6210987.html>
+2、事件捕获
+
+和事件冒泡相反的概念，即事件从最外层的元素开始捕获，然后逐级向下，直到达到触发事件的元素。这种方式一般不常用
+
+3、事件委托
+
+利用事件冒泡原理，将事件处理器绑定到某个父元素上，然后通过冒泡传递到子元素上触发。这样做可以减少事件处理器的数量，提高性能
+
+4、如何阻止事件冒泡
+
+使用事件对象的 `stopPropagation()` 方法
+
+5、如何阻止默认事件
+
+使用事件对象的 `preventDefault()` 方法。浏览器默认行为有链接跳转、表单提交等
+
+代码示例：
+
+```html
+<div id="parent">
+  <div id="child">Click me!</div>
+</div>
+```
+
+事件冒泡示例
+
+```js
+const parent = document.querySelector('#parent');
+const child = document.querySelector('#child');
+
+parent.addEventListener('click', function (e) {
+  console.log('父元素被点击');
+});
+child.addEventListener('click', function (e) {
+  console.log('子元素被点击');
+});
+document.addEventListener('click', function (e) {
+  console.log('document被点击');
+});
+```
+
+事件捕获示例：在事件监听器中添加了一个参数 `useCapture`，设置为 true 即是事件捕获
+
+```js
+parent.addEventListener(
+  'click',
+  function (e) {
+    console.log('父元素被点击');
+  },
+  true
+);
+child.addEventListener(
+  'click',
+  function (e) {
+    console.log('子元素被点击');
+  },
+  true
+);
+document.addEventListener(
+  'click',
+  function (e) {
+    console.log('document被点击');
+  },
+  true
+);
+```
+
+事件委托示例，将事件监听器绑定到父元素上，然后利用 `e.target` 属性判断是否点击的是子元素，从而触发相应的事件处理器
+
+```js
+// <div id="parent">
+//   <div id="child1">Click me!</div>
+//   <div class="child2">Click me!</div>
+// </div>
+
+const parent = document.querySelector('#parent');
+
+parent.addEventListener('click', function (e) {
+  if (e.target && e.target.matches('#child1')) {
+    console.log('子元素1被点击');
+  }
+  if (e.target && e.target.matches('.child2')) {
+    console.log('子元素2被点击');
+  }
+});
+```
+
+阻止事件冒泡示例，在子元素的事件监听器中调用 `e.stopPropagation()` 方法，以阻止事件冒泡到父元素
+
+```js
+parent.addEventListener('click', function (e) {
+  console.log('父元素被点击');
+});
+
+child.addEventListener('click', function (e) {
+  console.log('子元素被点击');
+  e.stopPropagation();
+});
+```
 
 ## getBoundingClientRect
 

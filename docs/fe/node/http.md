@@ -130,3 +130,42 @@ url 的打印结果如下：
   hash: ''
 }
 ```
+
+## 设置 HTTP 响应报文
+
+|       作用       |                 语法                 |
+| :--------------: | :----------------------------------: |
+|  设置响应状态码  |         response.statusCode          |
+| 设置响应状态描述 |        response.statusMessage        |
+|  设置响应头信息  |   response.setHeader('名称', '值')   |
+|    设置响应体    | response.write() 或者 response.end() |
+
+## 搭建静态资源服务
+
+假设有一个 docs 的文件夹，需要托管静态资源。在`http://127.0.0.1:9000/`后面拼接子目录即可访问。
+
+这里的 docs 就是静态资源目录，也称为网站根目录
+
+```js
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.setHeader('Content-Type', 'text/html;charset=utf-8');
+  const url = new URL(req.url, 'http://127.0.0.1:9000');
+  const pathname = url.pathname;
+  const root = __dirname + '/docs';
+  const filePath = root + pathname;
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.statusCode = 500;
+      res.end('Server Error');
+      return;
+    }
+    res.end(data);
+  });
+});
+
+server.listen(9000, () => {
+  console.log('server start...');
+});
+```

@@ -81,7 +81,7 @@ default-storage-engine=INNODB
 
 然后新建一个数据库，字符集选择 UTF-8 编码，然后右击新建的数据库，点击运行 SQL 文件即可
 
-## 常见问题
+## FAQ
 
 ### 安装服务时报错：无法启动此程序，因为计算机丢失 MSVCP120.dll
 

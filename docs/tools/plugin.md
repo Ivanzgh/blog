@@ -19,9 +19,9 @@
   - [bpmn-js 文档](https://bpmn.io/toolkit/bpmn-js/walkthrough/)、[github 仓库](https://github.com/bpmn-io/bpmn-js)，在后面两个库之上，bpmn-js 定义了 BPMN 细节，例如外观、建模规则和工具（即调色板）
   - [bpmn-moddle](https://github.com/bpmn-io/bpmn-moddle)，读写 BPMN 2.0 模式兼容的 XML 文档，并访问图表上绘制的形状和连接背后的 BPMN 相关信息
   - [diagram-js](https://github.com/bpmn-io/diagram-js)，用来绘制形状和连接，提供与图形元素交互的方法以及其他工具
-  - [参考1](https://juejin.cn/post/6844904017567416328)
-  - [参考2](https://gitee.com/zhijiantianya/ruoyi-vue-pro)
-  - [参考3](https://github.com/miyuesc/bpmn-process-designer)
+  - [参考 1](https://juejin.cn/post/6844904017567416328)
+  - [参考 2](https://gitee.com/zhijiantianya/ruoyi-vue-pro)
+  - [参考 3](https://github.com/miyuesc/bpmn-process-designer)
 
 ## 甘特图
 
@@ -67,15 +67,15 @@
 - [strapi](https://strapi.io/)、[github](https://github.com/strapi/strapi)
 - [Odoo](https://www.odoo.com/zh_CN)、[github](https://github.com/odoo/odoo)
 
-## OA系统
+## OA 系统
 
 ### O2OA
 
-- [开源免费OA开发平台_移动OA办公系统_电子政务OA_信创国产化OA](https://www.o2oa.net/)
-- [O2OA企业应用开发平台/O2OA - 码云](https://gitee.com/o2oa/O2OA)
-- [O2OA使用手册](https://www.o2oa.net/handbook.html)
+- [开源免费 OA 开发平台*移动 OA 办公系统*电子政务 OA\_信创国产化 OA](https://www.o2oa.net/)
+- [O2OA 企业应用开发平台/O2OA - 码云](https://gitee.com/o2oa/O2OA)
+- [O2OA 使用手册](https://www.o2oa.net/handbook.html)
 - [示例-企业通用办公平台](https://sample.o2oa.net/x_desktop/index.html)
-- [O2OA开发平台视频讲解](https://www.ixigua.com/home/58158361878)
+- [O2OA 开发平台视频讲解](https://www.ixigua.com/home/58158361878)
 
 ## 虚拟列表
 
@@ -166,6 +166,10 @@
 ## 懒加载
 
 - [lazysizes](https://github.com/aFarkas/lazysizes)
+
+## JSON 数据美化
+
+- [vue-json-pretty](https://github.com/leezng/vue-json-pretty)
 
 ## vuex 状态持久化
 
@@ -285,4 +289,23 @@ function animation() {
   threelayer.renderScene();
 }
 animation();
+```
+
+### lottiefiles
+
+https://lottiefiles.com/
+
+Lottie 是一种基于 JSON 的动画文件格式，可以创建复杂的 UI SVG 动画
+
+https://lottiereact.com/
+
+在 react 项目中使用 lottiefiles
+
+```jsx
+import Lottie from 'lottie-react';
+import animationData from './assets/dlf10_pPYkESohrg.json';
+
+export default function Children() {
+  return <Lottie animationData={animationData} />;
+}
 ```

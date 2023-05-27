@@ -41,7 +41,7 @@ JAVA_HOME  C:\Program Files\Java\jdk-14.0.2
 在 tomcat 下的 bin 文件夹中找到 `startup.bat` 双击启动，启动成功后在浏览器打开 `localhost` 即可看到 webapps 文件夹下的 `ROOT` 项目，若要看其他的项目，例如 example 项目则在浏览器输入`localhost/example`。
 注意此处是 80 端口，不会显示在地址栏中，如果没有修改 8080 端口号，则要输入 localhost:8080 才能看到效果。
 
-## 常见问题
+## FAQ
 
 ### 中文乱码
 

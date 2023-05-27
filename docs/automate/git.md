@@ -720,7 +720,7 @@ git merge test/master --allow-unrelated-histories
 
 当你在本地仓库中创建一个新的分支时，该分支的历史记录是独立的，并且不包含来自 antd 远程仓库的历史记录。因此当你想将来自 antd 的更新合并到本地分支时，Git 会拒绝合并，因为这些历史记录不相关
 
-## 常见问题
+## FAQ
 
 ### mac 下误将.DS_Store 文件上传到 GitHub
 
