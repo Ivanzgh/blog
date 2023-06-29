@@ -244,7 +244,9 @@ if (fruits.indexOf('Apple') > -1) {
 
 判断元素是否在数组中存在，返回值是 `true`或`false`
 
-语法 `array.includes(item, start)`，`item`查找的元素，`start`开始检索的位置(可选，默认是 0)，正向查找
+语法 `array.includes(item, start)`，`item`要查找的元素，`start`开始检索的位置(可选，默认是 0)，正向查找
+
+如果 start 为负值，则使用`数组长度 + start`的计算结果作为新的索引
 
 ```js
 let arr = [1, 2, 3];

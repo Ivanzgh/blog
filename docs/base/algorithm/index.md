@@ -1,5 +1,11 @@
 # 算法
 
+## 冒泡排序
+
+## 选择排序
+
+## 插入排序
+
 ## 归并排序
 
 归并排序采用**分治思想**。将一个数组分成 2 个，再分成 4 个，依次下去，直到分割成一个一个的数据，
@@ -11,80 +17,80 @@
 
 ```js
 function sortArray(nums) {
-  if (nums.length < 2) return nums
-  let middle = Math.floor(nums.length / 2)
+  if (nums.length < 2) return nums;
+  let middle = Math.floor(nums.length / 2);
   let left = [],
-    right = []
-  left = nums.slice(0, middle)
-  right = nums.slice(middle)
-  return merge(sortArray(left), sortArray(right))
+    right = [];
+  left = nums.slice(0, middle);
+  right = nums.slice(middle);
+  return merge(sortArray(left), sortArray(right));
 }
 
 function merge(left, right) {
-  let result = []
+  let result = [];
   while (left.length && right.length) {
     if (left[0] < right[0]) {
-      result.push(left.shift())
+      result.push(left.shift());
     } else {
-      result.push(right.shift())
+      result.push(right.shift());
     }
   }
   while (left.length) {
-    result.push(left.shift())
+    result.push(left.shift());
   }
   while (right.length) {
-    result.push(right.shift())
+    result.push(right.shift());
   }
-  return result
+  return result;
 }
 
-let arr = [2, 1, 4, 5, 3, 1, 5, 6, 0]
-let res = sortArray(arr)
-console.log(res) // [0, 1, 1, 2, 3, 4, 5, 5, 6]
+let arr = [2, 1, 4, 5, 3, 1, 5, 6, 0];
+let res = sortArray(arr);
+console.log(res); // [0, 1, 1, 2, 3, 4, 5, 5, 6]
 ```
 
 方式二、
 
 ```js
 function mergeArray(arr, first, mid, last, temp) {
-  let i = first
-  let m = mid
-  let j = mid + 1
-  let n = last
-  let k = 0
+  let i = first;
+  let m = mid;
+  let j = mid + 1;
+  let n = last;
+  let k = 0;
   while (i <= m && j <= n) {
     if (arr[i] < arr[j]) {
-      temp[k++] = arr[i++]
+      temp[k++] = arr[i++];
     } else {
-      temp[k++] = arr[j++]
+      temp[k++] = arr[j++];
     }
   }
   while (i <= m) {
-    temp[k++] = arr[i++]
+    temp[k++] = arr[i++];
   }
   while (j <= n) {
-    temp[k++] = arr[j++]
+    temp[k++] = arr[j++];
   }
   for (let l = 0; l < k; l++) {
-    arr[first + l] = temp[l]
+    arr[first + l] = temp[l];
   }
-  return arr
+  return arr;
 }
 
 function mergeSort(arr, first, last, temp) {
   if (first < last) {
-    let mid = Math.floor((first + last) / 2)
-    mergeSort(arr, first, mid, temp) // 左子数组有序
-    mergeSort(arr, mid + 1, last, temp) // 右子数组有序
-    arr = mergeArray(arr, first, mid, last, temp)
+    let mid = Math.floor((first + last) / 2);
+    mergeSort(arr, first, mid, temp); // 左子数组有序
+    mergeSort(arr, mid + 1, last, temp); // 右子数组有序
+    arr = mergeArray(arr, first, mid, last, temp);
   }
-  return arr
+  return arr;
 }
 
-let arr = [2, 1, 4, 5, 3, 1, 5, 6, 0]
-let temp = []
-let SortedArr = mergeSort(arr, 0, arr.length - 1, temp)
-console.log(SortedArr) // [0, 1, 1, 2, 3, 4, 5, 5, 6]
+let arr = [2, 1, 4, 5, 3, 1, 5, 6, 0];
+let temp = [];
+let SortedArr = mergeSort(arr, 0, arr.length - 1, temp);
+console.log(SortedArr); // [0, 1, 1, 2, 3, 4, 5, 5, 6]
 ```
 
 ## 数组生成树形结构
@@ -99,7 +105,7 @@ const arr = [
   { id: 6, value: '节点6', p_id: 5 },
   { id: 7, value: '节点7', p_id: 6 },
   { id: 8, value: '节点8', p_id: 6 }
-]
+];
 ```
 
 输出结果如下：
@@ -173,23 +179,24 @@ const arr = [
   { id: 6, value: '节点6', p_id: 5 },
   { id: 7, value: '节点7', p_id: 6 },
   { id: 8, value: '节点8', p_id: 6 }
-]
-let getTree = arr => {
+];
+let getTree = (arr) => {
   return arr
     .reduce((prev, next) => {
-      let finder = arr.find(item => item.id === next.p_id)
+      let finder = arr.find((item) => item.id === next.p_id);
       if (finder) {
-        ;(finder.children || ((finder.children = []), finder.children)).push(next)
-        prev.every(next => next.id !== finder.id) && prev.push(finder)
+        (finder.children || ((finder.children = []), finder.children)).push(next);
+        prev.every((next) => next.id !== finder.id) && prev.push(finder);
       }
-      return prev
+      return prev;
     }, [])
-    .reduce(
-      (prev, next, i, arr) => (arr.every(item => item.id !== next.p_id) && prev.push(next), prev),
-      []
-    )
-}
-getTree(arr)
+    .reduce((prev, next, i, arr) => (arr.every((item) => item.id !== next.p_id) && prev.push(next), prev), []);
+};
+getTree(arr);
 ```
 
 时间复杂度 O(n)
+
+## 动态规划
+
+## 贪心算法

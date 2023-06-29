@@ -824,24 +824,6 @@ export default {
 </style>
 ```
 
-## el-tooltip
-
-文字超出显示省略号和提示，没超出时不显示
-
-```html
-<el-tooltip effect="light" :content="item.name" placement="right" :disabled="isShowTooltip">
-  <span @mouseover="mouseOver($event)">{{ item.name }}</span>
-</el-tooltip>
-```
-
-```js
-isShowTooltip: false
-
-mouseOver(event) {
-  this.isShowTooltip = event.target.scrollWidth <= event.target.clientWidth
-}
-```
-
 ## svg-sprite-loader
 
 场景：在项目中方便地引入 svg 图标
@@ -970,3 +952,110 @@ module.exports = {
 使用：`a?.b?.c`、`a??b`
 
 注意：目前 Vue 默认是不支持在 template 中使用可选链操作符的
+
+## 拖拽、缩放
+
+```vue
+<template>
+  <div class="screen">
+    <div ref="screenBody" class="screen-body">
+      <div ref="screenTable" class="screen-table">666</div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      scaleFloor: 1,
+      scaleStep: 0.05,
+      preDownPos: {}
+    };
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const docScreen = this.$refs.screenBody;
+      docScreen.addEventListener('mousewheel', this.scrollFunc);
+      docScreen.addEventListener('DOMMouseScroll', this.scrollFunc);
+      docScreen.addEventListener('mousedown', this.downFunc);
+      docScreen.addEventListener('mouseup', this.upFunc);
+    });
+  },
+  methods: {
+    // 拖拽、缩放
+    scrollFunc(e) {
+      e = e || window.event;
+      if (e.wheelDelta) {
+        // IE/Opera/Chrome
+        this.mouseScroll(e.wheelDelta);
+      } else if (e.detail) {
+        // Firefox
+        this.mouseScroll(-e.detail);
+      }
+    },
+    downFunc(event) {
+      document.addEventListener('mousemove', this.moveFunc);
+      this.preDownPos = this.getMousePos(event);
+    },
+    moveFunc(event) {
+      const mosPostion = this.getMousePos(event);
+      this.moveScreenTable(mosPostion.x - this.preDownPos.x, mosPostion.y - this.preDownPos.y);
+      this.preDownPos = this.getMousePos(event);
+    },
+    upFunc() {
+      document.removeEventListener('mousemove', this.moveFunc);
+    },
+    moveScreenTable(x, y) {
+      const docScreen = this.$refs.screenTable;
+      let moveX = this.getPixelValue(docScreen, 'left');
+      let moveY = this.getPixelValue(docScreen, 'top');
+      moveX += x;
+      moveY += y;
+      docScreen.style.left = moveX + 'px';
+      docScreen.style.top = moveY + 'px';
+    },
+    mouseScroll(step) {
+      if (step > 0) {
+        this.scaleFloor += this.scaleStep;
+      } else if (step < 0 && this.scaleFloor > this.scaleStep * 2) {
+        this.scaleFloor -= this.scaleStep;
+      }
+      if (this.scaleFloor > 0) {
+        this.$refs.screenTable.style.transform = `scale(${this.scaleFloor})`;
+      } else {
+        this.$refs.screenTable.style.transform = '';
+      }
+    },
+    getMousePos(event) {
+      const e = event || window.event;
+      const x = e.clientX - this.$refs.screenBody.offsetLeft;
+      const y = e.clientY - this.$refs.screenBody.offsetTop;
+      return { x: x, y: y };
+    },
+    getPixelValue(doc, key) {
+      return Number(window.getComputedStyle(doc)[key].replace('px', ''));
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.screen {
+  height: calc(100vh - 86px);
+  display: flex;
+  .screen-body {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    .screen-table {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+}
+</style>
+```

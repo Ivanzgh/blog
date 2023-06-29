@@ -1034,6 +1034,28 @@ for (let k in arr) {
 
 `for in`循环遍历对象的属性时，原型链上的所有属性都将被访问，可以使用`hasOwnProperty`方法过滤或`Object.keys`会返回自身可枚举属性组成的数组
 
+### while
+
+只要条件为 true，while 会一直循环执行代码块
+
+```js
+let i = 0;
+while (i < 10) {
+  console.log(i);
+  i++;
+}
+```
+
+do/while 循环，会先执行一次 do 里面的代码块，如果条件为真，会继续循环执行
+
+```js
+let i = 0;
+do {
+  console.log(i);
+  i++;
+} while (i < 10);
+```
+
 ## not defined 和 undefined
 
 如果定义了一个变量，但未赋值，则是`undefined`; 如果未定义，则是`not defined`

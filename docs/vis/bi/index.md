@@ -43,7 +43,7 @@ export default {
         height: `${this.baseHeight}px`,
         transform: 'scale(1, 1) translate(-50%, -50%)' // 默认不缩放，垂直水平居中
       }
-    }
+    };
   },
   props: {
     baseWidth: { type: Number, default: 1920 }, // 设计稿尺寸（px）
@@ -51,15 +51,15 @@ export default {
   },
   mounted() {
     this.onResize = debounce(() => {
-      this.calcRate()
-    }, 500)
-    this.calcRate()
-    window.addEventListener('resize', this.onResize)
+      this.calcRate();
+    }, 500);
+    this.calcRate();
+    window.addEventListener('resize', this.onResize);
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.onResize)
+    window.removeEventListener('resize', this.onResize);
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -122,16 +122,16 @@ calcRate() {
 
 ```js
 function debounce(fn, delay) {
-  let timer = null
+  let timer = null;
   return function (...args) {
     timer = setTimeout(
       () => {
-        typeof fn === 'function' && fn.apply(null, args)
-        clearTimeout(timer)
+        typeof fn === 'function' && fn.apply(null, args);
+        clearTimeout(timer);
       },
       delay > 0 ? delay : 100
-    )
-  }
+    );
+  };
 }
 ```
 
@@ -196,6 +196,10 @@ function debounce(fn, delay) {
 </style>
 ```
 
+扩展：
+
+- 使用缩放都会导致地图缩小放大偏移的问题，解决办法是使用 iframe 引入地图部分
+
 ## vw、vh
 
 `vw`表示视口宽度，`vh`表示视口高度
@@ -203,9 +207,9 @@ function debounce(fn, delay) {
 假设屏幕分辨率是 `1920 x 1080`，宽高等分成 100 份，那么 1920px = 100vw，1080px = 100vh。当设计稿上有一个宽高为`300px x 200px`的`div`时，换算如下：
 
 ```js
-vw = (300 / 1920) * 100
+vw = (300 / 1920) * 100;
 
-vh = (200 / 1080) * 100
+vh = (200 / 1080) * 100;
 ```
 
 ### 特性
@@ -264,7 +268,7 @@ module.exports = defineConfig({
       }
     }
   }
-})
+});
 ```
 
 在组件中使用，将设计稿的 px 尺寸直接传入 vw、vh 函数即可
@@ -285,24 +289,24 @@ module.exports = defineConfig({
 /* Echarts图表字体、间距自适应 */
 
 export const fitChartSize = (size, defalteWidth = 1920) => {
-  let clientWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-  if (!clientWidth) return size
-  let scale = clientWidth / defalteWidth
-  return Number((size * scale).toFixed(3))
-}
+  let clientWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  if (!clientWidth) return size;
+  let scale = clientWidth / defalteWidth;
+  return Number((size * scale).toFixed(3));
+};
 ```
 
 比如要设置坐标轴轴的文字大小，如下配置即可将设计稿的 16px 字体大小换算为 vw 单位
 
 ```js
-import { fitChartSize } from '@/utils'
+import { fitChartSize } from '@/utils';
 
 const option = {
   axisLabel: {
     show: true,
     textStyle: { color: '#00c7ff', fontSize: fitChartSize(16) }
   }
-}
+};
 ```
 
 ## rem

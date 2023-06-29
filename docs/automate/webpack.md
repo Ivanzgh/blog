@@ -28,6 +28,22 @@
 
 官网：<https://webpack.js.org/>
 
+## Loader
+
+Loader 本质上是一个转换器，将匹配到的文件中的源码通过转换，使其变成另一种形态。
+
+例如，浏览器不认识 typescript 语法，但是可以通过 ts-loader 对其进行转换。从原理上来看，Loder 就是一个函数，参数为需要转换的源代码，返回转换后的新代码
+
+示例：假如我想在代码里用中文定义变量，浏览器肯定不认识，这时可以写个 loader 去转换，设定的语法格式：`变量 name = 'zgh'`
+
+```js
+function chineseLoader(originCode) {
+  return originCode.replace(/变量/g, 'let');
+}
+```
+
+这里的`chineseLoader`就是一个极简单的 Loader
+
 ## 依赖分析和 CDN 加速
 
 这里以 Vue 项目打包优化为例，减少打包体积，生产环境使用 CDN 加速

@@ -1164,3 +1164,17 @@ obj?.a;
 - 当 left 是 null、undefined，会返回 right 的值
 
 `||`与双问号的区别是：当 left 是 0、''、false 时，会返回 right 的值
+
+## 逻辑运算符和赋值运算符
+
+### &&=
+
+`x &&= y`等价于：`x && (x = y)`，当 x 为真时，`x = y`
+
+### ||=
+
+`x ||= y`等价于：`x || (x = y)`，仅在 x 为 false 的时候，`x = y`
+
+### ??=
+
+`x ??= y` 等价于 `x ?? (x = y)`，仅在 x 为 null 或 undefined 的时候，x = y

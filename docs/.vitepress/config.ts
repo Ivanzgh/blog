@@ -106,8 +106,9 @@ export default defineConfig({
           items: [
             { text: 'React', link: '/fe/react/' },
             { text: 'Hook', link: '/fe/react/hook' },
-            { text: 'Redux', link: '/fe/react/redux' },
-            { text: 'React-Router', link: '/fe/react/router' }
+            { text: '状态管理', link: '/fe/react/state' },
+            { text: 'React-Router', link: '/fe/react/router' },
+            { text: 'NextJS', link: '/fe/react/next' },
           ]
         }
       ],

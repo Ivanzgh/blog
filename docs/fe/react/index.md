@@ -424,10 +424,31 @@ f1();
 
 ## fiber 架构
 
-## react 调度机制
+## react 调度策略
 
 ## 优先级概念
 
 ## commit 和 render 阶段
 
 ## hooks 原理
+
+## 结合 TypeScript
+
+### React.FC
+
+不推荐写 React.FC
+
+[参考](https://github.com/facebook/create-react-app/pull/8177)
+
+```js
+type Props = {
+  name?: string,
+  age?: number
+};
+
+// 不推荐
+const App: React.FC<Props> = (props) => {};
+
+// 推荐
+const App = (props: Props) => {};
+```

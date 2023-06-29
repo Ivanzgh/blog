@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // class Stack {
+      //   constructor() {
+      //     this.items = [];
+      //   }
+      //   // 入栈
+      //   push(element) {
+      //     this.items.push(element);
+      //   }
+      //   // 出栈
+      //   pop() {
+      //     this.items.pop();
+      //   }
+      //   // 末位
+      //   get peek() {
+      //     return this.items[this.items.length - 1];
+      //   }
+      //   // 是否为空栈
+      //   get isEmpty() {
+      //     return !this.items.length;
+      //   }
+      //   // 长度
+      //   get size() {
+      //     return this.items.length;
+      //   }
+      //   // 清空
+      //   clear() {
+      //     this.items = [];
+      //   }
+      // }
+
+      // const stack = new Stack();
+      // console.log(stack.isEmpty);
+      // stack.push('z');
+      // stack.push('g');
+      // console.log(stack);
+      // console.log(stack.size);
+
+      // class Queue {
+      //   constructor(items) {
+      //     this.items = items || [];
+      //   }
+      //   // 入队列
+      //   enqueue(element) {
+      //     this.items.push(element);
+      //   }
+      //   // 出队列
+      //   dequeue() {
+      //     this.items.shift();
+      //   }
+      //   // 首位
+      //   front() {
+      //     return this.items[0];
+      //   }
+      //   // 是否为空队列
+      //   get isEmpty() {
+      //     return this.items.length === 0;
+      //   }
+      //   // 长度
+      //   size() {
+      //     return this.items.length;
+      //   }
+      //   // 清空
+      //   clear() {
+      //     this.items = [];
+      //   }
+      // }
+      // const queue = new Queue();
+      // console.log(queue.isEmpty);
+      // queue.enqueue('z');
+      // queue.enqueue('g');
+      // queue.enqueue('h');
+      // console.log(queue.size());
+      // queue.enqueue(); // 插入undefined
+      // queue.dequeue();
+      // console.log(queue);
+
+      // 链表的节点
+      // class Node {
+      //   constructor(element) {
+      //     // 存储节点数据
+      //     this.element = element;
+      //     // 用于指向下一个节点
+      //     this.next = null;
+      //   }
+      // }
+
+      // // 链表
+      // class LinkedList {
+      //   constructor() {
+      //     // 指向链表的头节点
+      //     this.head = null;
+      //     // 链表中节点的数量
+      //     this.length = 0;
+      //   }
+
+      //   // append()方法用于向链表末尾添加一个新的节点。
+      //   // 如果链表为空，则将该节点设置为链表的头节点；否则遍历链表，直到找到最后一个节点，然后将该节点添加到其后面
+      //   append(element) {
+      //     const node = new Node(element);
+      //     if (!this.head) {
+      //       this.head = node;
+      //     } else {
+      //       let current = this.head;
+      //       while (current.next) {
+      //         current = current.next;
+      //       }
+      //       current.next = node;
+      //     }
+      //     this.length++;
+      //   }
+
+      //   // insert()方法用于向链表的任意位置插入一个新的节点。
+      //   // 如果插入位置不合法，则返回false。如果插入位置是0，则将该节点设置为链表的头节点；否则从链表头开始遍历链表，找到需要插入位置的前一个节点，然后将该节点插入到其后面。
+      //   insert(position, element) {
+      //     if (position < 0 || position > this.length) {
+      //       return false;
+      //     }
+      //     const node = new Node(element);
+      //     if (position === 0) {
+      //       node.next = this.head;
+      //       this.head = node;
+      //     } else {
+      //       let current = this.head;
+      //       let index = 0;
+      //       let previous = null;
+      //       while (index < position) {
+      //         previous = current;
+      //         current = current.next;
+      //         index++;
+      //       }
+      //       node.next = current;
+      //       previous.next = node;
+      //     }
+      //     this.length++;
+      //     return true;
+      //   }
+
+      //   remove(element) {
+      //     let current = this.head;
+      //     let previous = null;
+      //     while (current) {
+      //       if (current.element === element) {
+      //         if (!previous) {
+      //           this.head = current.next;
+      //         } else {
+      //           previous.next = current.next;
+      //         }
+      //         this.length--;
+      //         return true;
+      //       }
+      //       previous = current;
+      //       current = current.next;
+      //     }
+      //     return false;
+      //   }
+
+      //   removeAt(position) {
+      //     if (position < 0 || position >= this.length) {
+      //       return null;
+      //     }
+      //     let current = this.head;
+      //     if (position === 0) {
+      //       this.head = current.next;
+      //     } else {
+      //       let index = 0;
+      //       let previous = null;
+      //       while (index < position) {
+      //         previous = current;
+      //         current = current.next;
+      //         index++;
+      //       }
+      //       previous.next = current.next;
+      //     }
+      //     this.length--;
+      //     return current.element;
+      //   }
+
+      //   indexOf(element) {
+      //     let current = this.head;
+      //     let index = 0;
+      //     while (current) {
+      //       if (current.element === element) {
+      //         return index;
+      //       }
+      //       current = current.next;
+      //       index++;
+      //     }
+      //     return -1;
+      //   }
+
+      //   getHead() {
+      //     return this.head;
+      //   }
+
+      //   isEmpty() {
+      //     return this.length === 0;
+      //   }
+
+      //   size() {
+      //     return this.length;
+      //   }
+      // }
+
+      // const linkedList = new LinkedList();
+
+      // linkedList.append(10); // 向链表末尾添加一个节点，节点值为10
+      // linkedList.append(20); // 向链表末尾添加一个节点，节点值为20
+      // linkedList.insert(1, 15); // 在索引为1的位置插入一个节点，节点值为15
+      // const removedValue = linkedList.removeAt(1); // 从链表中删除索引为1的节点，并返回该节点的值
+      // console.log(removedValue); // 15
+      // console.log(linkedList.indexOf(20)); // 1
+
+      // linkedList.remove(10); // 从链表中删除值为10的节点
+      // console.log(linkedList.size()); // 1
+      // console.log(linkedList.isEmpty()); // false
+
+      // console.log(linkedList);
+
+      class Node {
+        constructor(element) {
+          this.element = element;
+          this.next = null;
+          this.prev = null;
+        }
+      }
+
+      class DoublyLinkedList {
+        constructor() {
+          this.head = null;
+          this.tail = null;
+          this.length = 0;
+        }
+
+        append(element) {
+          const node = new Node(element);
+          if (!this.head) {
+            this.head = node;
+            this.tail = node;
+          } else {
+            node.prev = this.tail;
+            this.tail.next = node;
+            this.tail = node;
+          }
+          this.length++;
+        }
+
+        insert(position, element) {
+          if (position < 0 || position > this.length) {
+            return false;
+          }
+          const node = new Node(element);
+          if (this.length === 0) {
+            this.head = node;
+            this.tail = node;
+          } else if (position === 0) {
+            node.next = this.head;
+            this.head.prev = node;
+            this.head = node;
+          } else if (position === this.length) {
+            node.prev = this.tail;
+            this.tail.next = node;
+            this.tail = node;
+          } else {
+            let current = this.head;
+            let index = 0;
+            while (index < position) {
+              current = current.next;
+              index++;
+            }
+            node.prev = current.prev;
+            node.next = current;
+            current.prev.next = node;
+            current.prev = node;
+          }
+          this.length++;
+          return true;
+        }
+
+        remove(element) {
+          let current = this.head;
+          while (current) {
+            if (current.element === element) {
+              if (current === this.head && current === this.tail) {
+                this.head = null;
+                this.tail = null;
+              } else if (current === this.head) {
+                this.head = current.next;
+                this.head.prev = null;
+              } else if (current === this.tail) {
+                this.tail = current.prev;
+                this.tail.next = null;
+              } else {
+                current.prev.next = current.next;
+                current.next.prev = current.prev;
+              }
+              this.length--;
+              return true;
+            }
+            current = current.next;
+          }
+          return false;
+        }
+
+        removeAt(position) {
+          if (position < 0 || position >= this.length) {
+            return null;
+          }
+          let current = this.head;
+          if (this.length === 1) {
+            this.head = null;
+            this.tail = null;
+          } else if (position === 0) {
+            this.head = current.next;
+            this.head.prev = null;
+          } else if (position === this.length - 1) {
+            current = this.tail;
+            this.tail = current.prev;
+            this.tail.next = null;
+          } else {
+            let index = 0;
+            while (index < position) {
+              current = current.next;
+              index++;
+            }
+            current.prev.next = current.next;
+            current.next.prev = current.prev;
+          }
+          this.length--;
+          return current.element;
+        }
+
+        indexOf(element) {
+          let current = this.head;
+          let index = 0;
+          while (current) {
+            if (current.element === element) {
+              return index;
+            }
+            current = current.next;
+            index++;
+          }
+          return -1;
+        }
+
+        getHead() {
+          return this.head;
+        }
+
+        getTail() {
+          return this.tail;
+        }
+
+        isEmpty() {
+          return this.length === 0;
+        }
+
+        size() {
+          return this.length;
+        }
+      }
+
+      const doublyLinkedList = new DoublyLinkedList();
+
+      doublyLinkedList.append(10); // 向链表末尾添加一个节点，节点值为10
+      doublyLinkedList.append(20); // 向链表末尾添加一个节点，节点值为20
+      doublyLinkedList.insert(1, 15); // 在索引为1的位置插入一个节点，节点值为15
+      const removedValue = doublyLinkedList.removeAt(1); // 从链表中删除索引为1的节点，并返回该节点的值
+      console.log(removedValue); // 15
+      console.log(doublyLinkedList.indexOf(20)); // 1
+
+      doublyLinkedList.remove(10); // 从链表中删除值为10的节点
+      console.log(doublyLinkedList.size()); // 1
+      console.log(doublyLinkedList.isEmpty()); // false
+
+      console.log(doublyLinkedList);
+    </script>
+  </body>
+</html>

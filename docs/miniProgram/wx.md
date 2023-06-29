@@ -48,14 +48,14 @@ onLoad(options) {
 可以在跳转之前将参数存储到全局对象：
 
 ```js
-const app = getApp()
+const app = getApp();
 
 Page({
   goToLink() {
-    app.globalData.searchValue = 123
-    wx.switchTab({ url: '/pages/index/index' })
+    app.globalData.searchValue = 123;
+    wx.switchTab({ url: '/pages/index/index' });
   }
-})
+});
 ```
 
 在要使用的页面获取数据：`app.globalData.searchValue`
@@ -109,90 +109,90 @@ Page({
 
   // 相册上传
   photoAlbum() {
-    let that = this
-    const imgNum = this.data.imageList.length
+    let that = this;
+    const imgNum = this.data.imageList.length;
     if (imgNum >= 9) {
-      wx.showToast({ title: '最多上传9张图片', icon: 'loading', duration: 2000 })
-      return false
+      wx.showToast({ title: '最多上传9张图片', icon: 'loading', duration: 2000 });
+      return false;
     } else {
-      imgNum = 9 - imgNum
+      imgNum = 9 - imgNum;
     }
     wx.chooseMedia({
       count: imgNum,
       mediaType: ['image'],
       sourceType: ['album'],
       success(res) {
-        const arr = []
+        const arr = [];
         res.tempFiles.forEach((e) => {
-          arr.push(e.tempFilePath)
-        })
-        that.setData({ imageList: that.data.imageList.concat(arr) })
+          arr.push(e.tempFilePath);
+        });
+        that.setData({ imageList: that.data.imageList.concat(arr) });
       },
       fail(res) {
-        console.log('接口调用失败的回调函数', res)
+        console.log('接口调用失败的回调函数', res);
       }
-    })
+    });
   },
   // 拍照上传
   photograph() {
-    let that = this
-    const imgNum = this.data.imageList.length
+    let that = this;
+    const imgNum = this.data.imageList.length;
     if (imgNum >= 9) {
-      wx.showToast({ title: '最多上传9张图片', icon: 'loading', duration: 2000 })
-      return false
+      wx.showToast({ title: '最多上传9张图片', icon: 'loading', duration: 2000 });
+      return false;
     } else {
-      imgNum = 9 - imgNum
+      imgNum = 9 - imgNum;
     }
     wx.chooseMedia({
       count: imgNum,
       mediaType: ['image'],
       sourceType: ['camera'],
       success(res) {
-        const arr = []
+        const arr = [];
         res.tempFiles.forEach((e) => {
-          arr.push(e.tempFilePath)
-        })
+          arr.push(e.tempFilePath);
+        });
         that.setData({
           imageList: that.data.imageList.concat(arr)
-        })
+        });
       },
       fail(res) {
-        console.log('接口调用失败的回调函数', res)
+        console.log('接口调用失败的回调函数', res);
       }
-    })
+    });
   },
   // 图片预览
   handleImagePreview(e) {
-    const index = e.currentTarget.dataset.idx
-    const images = this.data.imageList
+    const index = e.currentTarget.dataset.idx;
+    const images = this.data.imageList;
     wx.previewImage({
       current: images[index], //当前预览的图片
       urls: images //所有要预览的图片
-    })
+    });
   },
 
   // 删除图片
   removeImage(e) {
-    const that = this
-    const imgList = this.data.imageList
-    const index = e.currentTarget.dataset.idx
+    const that = this;
+    const imgList = this.data.imageList;
+    const index = e.currentTarget.dataset.idx;
     wx.showModal({
       title: '提示',
       content: '确定要删除此图片吗？',
       success(res) {
         if (res.confirm) {
-          imgList.splice(index, 1)
+          imgList.splice(index, 1);
         } else if (res.cancel) {
-          return false
+          return false;
         }
-        that.setData({ imageList: imgList })
+        that.setData({ imageList: imgList });
       }
-    })
+    });
   },
 
   // wx.uploadFile() 不支持多图片上传。可以封装成 promise
   wxUploadFile(filePath) {
-    let that = this
+    let that = this;
     return new Promise((resolve, reject) => {
       wx.uploadFile({
         url: `${config.url.fileServer}/upload`,
@@ -203,28 +203,28 @@ Page({
         header: { 'Content-Type': 'multipart/form-data' },
         success: resolve,
         fail: reject
-      })
-    })
+      });
+    });
   },
 
   // 保存提交
   submitForm(e) {
-    const arr = []
+    const arr = [];
     //将选择的图片组成一个Promise数组，准备进行并行上传
     for (let path of this.data.imageList) {
-      arr.push(this.wxUploadFile(path))
+      arr.push(this.wxUploadFile(path));
     }
 
-    wx.showLoading({ title: '正在上传...', mask: true })
+    wx.showLoading({ title: '正在上传...', mask: true });
 
     // 开始并行上传图片
     Promise.all(arr)
       .then((res) => {
         // 上传成功，获取这些图片在服务器上的地址，组成一个数组
-        return res.map((item) => JSON.parse(item.data).url)
+        return res.map((item) => JSON.parse(item.data).url);
       })
       .catch((err) => {
-        console.log('upload images error:', err)
+        console.log('upload images error:', err);
       })
       .then((urls) => {
         // 调用保存图片的后端接口
@@ -235,19 +235,19 @@ Page({
       })
       .then((res) => {
         // 保存图片成功，返回上一页
-        const pages = getCurrentPages()
-        const currPage = pages[pages.length - 1]
-        const prevPage = pages[pages.length - 2]
-        wx.navigateBack()
+        const pages = getCurrentPages();
+        const currPage = pages[pages.length - 1];
+        const prevPage = pages[pages.length - 2];
+        wx.navigateBack();
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
       })
       .then(() => {
-        wx.hideLoading()
-      })
+        wx.hideLoading();
+      });
   }
-})
+});
 ```
 
 ### 使用 vant 小程序组件库
@@ -333,9 +333,9 @@ Page({
 wx.getRandomValues({
   length: 30, // 生成 30 个字节长度的随机数
   success(res) {
-    that.setData({ inspectFileUuid: wx.arrayBufferToBase64(res.randomValues) })
+    that.setData({ inspectFileUuid: wx.arrayBufferToBase64(res.randomValues) });
   }
-})
+});
 ```
 
 ## Echarts
@@ -347,7 +347,7 @@ wx.getRandomValues({
 ```
 
 ```js
-import * as echarts from '../../components/ec-canvas/echarts'
+import * as echarts from '../../components/ec-canvas/echarts';
 
 Page({
   data: {
@@ -357,28 +357,28 @@ Page({
   },
 
   onLoad(option) {
-    this.getBarData()
+    this.getBarData();
   },
 
   getBarData() {
     getStatistic().then((res) => {
-      this.initChart(res.data)
-    })
+      this.initChart(res.data);
+    });
   },
 
   initChart(data) {
-    const chartDom = this.selectComponent('#mychart-dom')
+    const chartDom = this.selectComponent('#mychart-dom');
     chartDom.init((canvas, width, height, dpr) => {
-      const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr })
-      canvas.setChart(chart)
+      const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
+      canvas.setChart(chart);
       const option = {
         // ....
-      }
-      chart.setOption(option)
-      return chart
-    })
+      };
+      chart.setOption(option);
+      return chart;
+    });
   }
-})
+});
 ```
 
 ## 踩坑记录
@@ -473,7 +473,7 @@ index.json
 index.js
 
 ```js
-import { getProjectList } from '../../utils/api.js'
+import { getProjectList } from '../../utils/api.js';
 
 Page({
   data: {
@@ -483,27 +483,27 @@ Page({
     loading: false
   },
   onLoad() {
-    this.searchProjectList()
+    this.searchProjectList();
   },
   searchProjectList() {
-    this.setData({ loading: true })
+    this.setData({ loading: true });
     getProjectList().then((res) => {
-      this.setData({ loading: false, projectList: res.data.data, originProList: res.data.data })
-    })
+      this.setData({ loading: false, projectList: res.data.data, originProList: res.data.data });
+    });
   },
   onSearch(e) {
-    this.setData({ searchValue: e.detail })
+    this.setData({ searchValue: e.detail });
     if (!e.detail) {
-      this.setData({ projectList: this.data.originProList })
+      this.setData({ projectList: this.data.originProList });
     } else {
-      const arr = this.data.projectList.filter((ele) => ele.proName.indexOf(e.detail) !== -1)
-      this.setData({ projectList: arr })
+      const arr = this.data.projectList.filter((ele) => ele.proName.indexOf(e.detail) !== -1);
+      this.setData({ projectList: arr });
     }
   },
   onClear() {
-    this.setData({ projectList: this.data.originProList })
+    this.setData({ projectList: this.data.originProList });
   }
-})
+});
 ```
 
 ### 2、分页返回数据
@@ -513,7 +513,7 @@ index.wxml 去掉了`bind:change="onSearch"`，其余同上。index.json 如果�
 index.js
 
 ```js
-import { getProjectList } from '../../utils/api.js'
+import { getProjectList } from '../../utils/api.js';
 
 Page({
   data: {
@@ -525,7 +525,7 @@ Page({
   },
 
   onLoad() {
-    this.getList(1)
+    this.getList(1);
   },
 
   /**
@@ -533,7 +533,7 @@ Page({
    */
   onReachBottom() {
     if (!this.data.loading && this.data.pageNum < Math.ceil(this.data.total / 10)) {
-      this.getList(this.data.pageNum + 1)
+      this.getList(this.data.pageNum + 1);
     }
   },
   /**
@@ -541,37 +541,150 @@ Page({
    */
   onPullDownRefresh() {
     //启用标题栏显示加载状态
-    wx.showNavigationBarLoading()
+    wx.showNavigationBarLoading();
     //调用相关方法
-    this.setData({ listData: [], searchValue: '', pageNum: 1, total: 0 })
-    this.getList(1)
+    this.setData({ listData: [], searchValue: '', pageNum: 1, total: 0 });
+    this.getList(1);
 
     setTimeout(() => {
-      wx.hideNavigationBarLoading() //隐藏标题栏显示加载状态
-      wx.stopPullDownRefresh() //结束刷新
-    }, 2000) //设置执行时间
+      wx.hideNavigationBarLoading(); //隐藏标题栏显示加载状态
+      wx.stopPullDownRefresh(); //结束刷新
+    }, 2000); //设置执行时间
   },
 
   getList(pageNum) {
-    this.setData({ loading: true })
+    this.setData({ loading: true });
     getProjectList({ pageNum, pageSize: 10, proName: this.data.searchValue }).then((res) => {
       this.setData({
         loading: false,
         listData: this.data.listData.concat(res.data.rows),
         pageNum,
         total: res.data.total
-      })
-    })
+      });
+    });
   },
 
   onSearch(e) {
-    this.setData({ listData: [], searchValue: e.detail, pageNum: 1, total: 0 })
-    this.getList(1)
+    this.setData({ listData: [], searchValue: e.detail, pageNum: 1, total: 0 });
+    this.getList(1);
   },
 
   onClear() {
-    this.setData({ listData: [], searchValue: '', pageNum: 1, total: 0 })
-    this.getList(1)
+    this.setData({ listData: [], searchValue: '', pageNum: 1, total: 0 });
+    this.getList(1);
   }
-})
+});
+```
+
+## web-view 嵌套网页
+
+[官方文档](https://developers.weixin.qq.com/miniprogram/dev/component/web-view.html)
+
+### 创建 web-view
+
+新创建一个页面，例如叫 webview，在 index.wxml 中写入如下内容：
+
+```html
+<web-view src="{{webSrc}}"></web-view>
+```
+
+在 index.js 写入
+
+```js
+Page({
+  data: {
+    webSrc: 'https://www.baidu.com'
+  }
+});
+```
+
+然后找个地方可以点击跳转进入 webview
+
+```html
+<navigator url="/pages/webview/index">webView</navigator>
+```
+
+### 配置业务域名
+
+在微信开发者工具中，可以正常看到嵌套的网页，但是在真机上无法访问，需要配置业务域名
+
+打开[小程序管理后台](https://mp.weixin.qq.com/)，在「开发管理」->「开发设置」->「业务域名」，
+
+1. 下载一个 txt 文件，将这个文件放到服务器的项目的根目录下
+   1. 服务器需要是自己的，才能放文件
+   2. 如果要访问的页面是 vue 这类项目创建的，需要将 txt 文件放到 public 文件夹下
+2. 添加要嵌套的地址，回到真机看效果
+
+### 小程序如何与网页通信？
+
+webview 想和小程序通信只能通过 `wx.miniProgram.postMessage`。只能从页面向小程序发送消息。 页面需要引入微信 [JS-SDK1.3.2](https://res.wx.qq.com/open/js/jweixin-1.3.2.js)
+
+#### 引入方式
+
+1、原始 html 页面引入
+
+```html
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+```
+
+2、在 React、Vue 引入
+
+```sh
+npm i weixin-js-sdk
+```
+
+如在 vue 中使用：
+
+```vue
+<template>
+  <div>
+    <el-button @click="sendMessage">Send Message</el-button>
+  </div>
+</template>
+
+<script>
+import wx from 'weixin-js-sdk';
+
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    sendMessage() {
+      console.log(wx);
+      // 跳转到小程序的页面
+      wx.miniProgram.navigateTo('pages/index/index');
+      // 跳转到 tabbar 页面
+      wx.miniProgram.switchTab('pages/index/index');
+      // 判断当前是否是小程序页面
+      wx.miniProgram.getEnv((res) => {
+        console.log(res.miniprogram);
+      });
+      // 页面向小程序发送消息
+      wx.miniProgram.postMessage({ data: { foo: 'bar' } });
+    }
+  }
+};
+</script>
+```
+
+`wx.miniProgram.postMessage({ data: { name: 'zgh' } })` 大括号里面的数据是 `data: {xxx:xx}`形式， key 必须是 data 字段
+
+#### 小程序接收消息
+
+只能在组件销毁、分享、后退才能处理接收到的数据
+
+```html
+<web-view src="{{webSrc}}" bindmessage="msgHandler"></web-view>
+```
+
+```js
+  msgHandler(res) {
+    console.log('取到网页传过来的值', res);
+    // res.detail.data 是一个数组，存储着每一次 webview 触发 postMessage 的值
+    let data = res.detail.data;
+    //如果要获取最新的 postMessage 的值，取数组最后一个即可
+    let lastData = data[data.length - 1];
+    console.log('最新的postMessage的值', lastData);
+  }
 ```

@@ -421,3 +421,21 @@ this.$refs.msgDrop.hide();
 ### form 表单
 
 `@submit.native.prevent`，阻止浏览器默认行为和事件冒泡，防止页面刷新
+
+### el-tooltip
+
+文字超出显示省略号和提示，没超出时不显示
+
+```html
+<el-tooltip effect="light" :content="item.name" placement="right" :disabled="isShowTooltip">
+  <span @mouseover="mouseOver($event)">{{ item.name }}</span>
+</el-tooltip>
+```
+
+```js
+isShowTooltip: false
+
+mouseOver(event) {
+  this.isShowTooltip = event.target.scrollWidth <= event.target.clientWidth
+}
+```

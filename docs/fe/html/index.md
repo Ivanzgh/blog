@@ -21,6 +21,28 @@ p 标签里面不能放块级元素，否则渲染时会出现两个 p 元素
 
 行内元素不会独占一行，直接设置宽高无效，常见的有 `<span>`、`<a>`、`<strong>`、`<b>`、`<em>`、`<i>`、`img`等
 
+## a 标签
+
+```html
+<a href="https://www.baidu.com" target="_top">top</a>
+```
+
+- href：超链接所指向的 URL
+- target：指定在何处显示链接
+
+### target 属性
+
+- `_self`：当前页面加载。默认值
+- `_blank`：通常在新标签页打开，但用户可以通过配置选择在新窗口打开。
+- `_parent`：当前浏览环境的父级浏览上下文。如果没有父级框架，行为与 `_self` 相同。
+- `_top`：最顶级的浏览上下文。如果没有，行为与 `_self` 相同。
+  - 路径要写全，`https://` 不能省略，否则就时相对路径
+  - 在 js 中可用`window.top.location.href = 'https://www.baidu.com'`
+
+### download 属性
+
+浏览器将链接的 URL 视为下载资源
+
 ## 本地存储
 
 cookies，sessionStorage、localStorage

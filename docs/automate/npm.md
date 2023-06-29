@@ -31,6 +31,7 @@ Node.js 在安装时会自动安装 npm ，所以如果已经安装了 Node.js�
 | npm list -g                          | 查看所有全局安装的模块                 |
 | npm i --legacy-peer-deps             | -                                      |
 | npm cache clear --force              | 清除 npm 缓存                          |
+| npm ls -g                            | 查看全局安装包                         |
 
 ## 安装参数区别
 
@@ -186,3 +187,72 @@ npx 参数：
 - --no-install-peer-deps: 在安装包时不会安装对等依赖项
 - --npm: 指定要使用的 npm 可执行文件路径
 - --node-arg: 将额外的参数传递给 node 运行时
+
+## package.json 中的版本符号
+
+版本号形式：`major.minor.patch`，即**主版本号.次版本号.修补版本号**
+
+- major：新的架构调整，不兼容老版本
+- minor：新增功能，兼容老版本
+- patch：修复 bug，兼容老版本
+
+- `^version`，表示版本号中最左边的非 0 数字的右侧可以是任意版本
+  - `如`"^17.0.2"`表示最大版本是`17.x.x`，而不会自动升级到`18.0.0`
+  - `"0.2.3"`表示最大版本是`0.2.x`，不会超过`0.3.0`
+- `~version`，表示大概匹配
+  - 如果 minor 版本号指定了，那么 minor 版本号不变，而 patch 版本号任意
+  - 如果 minor 和 patch 版本号未指定，那么 minor 和 patch 版本号任意
+  - `~1.2.3`表示版本可以是`1.2.x`
+  - `~1`表示版本可以是`1.x.x`
+
+## PNPM
+
+```
+Usage: pnpm [command] [flags]
+       pnpm [ -h | --help | -v | --version ]
+
+Manage your dependencies:
+      add                  Installs a package and any packages that it depends on. By default, any new package is installed as a prod
+                           dependency
+      import               Generates a pnpm-lock.yaml from an npm package-lock.json (or npm-shrinkwrap.json) file
+   i, install              Install all dependencies for a project
+  it, install-test         Runs a pnpm install followed immediately by a pnpm test
+  ln, link                 Connect the local project to another one
+      prune                Removes extraneous packages
+  rb, rebuild              Rebuild a package
+  rm, remove               Removes packages from node_modules and from the project's package.json
+      unlink               Unlinks a package. Like yarn unlink but pnpm re-installs the dependency after removing the external link
+  up, update               Updates packages to their latest version based on the specified range
+
+Review your dependencies:
+      audit                Checks for known security issues with the installed packages
+      licenses             Check licenses in consumed packages
+  ls, list                 Print all the versions of packages that are installed, as well as their dependencies, in a tree-structure
+      outdated             Check for outdated packages
+
+Run your scripts:
+      exec                 Executes a shell command in scope of a project
+      run                  Runs a defined package script
+      start                Runs an arbitrary command specified in the package's "start" property of its "scripts" object
+   t, test                 Runs a package's "test" script, if one was provided
+
+Other:
+      pack
+      publish              Publishes a package to the registry
+      root
+
+Manage your store:
+      store add            Adds new packages to the pnpm store directly. Does not modify any projects or files outside the store
+      store path           Prints the path to the active store directory
+      store prune          Removes unreferenced (extraneous, orphan) packages from the store
+      store status         Checks for modified packages in the store
+
+Options:
+  -r, --recursive          Run the command for each project in the workspace.
+```
+
+移除不再引用的包：
+
+```sh
+pnpm store prune
+```
