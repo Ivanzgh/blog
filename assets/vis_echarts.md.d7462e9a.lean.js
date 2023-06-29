@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,Q as l}from"./chunks/framework.f14b72c3.js";const h=JSON.parse('{"title":"Echarts","description":"","frontmatter":{},"headers":[],"relativePath":"vis/echarts.md","lastUpdated":1685193505000}'),p={name:"vis/echarts.md"},e=l("",7),o=[e];function c(t,F,r,i,y,d){return n(),a("div",null,o)}const u=s(p,[["render",c]]);export{h as __pageData,u as default};

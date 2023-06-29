@@ -1,1 +1,0 @@
-import{_ as s,c as n,o as a,Q as l}from"./chunks/framework.f14b72c3.js";const d=JSON.parse('{"title":"Hook","description":"","frontmatter":{},"headers":[],"relativePath":"fe/react/hook.md","lastUpdated":1685193505000}'),p={name:"fe/react/hook.md"},o=l("",65),F=[o];function t(e,c,r,y,i,C){return a(),n("div",null,F)}const g=s(p,[["render",t]]);export{d as __pageData,g as default};

@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,Q as l}from"./chunks/framework.f14b72c3.js";const C=JSON.parse('{"title":"模块化规范","description":"","frontmatter":{},"headers":[],"relativePath":"fe/js/module.md","lastUpdated":1685193505000}'),p={name:"fe/js/module.md"},o=l("",61),e=[o];function F(t,c,r,y,i,d){return n(),a("div",null,e)}const h=s(p,[["render",F]]);export{C as __pageData,h as default};

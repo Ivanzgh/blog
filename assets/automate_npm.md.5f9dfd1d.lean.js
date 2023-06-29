@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as n,Q as e}from"./chunks/framework.f14b72c3.js";const m=JSON.parse('{"title":"NPM","description":"","frontmatter":{},"headers":[],"relativePath":"automate/npm.md","lastUpdated":1688050449000}'),l={name:"automate/npm.md"},p=e("",69),o=[p];function t(c,r,i,d,F,y){return n(),a("div",null,o)}const g=s(l,[["render",t]]);export{m as __pageData,g as default};

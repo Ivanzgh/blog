@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,Q as l}from"./chunks/framework.f14b72c3.js";const C=JSON.parse('{"title":"Http 模块","description":"","frontmatter":{},"headers":[],"relativePath":"fe/node/http.md","lastUpdated":1688050449000}'),o={name:"fe/node/http.md"},p=l("",22),e=[p];function t(F,c,r,y,i,d){return a(),n("div",null,e)}const h=s(o,[["render",t]]);export{C as __pageData,h as default};

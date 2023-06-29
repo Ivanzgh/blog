@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,Q as l}from"./chunks/framework.f14b72c3.js";const f=JSON.parse('{"title":"泛型","description":"","frontmatter":{},"headers":[],"relativePath":"fe/ts/generic.md","lastUpdated":1688050449000}'),o={name:"fe/ts/generic.md"},p=l("",26),F=[p];function t(e,c,r,y,i,C){return a(),n("div",null,F)}const B=s(o,[["render",t]]);export{f as __pageData,B as default};
