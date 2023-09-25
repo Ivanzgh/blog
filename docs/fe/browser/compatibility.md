@@ -3,9 +3,7 @@
 ## hack 及 IE 条件注释
 
 ```html
-<!--[if IE]>
-  此处文字能够在IE浏览器下显示，其它浏览器不显示
-<![endif]-->
+<!--[if IE]>此处文字能够在IE浏览器下显示，其它浏览器不显示<![endif]-->
 ```
 
 ```html
@@ -15,21 +13,15 @@
 ```
 
 ```html
-<!--[if IE 6]>
-  这段文字只在IE6浏览器显示
-<![endif]-->
+<!--[if IE 6]>这段文字只在IE6浏览器显示<![endif]-->
 ```
 
 ```html
-<!--[if gte IE 6]>
-  这段文字只在IE6以上(包括)版本IE浏览器显示
-<![endif]-->
+<!--[if gte IE 6]>这段文字只在IE6以上(包括)版本IE浏览器显示<![endif]-->
 ```
 
 ```html
-<!--[if ! IE 8]>
-  这段文字在非IE8浏览器显示
-<![endif]-->
+<!--[if ! IE 8]>这段文字在非IE8浏览器显示<![endif]-->
 ```
 
 - `gt` : `greater than`，大于
@@ -63,10 +55,7 @@
 
 ```html
 <!--[if lt IE 9]>
-  <script
-    type="text/javascript"
-    src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"
-  ></script>
+  <script type="text/javascript" src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <![endif]-->
 ```
 
@@ -84,4 +73,18 @@
 
 ```html
 <script src="https://cdn.bootcss.com/picturefill/3.0.3/picturefill.min.js"></script>
+```
+
+## 如何检测 IE 浏览器
+
+```js
+function isIE() {
+  var userAgent = navigator.userAgent;
+  var isIE = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1;
+  var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1;
+  if (isIE || isIE11) {
+    return true;
+  }
+  return false;
+}
 ```

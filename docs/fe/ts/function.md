@@ -6,10 +6,10 @@
 
 ```typescript
 type f = {
-  (info: string): string
-}
+  (info: string): string;
+};
 
-type g = (info: string) => string
+type g = (info: string) => string;
 ```
 
 表示有一个函数参数是`info`，参数和返回值都是字符串类型
@@ -18,17 +18,24 @@ type g = (info: string) => string
 
 ```typescript
 // 内联类型注解
-function getInfo(info: string) {}
+function getInfo1(info: string) {}
+
+const getInfo2 = (info: string) => {};
+
+const getInfo3: (info: string) => void = (info) => {};
+
+type infoProps = (info: string) => void;
+const getInfo4: infoProps = (info) => {};
 
 // 接口类型注解
 interface Info {
-  ff: number
-  gg: string
+  ff: number;
+  gg: string;
 }
 function getInfo2(res: Info) {
-  return res.ff + res.gg
+  return res.ff + res.gg;
 }
-getInfo2({ gg: 'zgh', ff: 666 })
+getInfo2({ gg: 'zgh', ff: 666 });
 
 // 可选参数
 function getInfo3(info: string, msg?: string) {}
@@ -44,14 +51,14 @@ function getInfo4(info: string = 'success') {}
 ```typescript
 // 没有返回值
 function getInfo(): void {
-  console.log('This is message')
+  console.log('This is message');
 }
 
 // 返回{name: string, age: number}
 function getUser(info: string): { name: string; age: number } {
-  return { name: info, age: 23 }
+  return { name: info, age: 23 };
 }
-getUser('zgh')
+getUser('zgh');
 ```
 
 ## 函数重载
@@ -59,17 +66,18 @@ getUser('zgh')
 函数根据传入不同的参数而返回不同类型的数据
 
 ```typescript
-function f(x: string): string
-function f(x: number): number
-function f(x) {
+function f(x: string): string;
+function f(x: number): number;
+function f(x: string | number): string | number {
   if (typeof x === 'string') {
-    return x
+    return x;
   } else if (typeof x === 'number') {
-    return x + 1
+    return x + 1;
   }
+  return 0;
 }
 
-console.log(f(1))
+console.log(f(1));
 ```
 
 这样改变后，重载的 f 函数在调用的时候会进行正确的类型检查。

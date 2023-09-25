@@ -2,9 +2,9 @@
 
 ```ts
 function add(param: { one: number; two: number }): number {
-  return param.one + param.two
+  return param.one + param.two;
 }
-const total = add({ one: 1, two: 2 })
+const total = add({ one: 1, two: 2 });
 ```
 
 注解表示`param`参数是一个对象，有参数`one、two`且类型是`number`，返回值是`number`
@@ -13,7 +13,7 @@ const total = add({ one: 1, two: 2 })
 
 ```typescript
 function add({ one, two }: { one: number; two: number }): number {
-  return one + two
+  return one + two;
 }
 ```
 
@@ -21,16 +21,16 @@ function add({ one, two }: { one: number; two: number }): number {
 
 ```typescript
 interface Person {
-  first: string
-  last: string
+  first: string;
+  last: string;
 }
 
 function greeter(person: Person): string {
-  return 'hello,' + person.first + 'and' + person.last
+  return 'hello,' + person.first + 'and' + person.last;
 }
 
-let user = { first: 'zgh', last: 'ivan' }
-greeter(user)
+let user = { first: 'zgh', last: 'ivan' };
+greeter(user);
 ```
 
 类型检查器会检查`greeter`的调用，greeter 有一个参数，并要求这个对象参数有名称为`first`和`last`、类型为`string`的属性，
@@ -41,14 +41,14 @@ greeter(user)
 
 ```typescript
 interface Person {
-  first: string
+  first: string;
 }
 interface Person {
-  last: string
+  last: string;
 }
-const user = {} as Person
-console.log(user.first)
-console.log(user.last)
+const user = {} as Person;
+console.log(user.first);
+console.log(user.last);
 ```
 
 :::
@@ -59,21 +59,21 @@ console.log(user.last)
 
 ```typescript
 interface SquareConfig {
-  color?: string
-  width?: number
+  color?: string;
+  width?: number;
 }
 
 function createSquare(config: SquareConfig): { color: string; area: number } {
-  let newSquare = { color: 'blue', area: 100 }
+  let newSquare = { color: 'blue', area: 100 };
   if (config.color) {
-    newSquare.color = config.color
+    newSquare.color = config.color;
   }
   if (config.width) {
-    newSquare.area = config.width * config.width
+    newSquare.area = config.width * config.width;
   }
-  return newSquare
+  return newSquare;
 }
-let square = createSquare({ color: 'red' })
+let square = createSquare({ color: 'red' });
 ```
 
 在接口属性名称后面加`?`即表示非必需
@@ -88,11 +88,11 @@ createSquare()后面的`{ color: string; area: number }`表示返回值类型
 
 ```typescript
 interface User {
-  readonly name: string
-  readonly age: number
+  readonly name: string;
+  readonly age: number;
 }
-let my: User = { name: 'zgh', age: 24 }
-my.age = 23 // Error
+let my: User = { name: 'zgh', age: 24 };
+my.age = 23; // Error
 ```
 
 ::: tip
@@ -105,11 +105,11 @@ my.age = 23 // Error
 
 ```typescript
 interface User {
-  name?: string
-  readonly age: number
-  [propName: string]: any
+  name?: string;
+  readonly age: number;
+  [propName: string]: any;
 }
-let my: User = { name: 'zgh', age: 24, height: 183 }
+let my: User = { name: 'zgh', age: 24, height: 183 };
 ```
 
 `[propName: string]: any`表示属性名称是字符串类型，值是任意类型
@@ -120,23 +120,23 @@ let my: User = { name: 'zgh', age: 24, height: 183 }
 
 ```typescript
 interface Fun {
-  (name: string, age: number): boolean
+  (name: string, age: number): boolean;
 }
-let myFun: Fun = function(name: string, age: number) {
-  return age > 20
-}
-myFun('zgh', 23)
+let myFun: Fun = function (name: string, age: number) {
+  return age > 20;
+};
+myFun('zgh', 23);
 ```
 
 对于函数类型的类型检查来说，函数的参数名不需要与接口里定义的名字相匹配
 
 ```typescript
 interface Fun {
-  (name: string, age: number): boolean
+  (name: string, age: number): boolean;
 }
-let myFun: Fun = function(n: string, a: number): boolean {
-  return a > 20
-}
+let myFun: Fun = function (n: string, a: number): boolean {
+  return a > 20;
+};
 ```
 
 函数的参数会逐个进行检查，要求对应位置上的参数类型是兼容的
@@ -147,12 +147,12 @@ let myFun: Fun = function(n: string, a: number): boolean {
 
 ```typescript
 interface Arr {
-  [index: number]: string
+  [index: number]: string;
 }
 
-let ar: Arr = ['red', 'green', 'blue']
-let re = ar[1]
-console.log(re) // 'green'
+let ar: Arr = ['red', 'green', 'blue'];
+let re = ar[1];
+console.log(re); // 'green'
 ```
 
 上面表示用`number`类型 1 去索引`Arr`时会得到一个`string`类型 'green'
@@ -163,13 +163,13 @@ console.log(re) // 'green'
 
 ```typescript
 let user: {
-  name: string
-  age: number
-}
+  name: string;
+  age: number;
+};
 user = {
   name: 'zgh',
   age: 23
-}
+};
 ```
 
 ## 方法
@@ -178,20 +178,20 @@ user = {
 
 ```typescript
 interface Info {
-  ff: number
-  gg: string
-  say(): string // 定义一个say方法，返回值类型是字符串
+  ff: number;
+  gg: string;
+  say(): string; // 定义一个say方法，返回值类型是字符串
 }
 function getInfo2(res: Info): string {
-  const sayInfo = res.say()
-  return res.ff + res.gg
+  const sayInfo = res.say();
+  return res.ff + res.gg;
 }
 const user = {
   gg: 'zgh',
   ff: 666,
   say(): string {
-    return 'hello world'
+    return 'hello world';
   }
-}
-getInfo2(user)
+};
+getInfo2(user);
 ```

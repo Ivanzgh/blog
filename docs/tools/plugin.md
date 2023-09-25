@@ -62,6 +62,51 @@
 
 - [markmap](https://github.com/markmap/markmap) 将 markdown 格式转为思维导图
 
+1. Mermaid：用于创建交互式的流程图，时序图，甘特图等
+2. jsMind：用于创建思维导图
+3. D3.js：用于创建交互式的数据可视化，包括思维导图
+4. GoJS：用于创建交互式的流程图，网络图，思维导图等
+
+## Canvas 库
+
+1. Faloric js：功能强大的 Canvas 库，支持对象的拖放、缩放、旋转和编辑
+2. Konvajs：2D 渲染引擎，支持动画，可以很容易地在 Canvas 中创建交互式图形
+3. pixijs：轻量级的 2D 渲染引擎，非常适合游戏和动画
+4. Three.js：用于 WebGL 的 3D 图形库，可以轻松地在 Canvas 中呈现 3D 场景
+5. Paperjs：强大的向量圈形库，可以用于创建复杂的矢量图形和动画
+6. P5js：基于 Processing 的 JavaScript 库，可以用于创建交互式图形和动画
+7. CreateJS：功能强大的 JavaSeript 库，提供了多种工具，用于创建 HTML5 内容，包括 Canvas
+8. GreenSock：用于动画的 JavaScript 库，支持 Canvas 和 SVG
+9. D3js：强大的数据可视化库，可以用于创建复杂的图表和可视化，包括 Canvas
+
+## 3D 图形库
+
+1. Threejs: 用于 WebGL 的 3D 图形库，非常适合创建复杂的 3D 场景和动画
+2. Babylon.js 功能强大的 3D 图形库，提供了一组强大的工具，用于创建复杂的 3D 场景
+3. A-Frame：用于 webVR 的库，可以轻松地创建交互式 3D 场景
+4. PlayCanvas：用于在线游戏和 3D 内容的引擎，提供了一组强大的工具，用于创建高质量的 3D 场景
+
+## 地图库
+
+1. Leaflet：这是一个开源的 JavaScript 地图库，非常适合创建简单的地图和交互式地图应用程序
+2. OpenLayers：这是一个功能强大的开源 JavaScript 地图库，提供了丰富的地图功能，包括地图瓦片，图层控制，矢量图形等
+3. Mapbox GL JS：这是一个开源的 JavaScript 库，用于创建交互式地图，支持大量的地图图层和自定义样式
+4. Google Maps JavaScript API：这是 Google 提供的地图 API，可以用于在网站和移动应用程 序中嵌入 Google 地图
+
+## 电子表格库
+
+1. Handsontable：这是一个功能强大的 JavaScript 电子表格库，提供了丰富的功能，包括排序，筛选，复制／粘贴等
+2. SheetJS：这是一个开源的电子表格库，支持读写多种格式的电子表格文件，包括 Excel，CSV 等
+3. jExcel：这是一个开源的 JavaScript 电子表格库，提供了丰富的功能，包括编辑，排序，过滤等
+4. Tabulator：这是一个功能强大的 JavaScript 电子表格库，提供了丰富的功能，包括排序，筛选，编辑等
+
+## 物理引擎库
+
+1. Box2D：2D 物理引擎，支持各种物理模拟，如碰撞，重力，弹力等
+2. Chipmunk：2D 物理引擎，提供了丰富的功能，包括碰撞检测，多种物理运动等
+3. Bullet：3D 物理引擎，提供了丰富的功能，包括碰撞检测，刚体运动，软体模拟等
+4. Havok：一个商业的 3D 物理引擎，提供了丰富的功能，包括碰撞检测，刚体运动，软体模拟等
+
 ## ERP/CMS
 
 - [strapi](https://strapi.io/)、[github](https://github.com/strapi/strapi)

@@ -464,6 +464,7 @@
   height: 300px;
   position: relative;
 }
+/* 方式一： */
 .left,
 .right {
   position: absolute;
@@ -477,6 +478,13 @@
 .right {
   left: 200px;
   right: 0;
+}
+/* 方式二： */
+.left {
+  position: absolute;
+}
+.right {
+  margin-left: 200px;
 }
 ```
 
@@ -758,7 +766,7 @@ align-items: stretch;
 
 ### 多行文本
 
-1、使用`-webkit-line-clamp`属性（需要浏览器支持），可以限制行数
+1、使用`-webkit-line-clamp`属性（不支持 IE 浏览器），可以限制行数
 
 ```css
 .box {
@@ -771,14 +779,14 @@ align-items: stretch;
 }
 ```
 
-2、利用伪元素实现，兼容性好，但是需要知道文本容器的高度
+2、利用伪元素实现，兼容性好，但是需要知道文本容器的高度，而且在文字没有超出容器时也会显示省略号，适合文字都会超出容器的场景
 
 ```css
 .box {
-  width: 100px;
-  overflow: hidden;
-  height: 70px;
   position: relative;
+  overflow: hidden;
+  width: 100px;
+  height: 70px;
 }
 .box::after {
   content: '...';
@@ -790,7 +798,42 @@ align-items: stretch;
 }
 ```
 
-3、如果文本容器高度不固定，可以通过 js 动态计算高度，再配合伪元素实现
+3、通过 js 动态计算，兼容性好
+
+```css
+.content {
+  position: relative;
+  overflow: hidden;
+  height: 66px;
+  line-height: 33px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #626262;
+}
+```
+
+```js
+function textOverflowMore(className) {
+  var elList = document.getElementsByClassName(className);
+  for (var i in elList) {
+    var el = elList[i];
+    var text = el.innerHTML;
+    if (!text || !text.length) return;
+    for (var i = 0; i <= text.length; i++) {
+      el.innerHTML = text.substr(0, i);
+      // 超出元素的高度溢出换行
+      if (el.offsetHeight < el.scrollHeight) {
+        el.style.overflow = 'hidden';
+        // 将末尾的三个文字用...取代
+        el.innerHTML = text.substr(0, i - 3) + '...';
+        break;
+      }
+    }
+  }
+}
+
+textOverflowMore('.content');
+```
 
 ### flex 布局时显示省略号
 

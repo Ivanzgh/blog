@@ -17,7 +17,7 @@
 
 ```js
 function refresh() {
-  location.reload()
+  location.reload();
 }
 ```
 
@@ -25,9 +25,9 @@ function refresh() {
 
 ```js
 function closeCurrentWindow() {
-  window.opener = null
-  window.open('', '_self')
-  window.close()
+  window.opener = null;
+  window.open('', '_self');
+  window.close();
 }
 ```
 
@@ -37,7 +37,7 @@ function closeCurrentWindow() {
 
 ```js
 function historyBack() {
-  window.history.go(-1)
+  window.history.go(-1);
 }
 ```
 
@@ -46,56 +46,67 @@ function historyBack() {
 ### 获取单个参数
 
 ```js
-let urlParam = window.location.search
-let loc = urlParam.substring(urlParam.lastIndexOf('=') + 1, urlParam.length)
-console.log(loc)
+let urlParam = window.location.search;
+let loc = urlParam.substring(urlParam.lastIndexOf('=') + 1, urlParam.length);
+console.log(loc);
 ```
 
 ### 获取多个参数
 
 ```js
-//  <a href="file:///D:/test/url.html?index=1&item=2">fe</a>
+//  https://www.xxx.com/url.html?id=1&key=2
 
-function GetRequest() {
-  let url = location.search //获取url中"?"符后的字串
-  let theRequest = new Object()
+// 获取所有参数的值
+function getURLParameter() {
+  let url = location.search; // 获取url中"?"符后的字串
+  let res = new Object();
   if (url.indexOf('?') != -1) {
-    let str = url.substr(1)
-    strs = str.split('&')
+    let str = url.substr(1);
+    strs = str.split('&');
     for (let i = 0; i < strs.length; i++) {
-      theRequest[strs[i].split('=')[0]] = strs[i].split('=')[1]
+      res[strs[i].split('=')[0]] = strs[i].split('=')[1];
     }
   }
-  return theRequest
+  return res;
 }
-GetRequest() // {index: "1", item: "2"}
+getURLParameter(); // {id: "1", key: "2"}
+
+// 获取指定参数的值
+function getURLParameterByName(name) {
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  var results = regex.exec(window.location.href);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+getURLParameterByName('id');
 ```
 
 ### 获取参数对象
 
-node.js中有一个queryString模块，可以将参数转化为一个对象，键相同就合并成数组
+node.js 中有一个 queryString 模块，可以将参数转化为一个对象，键相同就合并成数组
 
 ```js
-let url = 'http://www.baidu.com?name=zgh&appearance=cool&appearance=handsome'
+let url = 'http://www.baidu.com?name=zgh&appearance=cool&appearance=handsome';
 // 期待结果： { name: 'zgh', appearance: [ 'cool', 'handsome' ] }
 
 function handsome(url) {
-  let arr = url.split('?')[1].split('&')
-  let obj = {}
+  let arr = url.split('?')[1].split('&');
+  let obj = {};
   arr.forEach((e) => {
-    let param = e.split('=')
-    let key = param[0]
-    let value = param[1]
+    let param = e.split('=');
+    let key = param[0];
+    let value = param[1];
     if (obj[key]) {
-      obj[key] = Array.isArray(obj[key]) ? obj[key] : [obj[key]]
-      obj[key].push(value)
+      obj[key] = Array.isArray(obj[key]) ? obj[key] : [obj[key]];
+      obj[key].push(value);
     } else {
-      obj[key] = value
+      obj[key] = value;
     }
-  })
-  return obj
+  });
+  return obj;
 }
-handsome(url)
+handsome(url);
 ```
 
 ## 路由跳转

@@ -207,6 +207,16 @@ npx 参数：
 
 ## PNPM
 
+## 安装和升级
+
+```sh
+# 安装
+npm i -g pnpm
+
+# 升级
+pnpm add -g pnpm
+```
+
 ```
 Usage: pnpm [command] [flags]
        pnpm [ -h | --help | -v | --version ]

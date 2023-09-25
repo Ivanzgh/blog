@@ -5,13 +5,15 @@
 
 ## 快捷键
 
-- `ctrl + f` 搜索/替换
-- `ctrl + 反引号` 打开控制台
-- `ctrl + shift + n` 新建窗口
-- `shift + alt + 上下箭头` 向上或下复制一行
-- `shift + alt + 鼠标左键选择` 选择多行
+- `command + f` 搜索/替换
+- `command + 反引号` 打开控制台
+- `command + shift + n` 新建窗口
+- `command + o` 打开文件
+- `shift + option + 上下箭头` 向上或下复制一行
+- `shift + option + 鼠标左键选择` 选择多行
 - `shift + option + 光标选中` 选中多行同时编辑
-- `alt + 左右箭头` 切换更改的位置
+- `option + 左右箭头` 切换更改的位置
+- f2 重命名一个变量
 
 ## 报错"在此系统上禁止运行脚本"
 

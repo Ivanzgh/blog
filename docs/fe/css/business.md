@@ -156,7 +156,8 @@
       #interview-records-window ul li {
         position: relative;
       }
-      <!--画线-- > #interview-records-window ul li:before {
+      /* 画线 */
+      #interview-records-window ul li:before {
         content: '';
         position: absolute;
         left: 160px;
@@ -166,7 +167,8 @@
         height: 100%;
         background-color: #00b800;
       }
-      <!--画圆-- > .interview-records-timeline {
+      /* 画圆 */
+      .interview-records-timeline {
         position: absolute;
         left: 150px;
         top: 50px;
@@ -355,30 +357,28 @@ img {
 
 根据后台返回的处理状态显示不同的样式，同时可以点击更改状态
 
-```html
-<style>
-  .input-color + label {
-    display: block;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    position: absolute;
-    top: 8px;
-    left: 30px;
-    background-color: #999;
-    border-radius: 4px;
-  }
+```css
+.input-color + label {
+  display: block;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 8px;
+  left: 30px;
+  background-color: #999;
+  border-radius: 4px;
+}
 
-  .input-color:checked + label::before {
-    display: block;
-    content: '√';
-    text-align: center;
-    font-size: 16px;
-    color: white;
-    background-color: #c00;
-    border-radius: 4px;
-  }
-</style>
+.input-color:checked + label::before {
+  display: block;
+  content: '√';
+  text-align: center;
+  font-size: 16px;
+  color: white;
+  background-color: #c00;
+  border-radius: 4px;
+}
 ```
 
 如果表格的某一行的状态是 true
@@ -411,14 +411,14 @@ if(!item.processResult) {
     var jsonData = {
       id: statusId,
       processResult: status
-    }
+    };
     postURL('/business/feedback/updateProcessResultById', JSON.stringify(jsonData), function (data) {
       if (data.success) {
-        getFeedBackList()
+        getFeedBackList();
       } else {
-        console.log('error')
+        console.log('error');
       }
-    })
+    });
   }
 </script>
 ```
@@ -431,18 +431,17 @@ if(!item.processResult) {
 white-space: pre-line;
 ```
 
-white-space:pre-line, 把多个空格合并成一个
-
-white-space:pre-wrap, 会保留所有空格。
+- `white-space: pre-line`，把多个空格合并成一个
+- `white-space: pre-wrap`，会保留所有空格
 
 ### 2、如果有\n 可以使用 br 标签替换
 
 ```html
 <script>
   var str =
-    '职位描述: 诚聘20名商务模特：\n岗位要求：年龄在18-26周岁之间，身高在165cm以上。\n有良好的形象和气质，颜值较高，有才艺、有经验者优先，无经验可以提供免费培训。 '
-  res = str.replace(/\n+/g, '<br/>')
-  document.write(res)
+    '职位描述: 诚聘20名商务模特：\n岗位要求：年龄在18-26周岁之间，身高在165cm以上。\n有良好的形象和气质，颜值较高，有才艺、有经验者优先，无经验可以提供免费培训。 ';
+  res = str.replace(/\n+/g, '<br/>');
+  document.write(res);
 </script>
 ```
 
@@ -621,5 +620,32 @@ a:hover {
   to {
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   }
+}
+```
+
+## 网站置灰
+
+如果是主流浏览器添加 filter 滤镜
+
+```css
+.gray {
+  filter: grayscale(0.95);
+}
+```
+
+IE10 以下
+
+```css
+filter: gray;
+```
+
+IE11 和 IE10 去掉了`filter: gray`属性，但是又不支持最新的`filter: grayscale()`。
+
+一般使用 grayscale.js（原链接已失效，可网上查找） 处理，不支持置灰：图片地址是 http 协议、hover、伪元素
+
+```js
+var navStr = navigator.userAgent.toLowerCase();
+if (navStr.indexOf('msie 10.0') !== -1 || navStr.indexOf('rv:11.0') !== -1) {
+  grayscale($('body'));
 }
 ```
