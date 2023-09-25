@@ -1,0 +1,1 @@
+import{_ as a,c as s,o,Q as l}from"./chunks/framework.f14b72c3.js";const h=JSON.parse('{"title":"Tomcat","description":"","frontmatter":{},"headers":[],"relativePath":"be/tomcat.md","lastUpdated":1695604450000}'),n={name:"be/tomcat.md"},e=l("",25),t=[e];function p(c,r,F,y,i,d){return o(),s("div",null,t)}const m=a(n,[["render",p]]);export{h as __pageData,m as default};

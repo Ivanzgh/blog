@@ -1,1 +1,0 @@
-import{_ as i,c as e,o as a,Q as t}from"./chunks/framework.f14b72c3.js";const m=JSON.parse('{"title":"OAuth2","description":"","frontmatter":{},"headers":[],"relativePath":"be/OAuth2.md","lastUpdated":1688050449000}'),l={name:"be/OAuth2.md"},o=t("",22),r=[o];function n(s,c,d,h,p,u){return a(),e("div",null,r)}const b=i(l,[["render",n]]);export{m as __pageData,b as default};

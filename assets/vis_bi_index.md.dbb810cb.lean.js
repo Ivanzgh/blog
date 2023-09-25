@@ -1,0 +1,1 @@
+import{_ as s,c as n,o as a,Q as l}from"./chunks/framework.f14b72c3.js";const u=JSON.parse('{"title":"BI","description":"","frontmatter":{},"headers":[],"relativePath":"vis/bi/index.md","lastUpdated":1695604450000}'),p={name:"vis/bi/index.md"},o=l("",44),F=[o];function e(t,c,r,y,i,d){return a(),n("div",null,F)}const h=s(p,[["render",e]]);export{u as __pageData,h as default};

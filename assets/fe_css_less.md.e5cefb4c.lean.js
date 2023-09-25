@@ -1,0 +1,1 @@
+import{_ as s,c as a,o as n,Q as l}from"./chunks/framework.f14b72c3.js";const B=JSON.parse('{"title":"Less","description":"","frontmatter":{},"headers":[],"relativePath":"fe/css/less.md","lastUpdated":1695604450000}'),p={name:"fe/css/less.md"},o=l("",46),F=[o];function e(t,c,r,y,i,d){return n(),a("div",null,F)}const u=s(p,[["render",e]]);export{B as __pageData,u as default};
