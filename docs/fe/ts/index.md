@@ -7,7 +7,7 @@
 [《深入理解 TypeScript》](https://jkchao.github.io/typescript-book-chinese/)
 
 ::: tip 关于《深入理解 TypeScript》
-注意 typescript 版本问题，代码还是手动敲一下为好，当前内容基于`Version 4.0.3`，一切以官方为主
+注意 typescript 版本问题，当前内容基于`Version 4.0.3`，一切以官方为主
 :::
 
 ## 介绍
@@ -248,6 +248,14 @@ type Props = Record<'x' | 'y', number>;
 //   x: number;
 //   y: number;
 // };
+
+
+export type Props = Record<string, unknown>;
+
+// 等同于
+// type Props = {
+//     [x: string]: unknown;
+// }
 ```
 
 ### Omit<T, K exdends keyof any>

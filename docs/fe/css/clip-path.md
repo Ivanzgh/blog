@@ -1,8 +1,10 @@
 # clip-path
 
-`clip-path`属性使用裁剪方式创建元素的可显示区域。区域内的部分显示，区域外的隐藏。
+`clip-path`属性使用裁剪方式创建元素的可显示区域。区域内的部分显示，区域外的隐藏
 
 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/clip-path)
+
+[在线绘制图形和自定义图案](https://bennettfeely.com/clippy/)
 
 ## circle
 

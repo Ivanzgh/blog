@@ -91,7 +91,7 @@ npm get registry
 
 ## npm 发布插件
 
-1、`npm init` 初始化项目,生成 package.json 文件
+1、`npm init` 初始化项目，生成 package.json 文件
 
 2、敲代码
 
@@ -133,6 +133,19 @@ npm version major  // 大改【2.0.0】
 
 ```js
 npm publish
+```
+
+### 插件删除
+
+```sh
+# 删除某个包
+npm unpublish test
+
+# 删除某个包的指定版本
+npm unpublish test@1.0.1
+
+# 强制删除某个包
+npm unpublish test --force
 ```
 
 ## package.json 和 package-lock.json 的区别
@@ -217,6 +230,8 @@ npm i -g pnpm
 pnpm add -g pnpm
 ```
 
+## 命令简介
+
 ```
 Usage: pnpm [command] [flags]
        pnpm [ -h | --help | -v | --version ]
@@ -266,3 +281,31 @@ Options:
 ```sh
 pnpm store prune
 ```
+
+### 更新依赖
+
+`pnpm up`，根据**指定的范围**更新软件包的最新版本，如果不带参数将更新所有依赖关系
+
+- `pnpm up` ，遵循 package.json 指定的范围更新所有的依赖项
+- `pnpm up --latest` ，更新所有依赖项，此操作会忽略 package.json 指定的范围
+- `pnpm up foo@2` ，将 foo 更新到 v2 上的最新版本
+- `pnpm up "@babel/*"` ，更新 @babel 范围内的所有依赖项
+
+`--latest`参数可简写为`-L`
+
+例如想更新 prettier 到最新的 3.0.3 版本，在 package.json 中显示的是`"prettier": "^2.8.8"`，执行 `pnpm up prettier`，发现没有任何变化，因为这里已经指定了版本范围只能是`2.x.x`，不能跨版本升级，这时可以添加`--latest`参数
+
+```sh
+pnpm up prettier -L
+```
+
+## packages.json 配置
+
+### browserslistrc
+
+官网：<https://browsersl.ist/>
+github：<https://github.com/browserslist/browserslist>
+
+参考文章：
+
+- <https://juejin.cn/post/6844903669524086797>

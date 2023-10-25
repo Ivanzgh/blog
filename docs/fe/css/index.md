@@ -41,6 +41,60 @@ IE 盒模型：`width = content + padding + border`
 
 解决方法: 统一设置 margin-top 或者 margin-bottom，不要混合使用
 
+## CSS 选择器
+
+- 通配符：`*`
+- id 选择器：#id
+- class 选择器：.class
+- 元素选择器：p、a 等
+- 后代选择器：p span、div a 等
+- 一级子元素选择器：选择元素的直接子元素，如`div > span`作用于第一级子元素，而后代选择器会作用于全部子孙元素
+- 伪类选择器：a:hover 等
+- 属性选择器：input[type="text"] 等
+
+伪类选择器：
+
+- `:root` 选择文档的根元素，即 html 元素
+- `:last-child` 向元素添加样式，且该元素是它的父元素的最后一个子元素
+- `:nth-child(n)` 向元素添加样式，且该元素是它的父元素的第 n 个子元素
+- `:nth-last-child(n)` 向元素添加样式，且该元素是它的父元素的倒数第 n 个子 元素
+- `:only-child` 向元素添加样式，且该元素是它的父元素的唯一子元素
+- `:first-of-type` 向元素添加样式，且该元素是同级同类型元素中第一个元 素
+- `:last-of-type` 向元素添加样式，且该元素是同级同类型元素中最后一个 元素
+- `:nth-of-type(n)` 向元素添加样式，且该元素是同级同类型元素中第 n 个元 素
+- `:nth-last-of-type(n)` 向元素添加样式，且该元素是同级同类型元素中倒数第 n 个元素
+- `:only-of-type` 向元素添加样式，且该元素是同级同类型元素中唯一的元素
+- `:empty` 向没有子元素（包括文本内容）的元素添加样式
+
+### 选择器权重
+
+1、样式优先级算法：
+
+- 就近原则，同权重情况下样式定义最近者为准
+- 载入样式以最后载入的定位为准
+
+2、优先级为：
+
+- `!important` > 行内样式 > #id > .class > 元素和伪元素 > `*` > 继承 > 默认
+- 内联样式表（标签内部）> 嵌入样式表（当前文件中）> 外部样式表（外部文件中）
+
+3、权重的规则：
+
+- `!important`：最高权重
+- 行内样式：1000
+- id 选择器：100
+- class 选择器：10
+- 标签选择器：1
+
+如：
+
+- `div {}`，权重为 1
+- `.class1 {}`，权重为 10
+- `#id1 {}`，权重为 100
+- `#id1 div {}`，权重为 100 + 1 = 101
+- `.class1 div {}`，权重为 10 + 1 = 11
+- `.class1 .class2 div {}`，权重为 10 + 10 + 1 = 21
+
 ## 伪类、伪元素
 
 ### 伪类
@@ -126,28 +180,6 @@ document.documentElement.style.setProperty('--primary-color', '#ff6347');
 4. 变量的值类型：注意变量值的类型和它们被引用的属性的类型是否相匹配。比如变量值是 color 类型，就不能用在 width 上
 
 5. 动态更新：CSS 变量的值可以在运行时通过 js 动态更新，这可能会导致样式的意外更改
-
-## 样式优先级算法
-
-- 就近原则，同权重情况下样式定义最近者为准
-- 载入样式以最后载入的定位为准
-
-优先级为:
-
-- 同权重: 内联样式表（标签内部）> 嵌入样式表（当前文件中）> 外部样式表（外部文件中）。
-- `!important` > id > class > html 标签
-- `!important` 比 内联优先级高
-
-### 权重的规则
-
-标签的权重为 1，class 的权重为 10，id 的权重为 100
-
-- `div {}`，权重为 1
-- `.class1 {}`，权重为 10
-- `#id1 {}`，权重为 100
-- `#id1 div {}`，权重为 100 + 1 = 101
-- `.class1 div {}`，权重为 10 + 1 = 11
-- `.class1 .class2 div {}`，权重为 10 + 10 + 1 = 21
 
 ## BFC 规范
 
@@ -324,9 +356,13 @@ img 元素默认样式导致，因为行内元素默认的垂直对齐方式是�
 ## 像素单位
 
 - px：绝对单位，页面按精确像素展示。
-- em：相对单位，基准点为父节点字体的大小，如果自身定义了 font-size 按自身来计算（浏览器默认字体是 16px）
-- rem：以根元素的字体大小为基准。例如 html 的 font-size: 16px，则子级 1rem = 16px
-- vw、vh：针对当前浏览器窗口大小而言，1vw 就等于可视窗口宽度的百分之一
+- em：相对单位，以父元素字体大小为基准，如果自身定义了 font-size 按自身来计算（浏览器默认字体是 16px）
+- rem：以根元素的字体大小为基准。例如 html 的 `font-size: 16px`，则子级 1rem = 16px
+- vw、vh：针对当前浏览器窗口大小而言
+  - vw：视口宽度，1vw 等于可视窗口宽度的 1%
+  - vh：视口高度，1vh 等于可视窗口高的的 1%
+  - vmin：vw 和 vh 中较小的那个
+  - vmax：vw 和 vh 中较大的那个
 
 ## 如何设置文字小于 12px
 
@@ -380,9 +416,9 @@ img 元素默认样式导致，因为行内元素默认的垂直对齐方式是�
 
 ### opacity
 
-opacity 属性能够设置的范围值 `0.0 ~ 1.0`，值越小越透明。示例`opacity: 0.5;`
+opacity 属性能够设置的范围值 `0.0 ~ 1.0`，值越小越透明
 
-ie9 以下使用滤镜 `filter:alpha(opacity=x)`，x 取值从 0 到 100，值越小越透明
+ie9 以下使用滤镜 `filter: alpha(opacity=x)`，x 取值从 0 到 100，值越小越透明
 
 如果项目为了要兼容 ie8 及以下，则需要写两段代码
 
@@ -395,26 +431,17 @@ ie9 以下使用滤镜 `filter:alpha(opacity=x)`，x 取值从 0 到 100，值�
 
 ### rgba
 
-rgba 是 rgb 的扩展，增加透明度，`alpha`参数介于 `0.0 ~ 1.0`之间，值越小越透明。
-示例`background-color: rgba(0, 0, 0, 0.5);`，小数点前的 0 可以省略。ie9 以下不兼容
+rgba 是 rgb 的扩展，增加了透明度，如`background-color: rgba(0, 0, 0, 0.5);`
+
+- `alpha`参数介于 `0.0 ~ 1.0`之间，值越小越透明
+- 小数点前的 0 可以省略
+- ie9 以下不兼容
 
 ## calc()设置流式布局宽高
 
-calc 是英文单词 calculate(计算)的缩写，支持到 IE9
+calc 是英文单词 calculate(计算)的缩写，支持到 IE9，是 css3 提供的一个在 css 文件中计算值的函数，用于动态计算长度值
 
-### vh、vw
-
-viewport：可视窗口，也就是浏览器。
-
-vw Viewport 宽度，1vw 等于 viewport 宽度的 1%
-
-vh Viewport 高度，1vh 等于 viewport 高的的 1%
-
-### calc()
-
-calc 是 css3 提供的一个在 css 文件中计算值的函数,用于动态计算长度值。
-
-- 运算符前后都需要保留一个空格，例如：width: calc(100% - 10px)；
+- 运算符前后都需要保留一个空格，例如：`width: calc(100% - 10px);`
 - 任何长度值都可以使用 calc()函数进行计算；
 - calc()函数支持 "+", "-", "\*", "/" 运算；
 - calc()函数使用标准的数学运算优先级规则；
@@ -430,7 +457,9 @@ calc 是 css3 提供的一个在 css 文件中计算值的函数,用于动态计
 设置`html,body { height: 100%; }`，子元素才能正常显示
 :::
 
-## boder 图片
+## boder
+
+### boder 图片
 
 ```css
 .box {
@@ -438,9 +467,32 @@ calc 是 css3 提供的一个在 css 文件中计算值的函数,用于动态计
 }
 ```
 
+### outline
+
+设置轮廓样式，outline 和 border 很类似，但是 outline 不占据空间，绘制于元素内容周围
+
+```css
+outline: 2px solid #f00;
+outline: none;
+```
+
 ## 圆角
 
 ## 背景
+
+<https://developer.mozilla.org/zh-CN/docs/Web/CSS/background>
+
+1. `background-color`：背景颜色
+2. `background-image`：背景图片
+3. `background-size`：背景图片大小
+4. `background-position`：背景图片位置
+5. `background-repeat`：背景图片重复
+6. `background-origin`：指定`background-image`属性的原点位置的背景相对区域
+7. `background-attachment`：决定背景图像的位置是在视口内固定，或者随着包含它的区块滚动
+8. `background-clip`：设置背景图片或颜色是否延伸到边框、内边距盒子、内容盒子下面
+9. `background-blend-mode`：背景图片、背景色如何混合
+
+background 缩写
 
 ## 文本效果
 
@@ -568,6 +620,11 @@ text-indent: 2em;
 
 ```css
 text-decoration: underline;
+
+/* none 默认
+underline 下划线
+overline 上划线
+line-through 中线 */
 ```
 
 - 字体设置
@@ -578,14 +635,15 @@ font: 600 16px/30px 微软雅黑;
 
 表示字体粗 600，字体大小 16px，行高 30px，微软雅黑字体
 
-- 文字换行
-  - 强制换行，行尾会将一个完整的单词拆开
+### 文字换行
+
+1、强制换行，行尾会将一个完整的单词拆开
 
 ```css
 word-break: break-all;
 ```
 
-- 行尾不会拆解单词，如果宽度不够会放到下一行，尾部会有空白
+2、行尾不会拆解单词，如果宽度不够会放到下一行，尾部会有空白
 
 ```css
 word-wrap: break-word;
@@ -610,6 +668,9 @@ letter-spacing: 0.5em;
 letter-spacing: 6px;
 letter-spacing: -1px;
 ```
+
+字母之间的间距 letter-spacing
+单词之间间距 word-spacing
 
 ## 兼容性
 

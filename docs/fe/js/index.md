@@ -191,9 +191,193 @@ null == ''    // false
 
 [参考链接](https://blog.csdn.net/qq_33120763/article/details/88296955)
 
+## 原型和原型链
+
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1697463743.png)
+
+- 每个函数都有一个`prototype`属性，这个属性指向函数的原型对象
+- 每个对象（null 除外）都有一个`__proto__`属性，这个属性指向该对象的原型
+- 每个原型都有一个`constructor`属性，指向关联的构造函数
+- 原型也是一个对象，所以也有原型
+
+当访问一个对象的属性或方法时，会先在对象自身中寻找，如果找不到则在原型中寻找，如果还找不到，则继续在原型的原型中寻找，以此类推，直到找到为止，若找不到则返回`undefined`，这就是原型链
+
+函数也有`__proto__`属性
+
+```js
+let fn = function () {};
+fn.__proto__ === Function.prototype; // true
+```
+
+```js
+let obj = {};
+console.log(obj.constructor.prototype === obj.__proto__); // true
+
+let arr = [];
+console.log(arr);
+
+function Person(name) {
+  this.name = name;
+}
+Person.prototype.age = 23;
+
+let person1 = new Person('zgh');
+console.log(person1.age); // 23
+
+console.log(person1.__proto__ === Person.prototype); // true
+
+console.log(Person.prototype.constructor === Person); // true
+
+console.log(person1.constructor === Person); // true
+```
+
+要获取原型推荐使用`Object.getPrototypeOf()`，不要使用`__proto__`
+
+`Object.getPrototypeOf(obj) === obj.__proto__`为 true
+
+## 执行上下文
+
+执行上下文可看作是一个包含了当前代码执行状态的环境对象
+
+### 三个重要组成部分
+
+1. 变量对象（Variable Object，简称 VO）
+
+- 在创建上下文时，会有一个包含了所有在上下文中定义的变量、函数和形参的对象被创建
+- 对于全局上下文，变量对象就是全局对象，如 window
+- 对于函数上下文，变量对象分为两个阶段：
+  - 创建阶段：变量和函数的声明会被存储在变量对象中
+  - 执行阶段：变量被赋值，函数被执行
+
+2. 作用域链（Scope Chain）
+3. this 值
+
+### 执行上下文的类型
+
+1. 全局执行上下文
+   1. 只有一个全局执行上下文
+   2. 是最顶层的上下文，在浏览器中指向了全局对象，如 window 对象
+2. 函数执行上下文
+   1. 每当一个**函数被调用时**，都会创建一个新的执行上下文。如果一个函数被多次调用，就会创建多个执行上下文
+   2. 每个函数都有自己的作用域链、变量对象和 this 值
+3. eval 函数执行上下文
+
+### 执行上下文栈
+
+执行上下文栈（Execution Context Stack，简称 ECS），栈的特点是**后进先出**（LIFO）
+
+当执行代码时，会首先创建全局上下文并将其推入栈中。在函数调用时会创建一个新的函数上下文，并将其推入栈中。当函数执行完成后，函数上下文从栈中弹出
+
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1698157359.png)
+
+### 变量对象
+
+每个执行上下文都有一个关联的变量对象，其包括这个执行上下文中定义的所有变量和函数
+
+在执行上下文的**创建阶段**会生成变量对象，生成变量对象主要有三个过程：
+
+- **检索当前执行上下文中的参数**。该过程生成 arguments 对象，并建立以形参变量名为属性名，以形参变量值为属性值的属性。全局执行上下文没有该步骤，因为没有参数传递
+- **检索当前执行上下文中的函数声明**。该过程建立以函数名为属性名，以函数所在内存地址引用为属性值的属性
+- **检索当前执行上下文中的变量声明**。该过程建立以变量名为属性名，以 undefined 为属性值的属性
+
+```js
+VO = {
+  arguments: {},
+  paramVariable: '形参变量',
+  function: <function reference>,
+  variable: undefined
+}
+```
+
+当执行上下文进入执行阶段后，变量对象变为**活动对象**（简称 AO），此时原先声明的变量会被赋值
+
+```js
+AO = {
+  arguments: {},
+  paramVariable: '形参变量',
+  function: <function reference>,
+  variable: '具体值'
+}
+```
+
+变量对象和活动对象都是指向同一个对象，只是处于执行上下文的不同阶段
+
+代码说明：
+
+```js
+function f(a) {
+  var b = 2;
+  function g() {}
+  var c = function () {};
+}
+f(1);
+```
+
+当 f 函数被调用时，f 执行上下文被创建，变量对象如下：
+
+```js
+f_ECS = {
+    VO = {
+      arguments: {
+        '0': 1,
+        length: 1
+      },
+      a: 1,
+      b: undefined,
+      g: <function g reference>,
+      c: undefined
+    }
+}
+```
+
+当 f 函数在执行阶段时，变量对象变为活动对象：
+
+```js
+f_ECS = {
+    AO = {
+      arguments: {
+        '0': 1,
+        length: 1
+      },
+      a: 1,
+      b: 2,
+      g: <function g reference>,
+      c: <function express c reference>
+    }
+}
+```
+
+## arguments
+
+arguments 是一个类数组对象，用于获取传递给函数的所有参数
+
+- 可通过索引访问参数，如`arguments[0]`
+- 获取 length，`arguments.length`
+
+```js
+function fun(a, b, c) {
+  console.log(arguments);
+}
+fun(1, 2, 3);
+```
+
+arguments 对象中的值在非严格模式下会与函数中的命名参数保持同步
+
+```js
+function fun(a, b) {
+  arguments[0] = 2;
+  console.log(a); // 2
+  // "use strict";
+  // console.log(a); // 1
+}
+fun(1, 2);
+```
+
+推荐使用 ES6 的扩展运算符处理参数
+
 ## 提升
 
-提升有变量提升和函数提升
+变量提升、函数提升，结合执行上下文来理解提升的内在机制
 
 ### 变量提升
 
@@ -226,7 +410,7 @@ console.log(name);
 
 函数提升就是把函数提升到前面
 
-在 JavaScript 中函数的创建方式有三种：函数声明（静态的）、函数表达式（函数字面量）、构造函数（动态的，匿名的）。
+函数的创建方式有三种：函数声明（静态的）、函数表达式（函数字面量）、构造函数（动态的，匿名的）
 
 函数表达式的形式如下：
 
@@ -258,58 +442,60 @@ var m = function () {
 };
 ```
 
-## 原型链
-
-在 js 中，每个函数都有一个`prototype`属性，这个属性指向函数的原型对象；
-
-每个对象（null 除外）都有一个`__proto__`属性，这个属性指向该对象的原型；
-
-每个原型都有一个`constructor`属性，指向关联的构造函数；
-
-原型也是一个对象，所以也有原型。当我们访问一个对象的属性或方法时，会先在对象自身中寻找，如果找不到则在原型中寻找，如果还找不到，则继续在原型的原型中寻找，
-以此类推，直到找到为止，若找不到则返回`undefined`，这就是原型链。
-
-函数也有`__proto__`属性
-
-```js
-let fn = function () {};
-fn.__proto__ === Function.prototype; // true
-```
-
-```js
-let obj = {};
-console.log(obj);
-console.log(obj.constructor.prototype === obj.__proto__); // true
-
-let arr = [];
-console.log(arr);
-
-function Person(name) {
-  this.name = name;
-}
-console.log(Person.prototype); // {constructor: ƒ}
-Person.prototype.age = 23;
-
-let person1 = new Person('zgh');
-console.log(person1); // Person {name: "zgh"}
-console.log(person1.age); // 23
-
-console.log(person1.__proto__ === Person.prototype); // true
-
-console.log(Person === Person.prototype.constructor); // true
-```
-
-函数 Person 的 prototype 属性指向了一个对象，这个对象正是调用构造函数时创建的实例 person1 的原型
-
-::: tip
-要获取原型推荐使用`Object.getPrototypeOf()`，不要使用`__proto__`
-
-`Object.getPrototypeOf(obj) === obj.__proto__`为 true
-:::
-
 ## 作用域
 
-作用域指变量的有效范围。分为全局作用域、局部作用域、块级作用域。
+作用域指变量的有效范围
+
+### 词法作用域、动态作用域
+
+- 词法作用域，也称为静态作用域，作用域在定义时确定的
+- 动态作用域，作用域在调用时确定的
+
+js 是词法作用域
+
+1、案例 1：
+
+```js
+const value = 1;
+function foo() {
+  console.log(value);
+}
+function bar() {
+  const value = 2;
+  foo();
+}
+bar();
+```
+
+打印结果是 1
+
+2、案例 2：
+
+```js
+// case 1
+var scope = 'global scope';
+function checkScope() {
+  var scope = 'local scope';
+  function f() {
+    return scope;
+  }
+  return f();
+}
+checkScope();
+
+// case 2
+var scope = 'global scope';
+function checkScope() {
+  var scope = 'local scope';
+  function f() {
+    return scope;
+  }
+  return f;
+}
+checkScope()();
+```
+
+打印结果都是 local scope
 
 ### 全局作用域
 
@@ -350,14 +536,22 @@ console.log(d); // ReferenceError: d is not defined
 
 ### 作用域链
 
-当在函数作用域操作一个变量时，它会先在自身作用域中寻找，如果有就直接使用（就近原则）。如果没有则向上一级作用域中寻找，直到找到全局作用域；
-如果全局作用域中依然没有找到，则会报错 `ReferenceError`。
+作用域链是指当前执行上下文和上层执行上下文的一系列变量对象组成的层级链，它决定了各级执行上下文中的代码在访问变量和函数时的顺序。
 
-在函数中要访问全局变量可以使用`window`对象。
+当在函数作用域操作一个变量时，它会先在自身作用域中寻找，如果有就直接使用，如果没有则向上一级作用域中寻找，直到找到全局作用域；
+如果全局作用域中依然没有找到，则会报错 `ReferenceError`
 
-### 执行上下文
-
-执行上下文是执行 JavaScript 代码的环境
+```js
+function f() {
+  const a = 1;
+  function g() {
+    function m() {
+      const b = 2;
+      console.log(a + b);
+    }
+  }
+}
+```
 
 ## 闭包
 
@@ -418,6 +612,13 @@ for (var i = 0; i < lis.length; i++) {
 示例二、每隔 1 秒输出 1~5
 
 ```js
+for (var i = 0; i < 3; i++) {
+  console.log('i: ' + i);
+  setTimeout(function () {
+    console.log(i);
+  }, 1000);
+}
+
 for (var i = 1; i <= 5; i++) {
   setTimeout(function timer() {
     console.log(i);
@@ -425,7 +626,13 @@ for (var i = 1; i <= 5; i++) {
 }
 ```
 
-上面代码会输出 5 次 6，延迟函数的回调会在循环结束时才执行。
+闭包允许函数访问其外部作用域的变量，但是不会捕获变量的当前值，而是捕获变量的引用
+
+上面第一个循环会输出 3 个 3，第二个循环会输出 5 次 6，延迟函数的回调会在循环结束时才执行，
+
+由于 setTimeout 回调在循环结束后才执行，它们都会共享相同的 i 变量引用，而循环在执行时已经完成，i 的值变为 3。因此当这些回调执行时，它们都引用的是相同的 i 变量，其值为 3
+
+在迭代内使用`IIFE`会为每个迭代都生成一个新的作用域，使得延迟函数的回调函数可以将新的作用域封闭在每个迭代的内部，每个迭代中都会有一个正确的变量值供我们访问
 
 ```js
 for (var i = 1; i <= 5; i++) {
@@ -436,9 +643,6 @@ for (var i = 1; i <= 5; i++) {
   })(i);
 }
 ```
-
-在迭代内使用`IIFE`会为每个迭代都生成一个新的作用域，使得延迟函数的回调函数可以将新的作用域封闭在每个迭代的内部，
-每个迭代中都会有一个正确的变量值供我们访问。
 
 还有一种更方便的方式，就是使用块作用域，将`var`换成`let`
 
@@ -451,6 +655,8 @@ for (let i = 1; i <= 5; i++) {
 ```
 
 ## this 指向
+
+this 的指向，是在执行上下文被创建时确定的
 
 ### 全局执行
 
@@ -497,7 +703,8 @@ obj.fun();
 如果把对象方法赋值给变量，调用该方法时，this 指向 `window`
 
 ```js
-let dd = 'js'; // 若 var dd = 'js',则 this.dd结果为 js
+// 若此处不是let而是var声明，则 this 指向 window 对象，this.dd结果为 js
+let dd = 'js';
 let obj = {
   dd: 'zgh',
   fun: function () {
@@ -513,11 +720,11 @@ res();
 在调用一个构造函数时加上 `new` 关键字，此时 `this` 指向这个构造函数调用时实例化出来的对象
 
 ```js
-function f(name) {
+function Person(name) {
   this.name = name;
-  console.log(this); // f {name: "zgh"}
+  console.log(this); // Person {name: "zgh"}
 }
-let res = new f('zgh');
+let res = new Person('zgh');
 console.log(typeof res); // object
 ```
 
@@ -754,6 +961,23 @@ function deepClone(obj) {
   }
   return obj;
 }
+
+const deepClone = (source) => {
+  if (typeof source !== 'object' || source === null) {
+    return source;
+  }
+  const target = Array.isArray(source) ? [] : {};
+  for (const key in source) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      if (typeof source[key] === 'object' && source[key] !== null) {
+        target[key] = deepClone(source[key]);
+      } else {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target;
+};
 ```
 
 `JSON.parse(JSON.stringify())`就是有一些局限性的深拷贝
@@ -1020,6 +1244,7 @@ for (let i = 0, len = arr.length; i < len; i++) {
 for (let m of arr) {
 }
 
+// 不推荐
 for (let k in arr) {
   console.log(k); // 0 1 2 3，返回的是数组下标
   console.log(typeof k); // string

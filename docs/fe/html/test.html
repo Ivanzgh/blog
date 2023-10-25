@@ -1,24 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <ol>
-    <div>22</div>
-    <li>z</li>
-    <li>g</li>
-    <li>h</li>
-  </ol>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      div > span {
+        color: #f00;
+      }
+    </style>
+  </head>
+  <body>
+    <p>11</p>
+    <span style="padding-top: 10px">a</span>
+    <p>22</p>
 
-  <header>d</header>
-  <form>1</form>
-  <span>ddd</span>
+    <input type="file" accept=".jpg, .png" multiple />
+    <input type="text" inputmode="emial" readonly />
+    <input type="tel" />
 
-  <blockquote>ddd</blockquote>
+    <div style="width: 100px; height: 100px; outline: 2px solid #f00" />
 
-  <p><div>1</div></p>
-</body>
+    <div>
+      <span>1</span>
+      <span>2</span>
+      <p>
+        <span>3</span>
+      </p>
+    </div>
+
+    <form action="">
+      <input name="username" pattern="[A-Za-z0-9]" title="警方将大幅降低拉飞机" required />
+
+      <input type="tel" />
+      <input type="submit" />
+    </form>
+
+    <a href="a.pdf" download>download</a>
+
+    <p id="hid" style="display: none">text</p>
+
+    <p contenteditable="true" spellcheck="true" translate="true">myy work</p>
+
+    <input type="text" spellcheck="true" />
+
+    <time datetime="2023-09-28" style="width: 100px"></time>
+
+    <script src="index.js" async defer></script>
+
+    <script>
+      function fun1() {}
+      function fun2() {
+        fun1();
+      }
+      fun2();
+    </script>
+  </body>
 </html>

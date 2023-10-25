@@ -4,40 +4,34 @@
 
 [官网](https://babeljs.io/)
 
-babel 是 javaScript 转译器。
+babel 是 JavaScript 转译器
 
-### 用途
+推荐学习项目：<https://github.com/jamiebuilds/the-super-tiny-compiler>
+
+用途：
 
 - 转译 esnext、typescript、flow 等到目标环境支持的 js
 - 代码的静态分析
 - 特定用途的代码转换
 
+## Babel 的编译流程
+
 ### 编译器和转译器
 
-- 编译器
+- 编译器 Compiler
   - 从一种编程语言转成另一个编程语言，主要指高级语言到低级语言
-  - 高级语言：javaScript、c++、java 等
+  - 高级语言：JavaScript、c++、java 等
   - 低级语言：汇编语言、机器语言
-- 转译器
+- 转译器 Transpiler
   - 从高级语言到高级语言的转换工具
+
+- parse：通过 parse 把源码转换成抽象语法树（AST）
+- transform：遍历 AST，调用插件生成新的 AST
+- generate：把转换后的 AST 打印成目标代码，并生成 sourcemap
 
 ## 前期准备
 
-### 安装依赖
-
-`@babel/core`，核心模块
-
-`@babel/cli`，终端运行工具
-
-```sh
-# 安装
-npm i -D @babel/cli @babel/core
-
-# 查看cli工具接受的选项
-npx babel --help
-```
-
-### 项目准备
+### 1. 项目准备
 
 先准备一个空项目
 
@@ -53,6 +47,22 @@ touch index.js
 ```js
 const fn = () => 1;
 ```
+
+### 2. 安装依赖
+
+`@babel/core`，核心模块
+
+`@babel/cli`，终端运行工具
+
+```sh
+# 安装
+npm i -D @babel/cli @babel/core
+
+# 查看cli工具接受的选项
+npx babel -h
+```
+
+### 3. 执行转译
 
 解析 src 目录下的所有 js 文件，并将其转换后的文件都输出到 lib 目录下
 
@@ -70,11 +80,26 @@ npx babel src -d lib
 }
 ```
 
+```sh
+# 将结果打印到控制台
+npx babel src/index.js
+
+# 将某个目录的文件全部编译成一个新的目录
+babel src --out-dir lib
+# 缩写
+babel src -d lib
+
+# 将结果写入到指定的文件
+babal src/a.js --out-file lib/a.js
+# 缩写
+babal src/a.js -o lib/a.js
+```
+
 ## Plugins
 
-plugins 本质就是 js 程序，让 Babel 如何对代码进行转换
+plugins 就是 js 程序，让 Babel 如何对代码进行转换
 
-在`src/index.js`中使用了箭头函数，需要将其转为 ES5 代码
+例如在`src/index.js`中使用了箭头函数，需要将其转为 ES5 代码
 
 ```sh
 # 安装插件
@@ -90,6 +115,24 @@ npx babel src -d lib --plugins=@babel/plugin-transform-arrow-functions
 const fn = function () {
   return 1;
 };
+```
+
+### 如何生成一个插件
+
+如 example-babel-plugin.js
+
+```js
+// 一个插件就是一个函数
+export default function ({ types: t }) {
+  return {
+    visitor: {
+      Identifier(path) {
+        let name = path.node.name; // 反转字符串： JavaScript -> tpircSavaJ
+        path.node.name = [...name].reverse().join('');
+      }
+    }
+  };
+}
 ```
 
 ## Presets
@@ -136,7 +179,7 @@ npm install -D @babel/preset-typescript
 
 ## 配置
 
-在终端手动输入很长的命令不太方便，更偏向于使用配置文件。在项目的根目录创建一个`babel.config.json`文件，需要 Babel v7.8.0 或更高版本
+在终端手动输入很长的命令不太方便，所以更偏向于使用配置文件。在项目的根目录创建一个`babel.config.json`文件，需要 Babel v7.8.0 或更高版本
 
 ```json
 {
@@ -166,7 +209,7 @@ const presets = [
 module.exports = { presets };
 ```
 
-执行前面定义的脚本命令：`npm run build`
+然后执行前面定义的脚本命令：`npm run build`
 
 上方配置使用了 env 这个 preset，且只会为目标浏览器中没有的功能加载转换插件。
 
@@ -174,7 +217,7 @@ module.exports = { presets };
 
 ## Polyfill
 
-Polyfill 是对执行环境或者其他功能的补充
+Polyfill 翻译为**垫片**，意为兜底的东西，是对执行环境或者其他功能的补充，让新的语法和方法也能在低版本浏览器里运行
 
 修改`src/index.js`，添加了 `Array.prototype.includes` 方法
 
@@ -184,10 +227,10 @@ let a = 3 ** 2;
 const b = [1, 2, 3].includes(1);
 ```
 
-在 chrome30 版本中是不支持 includes 方法的，而 Polyfill 的作用就是帮你引用一个可以使用的环境
+在 chrome30 版本中是不支持 includes 方法的，而 Polyfill 的作用就是引用一个可以使用的环境
 
 ```js
-npm i -S core-js@3
+npm i core-js@3
 ```
 
 配置`babel.config.json`，在前面配置的 targets 后面添加`useBuiltIns: 'usage'`。执行`npm run build`，转换后的代码如下，会发现在文件开头引入了一个文件，includes 方法能正常使用了
@@ -203,6 +246,9 @@ var a = Math.pow(3, 2);
 var b = [1, 2, 3].includes(1);
 ```
 
+useBuiltIns 是`@babel/env`提供的参数，默认值是 false。`useBuiltIns: 'usage'`的作用是只加载所需要的 polyfill，即按需加载。
+如果用了插件`@babel/plugin-transform-runtime`，就不能设置这个选项
+
 执行脚本时在终端有一段警告
 
 ```sh
@@ -214,7 +260,7 @@ You should also be sure that the version you pass to the `corejs` option matches
   yarn add core-js@2              yarn add core-js@3
 ```
 
-这是因为还缺少 corejs 配置，`babel.config.json`完整配置如下：
+这是因为还缺少 corejs 的版本配置，`babel.config.json`完整配置如下：
 
 ```json
 {
@@ -236,10 +282,23 @@ You should also be sure that the version you pass to the `corejs` option matches
 `@babel/polyfill`也可以实现，但是在 Babel7.4.0 以上已经不被推荐使用
 
 Q：既然 Plugins 能将新特性转换成目标浏览器支持的 js，那么为什么还需要 Polyfill 呢？
+
 A：因为一些原型链上的实例方法（如 includes）是没法通过代码转过去用的，实例方法的内部实现很复杂。如果通过代码转换实现效果会很复杂，所以采用引入环境这样的方式来达到功能的补充
+
+`@babel/plugin-transform-runtime`
+
+## API
 
 ## 编译流程
 
 ## AST
 
-## API
+抽象语法树
+
+词法分析
+
+语法分析
+
+<https://github.com/jamiebuilds/the-super-tiny-compiler>
+
+<https://github.com/umijs/babel-plugin-import>

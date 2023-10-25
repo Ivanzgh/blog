@@ -156,6 +156,15 @@ let [a, b, [c]] = [1, 2, [3]];
 console.log(a, b, c); // 1 2 3
 ```
 
+5、数组的对象解构
+
+```js
+const str = '23,zgh,boy';
+// { 数组下标: 变量名 }
+const { 1: name, 2: sex, 0: age } = str.split(',');
+console.log(name, sex, age); // zgh boy 23
+```
+
 ### 对象的解构赋值
 
 ```js
@@ -167,7 +176,8 @@ console.log(name, age); // zgh 22
 
 - 数组的元素是按次序排列的，变量的取值由它的位置决定
 - 对象的属性没有次序，变量必须与属性同名，才能取到正确的值
-  :::
+
+:::
 
 ### 函数参数的解构赋值
 

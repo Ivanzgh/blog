@@ -24,7 +24,7 @@ HTML 元素由起始标签、内容和结束标签组成，如`<p>html</p>`。HT
 
 ## HTML5 新特性
 
-- 语义化元素，如 `header`、`nav`、`footer`、`section`、`article`、`aside`
+- 语义化元素，如 `header`、`nav`、`footer`、`section`、`main`、`article`、`aside`
 - 多媒体元素，如 `video`、`audio`
 - 本地存储，如 localStorage、sessionStorage
 - 新表单控件，calendar、date、time、email、url、search ，如 `<input type='date'>`、`<input type='email'>`
@@ -36,9 +36,25 @@ HTML 元素由起始标签、内容和结束标签组成，如`<p>html</p>`。HT
 
 ## 块级元素、行内元素
 
-块级元素独占一行，宽度是父级元素的 100%，常见的有`<div>`、`<p>`、`<h1>`至`<h6>`、`<ul>`、`<ol>`、`<li>`、`<form>`、`<table>`、`<header>`、`<footer>`、`<nav>`、`<section>`、`<article>`、`<blockguote>`等
+块级元素，`display: block;`，独占一行，默认宽度由父容器决定，默认高度由内容决定。
 
-行内元素不会独占一行，直接设置宽高无效，常见的有 `<span>`、`<a>`、`<strong>`、`<b>`、`<em>`、`<i>`、`<img>`、`<br>`、`<code>`、`<sub>`、`<sup>`、`<cite>`、`<abbr>`等
+常见的有`<div>`、`<p>`、`<h1>`至`<h6>`、`<ul>`、`<ol>`、`<li>`、`<form>`、`<table>`、`<header>`、`<footer>`、`<nav>`、`<section>`、`<article>`、`<blockguote>`等
+
+行内元素，`display: inline`，不会独占一行，
+
+- 默认宽高由内容决定，直接设置宽高无效
+- 对 margin 和 padding 仅设置左右方向有效，上下无效（上下可以设置，但是不占据空间）
+- 可以设置行高
+- 行内元素中不能放块级元素
+
+常见的有 `<span>`、`<a>`、`<strong>`、`<b>`、`<em>`、`<i>`、`<br>`、`<code>`、`<sub>`、`<sup>`、`<cite>`、`<abbr>`等
+
+行内块级元素，`display: inline-block`，不独占一行
+
+- 默认宽高是自身内容宽高，可以设置宽高
+- 之间会有空白间隙
+
+常见的有`<img>`、`<input>`、`<button>`、`<textarea>`、`<select>`等
 
 ## 标签默认样式
 
@@ -197,9 +213,117 @@ HTML 实体字符是一种用实体编码表示特殊字符的方式。以下是
 </form>
 ```
 
+name：表单项的字段标识
+
 ## 表单校验
 
-示例：校验分页器跳转框
+### 校验提示
+
+当 input 输入框失去焦点就触发校验事件，在点击提交时让每个 input 都触发校验
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>表单验证</title>
+    <style type="text/css">
+      .error {
+        display: none;
+        color: #f00;
+      }
+    </style>
+  </head>
+  <body>
+    <form method="post">
+      <p>用户名：</p>
+      <p>
+        <input type="text" name="username" class="auth" />
+        <span class="error">用户名至少3位！</span>
+      </p>
+      <p>密码：</p>
+      <p>
+        <input type="password" name="password" class="auth" />
+        <span class="error">密码至少6位！</span>
+      </p>
+      <p>确认密码：</p>
+      <p>
+        <input type="password" name="respassword" class="auth" />
+        <span class="error">两次密码不一致！</span>
+      </p>
+      <p>邮箱：</p>
+      <p>
+        <input type="text" name="email" class="auth" />
+        <span class="error">邮箱格式不正确！</span>
+      </p>
+      <p>手机号码：</p>
+      <p>
+        <input type="text" name="phone" class="auth" maxlength="11" />
+        <span class="error">手机号码错误！</span>
+      </p>
+      <button type="button" class="loginbtn">OK</button>
+    </form>
+  </body>
+  <script src="jquery-3.3.1.js"></script>
+  <script type="text/javascript">
+    $('input[name=username]').blur(function () {
+      if (this.value.length < 3) {
+        $(this).next().show();
+      } else {
+        $(this).next().hide();
+      }
+    });
+    $('input[name=password]').blur(function () {
+      if (this.value.length < 6) {
+        $(this).next().show();
+      } else {
+        $(this).next().hide();
+      }
+    });
+    $('input[name=respassword]').blur(function () {
+      var val1 = $('input[name=password]').val();
+      if (val1 != this.value) {
+        $(this).next().show();
+      } else {
+        $(this).next().hide();
+      }
+    });
+
+    $('input[name=email]').blur(function () {
+      if (!this.value.match(/^\w+@\w+\.\w+$/i)) {
+        $(this).next().show();
+      } else {
+        $(this).next().hide();
+      }
+    });
+    $('input[name=phone]').blur(function () {
+      if (!this.value.match(/^1\d{10}$/)) {
+        $(this).next().show();
+      } else {
+        $(this).next().hide();
+      }
+    });
+
+    $('.loginbtn').click(function () {
+      $('.auth').blur();
+
+      let formData = $('form').serialize(); // 获取表单值的URL编码字符串
+      let formDataArray = $('form').serializeArray(); // 获取表单值的对象数组
+
+      console.log(formData);
+      console.log(formDataArray);
+
+      var data = {};
+      $.each(formDataArray, function (i, obj) {
+        data[obj.name] = obj.value;
+      });
+      console.log(data);
+    });
+  </script>
+</html>
+```
+
+### 校验分页器跳转框
 
 ```js
 // <input type="text" id="pageJump" oninput="validateInput(this)" />
@@ -251,7 +375,33 @@ cookies，sessionStorage、localStorage
 
 深入了解如何嵌入音频、视频和其他多媒体内容，以及不同浏览器之间的兼容性问题
 
+### video 视频
+
+```js
+<video width="320" height="240" controls>
+  <source src="video.mp4" type="video/mp4" />
+  <source src="video.ogg" type="video/ogg" />
+  Your browser does not support the video tag
+</video>
+```
+
+1、controls 属性指定是否显示媒体控件
+
+2、poster 提供预览图
+
+```js
+<video src="index.mp4" poster="pos.img"></video>
+```
+
+3、autoplay 自动播放
+
+4、loop 是否循环播放
+
+### audio 音频
+
 ## iframe 嵌入
+
+iframe 能将另一个网页嵌入到当前网页中
 
 ```html
 <iframe
@@ -261,7 +411,14 @@ cookies，sessionStorage、localStorage
 />
 ```
 
-需要注意跨域 CORS、是否允许嵌入等安全隐患限制
+- 需要注意跨域 CORS、是否允许嵌入等安全隐患限制
+- 最好是通过 js 动态的给 iframe 添加 src 属性
+
+缺点：
+
+1. iframe 会阻塞主页面的 onload 事件
+2. 搜索引擎的检索程序无法解读这种页面，不利于 SEO
+3. iframe 和主页面共享连接池，而浏览器对相同域的连接有限制，会影响页面的并行加载
 
 ### sandbox
 
@@ -362,6 +519,12 @@ secure 用于指定只在 HTTPS 连接中发送 Cookie
 
 浏览器将链接的 URL 视为下载资源
 
+```html
+<a href="a.pdf" download>download</a>
+```
+
+如果链接是图片，则直接打开，不会下载
+
 ## dl、dt、dd 表格标签
 
 dl dt dd 是一个组合型标签
@@ -382,46 +545,146 @@ dl 标签与 dt（定义项目/名字）和 dd（描述每一个项目/名字）
 
 通常使用在具有标题，而标题下对应有若干列表简单的（栏目标题+对应标题列表）和标题对应下面有内容
 
+## input
+
+### 属性
+
+1、accept 属性，指定浏览器可以处理的 MIME 类型的列表，MIME 类型是标识文档类型的标准
+
+```html
+<input type="file" accept=".jpg, .png" />
+```
+
+accept 可以接受的值有哪些？
+
+2、autofocus 属性，自动聚焦
+
+```html
+<input type="text" autofocus />
+```
+
+3、inputmode 属性，指定文本框中输入的内容属性，帮助浏览器优化输入体验，例如在移动端自动弹出合适的虚拟键盘
+
+与 type 属性不同的是，inputmode 属性并不会改变浏览器对 input 的处理，它仅仅是决定如何展示键盘
+
+```html
+<input type="text" inputmode="emial" />
+```
+
+可用类型：
+
+- text：默认值，使用用户本地区域设置的标准文本输入键盘
+- none：无虚拟键盘
+- tel：电话输入键盘
+- url：优化网址输入
+- email：优化邮件地址输入
+- numeric：数字输入键盘
+- decimal：小数输入键盘
+- search：优化搜索输入
+
+4、pattern 属性，指定文本框中输入内容的正则表达式。错误信息可以使用 title 属性自定义
+
+```html
+<form action="">
+  <input name="username" pattern="[A-Za-z0-9]" title="error" />
+  <input type="submit" />
+</form>
+```
+
+5、required 属性，指定表单元素是否必填，不会阻止用户提交空格或空白字符
+
+```html
+<form action="">
+  <input text="text" required />
+  <input type="submit" />
+</form>
+```
+
+6、autocomplete 属性，指定表单元素是否启用自动完成
+
+```html
+<input autocomplete="off" />
+```
+
+可用类型：
+
+- on：默认值，表示启用自动完成功能
+- off：表示禁用自动完成功能
+- name：表示使用表单元素的 name 属性作为自动完成的关键字
+- email：最近输入的电子邮件地址
+- username：用户名
+- current-password：密码
+- new-password：新密码
+- tel：电话号码
+- address-level1：国家或地区名称
+- address-level2：省份或州名称
+- address-level3：城市或地区名称
+- address-level4：街道名称
+- country：国家名称
+
+7、multiple 属性，指定表单元素是否允许多选，用于下拉列表、文件上传和复选框等
+
+```html
+<input type="file" multiple />
+```
+
+8、readonly 属性，指定表单元素是否只读
+
+```html
+<input type="text" readonly />
+```
+
+9、type 属性
+
+- text 单行文本输入框
+- password 密码输入框(密码显示为`***`)
+- radio 单选框
+- checkbox 复选框
+- file 上传文件
+- button 普通按钮
+- reset 重置按钮（触发表单的 reset 事件）
+- submit 提交按钮（触发表单的 submit 事件）
+- email 用于输入 email
+- url 用于输入 url
+- number 专门用于 number
+- range 显示为滑动条，用于输入一定范围内的值
+- date 选取日期和时间（还包含：month、week、time、datetime、datetime-local）
+- color 选取颜色
+
+### 样式
+
+```css
+input {
+  /* 修改input边框样式 */
+  outline: 2px solid #f00;
+  outline: none;
+}
+```
+
+### input 框设置只读
+
+- readonly
+- disabled
+- onfocus="this.blur()"
+
+```html
+<input type="text" value="hello" readonly />
+
+<input type="text" value="hello" disabled />
+
+<input type="text" value="hello" onfocus="this.blur()" />
+```
+
+三种方式的区别：
+
+1. 使用 disabled 会使输入框变灰，不可输入，不可点击，可复制
+2. 使用 readonly 不可输入，可点击，不变灰，可复制
+3. onfocus="this.blur()"不可输入，不可点击，不变灰，不可复制
+
 ## 表单
 
 - `outline: none;` 取消 input、textarea 的聚焦边框
 - `resize: none;` 禁止 textarea 可拖动
-
-### input
-
-- 禁止显示历史记录
-
-`autocomplete="off"` 禁用自动完成功能。on 启用
-
-- input 框设置只读
-
-方法一、readonly
-
-```html
-<input type="text" value="hello" readonly />
-<input type="text" value="hello" readonly="true" />
-```
-
-方法二、disabled
-
-```html
-<input type="text" value="hello" disabled />
-<input type="text" value="hello" disabled="true" />
-```
-
-方法三、onfocus="this.blur()"
-
-```html
-<input type="text" value="hello" onfocus="this.blur()" />
-```
-
-::: tip 区别：
-1、使用 disabled 会使输入框变灰，不可输入，不可点击，可复制
-
-2、使用 readonly 不可输入，可点击，不变灰，可复制
-
-3、onfocus="this.blur()"不可输入，不可点击，不变灰，不可复制
-:::
 
 ## 监听 input 框的值变化
 
@@ -563,17 +826,50 @@ figure:hover p {
 }
 ```
 
+## contenteditable 属性
+
+指定元素是否可编辑。可选值为：true、false、inherit，默认值为 false。可用于富文本编辑器、可编辑的表格等功能
+
+```html
+<div contenteditable="true">可编辑</div>
+```
+
+## hidden 属性
+
+指定元素是否隐藏，功能同`display: none`
+
+```html
+<p id="hid" hidden>text</p>
+```
+
+## async 和 defer
+
+设置 async 属性，脚本将异步加载，不会阻止页面的解析和渲染
+
+defer 属性，用于指定脚本是否应该延迟加载，直到页面解析完成后再执行
+
+```js
+<script src="index.js" async></script>
+
+<script src="index.js" defer></script>
+```
+
+## draggable 拖动
+
+允许用户通过拖动元素来移动它们
+
 ## IE11 中 flex 布局兼容问题
 
 flex:1 解析问题
 原因：
 
 ```css
-//在谷歌中flex:1;会解析为
+/* 在谷歌中flex:1;会解析为 */
 flex-grow: 1;
 flex-shrink: 1;
 flex-basis: 0%;
-//在IE中被解析为
+
+/* 在IE中被解析为 */
 flex-grow: 1;
 flex-shrink: 1;
 flex-basis: 0px;

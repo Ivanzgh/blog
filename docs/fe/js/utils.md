@@ -9,6 +9,35 @@ const getRandomColor = () => {
 getRandomColor();
 ```
 
+## 根据数组中的元素的唯一属性，筛选出相应的属性值
+
+```js
+const ids = [1, 3];
+const data = [
+  { id: 1, title: 'z' },
+  { id: 2, title: 'g' },
+  { id: 3, title: 'h' }
+];
+
+const idSet = new Set(ids);
+const res = data.filter((item) => idSet.has(item.id)).map((item) => item.title);
+
+console.log(res); // ['z', 'h']
+```
+
+不推荐的写法：
+
+```js
+let res = [];
+ids.forEach((id) => {
+  data.forEach((item) => {
+    if (id === item.id) {
+      res.push(item.title);
+    }
+  });
+});
+```
+
 ## 根据经纬度计算距离
 
 ```js
@@ -688,6 +717,7 @@ const data = [
     ]
   }
 ];
+
 function getChidlren(data, id) {
   let hasFound = false, // 表示是否找到id值
     result = null;
@@ -723,4 +753,116 @@ function arrayChunk(array, size) {
 
 const arr = [1, 2, 3, 4];
 arrayChunk(arr, 2); // [[1, 2], [3, 4]]
+```
+
+## 通过唯一值数组筛选树形结构数据
+
+从一个树形结构的数据中找到数组中的值，并组成新的数组。如下所示，有一个 orgId 组成的数组 key，期望结果是：
+
+```js
+const res = [
+  { label: '名称1', value: 1 },
+  { label: '名称3', value: 3 },
+  { label: '名称4', value: 4 },
+  { label: '名称6', value: 6 }
+];
+```
+
+```js
+const key = [1, 3, 4, 6];
+const arr = [
+  {
+    children: [
+      {
+        children: [
+          { children: null, orgId: 4, orgName: '名称4' },
+          { children: null, orgId: 5, orgName: '名称5' }
+        ],
+        orgId: 3,
+        orgName: '名称3'
+      },
+      {
+        children: null,
+        orgId: 6,
+        orgName: '名称6'
+      }
+    ],
+    orgId: 1,
+    orgName: '名称1'
+  },
+  {
+    children: [
+      {
+        children: [
+          { children: null, orgId: 8, orgName: '名称8' },
+          { children: null, orgId: 9, orgName: '名称9' }
+        ],
+        orgId: 7,
+        orgName: '名称7'
+      }
+    ],
+    orgId: 2,
+    orgName: '名称2'
+  }
+];
+
+function findOrgs(arr, key) {
+  const res = [];
+  arr.forEach((obj) => {
+    if (key.includes(obj.orgId)) {
+      res.push({ label: obj.orgName, value: obj.orgId });
+    }
+    if (obj.children && obj.children.length > 0) {
+      const childRes = findOrgs(obj.children, key);
+      res.push(...childRes);
+    }
+  });
+  return res;
+}
+
+const result = findOrgs(arr, key);
+console.log(result);
+```
+
+## 生成随机 uuid
+
+```js
+export const generateUUID = () => {
+  let d = new Date().getTime();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    let r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x7) | 0x8).toString(16);
+  });
+};
+```
+
+## 随机字符串
+
+```js
+export const generateRdStr = (length) => {
+  let text = '';
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+```
+
+## 时间戳转为时间
+
+```js
+// timestampToTime(1637244864707)   '2021-11-18 22:14:24'
+// timestampToTime(1687917420427)   '2023-06-28 09:57:00'
+export const timestampToTime = (timestamp) => {
+  let date = new Date(timestamp); // 时间戳为10位需*1000，为13位不需乘1000
+  let Y = date.getFullYear() + '-';
+  let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+  let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
+  let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+  let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+  let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+  return Y + M + D + h + m + s;
+};
 ```
