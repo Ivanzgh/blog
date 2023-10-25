@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,Q as l}from"./chunks/framework.f14b72c3.js";const B=JSON.parse('{"title":"老工具了","description":"","frontmatter":{},"headers":[],"relativePath":"fe/js/utils.md","lastUpdated":1695604450000}'),p={name:"fe/js/utils.md"},o=l("",114),F=[o];function e(t,c,r,y,i,C){return n(),a("div",null,F)}const u=s(p,[["render",e]]);export{B as __pageData,u as default};

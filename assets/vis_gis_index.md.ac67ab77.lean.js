@@ -1,0 +1,1 @@
+import{_ as e,c as a,o,Q as l}from"./chunks/framework.f14b72c3.js";const b=JSON.parse('{"title":"GIS","description":"","frontmatter":{},"headers":[],"relativePath":"vis/gis/index.md","lastUpdated":1698246525000}'),i={name:"vis/gis/index.md"},r=l("",121),t=[r];function s(d,c,h,p,n,u){return o(),a("div",null,t)}const g=e(i,[["render",s]]);export{b as __pageData,g as default};

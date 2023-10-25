@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,Q as p}from"./chunks/framework.f14b72c3.js";const g=JSON.parse('{"title":"Gulp","description":"","frontmatter":{},"headers":[],"relativePath":"automate/gulp.md","lastUpdated":1695604450000}'),l={name:"automate/gulp.md"},o=p("",40),F=[o];function e(t,c,r,y,i,u){return n(),a("div",null,F)}const C=s(l,[["render",e]]);export{g as __pageData,C as default};

@@ -1,1 +1,0 @@
-import{_ as s,c as a,o as n,Q as l}from"./chunks/framework.f14b72c3.js";const y=JSON.parse('{"title":"iTerm2","description":"","frontmatter":{},"headers":[],"relativePath":"tools/iTerm2.md","lastUpdated":1695604450000}'),o={name:"tools/iTerm2.md"},e=l("",56),p=[e];function t(c,r,i,h,F,d){return n(),a("div",null,p)}const g=s(o,[["render",t]]);export{y as __pageData,g as default};

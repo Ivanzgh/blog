@@ -1,0 +1,1 @@
+import{_ as a,c as s,o as l,Q as n}from"./chunks/framework.f14b72c3.js";const d=JSON.parse('{"title":"前端插件","description":"","frontmatter":{},"headers":[],"relativePath":"tools/plugin.md","lastUpdated":1698246525000}'),e={name:"tools/plugin.md"},o=n("",103),r=[o];function t(p,F,c,i,h,y){return l(),s("div",null,r)}const b=a(e,[["render",t]]);export{d as __pageData,b as default};
