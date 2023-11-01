@@ -6,13 +6,20 @@
 
 babel 是 JavaScript 转译器
 
-推荐学习项目：<https://github.com/jamiebuilds/the-super-tiny-compiler>
-
 用途：
 
 - 转译 esnext、typescript、flow 等到目标环境支持的 js
 - 代码的静态分析
 - 特定用途的代码转换
+
+## 参考资料
+
+- 推荐学习项目：<https://github.com/jamiebuilds/the-super-tiny-compiler>
+- [the-super-tiny-compiler 解析](https://juejin.cn/post/7098012087128948744)
+- [babal 学习手册](https://github.com/jamiebuilds/babel-handbook/blob/master/translations/zh-Hans/plugin-handbook.md)
+- [babel-plugin-import](https://github.com/umijs/babel-plugin-import)
+- [babel 常见包的介绍](https://segmentfault.com/a/1190000043348439?utm_source=sf-similar-article)
+- [小册《babel 插件通关秘籍》实战案例代码](https://github.com/QuarkGluonPlasma/babel-plugin-exercize)
 
 ## Babel 的编译流程
 
@@ -23,6 +30,7 @@ babel 是 JavaScript 转译器
   - 高级语言：JavaScript、c++、java 等
   - 低级语言：汇编语言、机器语言
 - 转译器 Transpiler
+
   - 从高级语言到高级语言的转换工具
 
 - parse：通过 parse 把源码转换成抽象语法树（AST）
@@ -298,7 +306,3 @@ A：因为一些原型链上的实例方法（如 includes）是没法通过代�
 词法分析
 
 语法分析
-
-<https://github.com/jamiebuilds/the-super-tiny-compiler>
-
-<https://github.com/umijs/babel-plugin-import>

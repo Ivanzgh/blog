@@ -21,6 +21,6 @@
   },
   "homepage": "https://github.com/Ivanzgh/blog#readme",
   "devDependencies": {
-    "vitepress": "^1.0.0-alpha.64"
+    "vitepress": "1.0.0-rc.24"
   }
 }

@@ -692,7 +692,7 @@ console.log(merged); // {a: 1, b: 30, c: 40, d: 50}
 它的绝大部分功能，ES5 都可以做到，新的 class 写法让对象原型的写法更加清晰、更像面向对象编程的语法
 
 ```js
-//ES5 中使用面向对象
+// ES5 中使用面向对象
 function Person(name, age) {
   this.name = name;
   this.age = age;
@@ -703,7 +703,7 @@ function Person(name, age) {
 let obj = new Person('zgh', 22);
 obj.say();
 
-//ES6 中使用面向对象
+// ES6 中使用面向对象
 class Person {
   constructor(name, age) {
     this.name = name;
@@ -870,8 +870,8 @@ new Promise((resolve, reject) => {});
 
 #### then 方法
 
-分别指定`resolved`状态和`rejected`状态的回调函数，第二个参数可选（不推荐使用）。
-返回的是一个新的`Promise`，支持链式调用
+- 分别指定`resolved`状态和`rejected`状态的回调函数，第二个参数可选（不推荐使用）。
+- 返回的是一个新的`Promise`，支持链式调用
 
 ```js
 function pro(params) {
@@ -1142,10 +1142,8 @@ let b = a ?? 1; // 1
 
 ### 与`||`的区别
 
-- `||` 返回第一个真值
-- `??` 返回第一个已定义的值
-
-`||` 无法区分 `false`、`0`、空字符串`""`、`NaN`和`null/undefined`
+- `||` 返回第一个真值，`??` 返回第一个已定义的值
+- `||` 无法区分 `false`、`0`、空字符串`""`、`NaN`和`null/undefined`
 
 ```js
 let a = 0;

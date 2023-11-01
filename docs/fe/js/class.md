@@ -9,7 +9,7 @@ const user = {};
 user.name = 'zgh';
 user.age = 25;
 user.say = function () {
-  return `${name} is ${age} years old`;
+  return `${this.name} is ${this.age} years old`;
 };
 ```
 

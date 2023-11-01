@@ -109,6 +109,16 @@ export default defineConfig({
             { text: '状态管理', link: '/fe/react/state' },
             { text: 'React-Router', link: '/fe/react/router' },
             { text: 'NextJS', link: '/fe/react/next' },
+            {
+              text: '业务',
+              link: '/fe/react/business',
+              items: [
+                { text: 'Ant Design', link: '/fe/react/antd/' },
+                { text: 'Ant Design Pro', link: '/fe/react/antd/ant-design-pro' },
+                { text: 'Umi', link: '/fe/react/antd/umi' },
+                { text: 'ProComponents', link: '/fe/react/antd/proComponents' }
+              ]
+            }
           ]
         }
       ],

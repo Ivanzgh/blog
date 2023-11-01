@@ -375,9 +375,9 @@ fun(1, 2);
 
 推荐使用 ES6 的扩展运算符处理参数
 
-## 提升
+## 变量提升、函数提升
 
-变量提升、函数提升，结合执行上下文来理解提升的内在机制
+结合执行上下文来理解提升的内在机制
 
 ### 变量提升
 
@@ -892,38 +892,26 @@ getValue.bind(a, 'zgh', '23')();
 
 ## IIFE
 
-### 立即执行函数表达式
+立即执行函数表达式（Immediately Invoked Function Expression，IIFE）
 
-IIFE（Immediately-invoked function expression）
+将一个函数用括号包裹起来，然后在函数定义后的括号会立即调用这个函数
 
-目的是为了隔离作用域，防止污染全局作用域
+作用：
 
-#### 方式一
+- 隔离作用域，防止污染全局作用域
+- 模块化开发，将代码封装在一个独立的作用域内，避免了变量和函数的污染
+- 立即执行，可以用来执行初始化的操作
 
 ```js
 (function f(x) {
   console.log(x); // 1
 })('1');
-```
 
-#### 方式二
-
-```js
-(function g(x) {
-  console.log(x); // 2
-})('2');
-```
-
-示例
-
-```js
-(function f() {
+(function () {
   var iife = 'zgh';
 })();
 console.log(iife); // Uncaught ReferenceError: iife is not defined
-```
 
-```js
 var res = (function () {
   var fe = 'hehe';
   return fe;
@@ -933,10 +921,11 @@ console.log(res); // hehe
 
 ## 深拷贝、浅拷贝
 
-浅拷贝：
+### 浅拷贝
+
+如果对象中的属性是引用类型，那么新对象中的对应属性仍然指向同一个引用，这些属性会被共享，对其中一个对象的修改会影响到另一个对象
 
 ```js
-const obj = { name: 'zgh' };
 function shallowClone(obj) {
   const newObj = {};
   for (let i in obj) {
@@ -944,73 +933,212 @@ function shallowClone(obj) {
   }
   return newObj;
 }
-shallowClone(obj); // {name: "zgh"}
 ```
 
-深拷贝：
+```js
+const obj = {
+  foo: 'zgh',
+  bar: { a: 1 }
+};
+
+const newObj = shallowClone(obj);
+
+newObj.bar.a = 2;
+console.log(obj.bar.a); // 2
+
+obj.foo = 'copy';
+console.log(newObj.foo); // zgh
+```
+
+其他几种方法实现浅拷贝：
+
+1、扩展运算符
 
 ```js
-function deepClone(obj) {
-  if (typeof obj === 'object') {
-    let res = obj.constructor === Array ? [] : {};
-    for (let i in obj) {
-      res[i] = typeof obj[i] === 'object' ? deepClone(obj[i]) : obj[i];
-    }
-  } else {
-    let res = obj;
-  }
-  return obj;
-}
+const obj = { name: 'zgh' };
+const newObj = { ...obj };
+```
 
-const deepClone = (source) => {
-  if (typeof source !== 'object' || source === null) {
-    return source;
+2、`Object.assign()`
+
+```js
+const obj = { name: 'zgh' };
+const newObj = Object.assign({}, obj);
+```
+
+3、`Object.create()`
+
+```js
+const obj = { name: 'zgh' };
+const newObj = Object.create(obj);
+```
+
+这种方法创建了一个新对象，它的原型链指向了 obj
+
+4、`Array.from()`
+
+```js
+const arr = [1, 2, 3];
+const newArr = Array.from(arr);
+```
+
+5、`slice()`
+
+```js
+const arr = [1, 2, 3];
+const newArr = arr.slice();
+```
+
+6、`concat()`
+
+```js
+const arr = [1, 2, 3];
+const newArr = arr.concat();
+```
+
+### 深拷贝
+
+深拷贝创建了一个新的对象，而且这个新对象和原始对象完全独立
+
+方式一：
+
+```js
+const deepClone = (obj) => {
+  // 如果是基本类型或 null，则直接返回
+  if (typeof obj !== 'object' || obj === null) {
+    return obj;
   }
-  const target = Array.isArray(source) ? [] : {};
-  for (const key in source) {
-    if (Object.prototype.hasOwnProperty.call(source, key)) {
-      if (typeof source[key] === 'object' && source[key] !== null) {
-        target[key] = deepClone(source[key]);
+  const newObj = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      // typeof null === 'object'
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        newObj[key] = deepClone(obj[key]);
       } else {
-        target[key] = source[key];
+        newObj[key] = obj[key];
       }
     }
   }
-  return target;
+  return newObj;
 };
 ```
 
-`JSON.parse(JSON.stringify())`就是有一些局限性的深拷贝
+方式一可以适应大部分场景，但是没有考虑处理循环引用的情况，可能会导致栈溢出错误
 
 ```js
-let arr = [1, 2, { name: 'zgh' }];
-let newArr = JSON.parse(JSON.stringify(arr));
+const obj = {
+  a: 1,
+  b: { c: 2, d: 3 }
+};
+obj.self = obj;
+
+// Uncaught RangeError: Maximum call stack size exceeded
+const copiedObj = deepClone(obj);
+```
+
+方式二、使用 WeakMap 来存储已经处理过的对象
+
+```js
+const deepClone = (obj, cache = new WeakMap()) => {
+  // 如果是基本类型或 null，则直接返回
+  if (typeof obj !== 'object' || obj === null) {
+    return obj;
+  }
+  // 处理循环引用
+  if (cache.has(obj)) {
+    return cache.get(obj);
+  }
+
+  const newObj = Array.isArray(obj) ? [] : {};
+  cache.set(obj, newObj);
+
+  for (let key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        newObj[key] = deepClone(obj[key], cache);
+      } else {
+        newObj[key] = obj[key];
+      }
+    }
+  }
+  return newObj;
+};
+```
+
+#### JSON.parse(JSON.stringify())
+
+`JSON.parse(JSON.stringify())`是有一些局限性的深拷贝
+
+```js
+const arr = [1, 2, { name: 'zgh' }];
+
+const newArr = JSON.parse(JSON.stringify(arr));
 newArr[2].name = 'lrx';
+
 console.log(newArr); // [1, 2, { name: 'lrx' }]
 console.log(arr); // [1, 2, { name: 'zgh' }]]
 ```
 
-<https://juejin.im/post/59ac1c4ef265da248e75892b>
+注意事项：
 
-<https://www.cnblogs.com/echolun/p/7889848.html>
+1、如果对象中存在循环引用，即对象包含一个指向自身的属性，使用这种方式拷贝会报错
+
+```js
+const obj = { name: 'zgh' };
+obj.self = obj;
+
+// Uncaught TypeError: Converting circular structure to JSON
+const newObj = JSON.parse(JSON.stringify(obj));
+```
+
+2、无法拷贝函数
+
+```js
+const obj = {
+  name: 'zgh',
+  foo: function () {
+    console.log('foo');
+  }
+};
+
+const newObj = JSON.parse(JSON.stringify(obj));
+
+console.log(newObj.foo); // undefined
+```
+
+3、只会拷贝对象自身的属性，不会拷贝原型链上的属性
+
+```js
+function Person(name) {
+  this.name = name;
+}
+
+Person.prototype.foo = function () {
+  console.log('foo');
+};
+Person.prototype.bar = 'js';
+
+const obj = new Person('zgh');
+const newObj = JSON.parse(JSON.stringify(obj));
+
+console.log(newObj.bar); // undefined
+
+newObj.foo(); // 报错：newObj.sayHello is not a function
+```
 
 如何区分深拷贝与浅拷贝？
 
 简单来说，就是假设 B 复制了 A，当修改 A 时，看 B 是否会发生变化，如果 B 也跟着变了，说明这是浅拷贝，如果 B 没变，那就是深拷贝
 
-区别：浅拷贝只复制对象的第一层属性、深拷贝可以对对象的属性进行递归复制
-
-浅拷贝是将原始对象中的数据型字段拷贝到新对象中去，将引用型字段的“引用”复制到新对象中去，不把“引用的对象”复制进去，
-所以原始对象和新对象引用同一对象，新对象中的引用型字段发生变化会导致原始对象中的对应字段也发生变化。
-
-深拷贝是在引用方面不同，深拷贝就是创建一个新的和原始字段的内容相同的字段，是两个一样大的数据段，所以两者的引用是不同的，
-之后的新对象中的引用型字段发生改变，不会引起原始对象中的字段发生改变。
+区别：浅拷贝只复制对象的自身属性、深拷贝可以对对象的属性进行递归复制
 
 ## 节流和防抖
 
 ### 防抖
 
 **事件在被触发 n 秒后执行回调函数，如果在这 n 秒内事件又被触发，则重新计时。** 即在规定时间内未触发第二次，则执行回调函数
+
+示例：在输入框中输入结束再去执行请求，但是下面代码在没有输入结束就会发出多次请求
 
 ```html
 <input type="text" id="my-input" />
@@ -1025,8 +1153,6 @@ console.log(arr); // [1, 2, { name: 'zgh' }]]
   });
 </script>
 ```
-
-需求是在输入框中输入结束再去执行请求，但是示例中在没有输入结束就发出多次请求，浪费资源。
 
 使用防抖
 
@@ -1057,7 +1183,7 @@ inp.addEventListener('keyup', (e) => {
 
 **在规定时间内多次触发函数，只有第一次有效。**
 
-时间戳版
+方式一、使用时间戳
 
 ```js
 function throttle(func, delay) {
@@ -1067,8 +1193,6 @@ function throttle(func, delay) {
     if (now - last >= delay) {
       func.apply(this, arguments);
       last = now;
-    } else {
-      console.log('距离上次调用的时间差不满足要求');
     }
   };
 }
@@ -1084,7 +1208,7 @@ inputs.addEventListener('keyup', function (e) {
 });
 ```
 
-定时器版
+方式二、使用定时器
 
 ```js
 function throttle(fun, delay) {
@@ -1144,7 +1268,7 @@ console.log(f(5));
 
 ```js
 // F(1)=1，F(2)=1, F(n)=F(n-1)+F(n-2)（n>=3，n∈N*）
-//1,1,2,3,5,8,13,21......
+// 1, 1, 2, 3, 5, 8, 13, 21, ......
 function f(n) {
   if (n === 1 || n === 2) {
     return 1;
@@ -1173,31 +1297,66 @@ function g(x) {
 g(1)(2);
 ```
 
-示例：实现 `add(1)(2)(3) => 6`
+示例：实现 `add(1)(2)(3)`的结果是 6
+
+初步实现：
 
 ```js
 function add(a) {
-  function sum(b) {
-    // 使用闭包
-    a = a + b; // 累加
-    return sum;
-  }
-  sum.toString = function () {
-    // 重写toSting() 方法
-    return a;
+  return function (b) {
+    return function (c) {
+      return a + b + c;
+    };
   };
-  return sum; // 返回一个函数
 }
 add(1)(2)(3);
 ```
 
-## Math.floor、Math.round、Math.ceil
+这种方式只能实现有限的层级，并不能无限嵌套。下面使用闭包，并重写函数的 `toString()` 方法来实现任意数累加
 
-- `Math.round` 四舍五入取整
-- `Math.ceil` 向上取整
-- `Math.floor` 向下取整
-- `Math.random` 取`[0,1)`的随机小数
-- `Math.abs(x)` 取 x 的绝对值
+```js
+function add(a) {
+  function sum(b) {
+    a = a + b;
+    return sum;
+  }
+  sum.toString = function () {
+    return a;
+  };
+  return sum;
+}
+
+const res = add(1)(2)(3).toString();
+```
+
+这里的调用链实际上是在执行多次 sum 函数，每次将参数累加到 a 上。最终的返回值是一个函数，该函数的 toString 方法返回累加后的结果
+
+## Math 对象
+
+Math 是 js 的内置对象，提供了用于数学计算的方法和属性
+
+常用方法：
+
+- `Math.round(x)` 四舍五入取整
+- `Math.ceil(x)` 向上取整
+- `Math.floor(x)` 向下取整
+- `Math.random()` 返回`[0,1)`的随机浮点数
+- `Math.abs(x)` 返回 x 的绝对值
+- `Math.max(x, y, ...)` 返回一组数字中的最大值
+- `Math.min(x, y, ...)` 返回一组数字中的最小值
+- `Math.pow(x, y)` 返回 x 的 y 次幂
+- `Math.sqrt(x)` 返回一个数的平方根
+- `Math.sin(x)`、`Math.cos(x)`、`Math.tan(x)` 返回 x 的正弦、余弦、正切值
+- `Math.log(x)` 返回一个数的自然对数
+
+常用属性：
+
+- `Math.PI`：表示圆周率 π（π 约等于 3.14159265359）
+- `Math.E`：表示自然对数的底数 e（e 约等于 2.71828182846）
+- `Math.LN2`：表示 2 的自然对数（约等于 0.69314718056）
+- `Math.LN10`：表示 10 的自然对数（约等于 2.30258509299）
+- `Math.LOG2E`：表示以 2 为底的 e 的对数（约等于 1.44269504089）
+- `Math.LOG10E`：表示以 10 为底的 e 的对数（约等于 0.43429448190）
 
 ```js
 Math.round(1.23); // 1
@@ -1237,9 +1396,8 @@ Math.floor(c); // 3
 
 ```js
 let arr = ['zgh', 22, 180, 125];
-for (let i = 0, len = arr.length; i < len; i++) {
-  console.log(typeof i); // number
-}
+
+for (let i = 0, len = arr.length; i < len; i++) {}
 
 for (let m of arr) {
 }

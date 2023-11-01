@@ -2,7 +2,7 @@
 
 ## 创建对象的方式
 
-### 直接创建
+### 1、直接创建
 
 ```js
 const obj = { name: 'zgh', age: 23 };
@@ -14,7 +14,7 @@ const obj = { name: 'zgh', age: 23 };
 const obj = Object.create(null);
 ```
 
-### new
+### 2、new Object()
 
 ```js
 let obj = new Object();
@@ -22,7 +22,7 @@ obj.name = 'zgh';
 obj.age = 23;
 ```
 
-### 工厂模式
+### 3、工厂模式
 
 工厂模式解决了重复实例化多个对象的问题
 
@@ -37,7 +37,7 @@ let person1 = createObj('zgh', 23);
 let person2 = createObj('lrx', 22);
 ```
 
-### 构造函数模式
+### 4、构造函数模式
 
 ```js
 function createObj(name, age) {
@@ -49,7 +49,7 @@ let person2 = new createObj('lrx', 22);
 console.log(person1, person2);
 ```
 
-### 原型模式
+### 5、原型模式
 
 ```js
 function Person() {}
@@ -58,11 +58,11 @@ Person.prototype.name = 'zgh';
 Person.prototype.age = 23;
 console.log(Person.prototype); // {name: "zgh", age: 23, constructor: ƒ}
 
-let person1 = new Person(); //创建一个实例person1
+let person1 = new Person(); // 创建一个实例 person1
 console.log(person1.name); // zgh
 ```
 
-### 混合模式（构造函数模式+原型模式）
+### 6、混合模式（构造函数模式+原型模式）
 
 构造函数模式用于定义实例属性，原型模式用于定义方法和共享的属性
 
@@ -72,7 +72,7 @@ function Person(name, age) {
   this.age = age;
 }
 Person.prototype = {
-  //每个函数都有prototype属性，指向该函数原型对象，原型对象都有constructor属性，这是一个指向prototype属性所在函数的指针
+  // 每个函数都有prototype属性，指向该函数原型对象，原型对象都有constructor属性，这是一个指向prototype属性所在函数的指针
   constructor: Person,
   say: function () {
     console.log(this.name);
@@ -155,45 +155,159 @@ let result = Person.call(obj);
 obj.__proto__ = Person.prototype;
 ```
 
-4、判断 Person 的返回值类型，如果是值类型，返回 obj。如果是引用类型，则返回这个引用类型的对象。
+4、判断 Person 的返回值类型，如果是值类型，返回 obj。如果是引用类型，则返回这个引用类型的对象
 
-## 继承
+## 对象继承的方式
 
-### 构造继承
+### 1、原型链继承
 
-### 原型继承
+通过将一个对象的原型指向另一个原型，实现继承关系，子类的原型是父类的一个实例对象
 
 ```js
 function Parent() {
-  this.name = 'zgh';
-  this.girl = [1, 2, 3, 4, 5];
+  this.name = 'Parent';
+  this.nums = [1, 2, 3];
 }
 function Child() {
-  this.age = 20;
+  this.name = 'Child';
 }
 
 Child.prototype = new Parent();
 
-let demo = new Child();
-console.log(demo.age);
+const demo = new Child();
 console.log(demo.name);
 ```
 
-但是这种方式存在一些问题，如下更改`demo1`后`demo2`也随着改变了，因为这两个实例使用的是同一个原型对象
+这种方式的缺点是子类共享了父类的原型对象，可能会导致意外的属性修改。如下更改`demo1`后`demo2`也随着改变了
 
 ```js
-let demo1 = new Child();
-let demo2 = new Child();
-demo1.girl.push(6);
-console.log(demo1.girl); // [1, 2, 3, 4, 5, 6]
-console.log(demo2.girl); // [1, 2, 3, 4, 5, 6]
+const demo1 = new Child();
+const demo2 = new Child();
+demo1.nums.push(4);
+console.log(demo1.nums); // [1, 2, 3, 4]
+console.log(demo2.nums); // [1, 2, 3, 4]
 ```
 
-### 实例继承
+### 2、构造函数继承
 
-### 拷贝继承
+通过在子类构造函数中调用父类构造函数，实现属性的继承。缺点是无法继承父类原型上的方法
 
-原型`prototype`机制或`apply`和`call`方法去实现较简单，建议使用构造函数与原型混合方式
+```js
+function Parent() {
+  this.name = 'Parent';
+  this.nums = [1, 2, 3];
+}
+Parent.prototype.foo = function () {
+  console.log(this.nums);
+};
+
+function Child() {
+  Parent.call(this);
+  this.name = 'Child';
+}
+
+const childObj = new Child();
+console.log(childObj.nums);
+
+console.log(childObj.foo()); // childObj.foo is not a function
+```
+
+### 3、组合继承
+
+组合继承结合了原型链继承和构造函数继承的优点，既能继承原型链上的方法，又能避免属性共享的问题
+
+这种方式的缺点是会调用两次父类构造函数，可能会导致性能问题
+
+```js
+function Parent() {
+  this.name = 'Parent';
+  this.nums = [1, 2, 3];
+}
+Parent.prototype.foo = function () {
+  console.log(this.nums);
+};
+
+function Child() {
+  Parent.call(this);
+  this.name = 'Child';
+}
+
+Child.prototype = new Parent();
+Child.prototype.constructor = Child; // 修复 constructor 指向
+
+const childObj1 = new Child();
+console.log(childObj1.foo()); // [1, 2, 3]
+console.log(childObj1.constructor);
+
+childObj1.nums.push(4);
+console.log(childObj1.nums); // [1, 2, 3, 4]
+
+const childObj2 = new Child();
+console.log(childObj2.nums); // [1, 2, 3]
+```
+
+### 4、原型式继承
+
+通过将一个对象作为另一个对象的基础，创建一个新的对象
+
+```js
+const parentObj = { name: 'Parent', nums: [1, 2, 3] };
+const childObj = Object.create(parentObj);
+childObj.name = 'Child';
+
+console.log(childObj.nums); // [1, 2, 3]
+```
+
+这种方式会创建一个新的对象，它的原型链指向了 parentObj，从而实现了继承
+
+### 5、寄生式继承
+
+在原型式继承的基础上，对新对象进行了增强
+
+```js
+function createChild(obj) {
+  const child = Object.create(obj);
+  child.say = function () {
+    console.log('Hello');
+  };
+  return child;
+}
+
+const parentObj = { name: 'Parent', nums: [1, 2, 3] };
+const childObj = createChild(parentObj);
+
+childObj.say(); // 'Hello'
+```
+
+### 6、寄生组合式继承
+
+寄生组合式继承是对组合继承进行了优化，避免了调用两次父类构造函数
+
+```js
+function inheritPrototype(Child, Parent) {
+  const prototype = Object.create(Parent.prototype);
+  prototype.constructor = Child;
+  Child.prototype = prototype;
+}
+
+function Parent() {
+  this.name = 'Parent';
+  this.nums = [1, 2, 3];
+}
+
+function Child() {
+  Parent.call(this);
+  this.name = 'Child';
+}
+
+inheritPrototype(Child, Parent);
+
+const childObj = new Child();
+```
+
+### 7、class 继承
+
+ES6+提出的对象继承方式
 
 ## Object.keys()
 
@@ -239,13 +353,13 @@ console.log(obj); // {name: "zgh", age: 22, address: "beijing"}
 
 ```js
 let arr11 = Object.assign([1, 2, 3], [4, 5]);
-console.log(arr11); //[4,5,3]
+console.log(arr11); // [4, 5, 3]
 
 // 说明:对象是根据属性名来对应，数组是根据索引号来对应，相当于
-let arr23 = { 0: 1, 1: 2, 2: 3 }; //相同的属性名有0、1，后面的覆盖前面的.
+let arr23 = { 0: 1, 1: 2, 2: 3 }; //相同的属性名有0、1，后面的覆盖前面的
 ```
 
-assign 实现了浅复制，会把原型上的属性也复制了，但是不能复制继承过来的属性
+assign 实现了浅复制，会把原型上的属性也复制了，但是不能复制继承的属性
 
 ::: warning
 `Object.assign`不会在 source 对象值为 `null` 或 `undefined` 的时候抛出错误。
