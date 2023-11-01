@@ -7,7 +7,6 @@ export default defineConfig({
   lastUpdated: true,
   cleanUrls: true,
   head: [['link', { rel: 'icon', href: '/blog/img/logo.png' }]],
-  markdown: { theme: 'dracula' },
   themeConfig: {
     logo: '/img/logo.png',
     // outline: 'deep',
