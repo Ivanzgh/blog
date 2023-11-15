@@ -1,4 +1,4 @@
-# JS
+# JavaScript
 
 ## 数据类型
 
@@ -31,10 +31,6 @@ c.x = 4;
 console.log(c); // { x: 4 }
 console.log(d); // { x: 4 }
 ```
-
-::: tip
-关于存储位置是栈内存还是堆内存这里存在争议
-:::
 
 ## 类型判断
 
@@ -658,6 +654,14 @@ for (let i = 1; i <= 5; i++) {
 
 this 的指向，是在执行上下文被创建时确定的
 
+默认绑定、显示绑定、隐式绑定
+
+- 默认绑定：函数调用时无任何调用前缀，this 指向全局对象 window（非严格模式）
+- 显示绑定：通过 apply、call、bind 方法改变 this 指向
+- 隐式绑定：
+  - 如果函数调用时，前面存在调用它的对象，那么 this 就会隐式绑定到这个对象上
+  - 如果函数调用前存在多个对象，this 指向距离调用自己最近的对象
+
 ### 全局执行
 
 ```js
@@ -666,7 +670,9 @@ console.log(this); //  window
 
 ### 函数中执行
 
-#### 1、标准模式
+1、**标准模式**
+
+即默认绑定，this 指向 window
 
 ```js
 function f() {
@@ -675,7 +681,9 @@ function f() {
 f();
 ```
 
-#### 2、严格模式
+2、**严格模式**
+
+在严格模式下，默认绑定的 this 指向 window
 
 ```js
 'use strict';
@@ -683,6 +691,36 @@ function f() {
   console.log(this); // undefined
 }
 f();
+```
+
+如果在严格模式下调用非严格模式下的函数，不影响 this 指向
+
+```js
+function fn() {
+  console.log(this); // window
+}
+
+(function () {
+  'use strict';
+  fn();
+})();
+```
+
+隐式绑定 this 丢失问题，常见于传入回调函数时
+
+```js
+const obj = {
+  foo: function () {
+    console.log(this);
+  }
+};
+setTimeout(obj.foo, 100); //  window
+setTimeout(function () {
+  obj.foo(); // obj
+}, 100);
+
+// 显示绑定
+setTimeout(obj.foo.bind(obj), 100); // obj
 ```
 
 ### 作为对象的方法调用
@@ -871,6 +909,8 @@ console.log(user.ref().cool); // zgh
 此处 `user.ref()` 是一个方法，this 指向 user 对象
 
 ## bind、call、apply
+
+![img](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1699345047.png)
 
 三者都能改变 `this` 的指向
 
@@ -1132,7 +1172,7 @@ newObj.foo(); // 报错：newObj.sayHello is not a function
 
 区别：浅拷贝只复制对象的自身属性、深拷贝可以对对象的属性进行递归复制
 
-## 节流和防抖
+## 防抖和节流
 
 ### 防抖
 
@@ -1330,6 +1370,121 @@ const res = add(1)(2)(3).toString();
 ```
 
 这里的调用链实际上是在执行多次 sum 函数，每次将参数累加到 a 上。最终的返回值是一个函数，该函数的 toString 方法返回累加后的结果
+
+## Event Loop
+
+### 宏任务
+
+宏任务（Macro Task）是指由 JavaScript 主线程执行的任务，它包括但不限于以下情况：
+
+- script 脚本
+- 浏览器事件（如 click、mouseover 等）
+- 定时器任务（setTimeout、setInterval、setImmediate(Node.js 环境)）
+- 页面渲染（如 回流或重绘）
+- 事件回调（如 I/O、点击事件等）
+- 网络请求
+- requestAnimationFrame
+
+setTimeOut 并不是直接把回调函数放进异步队列中去，而是在定时器的时间到了之后才放进去。如果此时这个队列已经有很多任务了，那就排在它们的后面
+
+### 微任务
+
+微任务（Micro Task）
+
+- Promise 的`then/catch/finally`方法
+- `process.nextTick` (Node.js 环境)
+- MutaionOberver（浏览器环境）
+
+`new Promise()`是同步任务
+
+### 事件循环机制
+
+1. 首先开始执行主线，从上往下执行所有的同步代码
+2. 在执行过程中如果遇到宏任务就存放到宏任务队列中，遇到微任务加入微任务队列，然后主线往下执行，直到主线执行完毕
+3. 查看微任务队列中是否存在微任务，如果存在，则将所有微任务也按主线方式执行完成，然后清空微任务队列
+4. 开始将宏任务队列中的第一个宏任务设置为主线继续执行，执行完一个宏任务，会去查看微任务队列，接着立即执行所有的微任务，然后再进行下一个宏任务，直到所有的宏任务队列执行清空完成
+
+每个宏任务之后，引擎会立即执行微任务队列中的所有任务，然后再执行其他的宏任务
+
+示例 1：
+
+```js
+console.log(1);
+setTimeout(() => {
+  console.log(2);
+}, 6000);
+console.log(3);
+
+const button = document.querySelector('button');
+
+button.addEventListener('click', () => {
+  console.log(4);
+});
+
+console.log(5);
+```
+
+如果在定时器时间 6s 内点击，则输出顺序是：1、3、5、4、2，否则输出顺序是：1、3、5、2、4
+
+示例 2：
+
+```js
+console.log(1);
+
+setTimeout(() => {
+  console.log(2);
+}, 0);
+
+Promise.resolve().then(() => console.log(3));
+
+Promise.resolve().then(() => setTimeout(() => console.log(4)));
+
+setTimeout(() => Promise.resolve().then(() => console.log(5)));
+
+setTimeout(() => console.log(6));
+
+console.log(7);
+```
+
+答案是：1 7 3 2 5 6 4
+
+示例 3：
+
+```js
+async function async1() {
+  console.log('async1 start');
+  await async2();
+  console.log('asnyc1 end');
+}
+async function async2() {
+  console.log('async2');
+}
+console.log('script start');
+setTimeout(() => {
+  console.log('setTimeOut');
+}, 0);
+async1();
+new Promise(function (reslove) {
+  console.log('promise1');
+  reslove();
+}).then(function () {
+  console.log('promise2');
+});
+console.log('script end');
+```
+
+答案：
+
+```
+script start
+async1 start
+async2
+promise1
+script end
+asnyc1 end
+promise2
+setTimeOut
+```
 
 ## Math 对象
 

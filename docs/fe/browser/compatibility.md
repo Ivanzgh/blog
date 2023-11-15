@@ -1,5 +1,39 @@
 # 浏览器兼容性问题
 
+## 检测是否是 IE 浏览器
+
+```js
+function isIE() {
+  var userAgent = navigator.userAgent;
+  var isIE = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1;
+  var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1;
+  if (isIE || isIE11) {
+    return true;
+  }
+  return false;
+}
+```
+
+## 检测浏览器类型
+
+```js
+function getBrowser() {
+  var userAgent = navigator.userAgent;
+
+  if (userAgent.indexOf('Chrome') != -1) {
+    return 'Chrome';
+  } else if (userAgent.indexOf('Safari') != -1) {
+    return 'Safari';
+  } else if (userAgent.indexOf('Firefox') != -1) {
+    return 'Firefox';
+  } else if (userAgent.indexOf('MSIE') != -1 || !!document.documentMode == true) {
+    return 'Internet Explorer';
+  } else {
+    return 'Unknown';
+  }
+}
+```
+
 ## hack 及 IE 条件注释
 
 ```html
@@ -73,18 +107,4 @@
 
 ```html
 <script src="https://cdn.bootcss.com/picturefill/3.0.3/picturefill.min.js"></script>
-```
-
-## 如何检测 IE 浏览器
-
-```js
-function isIE() {
-  var userAgent = navigator.userAgent;
-  var isIE = userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1;
-  var isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf('rv:11.0') > -1;
-  if (isIE || isIE11) {
-    return true;
-  }
-  return false;
-}
 ```

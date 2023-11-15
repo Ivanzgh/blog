@@ -4,7 +4,7 @@
 
 [官网](https://babeljs.io/)
 
-babel 是 JavaScript 转译器
+babel 是 JavaScript 编译器
 
 用途：
 
@@ -14,28 +14,20 @@ babel 是 JavaScript 转译器
 
 ## 参考资料
 
-- 推荐学习项目：<https://github.com/jamiebuilds/the-super-tiny-compiler>
-- [the-super-tiny-compiler 解析](https://juejin.cn/post/7098012087128948744)
 - [babal 学习手册](https://github.com/jamiebuilds/babel-handbook/blob/master/translations/zh-Hans/plugin-handbook.md)
 - [babel-plugin-import](https://github.com/umijs/babel-plugin-import)
 - [babel 常见包的介绍](https://segmentfault.com/a/1190000043348439?utm_source=sf-similar-article)
 - [小册《babel 插件通关秘籍》实战案例代码](https://github.com/QuarkGluonPlasma/babel-plugin-exercize)
 
-## Babel 的编译流程
+## 编译流程
 
-### 编译器和转译器
+解析、转换、生成
 
-- 编译器 Compiler
-  - 从一种编程语言转成另一个编程语言，主要指高级语言到低级语言
-  - 高级语言：JavaScript、c++、java 等
-  - 低级语言：汇编语言、机器语言
-- 转译器 Transpiler
-
-  - 从高级语言到高级语言的转换工具
-
-- parse：通过 parse 把源码转换成抽象语法树（AST）
+- parse：把源码字符串转换成抽象语法树（AST）
 - transform：遍历 AST，调用插件生成新的 AST
-- generate：把转换后的 AST 打印成目标代码，并生成 sourcemap
+- generate：将转换后的 AST 生成目标代码，并生成 sourcemap
+
+[AST 部分可以参考这里](./ast.md)
 
 ## 前期准备
 
@@ -295,14 +287,70 @@ A：因为一些原型链上的实例方法（如 includes）是没法通过代�
 
 `@babel/plugin-transform-runtime`
 
-## API
+## 工具包
 
-## 编译流程
+- `@babel/parser` 对源码进行解析，可以通过 plugins、sourceType 等来指定 parse 语法
+- `@babel/traverse` 通过 visitor 函数对遍历到的 AST 进行处理，分为 enter 和 exit 两个阶段，具体操作 AST 可以使用 path 的 api，还可以通过 state 在遍历过程中传递一些数据
+- `@babel/types` 用于创建、判断 AST 节点
+- `@babel/template` 用于批量创建节点
+- `@babel/code-frame` 可以创建友好的报错信息
+- `@babel/generator` 生成目标代码字符串
+- `@babel/core` 核心包
 
-## AST
+## 插入函数调用参数
 
-抽象语法树
+示例：通过 babel 自动在 console.log 中插入文件名和行列号的参数，方便定位到代码
 
-词法分析
+- 函数调用表达式的 AST 是 CallExpression
+- CallExrpession 节点有两个属性，callee 和 arguments，表示调用的函数名和参数
+- 判断当 callee 是 console.xx 时，在 arguments 的数组中插入一个 AST 节点
 
-语法分析
+```js
+// console.js
+const parser = require('@babel/parser');
+const traverse = require('@babel/traverse').default;
+const generate = require('@babel/generator').default;
+const types = require('@babel/types');
+
+const sourceCode = `
+    console.log(1);
+
+    function func() {
+        console.info(2);
+    }
+
+    export default class Clazz {
+        say() {
+            console.debug(3);
+        }
+        render() {
+            return <div>{console.error(4)}</div>
+        }
+    }
+`;
+
+const ast = parser.parse(sourceCode, {
+  // 解析代码的模式，可选值：script、module、unambiguous
+  sourceType: 'unambiguous', // 根据内容是否包含 import、export 自动设置
+  plugins: ['jsx'] // 因为sourceCode用到了jsx语法，所以要启用jsx的plugin
+});
+
+const targetCalleeName = ['log', 'info', 'error', 'debug'].map((item) => `console.${item}`);
+
+// traverse 过程中要声明对什么 AST 做什么修改， AST 可以在 astexplorer.net 来查看
+traverse(ast, {
+  CallExpression(path, state) {
+    // const calleeName = generate(path.node.callee).code;
+    const calleeName = path.get('callee').toString();
+    if (targetCalleeName.includes(calleeName)) {
+      const { line, column } = path.node.loc.start;
+      path.node.arguments.unshift(types.stringLiteral(`filename: (${line}, ${column})`));
+    }
+  }
+});
+
+const { code, map } = generate(ast);
+console.log(code);
+```
+
+执行`node ./console.js`，可以看到类似形式：`console.log("filename: (2, 4)", 1);`

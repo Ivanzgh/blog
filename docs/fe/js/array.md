@@ -121,10 +121,13 @@ console.log(arr); // [4, 2, 1, 5]
 
 ## slice()
 
-语法：`arrayObject.slice(start[, end])`
+从数组中截取一段元素，组成一个新的数组
 
-从数组中截取一段元素，组成一个新的数组。新数组包括`start`，不包括`end`。若没指定 `end`，则从 `start` 截取到数组结束的所有元素。
-新数组是对原数组的浅拷贝，原数组不会被改变。
+语法：`array.slice(start[, end])`
+
+- 新数组包括`start`，不包括`end`
+- 若没指定 `end`，则从 `start` 截取到数组结束的所有元素
+- 新数组是对原数组的浅拷贝，原数组不会被改变
 
 ```js
 let arr = [1, 2, 3, 4, 5];
@@ -150,9 +153,17 @@ console.log(arr2); // [{ a: 9 }]
 
 ## splice()
 
-删除或者添加元素，然后返回删除的元素
+删除或者添加元素，改变原数组
 
-语法：`splice(index,sum,item1,item2,...)`
+语法：`array.splice(index, sum, item1, item2, ...)`，sum 表示元素数量，不是结束下标
+
+```js
+const originalArr = [1, 2, 3, 4, 5];
+const newArr = originalArr.splice(0, 2);
+
+console.log(newArr); // [1, 2]
+console.log(originalArr); // [3, 4, 5]
+```
 
 替换数组中的元素：
 

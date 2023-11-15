@@ -2,9 +2,11 @@
 
 > npm 全称是 Node Package Manager ，是 Node.js 官方内置的包管理工具
 
-npm 官网：[https://www.npmjs.com/](https://www.npmjs.com/)
+npm 官网：[https://www.npmjs.com](https://www.npmjs.com)
 
-npm 中文文档：[https://www.npmjs.cn/](https://www.npmjs.cn/)
+npm 文档：[https://docs.npmjs.com](https://docs.npmjs.com/)
+
+npm 中文文档：[https://www.npmjs.cn](https://www.npmjs.cn)
 
 ## 安装和初始化
 
@@ -113,11 +115,11 @@ npm get registry
 
 ### npm 发布的插件版本号规则
 
-语义版本号分为 X.Y.Z 三位，分别代表主版本号、次版本号和补丁版本号。
+语义版本号分为 X.Y.Z 三位，分别代表主版本号、次版本号和补丁版本号
 
-- 如果只是修复 bug，需要更新 Z 位。
-- 如果是新增了功能，但是向下兼容，需要更新 Y 位。
-- 如果有大变动，向下不兼容，需要更新 X 位。
+- 如果只是修复 bug，需要更新 Z 位
+- 如果是新增了功能，但是向下兼容，需要更新 Y 位
+- 如果有大变动，向下不兼容，需要更新 X 位
 
 ### 插件升级
 
@@ -218,9 +220,20 @@ npx 参数：
   - `~1.2.3`表示版本可以是`1.2.x`
   - `~1`表示版本可以是`1.x.x`
 
-## PNPM
+## packages.json 配置
 
-## 安装和升级
+### browserslistrc
+
+官网：<https://browsersl.ist/>
+github：<https://github.com/browserslist/browserslist>
+
+参考文章：
+
+- <https://juejin.cn/post/6844903669524086797>
+
+## pnpm
+
+### 安装和升级
 
 ```sh
 # 安装
@@ -230,7 +243,7 @@ npm i -g pnpm
 pnpm add -g pnpm
 ```
 
-## 命令简介
+### 命令简介
 
 ```
 Usage: pnpm [command] [flags]
@@ -298,14 +311,3 @@ pnpm store prune
 ```sh
 pnpm up prettier -L
 ```
-
-## packages.json 配置
-
-### browserslistrc
-
-官网：<https://browsersl.ist/>
-github：<https://github.com/browserslist/browserslist>
-
-参考文章：
-
-- <https://juejin.cn/post/6844903669524086797>

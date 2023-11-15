@@ -10,23 +10,19 @@
 3. 实践使用 Webpack 进行前端项目的开发，包括搭建开发环境、打包发布等。
 4. 学习 Webpack 的高级特性，包括插件开发、性能优化等。
 5. 完成一个基于 Webpack 的前端项目，包括开发、打包、发布等环节。
-
-**时间安排**：
-
-1. 第一周：学习 Webpack 的基础知识，完成 Webpack 的安装和配置。
-2. 第二周：学习 Webpack 的打包和优化方法，完成代码分割、压缩、模块化等操作。
-3. 第三周：实践使用 Webpack 进行前端项目的开发，包括搭建开发环境、打包发布等。
-4. 第四周：学习 Webpack 的高级特性，包括插件开发、性能优化等。
-5. 第五周：完成一个基于 Webpack 的前端项目，包括开发、打包、发布等环节。
-
-**备注**：
-
-每周需要安排 5-10 小时的学习时间，可以通过阅读文档、视频教程、实践操作等方式进行学习。同时，需要定期进行总结和复习，以确保学习效果。
-:::
+   :::
 
 ## 简介
 
-官网：<https://webpack.js.org/>
+官网：<https://webpack.js.org/>，进入文档从 Guides 模块的 [Getting Started](https://webpack.js.org/guides/getting-started/) 开始看
+
+webpack 是一个构建工具
+
+构建工具能解决什么问题？
+
+- 混淆代码，让别人看不懂，提高保密性
+- 提高代码兼容性
+- 压缩代码体积，提高性能
 
 ## Loader
 
@@ -43,6 +39,10 @@ function chineseLoader(originCode) {
 ```
 
 这里的`chineseLoader`就是一个极简单的 Loader
+
+## Plugin
+
+## GZIP 压缩
 
 ## 依赖分析和 CDN 加速
 
@@ -125,8 +125,6 @@ module.exports = {
 ```sh
 npm run build:analyze
 ```
-
-## GZIP 压缩
 
 ## 项目生成目录结构
 

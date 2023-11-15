@@ -119,6 +119,64 @@ const AuthOrg = (props: RoleTypeFormProps) => {
 export default AuthOrg;
 ```
 
+### 获取所有父节点
+
+需求是在无用户交互的情况下，根据服务端返回的叶子节点的 id 数组来获取所有父级节点的 id。需要遍历这个数组，针对每个叶子节点，找到其对应的所有父节点
+
+```tsx
+import { useEffect } from 'react';
+import { Tree } from 'antd';
+
+const MyComponent = () => {
+  // 树的数据
+  const treeData = [];
+
+  // 假设是服务端返回的叶子节点的 id 数组
+  const leafNodeIds = ['leafNodeId1', 'leafNodeId2', 'leafNodeId3'];
+
+  const filterParentNodes = () => {
+    const findParentNodes = (nodes, targetId) => {
+      let parentNodes = [];
+      for (let node of nodes) {
+        if (node.children) {
+          const childNodes = findParentNodes(node.children, targetId);
+          if (childNodes.length > 0) {
+            parentNodes = [...parentNodes, node.key, ...childNodes];
+          }
+        }
+        if (targetId.includes(node.key)) {
+          parentNodes.push(node.key);
+        }
+      }
+      return parentNodes;
+    };
+
+    let parentNodes = [];
+    for (let leafNodeId of leafNodeIds) {
+      parentNodes = [...parentNodes, ...findParentNodes(treeData, leafNodeId)];
+    }
+    parentNodes = Array.from(new Set(parentNodes)); // 去重
+
+    // 过滤掉 leafNodeIds 中的叶子节点
+    // parentNodes = parentNodes.filter((nodeId) => !leafNodeIds.includes(nodeId));
+
+    console.log('父节点的 id:', parentNodes);
+  };
+
+  useEffect(() => {
+    filterParentNodes();
+  }, [treeData, leafNodeIds]);
+
+  return (
+    <div>
+      <Tree checkable treeData={treeData} />
+    </div>
+  );
+};
+
+export default MyComponent;
+```
+
 ## 自定义面包屑
 
 业务场景：

@@ -1,5 +1,7 @@
 # 对象
 
+[原型/继承/构造函数/类](/fe/js/class)
+
 ## 创建对象的方式
 
 ### 1、直接创建
@@ -403,6 +405,21 @@ console.log(me.hasOwnProperty('p1')); // true
 console.log(me.hasOwnProperty('p2')); // true
 ```
 
+判断对象是否包含特定属性，除了使用 hasOwnProperty 方法，还能使用 in 运算符
+
+```js
+const obj = { a: 1, b: 2, c: 3 };
+const val = 'b';
+
+if (val in obj) {
+  console.log(`对象包含属性 ${val}`);
+} else {
+  console.log(`对象不包含属性 ${val}`);
+}
+```
+
+in 运算符会检查对象的整个原型链，而 hasOwnProperty 方法只会检查对象本身的属性
+
 ## Object.getPrototypeOf()
 
 获取对象的原型
@@ -512,9 +529,9 @@ console.log(obj.val); // 101
 第一次获取`obj.val`的值为 2，接着给 a 赋值 100，然后第二次获取就是 100+1，即 101。
 注意不要使用`obj.val()`，否则报错`Uncaught TypeError: obj.val is not a function`
 
-### 使用`Object.defineProperty(obj, prop, descriptor)`
+### 在`Object.defineProperty()`中使用
 
-`Object.defineProperty()` 方法会直接在一个对象上定义一个新属性或者修改现有属性，并返回此对象。
+`Object.defineProperty(obj, prop, descriptor)` 方法会直接在一个对象上定义一个新属性或者修改现有属性，并返回此对象。
 
 ```js
 let obj = { a: 1 };
@@ -531,7 +548,7 @@ obj.count = 3;
 console.log(obj.count); // 3
 ```
 
-### class
+### 在 class 中使用
 
 ES6 增加了`class`类的概念，在其中的 setter 和 getter 使用如下：
 

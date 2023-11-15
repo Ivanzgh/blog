@@ -701,38 +701,6 @@ letter-spacing: -1px;
 
 在 vscode 中可以使用 Autoprefixer 插件
 
-## 回流与重绘
-
-回流必定引发重绘，重绘不一定引发回流
-
-### 回流(reflow)
-
-若改变了 DOM 元素的形状、大小或页面布局就会触发 reflow
-
-触发条件：
-
-- 添加或删除可见的 DOM 元素
-- 元素位置发生变化
-- 元素尺寸发生变化（width height padding margin border）
-- 浏览器窗口尺寸变化
-- 内容变化（如文本变化）
-- 页面初始渲染（无法避免）
-
-### 重绘(repaint)
-
-只是改变了样式，不影响周围元素或布局，如`color`或`background-color`，会引起浏览器的重绘。触发重绘的行为：
-
-- 修改颜色
-- 修改文本方向
-- 修改阴影
-
-### 减少回流
-
-- 动画设置`position:fixed`或 `absolute`，尽可能地使元素脱离文档流，从而减少对其他元素的影响
-- 避免使用`table`布局，`table`中每个元素的大小以及内容的改动，都会导致整个`table`的重新计算
-- 使用 visibility:hidden 替换 display:none
-- 使用 requestAnimationFrame 作为动画帧。动画速度越快，回流次数越多
-
 ## aspect-ratio
 
 可以定义盒子的宽高比。假如想始终保持元素的宽高比，在响应式布局中等比放大缩小，就可以使用该属性

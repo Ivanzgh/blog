@@ -16,6 +16,34 @@
 <ProForm name="modalForm"></ProForm>
 ```
 
+### ProFormDigit
+
+金额保留 6 位小数
+
+```tsx
+<ProFormDigit
+  name="money"
+  label="金额"
+  rules={[{ required: true, message: '请输入' }]}
+  min={0}
+  max={detailData.money}
+  fieldProps={{
+    onChange: (e: any) => {
+      if (e) {
+        let amountString = e.toString();
+        if (amountString.includes('.')) {
+          let decimalPlaces = amountString.split('.')[1].length;
+          if (decimalPlaces > 6) {
+            let res = parseFloat(e).toFixed(6);
+            form.setFieldValue('money', res);
+          }
+        }
+      }
+    }
+  }}
+/>
+```
+
 ## 日期时间
 
 ### 设置默认值

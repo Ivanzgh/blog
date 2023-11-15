@@ -11,16 +11,16 @@
 ```js
 // <div id="hehe"></div>
 
-const xhr = new XMLHttpRequest()
+const xhr = new XMLHttpRequest();
 //请求方式，路径，是否异步
-xhr.open('GET', 'https://www.easy-mock.com/mock/5c94518744e20f337dc3c58c/test/zgh/zghivan', false)
+xhr.open('GET', 'https://www.easy-mock.com/mock/5c94518744e20f337dc3c58c/test/zgh/zghivan', false);
 //设置xhrt对象不发送数据到服务器
-xhr.send(null)
-console.log(xhr)
+xhr.send(null);
+console.log(xhr);
 if (xhr.status == 200) {
-  const data = xhr.responseText
-  console.log(data)
-  document.getElementById('hehe').innerText = data
+  const data = xhr.responseText;
+  console.log(data);
+  document.getElementById('hehe').innerText = data;
 }
 ```
 
@@ -44,13 +44,13 @@ if (xhr.status == 200) {
       //post请求可以传递数据
       //data: {id : 1},
       success: function (data) {
-        console.log(data)
+        console.log(data);
       },
       error: function () {
-        console.log('error')
+        console.log('error');
       }
-    })
-  })
+    });
+  });
 </script>
 ```
 
@@ -106,27 +106,26 @@ headers: {
 qs 是 Axios 默认就有的，能将对象和 url 中的参数互相转换
 
 ```js
-import qs from 'qs'
+import qs from 'qs';
 
-const url = 'user=zgh&password=123'
+const url = 'user=zgh&password=123';
 // 转为对象
-console.log(qs.parse(url)) // { user: 'zgh', password: '123' }
+console.log(qs.parse(url)); // { user: 'zgh', password: '123' }
 
-const obj = { name: 'zgh', age: 23 }
+const obj = { name: 'zgh', age: 23 };
 // 转为url参数形式
-console.log(qs.stringify(obj)) // 'name=zgh&age=23'
+console.log(qs.stringify(obj)); // 'name=zgh&age=23'
 ```
 
 3、`multipart/form-data`一般用来传输文件，数据为二进制格式，也可为键值对格式
 
 ```js
-const fileData = new FormData()
-fileData.append('file', file)
-fileData.append('name', 'zgh')
+const fileData = new FormData();
+fileData.append('file', file);
+fileData.append('name', 'zgh');
 
 // 如果想传输文件数组
-fileData.append('files', file1)
-fileData.append('files', file2)
-fileData.append('files', file3)
-
+fileData.append('files', file1);
+fileData.append('files', file2);
+fileData.append('files', file3);
 ```

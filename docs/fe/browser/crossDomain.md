@@ -2,7 +2,7 @@
 outline: deep
 ---
 
-# 浏览器跨域问题
+# 浏览器跨域
 
 ## 什么是跨域
 
@@ -20,7 +20,7 @@ outline: deep
 不受同源策略限制的：
 
 - 页面中的链接、重定向以及表单提交
-- 跨域资源的引入是可以的，但是 js 不能读写加载的内容。如嵌入到页面中的`<script src="..." />`，`<img>`，`<link>`，`<iframe>`等
+- 跨域资源的引入是可以的，但是 js 不能读写加载的内容。如嵌入到页面中的`<script>`，`<img>`，`<link>`，`<iframe>`等
 
 ## 跨域方案
 
@@ -32,18 +32,22 @@ outline: deep
 
 原理：动态创建`script`标签，通过`script`标签的`src`属性调用脚本
 
+1、在服务器端提供 JSONP 支持。服务器需要能够解析传递给它的回调函数名，并将数据包裹在该函数中返回。
+
+- 服务器能处理这种形式的请求：`https://xxx.com/data?callback=getData`
+- 能返回如下形式的响应：`getData({"name": "zs", "age": 30})`
+
+2、创建一个 script 标签去请求数据，并将这个 script 标签添加到页面当中去
+
 ```js
-// 1、定义一个处理函数，处理接收回来的数据
+// 定义一个处理函数，处理接收回来的数据
 function getData(res) {
   conlose.log(res);
 }
 
-// 2、创建一个script标签去请求数据
-const jsonp = document.createElement('script');
-jsonp.src = 'http://localhost:3000/jsonp?callback=getData';
-
-// 3、将这个script标签添加到页面当中去
-document.body.appendChild(jsonp);
+const script = document.createElement('script');
+script.src = 'https://xxx.com/data?callback=getData';
+document.body.appendChild(script);
 ```
 
 jsonp 的优势：
@@ -95,10 +99,10 @@ axios 的`content-type`在 post 下是： `application/json`
 1. 先发出一个 options 的请求，该请求会带上一些头信息
 
 ```sh
-Origin： 客户端域名
-# (表明客户端发送的请求头数据)
+Origin: '客户端域名'
+# 表明客户端发送的请求头数据
 Access-Control-Request-Headers: content-type
-#（表明客户端发送的请求类型）
+# 表明客户端发送的请求类型
 Access-Control-Request-Method: POST
 ```
 
@@ -116,7 +120,7 @@ Access-Control-Allow-Method： '与客户端的对应或者大于客户端'
 4. 服务器对请求做出回应。同时带上之前发送的请求头，完成跨域过程。
 
 默认情况下`Access-Control-Allow-Credentials: false`，即不允许客户端携带验证信息到服务端，比如 cookies。
-那么，可能存在 session 将无法根据 cookie 获取到用户的登录信息
+那么，可能将无法根据 cookie 获取到用户的登录信息
 
 解决方案：
 
@@ -130,27 +134,6 @@ Access-Control-Allow-Method： '与客户端的对应或者大于客户端'
 
 假如有 A 网站向 B 网站发起请求，使用代理跨域，只需要在 A 网站的服务器发送一个请求到 B 网站，取得相应的数据。
 然后再用浏览器发送请求到 A，取得数据。
-
-### vue.config.js 配置跨域
-
-使用 vue-cli3 脚手架后，webpack 的配置被隐藏，当需要覆盖原有的配置时，则需要在项目的根目录下，新建 vue.config.js 文件
-
-```js
-module.exports = {
-  devServer: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000/api',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
-      }
-    }
-  }
-};
-```
 
 ### http-proxy-middleware
 
@@ -198,4 +181,23 @@ app.listen(3000);
 }
 ```
 
+### vue.config.js 配置跨域
 
+使用 vue-cli3 脚手架后，webpack 的配置被隐藏，当需要覆盖原有的配置时，则需要在项目的根目录下，新建 vue.config.js 文件
+
+```js
+module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000/api',
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
+  }
+};
+```

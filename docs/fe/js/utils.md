@@ -1,12 +1,23 @@
-# 老工具了
+# 工具函数
 
-## 随机生成 16 进制颜色
+## 随机生成十六进制颜色
 
 ```js
 const getRandomColor = () => {
   return `#` + [0, 0, 0].map(() => (~~(Math.random() * 0x100)).toString(16).replace(/^(\d)$/, `0$1`)).join(``);
 };
 getRandomColor();
+```
+
+## 获取指定范围内的随机整数
+
+```js
+getRandom(n, m) {
+  return Math.floor(Math.random() * (m - n + 1) + n)
+}
+
+getRandom(1, 100)
+getRandom(0, 5)
 ```
 
 ## 根据数组中的元素的唯一属性，筛选出相应的属性值
@@ -36,6 +47,247 @@ ids.forEach((id) => {
     }
   });
 });
+```
+
+## 根据 id 替换或删除数组项
+
+```js
+const values = { id: 2, name: '222' };
+const arr = [
+  { id: 1, name: '11' },
+  { id: 2, name: '22' },
+  { id: 3, name: '33' }
+];
+```
+
+1. 如果 values.id 和 arr 中的某一项的 id 相同，就用 values **替换**这一项
+
+```js
+const updatedArr = arr.map((item) => {
+  if (item.id === values.id) {
+    return values;
+  }
+  return item;
+});
+```
+
+2. 如果 values.id 和 arr 中的某一项的 id 相同，就**删除**这一项
+
+```js
+const updatedArr = arr.filter((item) => item.uuid !== values.uuid);
+```
+
+## 根据键名将对象转换为数组
+
+有一个对象 `{ a1: 1, b1: 2, a2: 3, b2: 4 }`，想根据键名中的数字如果相同就放到一个新对象里，最后得到一个数组，期望结果如下：`[{ a: 1, b: 2 }, { a: 3, b: 4 }]`
+
+```js
+const obj = { a1: 1, b1: 2, a2: 3, b2: 4 };
+
+const res = Object.values(
+  Object.entries(obj).reduce(
+    (acc, [key, val]) => (Object.assign((acc[[key.match(/\d/)]] ||= {}), { [key.replace(/\d/, '')]: val }), acc),
+    {}
+  )
+);
+console.log(JSON.stringify(res));
+```
+
+`||=`表示或等于，`a ||= b` 等同于 `a || (a = b)`
+
+`&&=`表示且等于，`a &&= b` 等同于 `a && (a = b)`
+
+## 数组拆分
+
+```js
+// array 需要拆分的数组，size 每组数组多少个
+function arrayChunk(array, size) {
+  let data = [];
+  for (let i = 0; i < array.length; i += size) {
+    data.push(array.slice(i, i + size));
+  }
+  return data;
+}
+
+const arr = [1, 2, 3, 4];
+arrayChunk(arr, 2); // [[1, 2], [3, 4]]
+```
+
+## 查找树形元素
+
+```js
+const data = [
+  {
+    id: 1,
+    name: '终端管理',
+    pid: 0,
+    children: [
+      {
+        id: 2,
+        name: '终端列表',
+        pid: 1,
+        children: [{ id: 4, name: '添加终端', pid: 2 }]
+      },
+      { id: 3, name: '划拨设备', pid: 1 }
+    ]
+  },
+  {
+    id: 5,
+    name: '系统设置',
+    pid: 0,
+    children: [
+      {
+        id: 6,
+        name: '权限管理',
+        pid: 5,
+        children: [
+          { id: 7, name: '用户角色', pid: 6 },
+          { id: 8, name: '菜单设置', pid: 6 }
+        ]
+      }
+    ]
+  }
+];
+
+function getChidlren(data, id) {
+  let hasFound = false, // 表示是否找到id值
+    result = null;
+  const fn = function (data) {
+    if (Array.isArray(data) && !hasFound) {
+      data.forEach((item) => {
+        if (item.id === id) {
+          result = item;
+          hasFound = true;
+        } else if (item.children) {
+          fn(item.children);
+        }
+      });
+    }
+  };
+  fn(data);
+  return result;
+}
+getChidlren(data, 3);
+```
+
+## 通过唯一值数组筛选树形结构数据
+
+从一个树形结构的数据中找到数组中的值，并组成新的数组。如下所示，有一个 orgId 组成的数组 key，期望结果是：
+
+```js
+const res = [
+  { label: '名称1', value: 1 },
+  { label: '名称3', value: 3 },
+  { label: '名称4', value: 4 },
+  { label: '名称6', value: 6 }
+];
+```
+
+```js
+const key = [1, 3, 4, 6];
+const arr = [
+  {
+    children: [
+      {
+        children: [
+          { children: null, orgId: 4, orgName: '名称4' },
+          { children: null, orgId: 5, orgName: '名称5' }
+        ],
+        orgId: 3,
+        orgName: '名称3'
+      },
+      {
+        children: null,
+        orgId: 6,
+        orgName: '名称6'
+      }
+    ],
+    orgId: 1,
+    orgName: '名称1'
+  },
+  {
+    children: [
+      {
+        children: [
+          { children: null, orgId: 8, orgName: '名称8' },
+          { children: null, orgId: 9, orgName: '名称9' }
+        ],
+        orgId: 7,
+        orgName: '名称7'
+      }
+    ],
+    orgId: 2,
+    orgName: '名称2'
+  }
+];
+
+function findOrgs(arr, key) {
+  const res = [];
+  arr.forEach((obj) => {
+    if (key.includes(obj.orgId)) {
+      res.push({ label: obj.orgName, value: obj.orgId });
+    }
+    if (obj.children && obj.children.length > 0) {
+      const childRes = findOrgs(obj.children, key);
+      res.push(...childRes);
+    }
+  });
+  return res;
+}
+
+const result = findOrgs(arr, key);
+console.log(result);
+```
+
+## 生成随机 uuid
+
+```js
+export const generateUUID = () => {
+  let d = new Date().getTime();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    let r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x7) | 0x8).toString(16);
+  });
+};
+```
+
+## 随机字符串
+
+```js
+export const generateRdStr = (length) => {
+  let text = '';
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+```
+
+## 经纬度格式化
+
+度转为度分秒
+
+```js
+function transformLonlatToDD(lon, lat) {
+  const lonUnit = lon > 0 ? 'E' : 'W';
+  const latUnit = lat > 0 ? 'N' : 'S';
+  const resLon = lonlat(lon) + lonUnit;
+  const resLat = lonlat(lat) + latUnit;
+  return [resLon, resLat];
+}
+
+function lonlat(coordinate) {
+  const d = coordinate >> 0; // 度
+  const m = ((coordinate % 1) * 60) >> 0; // 分
+  const s = ((((coordinate % 1) * 60) % 1) * 60) >> 0; // 秒
+  const ms = ((((coordinate % 1) * 60) % 1) * 60) % 1;
+  const mss = Math.round(parseFloat(ms) * 100) / 100; // 四舍五入，保留两位小数
+  const lon23 = Math.abs(s) + mss;
+  const res = Math.abs(d) + 'º' + Math.abs(m) + "'" + lon23.toFixed(2) + "''";
+  return res;
+}
 ```
 
 ## 根据经纬度计算距离
@@ -278,6 +530,23 @@ newDate.setTime(timestamp3); //设置Date对象的时间为时间戳的时间
 </script>
 ```
 
+## 时间戳转为时间
+
+```js
+// timestampToTime(1637244864707)   '2021-11-18 22:14:24'
+// timestampToTime(1687917420427)   '2023-06-28 09:57:00'
+export const timestampToTime = (timestamp) => {
+  let date = new Date(timestamp); // 时间戳为10位需*1000，为13位不需乘1000
+  let Y = date.getFullYear() + '-';
+  let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+  let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
+  let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+  let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+  let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+  return Y + M + D + h + m + s;
+};
+```
+
 ## 获取宽高
 
 screen 屏幕
@@ -446,28 +715,6 @@ function findMostWord(article) {
 }
 ```
 
-## 检测是否是 IE 浏览器
-
-```js
-!!window.ActiveXObject || 'ActiveXObject' in window ? true : false;
-```
-
-## 检测浏览器类型
-
-```js
-function getBrowser() {
-  const str = navigator.userAgent;
-  const list = ['Chrome', 'Safari', 'Firefox', 'Opera'];
-  for (let i = 0; i < list.length; i++) {
-    const e = list[i];
-    if (str.includes(e)) {
-      return e;
-    }
-  }
-  return 'other';
-}
-```
-
 ## 密码强度判断
 
 ```js
@@ -511,52 +758,6 @@ const url = '/dataManage/projectStage';
 const index = url.lastIndexOf('/');
 const router = url.substring(index + 1, url.length);
 console.log(router); // projectStage
-```
-
-## 对象数组转换
-
-```js
-/**
- * const obj = { a1: 1, b1: 2, a2: 3, b2: 4 }
- * const arr = [{ a: 1, b: 2 }, { a: 3, b: 4 }]
- */
-
-const res = Object.values(
-  Object.entries(obj).reduce(
-    (acc, [key, val]) => (Object.assign((acc[[key.match(/\d/)]] ||= {}), { [key.replace(/\d/, '')]: val }), acc),
-    {}
-  )
-);
-console.log(JSON.stringify(res));
-```
-
-`||=`表示或等于，`a ||= b` 等同于 `a || (a = b)`
-`&&=`表示且等于，`a &&= b` 等同于 `a && (a = b)`
-
-## 经纬度格式化
-
-度转为度分秒
-
-```js
-function transformLonlatToDD(lon, lat) {
-  //利用 >> 位运算符取整
-  const lonUnit = lon > 0 ? 'E' : 'W';
-  const latUnit = lat > 0 ? 'N' : 'S';
-  const resLon = lonlat(lon) + lonUnit;
-  const resLat = lonlat(lat) + latUnit;
-  return [resLon, resLat];
-}
-
-function lonlat(coordinate) {
-  const d = coordinate >> 0; // 度
-  const m = ((coordinate % 1) * 60) >> 0; // 分
-  const s = ((((coordinate % 1) * 60) % 1) * 60) >> 0; // 秒
-  const ms = ((((coordinate % 1) * 60) % 1) * 60) % 1;
-  const mss = Math.round(parseFloat(ms) * 100) / 100; // 四舍五入，保留两位小数
-  const lon23 = Math.abs(s) + mss;
-  const res = Math.abs(d) + 'º' + Math.abs(m) + "'" + lon23.toFixed(2) + "''";
-  return res;
-}
 ```
 
 ## js 实现拖拽功能
@@ -669,200 +870,4 @@ getCount([1,2,3,1,2,5,2,4,1,2,6,2,1,3,2],3,1)//传参（rank=3，ranktype=1）�
       }
       return arr1.slice(0, arr1.length)
     }
-```
-
-## 获取范围内的随机整数
-
-```js
-getRandom(n, m) {
-  return Math.floor(Math.random() * (m - n + 1) + n)
-}
-
-getRandom(1, 100)
-getRandom(0, 5)
-```
-
-## 查找树形元素
-
-```js
-const data = [
-  {
-    id: 1,
-    name: '终端管理',
-    pid: 0,
-    children: [
-      {
-        id: 2,
-        name: '终端列表',
-        pid: 1,
-        children: [{ id: 4, name: '添加终端', pid: 2 }]
-      },
-      { id: 3, name: '划拨设备', pid: 1 }
-    ]
-  },
-  {
-    id: 5,
-    name: '系统设置',
-    pid: 0,
-    children: [
-      {
-        id: 6,
-        name: '权限管理',
-        pid: 5,
-        children: [
-          { id: 7, name: '用户角色', pid: 6 },
-          { id: 8, name: '菜单设置', pid: 6 }
-        ]
-      }
-    ]
-  }
-];
-
-function getChidlren(data, id) {
-  let hasFound = false, // 表示是否找到id值
-    result = null;
-  const fn = function (data) {
-    if (Array.isArray(data) && !hasFound) {
-      data.forEach((item) => {
-        if (item.id === id) {
-          result = item;
-          hasFound = true;
-        } else if (item.children) {
-          fn(item.children);
-        }
-      });
-    }
-  };
-  fn(data);
-  return result;
-}
-getChidlren(data, 3);
-```
-
-## 数组拆分
-
-```js
-// array需要拆分的数组,size每组数组多少个
-function arrayChunk(array, size) {
-  let data = [];
-  for (let i = 0; i < array.length; i += size) {
-    data.push(array.slice(i, i + size));
-  }
-  return data;
-}
-
-const arr = [1, 2, 3, 4];
-arrayChunk(arr, 2); // [[1, 2], [3, 4]]
-```
-
-## 通过唯一值数组筛选树形结构数据
-
-从一个树形结构的数据中找到数组中的值，并组成新的数组。如下所示，有一个 orgId 组成的数组 key，期望结果是：
-
-```js
-const res = [
-  { label: '名称1', value: 1 },
-  { label: '名称3', value: 3 },
-  { label: '名称4', value: 4 },
-  { label: '名称6', value: 6 }
-];
-```
-
-```js
-const key = [1, 3, 4, 6];
-const arr = [
-  {
-    children: [
-      {
-        children: [
-          { children: null, orgId: 4, orgName: '名称4' },
-          { children: null, orgId: 5, orgName: '名称5' }
-        ],
-        orgId: 3,
-        orgName: '名称3'
-      },
-      {
-        children: null,
-        orgId: 6,
-        orgName: '名称6'
-      }
-    ],
-    orgId: 1,
-    orgName: '名称1'
-  },
-  {
-    children: [
-      {
-        children: [
-          { children: null, orgId: 8, orgName: '名称8' },
-          { children: null, orgId: 9, orgName: '名称9' }
-        ],
-        orgId: 7,
-        orgName: '名称7'
-      }
-    ],
-    orgId: 2,
-    orgName: '名称2'
-  }
-];
-
-function findOrgs(arr, key) {
-  const res = [];
-  arr.forEach((obj) => {
-    if (key.includes(obj.orgId)) {
-      res.push({ label: obj.orgName, value: obj.orgId });
-    }
-    if (obj.children && obj.children.length > 0) {
-      const childRes = findOrgs(obj.children, key);
-      res.push(...childRes);
-    }
-  });
-  return res;
-}
-
-const result = findOrgs(arr, key);
-console.log(result);
-```
-
-## 生成随机 uuid
-
-```js
-export const generateUUID = () => {
-  let d = new Date().getTime();
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    let r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c === 'x' ? r : (r & 0x7) | 0x8).toString(16);
-  });
-};
-```
-
-## 随机字符串
-
-```js
-export const generateRdStr = (length) => {
-  let text = '';
-  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for (let i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-};
-```
-
-## 时间戳转为时间
-
-```js
-// timestampToTime(1637244864707)   '2021-11-18 22:14:24'
-// timestampToTime(1687917420427)   '2023-06-28 09:57:00'
-export const timestampToTime = (timestamp) => {
-  let date = new Date(timestamp); // 时间戳为10位需*1000，为13位不需乘1000
-  let Y = date.getFullYear() + '-';
-  let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-  let D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
-  let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-  let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
-  let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
-  return Y + M + D + h + m + s;
-};
 ```

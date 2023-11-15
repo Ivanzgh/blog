@@ -558,6 +558,8 @@ mapFromArray(
 ); // Map { 'a' => 2, 'c' => 4 }
 ```
 
+## WeakMap
+
 ## Set
 
 `Set`对象是一组不重复的、无序的值的集合，可以往里面添加、删除、查询数据。
@@ -643,6 +645,12 @@ let res2 = Array.from(new Set(arr)); // [1, 2, 3]
 const str = [...new Set('ababbc')].join('');
 console.log(str); // 'abc'
 ```
+
+## WeakSet
+
+### 使用场景
+
+### WeakSet 和 Set 的区别
 
 ## ...操作符
 
@@ -978,16 +986,19 @@ let p2 = new Promise(function (resolve) {
 });
 
 Promise.all([p1, p2]).then((res) => {
+  // 3秒后打印出 ["Hello", "world"]
   console.log(res);
 });
 
 Promise.race([p1, p2]).then((res) => {
+  // 1秒后打印出 world
   console.log(res);
 });
 ```
 
-结果是 1 秒后打印出`world`，3 秒后打印出`["Hello", "world"]`，表明`Promise.all` 方法会按照参数数组里面的顺序将结果返回。
-`Promise.race`方法则是只要该数组中的`Promise`对象的状态发生变化（无论是`resolve`还是`reject`）该方法都会返回。
+结果表明`Promise.all` 方法会按照参数数组里面的顺序将结果返回
+
+`Promise.race`方法则是只要该数组中的`Promise`对象的状态发生变化（无论是`resolve`还是`reject`）该方法都会返回
 
 ## async、await
 
@@ -1149,6 +1160,28 @@ let b = a ?? 1; // 1
 let a = 0;
 a || 1; // 1
 a ?? 1; // 0
+```
+
+### 补充：双感叹号!!
+
+双感叹号确保结果类型是布尔类型
+
+```js
+!0; // true
+
+!undefined; // true
+
+!null; // true
+
+!''; // true
+
+!!0; // false
+
+!!undefined; // false
+
+!!null; // false
+
+!!''; // false
 ```
 
 ## 可选链和双问号

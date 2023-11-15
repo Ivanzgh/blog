@@ -27,9 +27,94 @@ export default [
 ];
 ```
 
-## model
+## CSS 方案
 
-<https://pro.ant.design/zh-CN/docs/simple-model>
+### CSS Modules 模块化
+
+- 目的：避免样式冲突
+- 原理：对每个类名按照一定规则进行转换
+
+```js
+// example.ts
+import styles from './example.less';
+export default ({ title }) => <div className={styles.title}>{title}</div>;
+```
+
+如果在浏览器查看 Dom 结构，可以看到类名被自动添加了一个 hash 值，保证了它的唯一性
+
+```html
+<div class="title___3TqAx">title</div>
+```
+
+如果想让样式全局生效可以使用 `:global`
+
+```less
+/*  example.less */
+.title {
+  margin-bottom: 16px;
+  color: @heading-color;
+  font-weight: 600;
+}
+
+/* 定义全局样式 */
+:global(.text) {
+  font-size: 16px;
+}
+
+/* 定义多个全局样式 */
+:global {
+  .footer {
+    color: #ccc;
+  }
+  .sider {
+    background: #ebebeb;
+  }
+}
+```
+
+### CSS-in-JS
+
+## 数据流方案
+
+### 全局初始数据
+
+[文档](https://pro.ant.design/zh-CN/docs/initial-state)
+
+在`src/app.tsx`里初始化全局数据，调用时`initialState`就是全局数据
+
+```js
+import { useModel } from '@umijs/max';
+
+const { initialState } = useModel('@@initialState');
+```
+
+### 简易数据流
+
+[文档](https://pro.ant.design/zh-CN/docs/simple-model)
+
+在 `src/models` 目录下新建文件
+
+```js
+// demo.ts
+export default () => 'Hello World';
+```
+
+使用：
+
+```js
+import { useModel } from 'umi';
+
+export default () => {
+  const message = useModel('demo');
+  return <div>{message}</div>;
+};
+```
+
+### dva
+
+### model
+
+持久化缓存：[redux-persist](https://github.com/rt2zz/redux-persist)
 
 新建`src/models`目录
 
@@ -74,8 +159,6 @@ export default const App = () => {
 ```
 
 3. 在 app.tsx 中，有一个 getInitialState 方法，可以初始化全局状态
-
-<https://pro.ant.design/zh-CN/docs/initial-state>
 
 ```tsx
 import { useModel } from '@umijs/max';
@@ -147,9 +230,31 @@ npm install @ant-design/charts --save
 npm install @ant-design/plots -S
 ```
 
-## 权限控制
+### 报错 Module "xxx" does not exist in container
 
-Umi 权限控制：[https://umijs.org/docs/max/access](https://umijs.org/docs/max/access)
+例如报错：`Module "./@ant-design/plots" does not exist in container. while loading "./@ant-design/plots" from webpack/container/reference/mf`
+
+解决方案一：在 `config/config.ts` 下注释掉 `mfsu: {}`，或者删掉即可
+
+解决方案二：删除`src/.umi` 这个文件夹重启即可
+
+## 权限方案
+
+权限配置文件路径`src/access.ts`
+
+- [参考一](https://pro.ant.design/zh-CN/docs/upgrade-v5#%E6%9D%83%E9%99%90)
+- [参考二](https://ant-design-pro.gitee.io/zh-CN/docs/authority-management/)
+- [Umi 权限控制](https://umijs.org/docs/max/access)
+
+[页面内的权限控制](https://ant-design-pro.gitee.io/zh-CN/docs/authority-management/#%E9%A1%B5%E9%9D%A2%E5%86%85%E7%9A%84%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6)
+
+路由和菜单的权限控制：
+
+先定义`src/access.ts`, `src/app.ts`，再在路由配置项上添加 `access` 属性即可完成路由和菜单的权限控制。
+
+`access` 属性的值为 `src/access.ts` 中返回的对象的 `key`
+
+如果鉴权函数在接收路由作为参数后返回值为 false，该条路由将会被禁用，并且从左侧 layout 菜单中移除，如果直接从 URL 访问对应路由，将看到一个 403 页面
 
 ### 菜单权限
 
@@ -332,4 +437,167 @@ export default Settings;
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => ({
   logo: 'logo.png'
 });
+```
+
+## 动态显示菜单图标
+
+使用：
+
+```tsx
+import Icon from './Icon';
+
+<ProForm>
+  <Form.Item name="icon" label="图标" style={{ width: '50%' }}>
+    <Icon
+      value={form.getFieldValue('icon')}
+      onChange={(val) => {
+        form.setFieldValue('icon', val);
+      }}
+    />
+  </Form.Item>
+</ProForm>;
+```
+
+Icon.tsx
+
+```tsx
+import { Input, Popover } from 'antd';
+import React, { useEffect, useState } from 'react';
+import * as allIcons from '@ant-design/icons';
+import { useEmotionCss } from '@ant-design/use-emotion-css';
+
+type IconProps = {
+  value: string;
+  onChange: (value: string) => void;
+};
+
+const Icon = (props: IconProps) => {
+  const [openPopover, setOpenPopover] = useState<boolean>(false);
+  const [iconValue, setIconValue] = useState<string>();
+
+  useEffect(() => {
+    setIconValue(props.value);
+  }, [props.value]);
+
+  const iconStyle = useEmotionCss(() => {
+    return {
+      padding: '6px',
+      fontSize: '20px',
+      cursor: 'pointer',
+      transition: 'color 0.3s',
+      '&:hover': {
+        backgroundColor: '#eee'
+      }
+    };
+  });
+
+  const iconSelect = () => {
+    const enums: { [key: string]: React.ReactNode } = {};
+    const showType = typeof allIcons['IdcardOutlined'];
+    const iconKeys = Object.keys(allIcons);
+    const pattern = /(Outlined)/; //  /(Filled|TwoTone)/
+
+    for (let i = 0; i < iconKeys.length; i++) {
+      const key = iconKeys[i];
+      const item = allIcons[key];
+
+      if (item.hasOwnProperty('displayName') && typeof item === showType && item.displayName !== 'AntdIcon') {
+        if (item.render?.name && pattern.test(item.render.name)) {
+          const iconNode = React.createElement(item);
+          if (iconNode) {
+            enums[key] = iconNode;
+          }
+        }
+      }
+    }
+
+    return enums;
+  };
+
+  const iconSelected = (name: string) => {
+    props.onChange(name);
+    setIconValue(name);
+    setOpenPopover(false);
+  };
+
+  const onInputChange = (e: any) => {
+    props.onChange(e.target.value);
+  };
+
+  const content = () => {
+    const icon = iconSelect();
+
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          width: '300px',
+          height: '400px',
+          overflow: 'auto'
+        }}
+      >
+        {Object.keys(icon).map((e, i) => {
+          return (
+            <div key={i} className={iconStyle} onClick={() => iconSelected(e)}>
+              {React.createElement(allIcons[e])}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpenPopover(newOpen);
+  };
+
+  return (
+    <Popover
+      placement="bottom"
+      title="选择图标"
+      content={content}
+      trigger="click"
+      open={openPopover}
+      onOpenChange={handleOpenChange}
+    >
+      <Input value={iconValue} placeholder="点击选择图标" allowClear onChange={onInputChange} />
+    </Popover>
+  );
+};
+
+export default Icon;
+```
+
+修改 `app.ts`，让图标能够渲染出来
+
+```ts
+import * as allIcons from '@ant-design/icons';
+import type { MenuDataItem } from '@ant-design/pro-components';
+
+const loopMenuItem = (menus: any[]): MenuDataItem[] =>
+  menus.map(({ icon, routes, ...item }) => ({
+    ...item,
+    icon: icon && React.createElement(allIcons[icon]),
+    children: routes && loopMenuItem(routes)
+  }));
+
+export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
+  return {
+    menu: {
+      params: {
+        accountId: initialState?.currentUser?.accountId
+      },
+      request: async () => {
+        const menuData = await fetchMenuData();
+        return loopMenuItem(menuData);
+      }
+    },
+    menuHeaderRender: undefined,
+    childrenRender: (children) => {
+      return <>{children}</>;
+    },
+    ...initialState?.settings
+  };
+};
 ```

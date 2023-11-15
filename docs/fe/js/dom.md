@@ -99,10 +99,10 @@ box.replaceChild(p, h1);
 
 两种操作方式：
 
-- *对象.属性*
+- _对象.属性_
 - `setAttribute()`、`getAttribute()`
 
-*对象.属性* 方式只对 html 中定义的属性起作用，可获取或修改属性
+_对象.属性_ 方式只对 html 中定义的属性起作用，可获取或修改属性
 
 ```js
 // <a href="http://www.baidu.com">百度</a>

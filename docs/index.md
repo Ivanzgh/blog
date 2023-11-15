@@ -4,10 +4,9 @@
 layout: home
 hero:
   name: 知行合一
-  text: 快来玩呀 →
   tagline: 实践是检验真理的唯一标准
   image:
-    src: /img/logo.png
+    src: /img/icon1.svg
     alt: VitePress
   actions:
     - theme: brand

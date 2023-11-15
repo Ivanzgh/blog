@@ -46,6 +46,7 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: '基础', link: '/fe/html/' },
+            { text: '本地存储', link: '/fe/html/storage' },
             { text: 'Canvas', link: '/fe/html/canvas' },
             { text: 'SVG', link: '/fe/html/svg' }
           ]
@@ -163,6 +164,9 @@ export default defineConfig({
         {
           text: '前端工程化',
           items: [
+            { text: '总览', link: '/automate/' },
+            { text: 'AST', link: '/automate/ast' },
+            { text: 'Lint规范', link: '/automate/lint' },
             { text: 'NPM', link: '/automate/npm' },
             { text: 'Git', link: '/automate/git' },
             { text: 'Babel', link: '/automate/babel' },
@@ -170,9 +174,7 @@ export default defineConfig({
             { text: 'Webpack', link: '/automate/webpack' },
             { text: 'Gulp', link: '/automate/gulp' },
             { text: 'Rollup', link: '/automate/rollup' },
-            { text: 'CI/CD', link: '/automate/cicd' },
-            { text: 'Eslint', link: '/automate/eslint' },
-            { text: 'Prettier', link: '/automate/prettier' }
+            { text: 'CI/CD', link: '/automate/cicd' }
           ]
         }
       ],
@@ -250,7 +252,7 @@ function nav() {
         { text: 'React', link: '/fe/react/' },
         { text: 'Vue', link: '/fe/vue/' },
         { text: 'Node', link: '/fe/node/' },
-        { text: '前端工程化', link: '/automate/npm' },
+        { text: '前端工程化', link: '/automate/index' },
         { text: '小程序', link: '/miniProgram/wx' },
         { text: '工具', link: '/tools/plugin' }
       ]
