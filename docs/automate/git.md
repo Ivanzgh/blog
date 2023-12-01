@@ -782,3 +782,13 @@ Windows 下修改 hosts 文件，打开`C:\Windows\System32\drivers\etc`下的 h
 ::: tip
 如果无法保存 hosts 文件，可以在开始栏找到 Windows 附件，找到记事本，以管理员身份运行，然后找到 hosts 文件位置，选择所有文件，即可保存更改。
 :::
+
+### 报错：fatal: refusing to merge unrelated histories
+
+一般在`git pull`或者`git push`时出现，这是因为两个分支没有取得关系
+
+在命令后面加上`--allow-unrelated-histories`
+
+```sh
+git pull origin master --allow-unrelated-histories
+```

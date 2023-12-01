@@ -649,3 +649,7 @@ if (navStr.indexOf('msie 10.0') !== -1 || navStr.indexOf('rv:11.0') !== -1) {
   grayscale($('body'));
 }
 ```
+
+## 修改滚动条样式
+
+[MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/::-webkit-scrollbar)

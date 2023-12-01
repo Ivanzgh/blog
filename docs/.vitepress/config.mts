@@ -99,64 +99,68 @@ export default defineConfig({
           ]
         }
       ],
-      '/fe/react/': [
+      '/react/': [
         {
           text: 'React',
           collapsed: false,
           items: [
-            { text: 'React', link: '/fe/react/' },
-            { text: 'Hook', link: '/fe/react/hook' },
-            { text: '状态管理', link: '/fe/react/state' },
-            { text: 'React-Router', link: '/fe/react/router' },
-            { text: 'NextJS', link: '/fe/react/next' },
+            { text: 'React', link: '/react/' },
+            { text: 'Hook', link: '/react/hook' },
+            { text: '状态管理', link: '/react/state' },
+            { text: 'React-Router', link: '/react/router' },
             {
               text: '业务',
-              link: '/fe/react/business',
+              link: '/react/business',
               items: [
-                { text: 'Ant Design', link: '/fe/react/antd/' },
-                { text: 'Ant Design Pro', link: '/fe/react/antd/ant-design-pro' },
-                { text: 'Umi', link: '/fe/react/antd/umi' },
-                { text: 'ProComponents', link: '/fe/react/antd/proComponents' }
+                { text: 'Ant Design', link: '/react/antd/' },
+                { text: 'Ant Design Pro', link: '/react/antd/ant-design-pro' },
+                { text: 'Umi', link: '/react/antd/umi' },
+                { text: 'ProComponents', link: '/react/antd/proComponents' }
               ]
             }
           ]
+        },
+        {
+          text: 'Next.js',
+          collapsed: false,
+          items: [{ text: '概览', link: '/react/next/' }]
         }
       ],
-      '/fe/vue/': [
+      '/vue/': [
         {
           text: 'Vue',
           collapsed: false,
           items: [
-            { text: 'Vue', link: '/fe/vue/' },
-            { text: '组件通信', link: '/fe/vue/contact' },
-            { text: '业务', link: '/fe/vue/business' },
-            { text: 'vue3', link: '/fe/vue/vue3' },
-            { text: 'UI库', link: '/fe/vue/ui' },
-            { text: 'vuex', link: '/fe/vue/vuex' },
-            { text: 'vue-router', link: '/fe/vue/vue-router' },
-            { text: 'vuepress', link: '/fe/vue/vuepress' }
+            { text: 'Vue', link: '/vue/' },
+            { text: '组件通信', link: '/vue/contact' },
+            { text: '业务', link: '/vue/business' },
+            { text: 'vue3', link: '/vue/vue3' },
+            { text: 'UI库', link: '/vue/ui' },
+            { text: 'vuex', link: '/vue/vuex' },
+            { text: 'vue-router', link: '/vue/vue-router' },
+            { text: 'vuepress', link: '/vue/vuepress' }
           ]
         }
       ],
-      '/fe/node/': [
+      '/node/': [
         {
           text: 'Node',
           collapsed: false,
           items: [
-            { text: '简介', link: '/fe/node/' },
-            { text: 'Buffer 缓冲区', link: '/fe/node/buffer' },
-            { text: 'fs 文件系统', link: '/fe/node/fs' },
-            { text: 'Http', link: '/fe/node/http' }
+            { text: '简介', link: '/node/' },
+            { text: 'Buffer 缓冲区', link: '/node/buffer' },
+            { text: 'fs 文件系统', link: '/node/fs' },
+            { text: 'Http', link: '/node/http' }
           ]
         },
         {
           text: '框架',
           collapsed: false,
           items: [
-            { text: 'Express', link: '/fe/node/express' },
-            { text: 'Koa', link: '/fe/node/koa' },
-            { text: 'Egg', link: '/fe/node/egg' },
-            { text: 'MongoDB', link: '/fe/node/mongodb' }
+            { text: 'Express', link: '/node/express' },
+            { text: 'Koa', link: '/node/koa' },
+            { text: 'Egg', link: '/node/egg' },
+            { text: 'MongoDB', link: '/node/mongodb' }
           ]
         }
       ],
@@ -201,27 +205,13 @@ export default defineConfig({
           ]
         }
       ],
-      '/vis/gis/': [
-        {
-          text: 'GIS',
-          collapsed: false,
-          items: [
-            { text: '介绍', link: '/vis/gis/' },
-            { text: '电子海图', link: '/vis/gis/enc' },
-            { text: 'Maptalks', link: '/vis/gis/maptalks' },
-            { text: 'OpenLayers', link: '/vis/gis/openlayers' },
-            { text: 'Leaflet', link: '/vis/gis/leaflet' },
-            { text: 'GeoServer', link: '/vis/gis/geoServer' },
-            { text: 'Cesium', link: '/vis/gis/cesium' }
-          ]
-        }
-      ],
       '/base/network/': [
         {
           text: '计算机网络',
           collapsed: false,
           items: [
             { text: '概览', link: '/base/network/' },
+            { text: 'HTTP、HTTPS协议', link: '/base/network/http' },
             { text: 'webSocket', link: '/base/network/webSocket' }
           ]
         }
@@ -237,6 +227,53 @@ export default defineConfig({
             { text: '发布-订阅模式', link: '/base/design-pattern/publisher-subscriber' }
           ]
         }
+      ],
+      '/gis/': [
+        {
+          text: 'GIS',
+          collapsed: false,
+          items: [
+            { text: '介绍', link: '/gis/' },
+            { text: '电子海图', link: '/gis/enc' },
+            { text: 'Maptalks', link: '/gis/maptalks' },
+            { text: 'OpenLayers', link: '/gis/openlayers' },
+            { text: 'Leaflet', link: '/gis/leaflet' },
+            { text: 'GeoServer', link: '/gis/geoServer' },
+            { text: 'Cesium', link: '/gis/cesium' },
+            { text: '高德地图', link: '/gis/amap' },
+            { text: '百度地图', link: '/gis/bmap' }
+          ]
+        }
+      ],
+      '/webgl/': [
+        {
+          text: 'ThreeJS',
+          collapsed: false,
+          items: [{ text: '介绍', link: '/webgl/three/' }]
+        },
+        {
+          text: '数据可视化',
+          collapsed: false,
+          items: [
+            { text: 'BI', link: '/webgl/bi/' },
+            { text: 'Echarts', link: '/webgl/echarts' }
+          ]
+        }
+      ],
+      '/media/': [
+        {
+          text: '流媒体',
+          collapsed: false,
+          items: [{ text: '音视频', link: '/media/' }]
+        }
+      ],
+      '/server/': [
+        { text: 'Nginx', link: '/server/nginx' },
+        { text: 'Docker', link: '/server/docker' },
+        { text: 'MySQL', link: '/server/mysql' },
+        { text: 'Tomcat', link: '/server/tomcat' },
+        { text: 'ElasticSearch', link: '/server/elasticsearch' },
+        { text: 'OAuth2', link: '/server/OAuth2' }
       ]
     }
   }
@@ -249,29 +286,19 @@ function nav() {
       items: [
         { text: '基础', link: '/fe/js/' },
         { text: 'TypeScript', link: '/fe/ts/' },
-        { text: 'React', link: '/fe/react/' },
-        { text: 'Vue', link: '/fe/vue/' },
-        { text: 'Node', link: '/fe/node/' },
+        { text: 'React', link: '/react/' },
+        { text: 'Vue', link: '/vue/' },
+        { text: 'Node', link: '/node/' },
         { text: '前端工程化', link: '/automate/index' },
         { text: '小程序', link: '/miniProgram/wx' },
         { text: '工具', link: '/tools/plugin' }
       ]
     },
     {
-      text: '后端',
-      items: [
-        { text: 'Docker', link: '/be/docker' },
-        { text: 'Nginx', link: '/be/nginx' },
-        { text: 'MySQL', link: '/be/mysql' },
-        { text: 'Tomcat', link: '/be/tomcat' },
-        { text: 'ElasticSearch', link: '/be/elasticsearch' }
-      ]
-    },
-    {
       text: '可视化',
       items: [
-        { text: 'GIS', link: '/vis/gis/' },
-        { text: 'Three', link: '/vis/three/' },
+        { text: 'GIS', link: '/gis/' },
+        { text: 'WebGL', link: '/webgl/' },
         { text: '流媒体', link: '/media/' }
       ]
     },
@@ -285,6 +312,7 @@ function nav() {
         { text: '操作系统', link: '/base/os/' },
         { text: '计算机组成原理', link: '/base/computer-organization/' }
       ]
-    }
+    },
+    { text: '服务端', link: '/server/nginx' }
   ];
 }

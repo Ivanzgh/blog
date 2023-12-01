@@ -14,6 +14,15 @@ OSI（Open System Interconnection）模型是一种用于计算机网络体系�
 
 [参考](https://zhuanlan.zhihu.com/p/152590226)
 
+## TCP/IP 的四层模型
+
+从上到下依次是：
+
+- 应用层（HTTP/FTP）
+- 传输层（TCP/UDP）
+- 网络层（IP/ARP）
+- 数据链路层
+
 ## 状态码
 
 状态码由 3 位数字组成，第一个数字定义了响应的类别，且有 5 种可能的取值：
@@ -66,8 +75,6 @@ OSI（Open System Interconnection）模型是一种用于计算机网络体系�
 ## TCP 和 UDP
 
 ## 三次握手、四次挥手
-
-## HTTP、HTTPS、HTTP2.0
 
 ## DNS
 
@@ -141,11 +148,3 @@ DNS 域名：
 <https://segmentfault.com/a/1190000006879700>
 
 <https://www.cnblogs.com/kongxy/p/4615226.html>
-
-## HTTP 协议
-
-超文本传输协议（Hypertext Transfer Protocol），是一种基于 TCP/IP 的应用层通信协议，这个协议详细规定了浏览器和万维网之间互相通信的规则
-
-http 协议默认端口是 80，https 协议默认端口是 443
-
-端口是应用程序的数字标识，主要作用是实现了不同主机应用程序之间的通信

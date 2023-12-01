@@ -286,6 +286,10 @@ export default function Children() {
 
 useCallback 的作用是**缓存函数**，避免重复生成新函数导致组件重新渲染
 
+- [how-to-use-memo-use-callback](https://www.developerway.com/posts/how-to-use-memo-use-callback)
+- <https://juejin.cn/post/7251802404877893689>
+- <https://juejin.cn/post/7271643757640007680>
+
 ```js
 useCallback(fn, deps);
 ```

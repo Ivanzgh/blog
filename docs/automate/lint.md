@@ -2,7 +2,7 @@
 
 ## Husky
 
-husky 可以在执行 git 命令时，执行自定义的程序脚本。用于在项目里添加 git hooks，在 commit 前校验代码规范、commit 信息规范等
+husky 可以在执行 git 命令时，执行自定义的程序脚本，可以理解成一个能运行脚本的平台。用于在项目里添加 git hooks，在 commit 前校验代码规范、commit 信息规范等
 
 - 文档：<https://typicode.github.io/husky/getting-started.html>
 - github： <https://github.com/typicode/husky>
@@ -116,7 +116,7 @@ type 类型：
 # 安装
 pnpm add -D @commitlint/{config-conventional,cli}
 
-# 创建 commitlint.config.js
+# 创建 commitlint.config.js 或者 .cjs
 echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
 
 # 添加

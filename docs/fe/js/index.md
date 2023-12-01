@@ -1,5 +1,11 @@
 # JavaScript
 
+## 学习资源
+
+- [MDN](https://developer.mozilla.org/zh-CN/)
+- [javascript.info](https://javascript.info/)、[中文版](https://zh.javascript.info/)
+- [ES6](https://es6.ruanyifeng.com/)
+
 ## 数据类型
 
 ![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666417923.png)

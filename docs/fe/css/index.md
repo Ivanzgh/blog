@@ -494,6 +494,16 @@ outline: none;
 
 background 缩写
 
+示例：背景图片占满容器，并始终在容器的中心位置
+
+```css
+.bg {
+  background-image: url('./bg.jpg');
+  background-size: cover;
+  background-position: center center;
+}
+```
+
 ## 文本效果
 
 ```css
