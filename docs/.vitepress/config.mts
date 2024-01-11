@@ -36,9 +36,8 @@ export default defineConfig({
             { text: 'DOM', link: '/fe/js/dom' },
             { text: 'JSON', link: '/fe/js/json' },
             { text: 'AJAX', link: '/fe/js/ajax' },
-            { text: '模块化规范', link: '/fe/js/module' },
             { text: '手写JS', link: '/fe/js/truth' },
-            { text: '工具', link: '/fe/js/utils' }
+            { text: '工具函数', link: '/fe/js/utils' }
           ]
         },
         {
@@ -169,16 +168,45 @@ export default defineConfig({
           text: '前端工程化',
           items: [
             { text: '总览', link: '/automate/' },
-            { text: 'AST', link: '/automate/ast' },
-            { text: 'Lint规范', link: '/automate/lint' },
-            { text: 'NPM', link: '/automate/npm' },
             { text: 'Git', link: '/automate/git' },
+            { text: 'AST', link: '/automate/ast' },
             { text: 'Babel', link: '/automate/babel' },
-            { text: 'Vite', link: '/automate/vite' },
-            { text: 'Webpack', link: '/automate/webpack' },
-            { text: 'Gulp', link: '/automate/gulp' },
-            { text: 'Rollup', link: '/automate/rollup' },
+            { text: '测试', link: '/automate/test' },
             { text: 'CI/CD', link: '/automate/cicd' }
+          ]
+        },
+        {
+          text: '构建工具',
+          collapsed: false,
+          items: [
+            { text: '模块化规范', link: '/automate/module' },
+            {
+              text: 'Webpack',
+              collapsed: true,
+              items: [
+                { text: '核心概念', link: '/automate/webpack/' },
+                { text: '快速入门', link: '/automate/webpack/getting-started' }
+              ]
+            },
+            { text: 'Vite', link: '/automate/vite' },
+            { text: 'Rollup', link: '/automate/rollup' },
+            { text: 'Gulp', link: '/automate/gulp' }
+          ]
+        },
+        {
+          text: '开发规范',
+          collapsed: false,
+          items: [
+            { text: 'Lint规范', link: '/automate/lint' },
+            { text: '代码规范', link: '/automate/code' }
+          ]
+        },
+        {
+          text: '包管理',
+          collapsed: false,
+          items: [
+            { text: 'npm', link: '/automate/npm' },
+            { text: 'pnpm', link: '/automate/pnpm' }
           ]
         }
       ],

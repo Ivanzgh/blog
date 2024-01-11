@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      html {
+        /* font-size: 62.5%; */
+        /* font-size: 16px; */
+      }
+      .box {
+        font-size: 18px;
+      }
+      .box1 {
+        width: 10rem;
+        height: 10rem;
+        background-color: #eee;
+      }
+      /* 在较小屏幕上设置最小字体大小 */
+      @media screen and (max-width: 768px) {
+        body {
+          font-size: 14px; /* 设置较小屏幕上的最小字体大小 */
+        }
+      }
+
+      .flex {
+        display: flex;
+        width: 300px;
+        height: 500px;
+      }
+      .l {
+        /* width: 200px;
+        min-width: 200px; */
+        flex: 0 0 200px;
+      }
+      .r {
+        width: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <div class="box1">123</div>
+    </div>
+
+    <div class="flex">
+      <div class="l"></div>
+      <div class="r"></div>
+    </div>
+    <!-- <script>
+      function setRootFontSize() {
+        console.log(1);
+        const baseFontSize = 16;
+        const screenWidth = window.innerWidth;
+        const newSize = (screenWidth / 1920) * 16;
+        document.documentElement.style.fontSize = newSize + 'px';
+      }
+      window.addEventListener('load', setRootFontSize);
+      window.addEventListener('resize', setRootFontSize);
+    </script> -->
+  </body>
+</html>

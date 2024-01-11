@@ -56,6 +56,7 @@ arr2.sort((a, b) => a - b); // ['zgh', '唔西迪西', 'ivan']
 ```js
 const arr = [3, 5, 2, 4, 1];
 arr.sort(); // [1,2,3,4,5]
+
 // 比较的数字会先被转换为字符串，比较Unicode顺序
 const arr1 = [5, 10, 20];
 arr1.sort(); // [10, 20, 5]
@@ -294,9 +295,7 @@ let arr = [
   { name: 'g', score: 95 },
   { name: 'h', score: 99 }
 ];
-let rs = arr.some((item) => {
-  return item.score > 90;
-});
+let rs = arr.some((item) => item.score > 90);
 console.log(rs); // true
 ```
 

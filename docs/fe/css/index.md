@@ -2,69 +2,202 @@
 
 ## 盒模型
 
-页面中的每个标签元素都由几个部分组成：内容`content`、内边距`padding`、边框`border`、外边距`margin`
+盒模型由四个部分组成：内容`content`、内边距`padding`、边框`border`、外边距`margin`
 
 ![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666417350.png)
 
-标准盒模型：`width = content`
-
-IE 盒模型：`width = content + padding + border`
+- 标准盒模型：`width = content`
+- IE 盒模型：`width = content + padding + border`
 
 盒模型可通过`box-sizing`设置，支持到 IE8
 
 - `box-sizing: content-box` 标准盒模型，默认值
 - `box-sizing: border-box` IE 的怪异盒模型
 
+### padding 特性
+
+- 行内元素的内边距对左、右、下起作用
+- 行内元素的外边距只对左、右起作用
+- 给行内元素加上绝对定位后，行内元素的内边距和外边距对上下左右均起作用
+
 ### margin 特性
 
-1、给子盒子设置 margin-top 后，父盒子也跟着子盒子一块向下移动
+1、给子元素设置 margin-top 后，父元素也跟着子元素一块向下移动
 
-一个盒子如果没有`padding-top`和`border-top`，那么这个盒子的上边距会和其内部文档流中的第一个子元素的上边距重叠
+一个元素如果没有`padding-top`和`border-top`，那么这个元素的上边距会和其内部文档流中的第一个子元素的上边距重叠
 
-解决办法：给父盒子设置 `border-top` 或者 `padding-top`
+解决办法：给父元素设置 `border-top` 或者 `padding-top`
 
 2、`margin: 0 auto;`会让元素水平居中
 
-### padding 特性
+3、外边距合并
 
-- 行内元素的内边距对左、右、下起作用。
-- 行内元素的外边距只对左、右起作用。
-- 给行内元素加上绝对定位后，行内元素的内边距和外边距对上下左右均起作用
-
-### 外边距合并
-
-当两个垂直外边距相遇时，它们将形成一个外边距。
-
-合并后的外边距的高度等于两个发生合并的外边距的高度中的较大者。
+当两个垂直外边距相遇时，它们将形成一个外边距。合并后的外边距的高度等于两个发生合并的外边距的高度中的较大者。
 
 ![image](http://www.w3school.com.cn/i/ct_css_margin_collapsing_example_1.gif)
 
-解决方法: 统一设置 margin-top 或者 margin-bottom，不要混合使用
+解决方法:
+
+- 统一设置 margin-top 或者 margin-bottom，不要混合使用
+- 设置其中一个元素为 BFC
+
+## BFC 规范
+
+### 块级格式化上下文：block formatting context
+
+CSS 2.1 规范中的一个概念，它是一个独立容器，决定了元素如何对其内容进行定位，以及与其他元素的关系和相互作用。
+
+简单说，BFC 是一个独立的布局环境，可以理解为一个容器，在这个容器中按照一定规则进行元素摆放，并且不会影响其它环境中的元素。
+
+### BFC 特性和创建条件
+
+让处于 BFC 内部的元素与外部的元素相互隔离，使内外元素的定位不会相互影响
+
+特性:
+
+- 内部的 Box 会在垂直方向，从顶部开始一个接一个地放置
+- Box 垂直方向的距离由 margin 决定。属于同一个 BFC 的两个相邻 Box 的 margin 会发生叠加
+- 每个元素的 margin box 的左边，与包含块 border box 的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此
+- BFC 的区域不会与 float box 叠加
+- BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素，反之亦然
+- 计算 BFC 的高度时，浮动元素也参与计算
+
+BFC 由以下之一创建：
+
+- 根元素
+- 浮动元素 float，值为 left|right|inherit，不能是 none
+- 使用`position: absolute;`或`position: fixed;`的元素
+- 使用 overflow ，值为：hidden|auto|scroll ，不能是 visible
+- `display: flex`
+- `display: inline-block`
+- 表格单元格：`display: table-cell`
+- 表格标题：`display: table-caption`
+
+### BFC 作用
+
+1. **解决 margin 重叠的问题**
+
+同一个 BFC 下的两个相邻的盒子会出现垂直 margin 重叠的问题，通常可以为其中一个盒子添加一个父元素，并使其触发 BFC，即可解决这个问题
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .box {
+        /* 关键点 */
+        overflow: auto;
+      }
+      p {
+        margin: 30px;
+        height: 30px;
+        background-color: #f00;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <p>1</p>
+    </div>
+    <p>2</p>
+    <p>3</p>
+  </body>
+</html>
+```
+
+2. **浮动带来的布局问题**
+
+在同一个 BFC 下即使有元素浮动，BFC 下元素的最左边边缘总是会与包含它的盒子左边相接触，那么就会出现浮动元素遮盖了其他元素的情况。
+
+试想，在一个 BFC 内如果存在一个 float 元素和一个 div，浮动元素会遮盖住 div，此时，如果给这个 div 构建一个新的 BFC，由于 BFC 特性，内外不相互影响，此时 div 会被 float 元素挤开
+
+比如下面这个例子，绿色盒子会因为浮动遮盖住红色的盒子，但由于两个盒子都在同一个 BFC（body 元素）下，根据 BFC 特性，红色盒子会与包含块相接，此时只要让红色盒子触发 BFC，我们为红色盒子添加一个触发 BFC 的条件`overflow:hidden`，此时红色盒子由于 BFC 的特性隔离开绿色，这样就可以通过 float 元素的方式实现两栏布局
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        position: relative;
+      }
+      .green {
+        width: 30px;
+        height: 30px;
+        background-color: #0f0;
+        float: left;
+      }
+      .red {
+        width: 50px;
+        height: 50px;
+        background-color: #f00;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="green"></div>
+    <div class="red"></div>
+  </body>
+</html>
+```
+
+1. **清除浮动**
+
+在触发 BFC 后，这个盒子的高度将包含浮动元素的高度。当一个父元素中包含了浮动元素，而浮动元素超出了父元素，此时为父元素创建 BFC，那么浮动元素就会包裹进这个 BFC，解决了父元素中高度塌陷的问题
+
+如下示例，两个 div 由于设置了`float:left`使其浮动，导致了父元素高度的坍塌，此时给父元素添加一个`overflow:hidden`属性值，使其触发 BFC，由于 BFC 下的盒子会包含浮动元素的高度，
+因此盒子就被撑了起来
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      .parent {
+        border: 2px solid #f00;
+        overflow: hidden;
+      }
+      .child {
+        height: 30px;
+        border: 1px solid #0f0;
+        float: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="parent">
+      <div class="child">child1</div>
+      <div class="child">child2</div>
+    </div>
+  </body>
+</html>
+```
+
+::: tip IFC
+
+IFC 指的是行级格式化上下文，布局规则：
+
+1. 行级上下文内部的盒子会在水平方向，一个接一个地放置
+2. 当一行不够的时候会自动切换到下一行
+3. 行级上下文的高度由内部最高的内联盒子的高度决定
+
+:::
 
 ## CSS 选择器
 
 - 通配符：`*`
-- id 选择器：#id
-- class 选择器：.class
-- 元素选择器：p、a 等
-- 后代选择器：p span、div a 等
+- id 选择器：`#id`
+- class 选择器：`.class`
+- 元素选择器：`p`、`a` 等
+- 后代选择器：`p span`、`div a` 等
 - 一级子元素选择器：选择元素的直接子元素，如`div > span`作用于第一级子元素，而后代选择器会作用于全部子孙元素
-- 伪类选择器：a:hover 等
-- 属性选择器：input[type="text"] 等
-
-伪类选择器：
-
-- `:root` 选择文档的根元素，即 html 元素
-- `:last-child` 向元素添加样式，且该元素是它的父元素的最后一个子元素
-- `:nth-child(n)` 向元素添加样式，且该元素是它的父元素的第 n 个子元素
-- `:nth-last-child(n)` 向元素添加样式，且该元素是它的父元素的倒数第 n 个子 元素
-- `:only-child` 向元素添加样式，且该元素是它的父元素的唯一子元素
-- `:first-of-type` 向元素添加样式，且该元素是同级同类型元素中第一个元 素
-- `:last-of-type` 向元素添加样式，且该元素是同级同类型元素中最后一个 元素
-- `:nth-of-type(n)` 向元素添加样式，且该元素是同级同类型元素中第 n 个元 素
-- `:nth-last-of-type(n)` 向元素添加样式，且该元素是同级同类型元素中倒数第 n 个元素
-- `:only-of-type` 向元素添加样式，且该元素是同级同类型元素中唯一的元素
-- `:empty` 向没有子元素（包括文本内容）的元素添加样式
+- 伪类选择器：`a:hover` 等
+- 属性选择器：`input[type="text"]` 等
+- 相邻元素选择器：如`.box1 ~ .box2`
 
 ### 选择器权重
 
@@ -97,13 +230,46 @@ IE 盒模型：`width = content + padding + border`
 
 ## 伪类、伪元素
 
+- 伪类用于当已有的元素处于某个状态时，为其添加样式
+- 伪元素用于创建不在文档树中的元素，并为其添加样式
+
 ### 伪类
 
-是选择器的一种，用于选择处于特定状态的元素，用一个冒号表示，例如`:first-child`、`:last-child`、`:hover`、`:focus`、`:link`、`:visited`等
+伪类是选择器的一种，用于选择处于特定状态的元素，用一个冒号表示
+
+- `:hover` 鼠标悬浮状态
+- `:focus` 元素本身获得焦点
+- `:focus-within` 元素本身及子元素获得焦点
+- `:root` 选择文档的根元素，即 html 元素
+- `:first-child` 父元素的第一个子元素
+- `:last-child` 父元素的最后一个子元素
+- `:nth-child(n)` 父元素的第 n 个子元素
+- `:nth-last-child(n)` 父元素的倒数第 n 个子 元素
+- `:only-child` 父元素的唯一子元素
+- `:first-of-type` 同级同类型元素中第一个元素
+- `:last-of-type` 同级同类型元素中最后一个 元素
+- `:nth-of-type(n)` 同级同类型元素中第 n 个元 素
+- `:nth-last-of-type(n)` 同级同类型元素中倒数第 n 个元素
+- `:only-of-type` 同级同类型元素中唯一的元素
+- `:empty` 向没有子元素（包括文本内容）的元素添加样式
+- `:not` 不处于某个状态
+- `:checked` 单/复选框开关选中的状态
+- `:disabled` 禁用状态
+- `:valid` 校验通过状态
+- `:invalid` 校验不通过状态
+- `:target` URL 的锚点
+- `:link` 访问过的链接
+- `:visited` 未访问过的链接
+- `:placeholder-shown` 输入框有占位符时的情况（即用户还未输入时）
 
 ### 伪元素
 
-用两个冒号表示，`::before`、`::after`
+用两个冒号表示
+
+- `::before`
+- `::after`
+- `::selection` 被用户选中的部分
+- `::placeholder` 输入框的占位符文本
 
 例如，给激活的菜单项底部添加下划线
 
@@ -181,151 +347,22 @@ document.documentElement.style.setProperty('--primary-color', '#ff6347');
 
 5. 动态更新：CSS 变量的值可以在运行时通过 js 动态更新，这可能会导致样式的意外更改
 
-## BFC 规范
+## position 定位
 
-### 块级格式化上下文：block formatting context
+- `relative` 相对定位，元素占据文档位置，可以有偏移
+- `absolute` 绝对定位，元素不占位置，相对于父元素定位
+- `fixed` 固定在视窗某一位置
+- `sticky` “粘”在视窗某一位置
 
-CSS 2.1 规范中的一个概念，它是一个独立容器，决定了元素如何对其内容进行定位，以及与其他元素的关系和相互作用
-
-BFC 内部的元素和外部的元素不会互相影响
-
-### BFC 特性和创建条件
-
-让处于 BFC 内部的元素与外部的元素相互隔离，使内外元素的定位不会相互影响
-
-特性:
-
-- 内部的 Box 会在垂直方向，从顶部开始一个接一个地放置
-- Box 垂直方向的距离由 margin 决定。属于同一个 BFC 的两个相邻 Box 的 margin 会发生叠加
-- 每个元素的 margin box 的左边，与包含块 border box 的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此
-- BFC 的区域不会与 float box 叠加
-- BFC 就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素，反之亦然
-- 计算 BFC 的高度时，浮动元素也参与计算
-
-BFC 由以下之一创建：
-
-- 根元素或其它包含它的元素
-- 浮动 (元素的 float 不是 none)
-- 绝对定位的元素 (元素具有 position 为 absolute 或 fixed)
-- `display: inline-block`
-- 表格单元格：`display: table-cell`
-- 表格标题：`display: table-caption`
-- 块元素具有 overflow ，且值不是 visible
-- `display: flow-root`
-
-### BFC 作用
-
-- **解决 margin 重叠的问题**
-
-同一个 BFC 下的两个相邻的盒子会出现垂直 margin 重叠的问题，通常我们可以为其中一个盒子添加一个父元素，并使其触发 BFC，即可解决这个问题
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <style>
-      .box {
-        /* 关键点 */
-        overflow: auto;
-      }
-      p {
-        margin: 30px;
-        height: 30px;
-        background-color: #f00;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="box">
-      <p>1</p>
-    </div>
-    <p>2</p>
-    <p>3</p>
-  </body>
-</html>
-```
-
-- **浮动带来的布局问题**
-
-在同一个 BFC 下即使有元素浮动，BFC 下元素的最左边边缘总是会与包含它的盒子左边相接触，那么就会出现浮动元素遮盖了其他元素的情况。
-BFC 还有一条重要特性：BFC 的区域不会与 float box 重叠。试想，在一个 BFC 内如果存在一个 float 元素和一个 div，浮动元素会遮盖住 div，
-此时，如果给这个 div 构建一个新的 BFC，由于 BFC 特性，内外不相互影响，此时 div 会被 float 元素挤开
-
-比如下面这个例子，绿色盒子会因为浮动遮盖住红色的盒子，但由于两个盒子都在同一个 BFC（body 元素）下，根据 BFC 特性，
-红色盒子会与包含块相接，此时只要让红色盒子触发 BFC，我们为红色盒子添加一个触发 BFC 的条件`overflow:hidden`，
-此时红色盒子由于 BFC 的特性隔离开绿色，这样就可以通过 float 元素的方式实现两栏布局
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <style>
-      body {
-        position: relative;
-      }
-      .green {
-        width: 30px;
-        height: 30px;
-        background-color: #0f0;
-        float: left;
-      }
-      .red {
-        width: 50px;
-        height: 50px;
-        background-color: #f00;
-        overflow: hidden;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="green"></div>
-    <div class="red"></div>
-  </body>
-</html>
-```
-
-- **清除浮动**
-
-在触发 BFC 后，这个盒子的高度将包含浮动元素的高度。当一个父元素中包含了浮动元素，而浮动元素超出了父元素，此时为父元素创建 BFC，那么浮动元素就会包裹进这个 BFC，解决了父元素中高度塌陷的问题
-
-如下示例，两个 div 由于设置了`float:left`使其浮动，导致了父元素高度的坍塌，此时给父元素添加一个`overflow:hidden`属性值，使其触发 BFC，由于 BFC 下的盒子会包含浮动元素的高度，
-因此盒子就被撑了起来
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <style>
-      .parent {
-        border: 2px solid #f00;
-        overflow: hidden;
-      }
-      .child {
-        height: 30px;
-        border: 1px solid #0f0;
-        float: left;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="parent">
-      <div class="child">child1</div>
-      <div class="child">child2</div>
-    </div>
-  </body>
-</html>
-```
+上下左右的偏移距离：`top`、`left`、`bottom`、`right`
 
 ## 清除浮动
 
 **浮动元素会脱离文档流并向左/向右浮动，直到碰到父元素或者另一个浮动元素**
 
-清除浮动是为了清除使用浮动元素产生的影响。浮动会导致父元素高度坍塌，而高度的塌陷使页面后面的布局不能正常显示
+清除浮动是为了清除使用浮动元素产生的影响。浮动会导致父元素高度坍塌，从而导致页面后面的布局不能正常显示
 
-主推采用`::after`伪元素方法清理浮动
+推荐采用`::after`伪元素方法清理浮动
 
 ```css
 .clearfix {
@@ -335,9 +372,9 @@ BFC 还有一条重要特性：BFC 的区域不会与 float box 重叠。试想�
 .clearfix::after {
   content: '';
   display: block;
+  clear: both;
   height: 0;
   visibility: hidden;
-  clear: both;
 }
 ```
 
@@ -352,17 +389,6 @@ img 元素默认样式导致，因为行内元素默认的垂直对齐方式是�
 3. 设置 img 浮动：`float: left;`
 4. 设置父元素：`font-size: 0;`
 5. 设置 img 对齐方式：`vertical-align: top`，top、bottom、middle 都可以
-
-## 像素单位
-
-- px：绝对单位，页面按精确像素展示。
-- em：相对单位，以父元素字体大小为基准，如果自身定义了 font-size 按自身来计算（浏览器默认字体是 16px）
-- rem：以根元素的字体大小为基准。例如 html 的 `font-size: 16px`，则子级 1rem = 16px
-- vw、vh：针对当前浏览器窗口大小而言
-  - vw：视口宽度，1vw 等于可视窗口宽度的 1%
-  - vh：视口高度，1vh 等于可视窗口高的的 1%
-  - vmin：vw 和 vh 中较小的那个
-  - vmax：vw 和 vh 中较大的那个
 
 ## 如何设置文字小于 12px
 
@@ -404,11 +430,13 @@ img 元素默认样式导致，因为行内元素默认的垂直对齐方式是�
 
 ## 隐藏元素的方式
 
-以下方式都能隐藏元素，而且 Dom 元素还在
-
 - `display: none;` 不占据页面位置
 - `opacity: 0;` 占据页面位置
 - `visibility: hidden;` 占据页面位置
+- `transform:scale(0,0)` 将元素缩放为 0，占据页面位置
+- 使用绝对定位将元素移出可视区域内
+- 通过 z-index 负值，来使其他元素遮盖住该元素
+- 通过 clip/clip-path 元素裁剪的方法来实现元素的隐藏，占据页面位置
 
 ## rgba()和 opacity 的区别
 
@@ -457,14 +485,12 @@ calc 是英文单词 calculate(计算)的缩写，支持到 IE9，是 css3 提�
 设置`html,body { height: 100%; }`，子元素才能正常显示
 :::
 
-## boder
+## border 边框
 
-### boder 图片
+### 边框图片
 
 ```css
-.box {
-  border-image: linear-gradient(#1be9f5, #2c7074) 2 2;
-}
+border-image: linear-gradient(#1be9f5, #2c7074) 2 2;
 ```
 
 ### outline
@@ -476,9 +502,9 @@ outline: 2px solid #f00;
 outline: none;
 ```
 
-## 圆角
+### 圆角
 
-## 背景
+## background 背景
 
 <https://developer.mozilla.org/zh-CN/docs/Web/CSS/background>
 
@@ -504,27 +530,11 @@ background 缩写
 }
 ```
 
-## 文本效果
-
-```css
-.box {
-  text-shadow: 0 0 10px rgb(68, 217, 236), 0 0 30px rgb(84, 203, 247), 0 0 50px rgb(32, 180, 230), 0 0 70px rgb(23, 162, 231),
-    0 0 90px rgb(19, 125, 224), 0 0 110px rgb(7, 80, 122), 0 0 130px rgba(14, 62, 158, 1);
-}
-```
-
-## 边框角线
-
 ## 可替换元素
 
-可替换元素是一种外部对象， CSS 可以影响它的位置，但不会影响到它自身的内容
+通过修改某个属性值，呈现的内容就可以被替换的元素就是可替换元素，CSS 可以影响它的位置，但不会影响到它自身的内容
 
-可替换元素：
-
-- iframe
-- video
-- img
-- embed
+可替换元素：`<iframe>`、`<video>`、`<img>`、`<embed>`
 
 ### object-fit
 
@@ -620,21 +630,11 @@ p::selection {
 
 ## 文本
 
+- 文本对齐：`text-align`，可选值：left、center、right
 - 首行缩进 2 个字
 
 ```css
 text-indent: 2em;
-```
-
-- 文字加下划线
-
-```css
-text-decoration: underline;
-
-/* none 默认
-underline 下划线
-overline 上划线
-line-through 中线 */
 ```
 
 - 字体设置
@@ -644,6 +644,27 @@ font: 600 16px/30px 微软雅黑;
 ```
 
 表示字体粗 600，字体大小 16px，行高 30px，微软雅黑字体
+
+### text-overflow
+
+文本超出部分截断
+
+单行文本超出显示省略号：
+
+```css
+text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
+```
+
+### text-decoration
+
+文字划线
+
+- `text-decoration: none;` 默认
+- `text-decoration: underline;` 下划线
+- `text-decoration: overline;` 上滑线
+- `text-decoration: line-through` 中线
 
 ### 文字换行
 
@@ -679,8 +700,29 @@ letter-spacing: 6px;
 letter-spacing: -1px;
 ```
 
-字母之间的间距 letter-spacing
-单词之间间距 word-spacing
+- 字母之间的间距 `letter-spacing`
+- 单词之间间距 `word-spacing`
+
+### white-space
+
+空格处理
+
+- `nowrap`：使文本永不换行
+- `pre`：保留空格和换行符，无法自动换行
+- `pre-wrap`：保留空格和换行符，可以自动换行
+
+### text-shadow
+
+文本阴影
+
+### 文本效果
+
+```css
+.box {
+  text-shadow: 0 0 10px rgb(68, 217, 236), 0 0 30px rgb(84, 203, 247), 0 0 50px rgb(32, 180, 230), 0 0 70px rgb(23, 162, 231),
+    0 0 90px rgb(19, 125, 224), 0 0 110px rgb(7, 80, 122), 0 0 130px rgba(14, 62, 158, 1);
+}
+```
 
 ## 兼容性
 
@@ -724,7 +766,7 @@ aspect-ratio: 16 / 9;
 
 ## 混合模式
 
-`mix-blend-mode`属性描述了 元素的内容 应该与 元素的直系父元素的内容 和 元素的背景 如何混合
+`mix-blend-mode`属性描述了**元素的内容**应该与**元素的直系父元素的内容**和**元素的背景**如何混合
 
 ```css
 mix-blend-mode: normal;
@@ -749,6 +791,27 @@ mix-blend-mode: inherit;
 mix-blend-mode: unset;
 ```
 
-## 波浪效果
+## CSS 优化
 
-## 3D
+1、加载性能
+
+- css 打包压缩
+- 减少使用`@import`,而建议使用 link
+
+2、选择器性能
+
+- 减少使用通配符`*`
+- 尽量少用后代选择器，降低选择器的权重值
+- 可以通过继承的属性，避免对这些属性重复指定规则
+
+3、渲染性能
+
+- 添加浏览器前缀，带浏览器前缀的在前。标准属性在后
+- 属性值为 0 时，不加单位
+- 以 0 开头的浮动小数，可以省略小数点之前的 0
+- css 雪碧图，一张图片上有多个小图标，通过背景定位显示单个图标。减少页面的请求次数，但是图片尺寸会变大
+
+4、可维护性
+
+- 将具有相同属性的样式抽离出来，整合并通过 class 在页面中进行使用，提高 css 的可维护性
+- 样式与内容分离：将 css 代码定义到外部 css 中

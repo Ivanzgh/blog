@@ -4,8 +4,6 @@
 
 <iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block; width:100%; height:500px;" src="https://www.processon.com/embed/62e696b45653bb071617d8d0"></iframe>
 
-在线体验：<https://the-echoplex.net/flexyboxes/>
-
 ### flex 属性
 
 假设在 1 个 500px 的容器中，我们有 3 个 100px 宽的元素，那么这 3 个元素需要占 300px 的宽，剩下 200px 的**可用空间**。
@@ -36,6 +34,24 @@
 - `flex: auto`： 相当于`flex: 1 1 auto`，可拉伸，可收缩
 - `flex: none`： 相当于`flex: 0 0 auto`，不可伸缩
 - `flex: 正整数`：`flex: 1`或者`flex: 2`等，相当于`flex: 1 1 0`，元素可以在`flex-basis: 0`的基础上伸缩
+
+子元素的总宽度超过父容器的宽度时，会收缩子元素的宽度。如果不想收缩宽度，可以给相关子元素设置 `flex-basis`
+
+```css
+.box {
+  display: flex;
+  width: 300px;
+  height: 500px;
+}
+.l {
+  /* width: 200px;
+  min-width: 200px; */
+  flex: 0 0 200px;
+}
+.r {
+  width: 300px;
+}
+```
 
 ## gird 布局
 
@@ -418,7 +434,7 @@
   height: 300px;
 }
 .left {
-  width: 200px;
+  flex: 0 0 200px;
 }
 .right {
   flex: 1;
@@ -479,6 +495,7 @@
   left: 200px;
   right: 0;
 }
+
 /* 方式二： */
 .left {
   position: absolute;
@@ -514,7 +531,7 @@
 </div>
 ```
 
-1. flex 布局
+方案一：flex 布局
 
 ```css
 .box {
@@ -527,23 +544,24 @@
 }
 .middle {
   flex: 1;
+  /* flex-grow: 1; */
 }
 .right {
   width: 200px;
 }
 ```
 
-2. grid 布局
+方案二、grid 布局
 
 ```css
 .box {
   display: grid;
-  grid-template-columns: 200px auto 200px;
   grid-template-rows: 300px;
+  grid-template-columns: 200px auto 200px;
 }
 ```
 
-3. 浮动布局
+方案三、浮动布局
 
 ```css
 .box {
@@ -578,7 +596,7 @@
 </div>
 ```
 
-4. 定位
+方案四、定位
 
 ```css
 .box {
@@ -617,12 +635,14 @@
 
 优点：兼容所有浏览器
 
+::: code-group
+
 ```html
-<div class="box8">
-  <div class="box-left">
+<div class="box">
+  <div class="left">
     <h1>aside</h1>
   </div>
-  <div class="box-right">
+  <div class="right">
     <h1>article</h1>
     <h1>article</h1>
     <h1>article</h1>
@@ -630,34 +650,35 @@
     <h1>article</h1>
   </div>
 </div>
-
-<style>
-  .box8 {
-    margin: 0 auto;
-    width: 600px;
-    overflow: hidden;
-  }
-  .box-left {
-    float: left;
-    width: 150px;
-    background-color: #f00;
-    padding-bottom: 9999px;
-    margin-bottom: -9999px;
-  }
-  .box-right {
-    float: left;
-    width: 450px;
-    background-color: #00f;
-    padding-bottom: 9999px;
-    margin-bottom: -9999px;
-  }
-</style>
 ```
+
+```css
+.box {
+  margin: 0 auto;
+  width: 600px;
+  overflow: hidden;
+}
+.left {
+  float: left;
+  width: 150px;
+  background-color: #f00;
+  padding-bottom: 9999px;
+  margin-bottom: -9999px;
+}
+.right {
+  float: left;
+  width: 450px;
+  background-color: #00f;
+  padding-bottom: 9999px;
+  margin-bottom: -9999px;
+}
+```
+
+:::
 
 ### 2、flex 布局
 
-给父元素加上`display:flex`即可，不用设置浮动属性，这依赖于`align-items`属性，它的默认值是 `stretch`，
-也就是在辅轴上将所有子项目拉伸为同一高度（或宽度）以保持对齐。下面还有子内容还需设置`height: 100%`
+给父元素加上`display:flex`即可。这依赖于`align-items`属性，它的默认值是 `stretch`，也就是在交叉轴上将所有子项目拉伸为同一高度（或宽度）以保持对齐。下面还有子内容还需设置`height: 100%`
 
 ```css
 display: flex;
@@ -868,4 +889,34 @@ textOverflowMore('.content');
 <div title="文本超出显示省略号文本超出显示省略号文本超出显示省略号">
   文本超出显示省略号文本超出显示省略号文本超出显示省略号
 </div>
+```
+
+## 已知容器宽高，使子元素间隔相等
+
+```html
+<div class="container">
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
+  <div class="box"></div>
+</div>
+```
+
+```css
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 200px;
+  height: 300px;
+  justify-content: space-between;
+  align-content: space-between;
+  gap: 20px; /* 间距 */
+  background-color: lightgray;
+}
+
+.box {
+  flex-basis: calc(50% - 10px); /* 计算每个盒子的宽度和高度，减去间距 */
+  height: calc(50% - 10px);
+  background-color: #5491cf;
+}
 ```

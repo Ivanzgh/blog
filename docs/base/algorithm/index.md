@@ -97,35 +97,35 @@ console.log(SortedArr); // [0, 1, 1, 2, 3, 4, 5, 5, 6]
 
 ```js
 const arr = [
-  { id: 1, value: '节点1', p_id: 0 },
-  { id: 2, value: '节点2', p_id: 1 },
-  { id: 3, value: '节点3', p_id: 1 },
-  { id: 4, value: '节点4', p_id: 2 },
-  { id: 5, value: '节点5', p_id: 0 },
-  { id: 6, value: '节点6', p_id: 5 },
-  { id: 7, value: '节点7', p_id: 6 },
-  { id: 8, value: '节点8', p_id: 6 }
+  { id: 1, value: '节点1', pid: 0 },
+  { id: 2, value: '节点2', pid: 1 },
+  { id: 3, value: '节点3', pid: 1 },
+  { id: 4, value: '节点4', pid: 2 },
+  { id: 5, value: '节点5', pid: 0 },
+  { id: 6, value: '节点6', pid: 5 },
+  { id: 7, value: '节点7', pid: 6 },
+  { id: 8, value: '节点8', pid: 6 }
 ];
 ```
 
-输出结果如下：
+期望结果如下：
 
 ```json
 [
   {
     "id": 1,
     "value": "节点1",
-    "p_id": 0,
+    "pid": 0,
     "children": [
       {
         "id": 2,
         "value": "节点2",
-        "p_id": 1,
+        "pid": 1,
         "children": [
           {
             "id": 4,
             "value": "节点4",
-            "p_id": 2,
+            "pid": 2,
             "children": []
           }
         ]
@@ -133,7 +133,7 @@ const arr = [
       {
         "id": 3,
         "value": "节点3",
-        "p_id": 1,
+        "pid": 1,
         "children": []
       }
     ]
@@ -141,23 +141,23 @@ const arr = [
   {
     "id": 5,
     "value": "节点5",
-    "p_id": 0,
+    "pid": 0,
     "children": [
       {
         "id": 6,
         "value": "节点6",
-        "p_id": 5,
+        "pid": 5,
         "children": [
           {
             "id": 7,
             "value": "节点7",
-            "p_id": 6,
+            "pid": 6,
             "children": []
           },
           {
             "id": 8,
             "value": "节点8",
-            "p_id": 6,
+            "pid": 6,
             "children": []
           }
         ]
@@ -167,35 +167,42 @@ const arr = [
 ]
 ```
 
-实现
+方式一、递归实现
 
 ```js
-const arr = [
-  { id: 1, value: '节点1', p_id: 0 },
-  { id: 2, value: '节点2', p_id: 1 },
-  { id: 3, value: '节点3', p_id: 1 },
-  { id: 4, value: '节点4', p_id: 2 },
-  { id: 5, value: '节点5', p_id: 0 },
-  { id: 6, value: '节点6', p_id: 5 },
-  { id: 7, value: '节点7', p_id: 6 },
-  { id: 8, value: '节点8', p_id: 6 }
-];
-let getTree = (arr) => {
+function buildTree(arr, pid = 0) {
+  const tree = [];
+  for (const item of arr) {
+    if (item.pid === pid) {
+      const children = buildTree(arr, item.id);
+      if (children.length > 0) {
+        item.children = children;
+      } else {
+        item.children = [];
+      }
+      tree.push(item);
+    }
+  }
+  return tree;
+}
+```
+
+方式二、reduce 循环
+
+```js
+function buildTree(arr) {
   return arr
     .reduce((prev, next) => {
-      let finder = arr.find((item) => item.id === next.p_id);
+      let finder = arr.find((item) => item.id === next.pid);
       if (finder) {
         (finder.children || ((finder.children = []), finder.children)).push(next);
         prev.every((next) => next.id !== finder.id) && prev.push(finder);
       }
       return prev;
     }, [])
-    .reduce((prev, next, i, arr) => (arr.every((item) => item.id !== next.p_id) && prev.push(next), prev), []);
-};
-getTree(arr);
+    .reduce((prev, next, i, arr) => (arr.every((item) => item.id !== next.pid) && prev.push(next), prev), []);
+}
 ```
-
-时间复杂度 O(n)
 
 ## 动态规划
 

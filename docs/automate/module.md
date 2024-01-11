@@ -1,6 +1,51 @@
 # 模块化规范
 
-## 模块化简介
+## 模块化历史
+
+1、文件划分形式
+
+- 每个文件是一个独立的模块，通过 script 标签引入不同模块
+- 缺点：模块之间缺少依赖关系、维护困难、没有私有空间、变量污染等
+
+```html
+<script src="a.js"></script>
+<script src="b.js"></script>
+```
+
+2、命名空间形式
+
+- 规定每个模块只暴露一个全局对象，然后模块的内容都挂载到这个对象中
+- 未解决依赖关系
+
+```js
+window.moduleA = {
+  name: 'zgh',
+  f1: function () {}
+};
+```
+
+3、立即执行函数
+
+为模块提供私有空间，通过参数的形式作为依赖声明
+
+```js
+(function ($) {
+  var name = 'zgh';
+
+  function f1() {}
+
+  window.moduleA = {
+    f1: f1
+  };
+})(jQuery);
+```
+
+- 用 script 标签在页面引入模块，模块的加载不受控，维护困难
+- 理想方式：在页面中引入一个 JS 入口文件，其余的模块可以通过代码控制，**按需加载**进来
+
+除了模块加载的问题以外，还需要规定模块化的规范，当前主流是 CommonJS 、ES Modules
+
+## 模块化概述
 
 ### 什么是模块化？
 
@@ -19,13 +64,10 @@
 
 如果引入模块化，可能就是在一个文件中引入多个 js 文件，如：
 
-```js
-<body>
-  <script src="a.js"></script>
-  <script src="b.js"></script>
-  <script src="c.js"></script>
-  <script src="util/index.js"></script>
-</body>
+```html
+<script src="a.js"></script>
+<script src="b.js"></script>
+<script src="c.js"></script>
 ```
 
 这样做会带来很多问题：
@@ -53,6 +95,14 @@ Node.js 从`v13.2.0`之后也引入了规范的`ES Modules`机制，同时兼容
 
 ### 模块的导入导出
 
+引入模块的方式：
+
+```js
+const module1 = require('模块名');
+```
+
+暴露的模块本质是 exports 对象
+
 ```js
 const axios = require('axios');
 
@@ -69,14 +119,6 @@ module.exports.getData = getData;
 
 // 导出所有
 module.exports = { getData, postData };
-```
-
-暴露的模块本质是 exports 对象
-
-引入模块的方式：
-
-```js
-const module1 = require('模块名');
 ```
 
 ### 模块的初始化
@@ -105,9 +147,9 @@ console.log(addModule1.add()); // 2
 console.log(addModule2.add()); // 3
 ```
 
-在命令行执行 `node main.js` 运行程序，可以看出 add.js 这个模块虽然被引用了两次，但只初始化了一次
+在终端执行 `node main.js` 运行程序，可以看出 add.js 这个模块虽然被引用了两次，但只初始化了一次
 
-## AMD 规范
+## AMD
 
 AMD (Asynchronous Module Definition) 是 js 中一种模块定义的规范，可以在浏览器端**异步加载**模块
 
@@ -147,11 +189,15 @@ require(['moduleA'], function (moduleA) {
 });
 ```
 
-通常情况下会使用 [RequireJS](https://requirejs.org/) 库来实现 AMD 规范的模块加载和管理。[Why AMD](https://requirejs.org/docs/whyamd.html)
+通常情况下会使用 [RequireJS](https://requirejs.org) 库来实现 AMD 规范的模块加载和管理。[Why AMD](https://requirejs.org/docs/whyamd.html)
 
 ## CMD
 
-CMD（Common Module Definition） 规范和 AMD 很相似，尽量保持简单，并与 CommonJS 规范保持了很大的兼容性。优点是依赖就近，延迟执行，容易在 Node.js 中运行。缺点是依赖 SPM 打包，模块的加载逻辑偏重。代表实现有 Sea.js
+CMD（Common Module Definition） 规范和 AMD 很相似，尽量保持简单，并与 CommonJS 规范保持了很大的兼容性。
+
+- 优点是依赖就近，延迟执行，容易在 Node.js 中运行
+- 缺点是依赖 SPM 打包，模块的加载逻辑偏重
+- 代表实现有 [Sea.js](https://github.com/seajs/seajs)
 
 依赖就近：执行到这一部分的时候，再去加载对应的文件
 
@@ -170,7 +216,7 @@ UMD（Universal Module Definition）规范类似于兼容 CommonJS 和 AMD 的�
 
 ## ESM
 
-ESM 表示 ES6 的模块规范，支持异步特性，是最常用的一种规范
+ESM（ES Modules）表示 ES6 的模块规范，支持异步特性，是最常用的一种规范
 
 ```js
 // a.js
@@ -189,8 +235,8 @@ import { a, b } from 'a.js';
 const a = () => {};
 export default a;
 
-// 其他文件导入，可以任意命名，如jj
-import jj from 'default.js';
+// 其他文件导入，可以任意命名
+import  from 'default.js';
 ```
 
 还可直接在定义变量时就导出
@@ -218,3 +264,17 @@ import * as obj from 'a.js';
 console.log(obj.a);
 console.log(obj.b);
 ```
+
+## 构建工具
+
+有了模块化和模块化规范，那具体怎么落地实现呢？
+
+开发方式从 JSP、PHP、原生 JavaScript、jQuery，再到 Vue、React、Angular 框架。从 ES5、ES6+，再到 TypeScript，以及 less、scss 等。前端开发变的复杂，会遇到一些问题：
+
+- 需要模块化开发，逻辑复用
+- 使用高级特性来加快开发效率，如 ES6+、sass、less
+- 监听文件的变化并反映到浏览器上（热更新）
+- 静态资源需要模块化
+- 代码压缩、合并以及其他相关的优化
+
+所以 webpack、vite、rollop、gulp、turbopack 等构建工具就产生了

@@ -1,25 +1,5 @@
 # vuePress
 
-## 养个猫
-
-如你所见，左下角有一只卡哇伊的猫，有白色和黑色两种。由[live2d](https://www.live2d.com/zh-CHS/)制作而来，
-特别好玩的一个东西，有兴趣自行了解。
-
-首先下载`lived2d.js`，然后在`components`下注册一个`Cat.vue`组件，最后在`config.js`中配置使用
-
-```js
-module.exports = {
-  plugins: [
-    [
-      {
-        name: 'page-plugin',
-        globalUIComponents: ['Cat']
-      }
-    ]
-  ]
-}
-```
-
 ## 插件
 
 地址：[awesome-vuepress](https://github.com/vuepressjs/awesome-vuepress#plugins)
@@ -146,3 +126,9 @@ No url found for submodule path 'docs/.vuepress/dist' in .gitmodules
 
 就是 git 子模块找不到 dist 文件夹，我是之前使用手动部署导致本地产生了 dist 文件夹，所以删除 dist 文件夹再 push 到 github 上即可。
 在`.gitignore`中将`docs/.vuepress/dist`也删除，假如你添加过这个。
+
+## VitePress
+
+> VitePress 使用 基于文件的路由：每个 .md 文件将在相同的路径被编译成为 .html 文件
+
+vitepress 是如何将 md 文件编译成 html 文件的？

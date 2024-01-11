@@ -1,6 +1,8 @@
 # Leaflet
 
-官网地址: [https://leafletjs.com/](https://leafletjs.com/)
+一个开源 JavaScript 库，适用于移动设备的交互式地图
+
+官网: [https://leafletjs.com/](https://leafletjs.com/)
 
 ## 安装
 
@@ -31,7 +33,7 @@ CDN
 const map = L.map('map', {
   center: [39.90923, 116.397428],
   zoom: 12
-})
+});
 ```
 
 ### 添加图层
@@ -39,12 +41,9 @@ const map = L.map('map', {
 #### （1）、高德地图标准图层
 
 ```js
-L.tileLayer(
-  'http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',
-  {
-    subdomains: ['1', '2', '3', '4'] // 子域名，对应 urlTemplate 链接中的参数 {s}
-  }
-).addTo(map)
+L.tileLayer('http://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+  subdomains: ['1', '2', '3', '4'] // 子域名，对应 urlTemplate 链接中的参数 {s}
+}).addTo(map);
 ```
 
 #### （2）、高德地图卫星图层
@@ -52,7 +51,7 @@ L.tileLayer(
 ```js
 L.tileLayer('http://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', {
   subdomains: ['1', '2', '3', '4']
-}).addTo(map)
+}).addTo(map);
 ```
 
 #### （3）、高德地图标注
@@ -60,19 +59,19 @@ L.tileLayer('http://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={
 ```js
 L.tileLayer('http://webst0{s}.is.autonavi.com/appmaptile?style=8&x={x}&y={y}&z={z}', {
   subdomains: ['1', '2', '3', '4']
-}).addTo(map)
+}).addTo(map);
 ```
 
 #### （4）、谷歌地图
 
 ```js
-L.tileLayer('http://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}').addTo(map)
+L.tileLayer('http://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}').addTo(map);
 ```
 
 #### （5）、谷歌卫星地图
 
 ```js
-L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}').addTo(map)
+L.tileLayer('http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}').addTo(map);
 ```
 
 #### （6）、百度地图

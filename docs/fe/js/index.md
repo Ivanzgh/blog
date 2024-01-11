@@ -46,9 +46,9 @@ console.log(d); // { x: 4 }
 typeof 'js'; // 'string'
 typeof 666; // 'number'
 typeof true; // 'boolean'
-typeof null; // 'object'
 typeof undefined; // 'undefined'
 typeof Symbol(); // 'symbol'
+typeof null; // 'object'
 typeof {}; // 'object'
 typeof []; // 'object'
 typeof (() => {}); // 'function'
@@ -163,7 +163,7 @@ parseFloat('1.23'); // 1.23
 
 5、Boolean()
 
-除了 undefined、null、' '、NaN、0、false 转换出来是 false，其他都是 true
+除了 `undefined`、`null`、`' '`、`NaN`、`0`、`false` 转换出来是 false，其他都是 true
 
 ### 隐式类型转换
 
@@ -1216,6 +1216,7 @@ function debounce(fn, delay) {
     }, delay);
   };
 }
+
 let debounceAjax = debounce(ajaxTest, 500);
 let inp = document.getElementById('my-input');
 inp.addEventListener('keyup', (e) => {
@@ -1658,7 +1659,7 @@ console.log(b); // b is not defined
 
 ## 表达式和运算符
 
-### 自增
+### 递增/递减操作符
 
 前置自增，先执行后运算
 

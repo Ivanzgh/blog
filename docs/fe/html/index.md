@@ -519,6 +519,67 @@ dl 标签与 dt（定义项目/名字）和 dd（描述每一个项目/名字）
 
 通常使用在具有标题，而标题下对应有若干列表简单的（栏目标题+对应标题列表）和标题对应下面有内容
 
+## 表格
+
+- table 表格
+- thead 表头
+- tbody 表体
+- tr 每一行
+- th 定义表头单元格，列的标题，内容加粗且默认居中显示
+- td 定义数据单元格，单元格的内容
+
+```html
+<table>
+  <thead>
+    <tr>
+      <th>姓名</th>
+      <th>年龄</th>
+      <th>城市</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>张三</td>
+      <td>25</td>
+      <td>北京</td>
+    </tr>
+    <tr>
+      <td>李四</td>
+      <td>20</td>
+      <td>上海</td>
+    </tr>
+    <tr>
+      <td>王五</td>
+      <td>18</td>
+      <td>深圳</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+常用的样式：
+
+```css
+table {
+  /* 合并边框 */
+  border-collapse: collapse;
+
+  /* 创建滚动条 */
+  overflow: auto;
+}
+
+/* 奇数行背景色 */
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+/* 表头固定 */
+thead {
+  position: sticky;
+  top: 0;
+}
+```
+
 ## input
 
 ### 属性

@@ -1,5 +1,11 @@
 # GeoServer
 
+GeoServer 是一个用于共享地理空间数据的开源服务器
+
+- [GeoServer 官网](geoserver.org)
+- [文档](https://docs.geoserver.org/)
+- [GeoServer 用户手册中文版](https://www.osgeo.cn/geoserver-user-manual/index.html)
+
 下载：<http://geoserver.org/release/stable/>
 
 安装解压后运行 `bin` 文件夹下的`startup.bat` （`linux` 为 `startup.sh`）
@@ -14,8 +20,7 @@
 
 ## YSLD
 
-官网：<https://docs.geoserver.org/latest/en/user/styling/ysld/index.html>
-
-中文版：<https://www.osgeo.cn/geoserver-user-manual/styling/ysld/index.html>
+- [文档地址](https://docs.geoserver.org/latest/en/user/styling/ysld/index.html)
+- [中文版文档地址](https://www.osgeo.cn/geoserver-user-manual/styling/ysld/index.html)
 
 在 geoserver 中使用 `YSLD`样式需要安装插件，找到[YSLD Styling](https://geoserver.org/release/stable/)点击下载

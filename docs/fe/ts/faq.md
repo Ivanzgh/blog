@@ -31,3 +31,22 @@ return new Promise<void>((resolve, reject) => {
   resolve();
 });
 ```
+
+## 报错：Property 'style' does not exist on type 'Element'
+
+获取 Dom 时，如果没有任何类型声明会显示 Element 类型，在使用 dom.style 时会报错，需要将其转为 HTMLElement 类型
+
+```ts
+const nodes = document.querySelectorAll('.box');
+if (nodes.length > 0) {
+  for (let i = 0; i < nodes.length; i++) {
+    nodes[i].style.color = '#239FF4';
+  }
+}
+
+// 方式一：
+const nodes = document.querySelectorAll<HTMLElement>('.box');
+
+// 方式二：
+const nodes = document.querySelectorAll('.box') as NodeListOf<HTMLElement>;
+```

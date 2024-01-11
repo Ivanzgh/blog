@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Git
 
 ## 介绍
@@ -60,7 +64,7 @@ git config --global --list
 
 如果想将个人的 GitHub 密钥和公司的密钥区分开来，就需要配置多个 SSH Key
 
-### 删除本地的 SSH
+### 1、删除本地的 SSH
 
 这个步骤**不是必需的**，如果想全部重来就可以使用。打开终端输入`cd ~/.ssh`，如果顺利进入到.ssh 文件夹，使用命令：
 
@@ -69,7 +73,7 @@ cd ..
 rm -r .ssh
 ```
 
-### 清空默认的用户名和邮箱
+### 2、清空默认的用户名和邮箱
 
 查看已配置的 git 列表 `git config --list`
 
@@ -80,7 +84,7 @@ git config --global --unset user.name
 git config --global --unset user.email
 ```
 
-### 创建新的 SSH
+### 3、创建新的 SSH
 
 打开终端输入`cd ~/.ssh`，如果没有 .ssh 目录，先创建该目录
 
@@ -104,7 +108,7 @@ ssh-keygen -t rsa -f ~/.ssh/id_rsa_gitlab -C "youremail@email.com"
 
 然后同上要输入名字，一路回车
 
-### 将私钥添加到 ssh-agent 信任列表
+### 4、将私钥添加到 ssh-agent 信任列表
 
 ```sh
 ssh-add ~/.ssh/id_rsa
@@ -124,7 +128,7 @@ ssh-add -l
 ssh-add -D
 ```
 
-### 配置 config 文件
+### 5、配置 config 文件
 
 终端输入`open ~/.ssh/`，看看有没有 config 文件，文件没有后缀，如果没有就新建一个
 
@@ -157,7 +161,7 @@ IdentityFile ~/.ssh/id_rsa_gitlab
 # Port: SSH访问主机的端口号，默认是22端口
 ```
 
-### 将公钥添加到远程仓库
+### 6、将公钥添加到远程仓库
 
 将公钥复制到剪贴板，然后去添加到各个远程仓库
 
@@ -168,7 +172,7 @@ pbcopy < ~/.ssh/id_rsa.pub
 # pbcopy < ~/.ssh/id_rsa_gitlab.pub
 ```
 
-### 测试连接
+### 7、测试连接
 
 ```sh
 ssh -T git@github.com

@@ -169,92 +169,49 @@ const AvatarView = ({ uuid, avatar }: { uuid: string; avatar: string }) => {
 export default AvatarView;
 ```
 
-## antd 两个独立的日期时间选择框限制范围
+## 输入框搜索做防抖功能
 
 ```tsx
-import { useState } from 'react';
-import { DatePicker } from 'antd';
-import dayjs from 'dayjs';
+import { useRef, useState } from 'react';
+import { Input } from 'antd';
 
-function DateRangePicker() {
-  const defaultStartDate = dayjs('2023-09-05 14:58:20', 'YYYY-MM-DD HH:mm:ss');
-  const defaultEndDate = dayjs('2023-09-06 18:28:10', 'YYYY-MM-DD HH:mm:ss');
+const Search = () => {
+  const [seachResult, setSeachResult] = useState<any[]>([]);
+  const searchInputEl = useRef(null);
 
-  const [startDate, setStartDate] = useState(defaultStartDate);
-  const [endDate, setEndDate] = useState(defaultEndDate);
-
-  const disabledStartDate = (current) => {
-    // 限制只能选择当前月份
-    // const minDate = dayjs('2023-09-01', 'YYYY-MM-DD');
-    // const maxDate = dayjs('2023-09-30', 'YYYY-MM-DD');
-    // return current && (current.isBefore(minDate) || current.isAfter(maxDate) || current.isAfter(endDate));
-    return current && current.isAfter(endDate);
-  };
-
-  const disabledEndDate = (current) => {
-    // const minDate = dayjs('2023-09-01', 'YYYY-MM-DD');
-    // const maxDate = dayjs('2023-09-30', 'YYYY-MM-DD');
-    // return current && (current.isBefore(minDate) || current.isAfter(maxDate) || current.isBefore(startDate));
-    return current && current.isBefore(startDate);
-  };
-
-  const disabledStartTime = (_, type) => {
-    if (type === 'start') {
-      return {
-        disabledHours: () => [],
-        disabledMinutes: () => [],
-        disabledSeconds: () => []
-      };
+  const getData = async (value: string) => {
+    if (value === '') {
+      setSeachResult([]);
+      return;
     }
-    return {};
+    const res: any = await getSearchInfo();
+    setSeachResult(res.data);
   };
 
-  const disabledEndTime = (_, type) => {
-    if (type === 'end') {
-      return {
-        disabledHours: () => [],
-        disabledMinutes: () => [],
-        disabledSeconds: () => []
-      };
-    }
-    return {};
+  const debounce = (fn: (key: string) => void, delay: number) => {
+    let timer: any = null;
+    return function (value: string) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        fn(value);
+      }, delay);
+    };
   };
 
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-    if (date && endDate && date.isAfter(endDate)) {
-      setEndDate(date);
-    }
-  };
+  const taskChange = debounce((value) => {
+    getData(value);
+  }, 500);
 
-  const handleEndDateChange = (date) => {
-    setEndDate(date);
-    if (date && startDate && date.isBefore(startDate)) {
-      setStartDate(date);
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value: inputValue } = e.target;
+    taskChange(inputValue);
   };
 
   return (
-    <div>
-      <DatePicker
-        format="YYYY-MM-DD HH:mm:ss"
-        showTime={{ format: 'HH:mm:ss' }}
-        value={startDate}
-        onChange={handleStartDateChange}
-        disabledDate={disabledStartDate}
-        disabledTime={disabledStartTime}
-      />
-      <DatePicker
-        format="YYYY-MM-DD HH:mm:ss"
-        showTime={{ format: 'HH:mm:ss' }}
-        value={endDate}
-        onChange={handleEndDateChange}
-        disabledDate={disabledEndDate}
-        disabledTime={disabledEndTime}
-      />
-    </div>
+    <>
+      <Input ref={searchInputEl} placeholder="请输入" allowClear onChange={handleChange} />
+    </>
   );
-}
-
-export default DateRangePicker;
+};
+export default Search;
 ```

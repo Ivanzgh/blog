@@ -20,6 +20,16 @@
 
 ## Zustand
 
+<https://docs.pmnd.rs/zustand/getting-started/introduction>
+
+安装
+
+```sh
+pnpm add zustand
+```
+
+
+
 ## Mobx
 
 ## Redux-Thunk

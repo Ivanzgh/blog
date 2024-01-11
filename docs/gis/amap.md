@@ -5,6 +5,7 @@
 - [地图 JS API 2.0 概述](https://lbs.amap.com/api/javascript-api-v2/summary)
 - [API 参考手册](https://lbs.amap.com/api/javascript-api-v2/documentation)
 - [JS API 示例](https://lbs.amap.com/demo/list/js-api)
+- [高德坐标拾取系统](https://lbs.amap.com/tools/picker)
 - [结合 React 使用](https://lbs.amap.com/api/javascript-api-v2/guide/abc/amap-react)
 - [结合 Vue 使用](https://lbs.amap.com/api/javascript-api-v2/guide/abc/amap-vue)
 
@@ -24,6 +25,39 @@ map.on('complete', function () {});
 map.destroy();
 ```
 
+## 结合 React 使用
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
+import AMapLoader from '@amap/amap-jsapi-loader';
+
+const MapContainer = () => {
+  const map = useRef<any>();
+  const AMap = useRef<any>(null);
+
+  const initMap = async () => {
+    AMap.current = await AMapLoader.load({ key: mapKey, version: '2.0', plugins: ['AMap.MouseTool'] });
+
+    map.current = new AMap.current.Map('container', {
+      resizeEnable: true,
+      zoom: 9,
+      center: [116.397428, 40.10993]
+    });
+
+    map.current.on('zoomend', async function () {
+      const zoom = map.current.getZoom(0);
+    });
+  };
+
+  useEffect(() => {
+    initMap();
+    return () => {
+      map.current?.destroy();
+    };
+  }, []);
+};
+```
+
 ## 属性设置
 
 ```js
@@ -31,7 +65,7 @@ map.destroy();
 map.getCenter();
 // 设置地图中心点
 map.setCenter([lng, lat]);
-//同时设置地图层级与中心点
+// 同时设置地图层级与中心点
 map.setZoomAndCneter(zoom, [lng, lat]);
 
 // 获取当前地图缩放级别，可以传递参数，表示级别的小数位精度，缺省为2。取整：map.getZoom(0)
@@ -91,7 +125,7 @@ map.off('click', function () {});
 ## Marker 点标记
 
 ```js
-// 构造点标记
+// 点标记
 const marker = new AMap.Marker({
   icon: 'XXX.png',
   position: [lng, lat]
@@ -110,7 +144,7 @@ const clearMarker = () => {
     marker = null;
   }
 };
-//从多个点标记中删除指定点
+// 从多个点标记中删除指定点
 markers[0].setMap(null);
 
 // 获取某类覆盖物，如 marker、polyline、polygon
@@ -197,25 +231,99 @@ const addBDMarker = () => {
 };
 ```
 
+## 点聚合
+
+[点聚合文档](https://lbs.amap.com/api/javascript-api-v2/documentation#markercluster)
+
+在 api2.0 之前的[例子](https://lbs.amap.com/demo/javascript-api/example/marker/markerclusterer)
+
+在 api2.0 之后，必须增加`lnglat`字段表示点标记的经纬度信息
+
+```ts
+// 不同类型的点标记，使用不同的图标和样式
+const typeObj = {
+  100: { image: mapyz, class: 'yzMarkerInfo' },
+  200: { image: mapcdz, class: 'cdzMarkerInfo' },
+  300: { image: mapjz, class: 'jzMarkerInfo' }
+};
+
+function addCluster() {
+  if (cluster) {
+    cluster.setMap(null);
+  }
+  map.current.plugin(['AMap.MarkerCluster'], async function () {
+    // 获取数据
+    const res: any = await getSpecialCoordinate();
+    const markerData = res.data;
+    for (const item of markerData) {
+      item.lnglat = item.coordinates;
+    }
+
+    cluster = new AMap.MarkerCluster(map.current, markerData, {
+      gridSize: 80,
+      renderMarker: renderMarker
+      // styles 指定聚合后的点标记的图标样式
+      // renderClusterMarker 实现聚合点的自定义绘制
+    });
+
+    // 点击聚合点散开
+    cluster.on('click', (e: any) => {
+      if (e.clusterData.length <= 1) return;
+      let alllng = 0,
+        alllat = 0;
+      for (const item of e.clusterData) {
+        alllng += item.lnglat.lng;
+        alllat += item.lnglat.lat;
+      }
+      const lat = alllat / e.clusterData.length;
+      const lng = alllng / e.clusterData.length;
+      const zoom = map.current.getZoom();
+      map.current.setZoomAndCenter(zoom + 1, [lng, lat]);
+    });
+  });
+}
+
+// 实现非聚合点的自定义绘制
+function renderMarker(context: any) {
+  const spMarkerCoord = context.data[0];
+  const typeItem = typeObj[spMarkerCoord.specialTypeId as keyof typeof typeObj];
+  context.marker.setOffset(new AMap.Pixel(-1, -20));
+  context.marker.setExtData({ data: spMarkerCoord });
+  context.marker.setIcon(
+    new AMap.Icon({
+      size: new AMap.Size(30, 30),
+      image: typeItem.image,
+      imageSize: new AMap.Size(30, 30),
+      imageOffset: new AMap.Pixel(0, 0)
+    })
+  );
+  context.marker.setLabel({
+    offset: new AMap.Pixel(0, -10),
+    content: `<div class='${typeItem.class}'>${spMarkerCoord.label}</div>`,
+    direction: 'top'
+  });
+
+  context.marker.on('click', (ev: any) => {
+    const params = ev.target.getExtData();
+    handleClickMarker(params);
+  });
+}
+```
+
 ## 覆盖物事件
 
 ```js
-const lineArr = [
-  [116.368904, 39.913423],
-  [116.382122, 39.901176],
-  [116.387271, 39.912501],
-  [116.398258, 39.9046]
-];
 const circle = new AMap.Circle({
   map: map,
-  center: lineArr[0], // 设置线覆盖物路径
+  center: [116.368904, 39.913423],
   radius: 1500,
   strokeColor: '#3366FF', // 边框线颜色
   strokeOpacity: 0.3, // 边框线透明度
   strokeWeight: 3, // 边框线宽
   fillColor: '#FFA500', // 填充色
-  fillOpacity: 0.35 // 填充透明度
+  fillOpacity: 0.5 // 填充透明度
 });
+
 const polygonArr = [
   [116.403322, 39.920255],
   [116.410703, 39.897555],
@@ -229,7 +337,7 @@ const polygon = new AMap.Polygon({
   strokeOpacity: 0.2, // 线透明度
   strokeWeight: 3, // 线宽
   fillColor: '#1791fc', // 填充色
-  fillOpacity: 0.35, // 填充透明度
+  fillOpacity: 0.5, // 填充透明度
   draggable: true // 允许覆盖物被拖拽
 });
 
@@ -239,21 +347,16 @@ marker.on('click', function () {}); // 点击覆盖物
 
 // 在指定位置打开信息窗体
 function openInfo() {
-  // 构建信息窗体中显示的内容
-  let info = [];
-  info.push('<div><div><img style="float:left;" src=" https://webapi.amap.com/images/autonavi.png "/></div> ');
-  info.push('<div style="padding:0px 0px 0px 4px;"><b>高德软件</b>');
-  info.push('电话 : 010-84107000   邮编 : 100102');
-  info.push('地址 :北京市朝阳区望京阜荣街10号首开广场4层</div></div>');
-  infoWindow = new AMap.InfoWindow({
-    content: info.join('<br/>') // 使用默认信息窗体框样式，显示信息内容
+  const infoWindow = new AMap.InfoWindow({
+    content: '信息窗体'
   });
-  infoWindow.on('open', showInfoOpen);
-  infoWindow.on('close', showInfoClose);
+  infoWindow.on('open', handleOpenInfo);
+  infoWindow.on('close', handleCloseInfo);
   infoWindow.open(map, map.getCenter());
 }
 
-map.emit('count', (count += 1)); // 触发自定义事件count
+// 触发自定义事件count
+map.emit('count', (count += 1));
 map.on('count', (count) => {
   console.log(count);
 });
@@ -297,81 +400,242 @@ map.add(roadnet); // 添加图层
 map.remove(roadnet); //移除图层
 map.add([satellite, roadnet]); // 批量添加图层
 
-// 直接在map的options属性中添加图层
+// 添加图层
 const map = new AMap.Map('container', {
   layers: [new AMap.TileLayer(), new AMap.TileLayer.Satellite()]
 });
 ```
 
-## 测距、测面
+## 行政区划
 
-```js
+获取区级编码 adcode，[例子](https://lbs.amap.com/demo/javascript-api/example/district-search/city-drop-down-list)，打开控制台，选择地级市后找到这个请求地址：`https://lbs.amap.com/_AMapService/v3/config/district`，响应结果就是相关数据
+
+## 绘制图形并标注面积
+
+```tsx
+import { useEffect, useRef, useState } from 'react';
 import AMapLoader from '@amap/amap-jsapi-loader';
 
-const AMap = await AMapLoader.load({ key: mapKey, version: '2.0', plugins: ['AMap.MouseTool'] });
-const map = new AMap.Map('container', {
-  zoom: 11,
-  center: [116.397428, 39.90923]
-});
-const mouseTool = new AMap.MouseTool(map);
+export type measureProps = 'rule' | 'measureArea';
+export type drawProps = 'circle' | 'rect' | 'polygon';
 
-// 测距：rule
-// 测面：measureArea
-function draw(type: string) {
-  if (!mouseTool) {
-    console.log('mouseTool is undefined');
-    return;
-  }
-  switch (type) {
-    case 'rule': {
-      mouseTool.rule({
-        startMarkerOptions: {
-          icon: new AMap.Icon({
-            size: new AMap.Size(19, 31),
-            imageSize: new AMap.Size(19, 31),
-            image: 'http://webapi.amap.com/theme/v1.3/markers/b/start.png'
-          }),
-          offset: new AMap.Pixel(-9, -31)
-        },
-        endMarkerOptions: {
-          icon: new AMap.Icon({
-            size: new AMap.Size(19, 31),
-            imageSize: new AMap.Size(19, 31),
-            image: 'http://webapi.amap.com/theme/v1.3/markers/b/end.png'
-          }),
-          offset: new AMap.Pixel(-9, -31)
-        },
-        midMarkerOptions: {
-          icon: new AMap.Icon({
-            size: new AMap.Size(19, 31),
-            imageSize: new AMap.Size(19, 31),
-            image: 'http://webapi.amap.com/theme/v1.3/markers/b/mid.png'
-          }),
-          offset: new AMap.Pixel(-9, -31)
-        },
-        lineOptions: {
-          strokeStyle: 'solid',
-          strokeColor: '#FF33FF',
-          strokeOpacity: 1,
-          strokeWeight: 2
-        }
-      });
-      break;
-    }
-    case 'measureArea': {
-      mouseTool.measureArea({
-        strokeColor: '#80d8ff',
-        fillColor: '#80d8ff',
-        fillOpacity: 0.3
-      });
-      break;
-    }
-  }
-}
+const MapContainer = () => {
+  const map = useRef<any>(null);
+  const AMap = useRef<any>(null);
+  const [mouseTool, setMouseTool] = useState<any>();
 
-const onClearAll = () => {
-  mouseTool.close(true); // 关闭，并清除覆盖物
+  const initMap = async () => {
+    AMap.current = await AMapLoader.load({ key: mapKey, version: '2.0', plugins: ['AMap.MouseTool'] });
+
+    map.current = new AMap.current.Map('container', {
+      resizeEnable: true,
+      center: [116.397428, 40.10993],
+      zoom: 9
+    });
+
+    const ms = new AMap.current.MouseTool(map.current);
+    setMouseTool(ms);
+
+    ms.on('draw', function (e: any) {
+      const data = e.obj.getExtData();
+      onMouseTool(data.type, e);
+    });
+  };
+
+  useEffect(() => {
+    if (map.current === null) {
+      initMap();
+    }
+
+    return () => {
+      map.current?.destroy();
+    };
+  }, []);
+
+  function onMouseTool(type: string, event: any) {
+    const gl = event.obj;
+
+    if (type === 'circle') {
+      const radius = gl.getRadius();
+      if (radius == 0) return;
+
+      const π = 3.1415926;
+      const center = gl.getCenter();
+      const areaM = π * radius * radius;
+      const areaKM = (areaM / 1000000).toFixed(2);
+      const r = (radius / 1000).toFixed(2);
+      const text = new AMap.current.Text({
+        position: center,
+        text: `<div>范围面积：${areaKM}平方公里</div><div>半径：${r}公里</div>`,
+        offset: new AMap.current.Pixel(-20, -20),
+        extData: { type: 'circle' }
+      });
+      map.current.add(text);
+    }
+
+    if (type === 'rect') {
+      const bounds = gl.getBounds();
+      const northEast = bounds.northEast;
+      const southWest = bounds.southWest;
+      if (northEast.pos === southWest.pos) return;
+
+      const lat = (northEast.lat + southWest.lat) / 2;
+      const lng = (northEast.lng + southWest.lng) / 2;
+
+      const southEast = new AMap.current.LngLat(northEast.lng, southWest.lat);
+      const wDistance = southWest.distance(southEast);
+      const hDistance = northEast.distance(southEast);
+      const wKM = (wDistance / 1000).toFixed(2);
+      const hKM = (hDistance / 1000).toFixed(2);
+      // const path = gl.getPath();
+      // const areaM = AMap.current.GeometryUtil.ringArea(path);
+      const areaKM = ((wDistance * hDistance) / 1000000).toFixed(2);
+
+      const text = new AMap.current.Text({
+        position: new AMap.current.LngLat(lng, lat),
+        text: `<div>范围面积：${areaKM}平方公里</div><div>长：${wKM}公里</div><div>宽：${hKM}公里</div>`,
+        offset: new AMap.current.Pixel(-20, -20),
+        extData: { type: 'rect' }
+      });
+      map.current.add(text);
+    }
+
+    if (type === 'polygon') {
+      const path = gl.getPath();
+      const areaM = AMap.current.GeometryUtil.ringArea(path);
+      const areaKM = (areaM / 1000000).toFixed(2);
+
+      let alllng = 0,
+        alllat = 0;
+      for (const item of path) {
+        alllng += item.lng;
+        alllat += item.lat;
+      }
+      const lat = alllat / path.length;
+      const lng = alllng / path.length;
+
+      const text = new AMap.current.Text({
+        position: new AMap.current.LngLat(lng, lat),
+        text: `<div>范围面积：${areaKM}平方公里</div>`,
+        offset: new AMap.current.Pixel(-20, -20),
+        extData: { type: 'polygon' }
+      });
+      map.current.add(text);
+    }
+
+    // 这块功能是：框选搜索，用户可以绘制圆、矩形、多边形，框选出点标记，用作后续数据展示
+    if (['circle', 'rect', 'polygon'].includes(type)) {
+      const searchType = ['Overlay.Circle', 'Overlay.Rectangle', 'Overlay.Polygon'];
+      if (searchType.includes(gl.className)) {
+        const searchMarkers: any = [];
+        const allMarkers = map.current.getAllOverlays('marker');
+        allMarkers.forEach((e: any) => {
+          const data = e.getExtData() || {};
+          if (Object.keys(data).length > 0 && gl.contains(data.data.coordinates)) {
+            searchMarkers.push(data);
+          }
+        });
+      }
+    }
+  }
+
+  // 测距、测面
+  function onMeasure(type: measureProps) {
+    if (!mouseTool) return;
+    switch (type) {
+      case 'rule': {
+        const mouseToolRuleOptions = {
+          startMarkerOptions: {
+            icon: new AMap.current.Icon({
+              size: new AMap.current.Size(19, 31),
+              imageSize: new AMap.current.Size(19, 31),
+              image: 'http://webapi.amap.com/theme/v1.3/markers/b/start.png'
+            }),
+            offset: new AMap.current.Pixel(-9, -31)
+          },
+          endMarkerOptions: {
+            icon: new AMap.current.Icon({
+              size: new AMap.current.Size(19, 31),
+              imageSize: new AMap.current.Size(19, 31),
+              image: 'http://webapi.amap.com/theme/v1.3/markers/b/end.png'
+            }),
+            offset: new AMap.current.Pixel(-9, -31)
+          },
+          midMarkerOptions: {
+            icon: new AMap.current.Icon({
+              size: new AMap.current.Size(19, 31),
+              imageSize: new AMap.current.Size(19, 31),
+              image: 'http://webapi.amap.com/theme/v1.3/markers/b/mid.png'
+            }),
+            offset: new AMap.current.Pixel(-9, -31)
+          },
+          lineOptions: {
+            strokeStyle: 'solid',
+            strokeColor: '#FF33FF',
+            strokeOpacity: 1,
+            strokeWeight: 2,
+            extData: { type }
+          }
+        };
+        mouseTool.rule(mouseToolRuleOptions);
+        break;
+      }
+      case 'measureArea': {
+        mouseTool.measureArea({
+          strokeColor: '#80d8ff',
+          fillColor: '#80d8ff',
+          fillOpacity: 0.3,
+          extData: { type }
+        });
+        break;
+      }
+    }
+  }
+
+  // 框选搜索
+  function onDrawSearch(type: drawProps) {
+    if (!mouseTool) return;
+
+    const drawStyles = {
+      strokeColor: '#FF33FF',
+      strokeOpacity: 0.2,
+      strokeWeight: 3,
+      fillColor: '#1791fc',
+      fillOpacity: 0.2,
+      strokeStyle: 'solid'
+    };
+
+    switch (type) {
+      case 'circle':
+        mouseTool.circle({ ...drawStyles, extData: { type } });
+        break;
+      case 'rect':
+        mouseTool.rectangle({ ...drawStyles, extData: { type } });
+        break;
+      case 'polygon':
+        mouseTool.polygon({ ...drawStyles, extData: { type } });
+        break;
+      default:
+        break;
+    }
+  }
+
+  function onClearAll() {
+    mouseTool.close(true); // 关闭，并清除覆盖物
+
+    // 清空绘制图形产生的文本标记
+    const allTexts = map.current.getAllOverlays('text');
+    allTexts.forEach((t: any) => {
+      const extData = t.getExtData();
+      if (['circle', 'rect', 'polygon'].includes(extData.type)) {
+        t.setMap(null);
+        t = null;
+      }
+    });
+  }
 };
 
+return <div id="container" style={{ height: '100vh' }}></div>;
 
+export default MapContainer;
 ```

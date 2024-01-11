@@ -148,3 +148,21 @@ DNS 域名：
 <https://segmentfault.com/a/1190000006879700>
 
 <https://www.cnblogs.com/kongxy/p/4615226.html>
+
+## localhost 和 127.0.0.1 的区别
+
+localhost 是本机域名，127.0.0.1 是本机 IP 地址，localhost 通过 host 文件会自动解析到 127.0.0.1
+
+查看 host 文件：`cat /etc/hosts`
+
+```sh
+##
+# Host Database
+#
+# localhost is used to configure the loopback interface
+# when the system is booting.  Do not change this entry.
+##
+127.0.0.1	localhost
+255.255.255.255	broadcasthost
+::1             localhost
+```

@@ -12,17 +12,37 @@
 
 ## 介绍
 
-安装
+::: code-group
 
-```sh
+```sh[全局安装]
 npm install -g typescript
 ```
+
+```sh[局部安装]
+pnpm add -D typescript
+```
+
+:::
 
 验证
 
 ```sh
 tsc -v
 ```
+
+如果是局部安装的，需要使用 npx 运行
+
+```sh
+npx tsc -v
+```
+
+初始化，会在根目录生成一个`tsconfig.json`文件
+
+```sh
+npx tsc --init
+```
+
+## 编译
 
 编译，然后可以得到一个同名的 js 文件
 
@@ -248,7 +268,6 @@ type Props = Record<'x' | 'y', number>;
 //   x: number;
 //   y: number;
 // };
-
 
 export type Props = Record<string, unknown>;
 

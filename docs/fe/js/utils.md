@@ -113,6 +113,18 @@ const arr = [1, 2, 3, 4];
 arrayChunk(arr, 2); // [[1, 2], [3, 4]]
 ```
 
+## 生成树形结构
+
+```js
+const data = [
+  { id: 1, name: 'a1', pid: 0 },
+  { id: 2, name: 'a2', pid: 0 },
+  { id: 3, name: 'a3', pid: 1 },
+  { id: 4, name: 'a4', pid: 3 },
+  { id: 5, name: 'a5', pid: 3 }
+];
+```
+
 ## 查找树形元素
 
 ```js
@@ -238,6 +250,8 @@ function findOrgs(arr, key) {
 const result = findOrgs(arr, key);
 console.log(result);
 ```
+
+## 树形节点搜索关键字，返回完整路径
 
 ## 生成随机 uuid
 

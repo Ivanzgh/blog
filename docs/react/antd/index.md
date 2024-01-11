@@ -1,5 +1,48 @@
 # Ant Design
 
+## 全家桶
+
+- [Ant Design of React](https://ant.design/docs/react/introduce-cn)
+- [Umi](https://umijs.org)
+- [Ant Design Pro](https://pro.ant.design/zh-CN)
+- [ProComponents](https://procomponents.ant.design)
+- [ProLayout](https://prolayout.ant.design)
+- [ahooks](https://ahooks.js.org/zh-CN)
+- [dvajs](https://dvajs.com)
+
+## 如何使用主题变量
+
+[定制主题](https://ant.design/docs/react/customize-theme-cn)
+
+例如修改表格组件的默认样式：
+
+```tsx
+import { Table, ConfigProvider } from 'antd';
+
+const App = () => {
+  return (
+    <>
+      <ConfigProvider
+        theme={{
+          components: {
+            Table: {
+              headerBg: 'transport',
+              headerColor: '#fff',
+              borderColor: '#004670',
+              rowHoverBg: '#00b96b'
+            }
+          }
+        }}
+      >
+        <Table bordered columns={columns} dataSource={Data} />
+      </ConfigProvider>
+    </>
+  );
+};
+
+export default App;
+```
+
 ## Button 组件的 hidden 属性
 
 在做按钮权限时，发现 Button 组件有一个 hideen 属性可以控制显示隐藏，这个属性没有在文档上体现
@@ -27,7 +70,7 @@
 
 ### 默认展开全部
 
-如果直接设置`defaultExpandAll`为 true，并不会出现默认展开全部的效果。这是因为数据一般是由服务端获取的，初识时节点还没生成，需要等数据回来再设置
+如果直接设置`defaultExpandAll`为 true，并不会出现默认展开全部的效果。这是因为数据一般是由服务端获取的，初始时节点还没生成，需要等数据回来再设置
 
 ### 选中回显
 
@@ -70,6 +113,7 @@ const AuthOrg = (props: RoleTypeFormProps) => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     if (!props.values.appId) return;
     if (props.lastUpdatedBy === 'org') {
@@ -284,4 +328,133 @@ const TableList = () => {
     </PageContainer>
   );
 };
+```
+
+## 两个独立的日期时间选择框限制范围
+
+```tsx
+import { useState } from 'react';
+import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
+
+function DateRangePicker() {
+  const defaultStartDate = dayjs('2023-09-05 14:58:20', 'YYYY-MM-DD HH:mm:ss');
+  const defaultEndDate = dayjs('2023-09-06 18:28:10', 'YYYY-MM-DD HH:mm:ss');
+
+  const [startDate, setStartDate] = useState(defaultStartDate);
+  const [endDate, setEndDate] = useState(defaultEndDate);
+
+  const disabledStartDate = (current) => {
+    // 限制只能选择当前月份
+    // const minDate = dayjs('2023-09-01', 'YYYY-MM-DD');
+    // const maxDate = dayjs('2023-09-30', 'YYYY-MM-DD');
+    // return current && (current.isBefore(minDate) || current.isAfter(maxDate) || current.isAfter(endDate));
+    return current && current.isAfter(endDate);
+  };
+
+  const disabledEndDate = (current) => {
+    // const minDate = dayjs('2023-09-01', 'YYYY-MM-DD');
+    // const maxDate = dayjs('2023-09-30', 'YYYY-MM-DD');
+    // return current && (current.isBefore(minDate) || current.isAfter(maxDate) || current.isBefore(startDate));
+    return current && current.isBefore(startDate);
+  };
+
+  const disabledStartTime = (_, type) => {
+    if (type === 'start') {
+      return {
+        disabledHours: () => [],
+        disabledMinutes: () => [],
+        disabledSeconds: () => []
+      };
+    }
+    return {};
+  };
+
+  const disabledEndTime = (_, type) => {
+    if (type === 'end') {
+      return {
+        disabledHours: () => [],
+        disabledMinutes: () => [],
+        disabledSeconds: () => []
+      };
+    }
+    return {};
+  };
+
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    if (date && endDate && date.isAfter(endDate)) {
+      setEndDate(date);
+    }
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    if (date && startDate && date.isBefore(startDate)) {
+      setStartDate(date);
+    }
+  };
+
+  return (
+    <div>
+      <DatePicker
+        format="YYYY-MM-DD HH:mm:ss"
+        showTime={{ format: 'HH:mm:ss' }}
+        value={startDate}
+        onChange={handleStartDateChange}
+        disabledDate={disabledStartDate}
+        disabledTime={disabledStartTime}
+      />
+      <DatePicker
+        format="YYYY-MM-DD HH:mm:ss"
+        showTime={{ format: 'HH:mm:ss' }}
+        value={endDate}
+        onChange={handleEndDateChange}
+        disabledDate={disabledEndDate}
+        disabledTime={disabledEndTime}
+      />
+    </div>
+  );
+}
+
+export default DateRangePicker;
+```
+
+## 走马灯自定义箭头，点击预览
+
+走马灯增加前进、后退的箭头，点击图片后可以放大预览
+
+```tsx
+<Carousel arrows prevArrow={<LeftOutlined />} nextArrow={<RightOutlined />}>
+  {listData.map((e: any, i: number) => (
+    <div className="w-full h-[500px]" key={i}>
+      <Image style={{ width: '100%', height: '100%' }} src={e.url} preview={{ src: e.url, mask: '' }} />
+    </div>
+  ))}
+</Carousel>
+```
+
+```less
+.ant-image {
+  width: 100%;
+  height: 100%;
+}
+
+.ant-carousel .slick-prev,
+.ant-carousel .slick-prev:hover,
+.ant-carousel .slick-prev:focus {
+  font-size: 30px;
+  left: 10px;
+  z-index: 2;
+  color: #fff;
+}
+
+.ant-carousel .slick-next,
+.ant-carousel .slick-next:hover,
+.ant-carousel .slick-next:focus {
+  font-size: 30px;
+  right: 20px;
+  z-index: 2;
+  color: #fff;
+}
 ```

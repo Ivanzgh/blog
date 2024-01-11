@@ -6,22 +6,61 @@
 
 <https://www.cnblogs.com/monozxy/p/7903019.html>
 
-把左、右、下三条边隐藏掉（颜色设为 transparent）可画出向下的小三角
+将元素的宽高设为 0，只设置 border，任意三条边隐藏（颜色设为 transparent），即可画出小三角
 
 ```css
-#demo {
-  width: 0;
-  height: 0;
-  overflow: hidden; /*处理IE6的最小高度问题*/
-  border-width: 20px;
-  border-style: solid dashed dashed dashed; /*IE6下, 设置余下三条边的border-style为dashed,即可达到透明的效果，否则会有黑边*/
-  border-color: red transparent transparent transparent;
+width: 0;
+height: 0;
+border-width: 20px;
+border-style: solid;
+border-color: red transparent transparent transparent;
+```
+
+## 星级评估
+
+::: code-group
+
+```css
+.rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+}
+.star {
+  position: relative;
+  margin: 0 2px;
+  font-size: 40px;
+  color: #ddd;
+}
+.star::before {
+  content: '\2605';
+  position: absolute;
+  left: 0;
+}
+.star:hover::before,
+.star:hover ~ .star::before {
+  color: red;
 }
 ```
+
+```html
+<div class="rating">
+  <span class="star">☆</span>
+  <span class="star">☆</span>
+  <span class="star">☆</span>
+  <span class="star">☆</span>
+  <span class="star">☆</span>
+</div>
+```
+
+:::
 
 ## 更改复选框样式
 
 <https://blog.csdn.net/qq_34182808/article/details/79992465>
+
+::: code-group
 
 ```css
 .input-color + label {
@@ -45,72 +84,75 @@
   background-color: #c00;
   border-radius: 4px;
 }
+```
 
-/* <input type="checkbox" class="input-color">
+```html
+<input type="checkbox" class="input-color" />
 
 <label for="input-color" onclick="toggleStatus()"></label>
-
-*/
 ```
+
+:::
 
 ## 毛玻璃效果
 
-```html
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-  }
-  html,
-  body {
-    color: rgba(0, 0, 0, 0.8);
-    height: 100%;
-  }
-  .container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background-image: url(1jpg);
-    background-position: center top;
-    background-size: cover;
-  }
-  .content {
-    width: 800px;
-    height: 400px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-top: -200px;
-    margin-left: -400px;
-    border-radius: 8px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    z-index: 2;
-    padding: 50px;
-    box-sizing: border-box;
-  }
-  .content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    -webkit-filter: blur(20px);
-    -moz-filter: blur(20px);
-    -ms-filter: blur(20px);
-    -o-filter: blur(20px);
-    filter: blur(20px);
-    z-index: -3;
-    margin: -30px;
-    background-image: url(1jpg);
-    background-position: center top;
-    background-size: cover;
-    background-attachment: fixed;
-  }
-</style>
+::: code-group
 
-<!------------------------------------------ -->
+```css
+* {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  color: rgba(0, 0, 0, 0.8);
+  height: 100%;
+}
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-image: url(1jpg);
+  background-position: center top;
+  background-size: cover;
+}
+.content {
+  width: 800px;
+  height: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -200px;
+  margin-left: -400px;
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  z-index: 2;
+  padding: 50px;
+  box-sizing: border-box;
+}
+.content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-filter: blur(20px);
+  -moz-filter: blur(20px);
+  -ms-filter: blur(20px);
+  -o-filter: blur(20px);
+  filter: blur(20px);
+  z-index: -3;
+  margin: -30px;
+  background-image: url(1jpg);
+  background-position: center top;
+  background-size: cover;
+  background-attachment: fixed;
+}
+```
+
+```html
 <div class="container">
   <div class="content">
     <p>Are you ready?</p>
@@ -118,211 +160,132 @@
 </div>
 ```
 
+:::
+
 <https://www.cnblogs.com/ghost-xyx/p/5677168.html>
 
 ## 时光轴
 
+::: code-group
+
 ```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
-
-      ul li {
-        list-style: none;
-      }
-
-      #interview-records-window {
-        width: 800px;
-        height: 400px;
-        margin: 0 auto;
-        background-color: #e4e4e4;
-        font-size: 14px;
-        color: #333;
-        line-height: 24px;
-        font-family: '微软雅黑';
-        overflow-y: auto;
-        overflow-x: hidden;
-      }
-
-      #interview-records-window ul li {
-        position: relative;
-      }
-      /* 画线 */
-      #interview-records-window ul li:before {
-        content: '';
-        position: absolute;
-        left: 160px;
-        top: 20px;
-        z-index: 0;
-        width: 1px;
-        height: 100%;
-        background-color: #00b800;
-      }
-      /* 画圆 */
-      .interview-records-timeline {
-        position: absolute;
-        left: 150px;
-        top: 50px;
-        z-index: 10;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        background-color: #00b800;
-        color: #5fb878;
-        border-radius: 50%;
-        text-align: center;
-        cursor: pointer;
-      }
-
-      #interview-records-window ul li {
-        display: flex;
-        padding: 25px 0 0 50px;
-      }
-
-      .interview-record-left {
-        width: 150px;
-        margin-top: 20px;
-      }
-
-      .interview-record-right {
-        margin-top: 20px;
-      }
-
-      .interview-record-right-wrap {
-        margin-bottom: 20px;
-      }
-
-      .interview-record-title {
-        margin-bottom: 10px;
-      }
-
-      .interview-record-title img {
-        width: 19px;
-        height: 22px;
-        margin-right: 20px;
-      }
-
-      .interview-record-content {
-        padding-left: 36px;
-        font-size: 14px;
-      }
-
-      .interview-record-content p {
-        line-height: 1.5;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div id="interview-records-window">
-      <ul>
-        <li>
-          <div class="interview-record-left">
-            <p>2019.7.17</p>
-            <p style="padding-left: 20px;">16:30</p>
+<div id="box-wrap">
+  <ul>
+    <li>
+      <div class="left">
+        <p>2019.7.17</p>
+        <p style="padding-left: 20px;">16:30</p>
+      </div>
+      <i class="timeline"></i>
+      <div class="right">
+        <div class="right-box">
+          <div class="title">
+            <img src="images/u3824.png" alt="" />
+            <span>北京地区招聘JAVA工程师三名</span>
           </div>
-          <i class="interview-records-timeline"></i>
-          <div class="interview-record-right">
-            <div class="interview-record-right-wrap">
-              <div class="interview-record-title">
-                <img src="images/u3824.png" alt="" />
-                <span>北京地区招聘JAVA工程师三名</span>
-              </div>
-              <div class="interview-record-content">
-                <p>面试地点：北京海淀区西二旗甲13号院</p>
-                <p>接洽人：张三</p>
-                <p>接洽人电话：18618437566</p>
-              </div>
-            </div>
+          <div class="content">
+            <p>面试地点：北京海淀区西二旗</p>
+            <p>接洽人：张三</p>
+            <p>接洽人电话：18618437566</p>
           </div>
-        </li>
-        <li>
-          <div class="interview-record-left">
-            <p>2019.7.17</p>
-            <p style="padding-left: 20px;">16:30</p>
+        </div>
+        <div class="right-box">
+          <div class="title">
+            <img src="images/u3824.png" alt="" />
+            <span>北京地区招聘JAVA工程师三名</span>
           </div>
-          <i class="interview-records-timeline"></i>
-          <div class="interview-record-right">
-            <div class="interview-record-right-wrap">
-              <div class="interview-record-title">
-                <img src="images/u3824.png" alt="" />
-                <span>北京地区招聘JAVA工程师三名</span>
-              </div>
-              <div class="interview-record-content">
-                <p>面试地点：北京海淀区西二旗甲13号院</p>
-                <p>接洽人：张三</p>
-                <p>接洽人电话：18618437566</p>
-              </div>
-            </div>
-            <div class="interview-record-right-wrap">
-              <div class="interview-record-title">
-                <img src="images/u3824.png" alt="" />
-                <span>北京地区招聘JAVA工程师三名</span>
-              </div>
-              <div class="interview-record-content">
-                <p>面试地点：北京海淀区西二旗甲13号院</p>
-                <p>接洽人：张三</p>
-                <p>接洽人电话：18618437566</p>
-              </div>
-            </div>
+          <div class="content">
+            <p>面试地点：北京海淀区西二旗</p>
+            <p>接洽人：张三</p>
+            <p>接洽人电话：18618437566</p>
           </div>
-        </li>
-        <li>
-          <div class="interview-record-left">
-            <p>2019.7.17</p>
-            <p style="padding-left: 20px;">16:30</p>
-          </div>
-          <i class="interview-records-timeline"></i>
-          <div class="interview-record-right">
-            <div class="interview-record-right-wrap">
-              <div class="interview-record-title">
-                <img src="images/u3824.png" alt="" />
-                <span>北京地区招聘JAVA工程师三名</span>
-              </div>
-              <div class="interview-record-content">
-                <p>面试地点：北京海淀区西二旗甲13号院</p>
-                <p>接洽人：张三</p>
-                <p>接洽人电话：18618437566</p>
-              </div>
-            </div>
-            <div class="interview-record-right-wrap">
-              <div class="interview-record-title">
-                <img src="images/u3824.png" alt="" />
-                <span>北京地区招聘JAVA工程师三名</span>
-              </div>
-              <div class="interview-record-content">
-                <p>面试地点：北京海淀区西二旗甲13号院</p>
-                <p>接洽人：张三</p>
-                <p>接洽人电话：18618437566</p>
-              </div>
-            </div>
-            <div class="interview-record-right-wrap">
-              <div class="interview-record-title">
-                <img src="images/u3824.png" alt="" />
-                <span>北京地区招聘JAVA工程师三名</span>
-              </div>
-              <div class="interview-record-content">
-                <p>面试地点：北京海淀区西二旗甲13号院</p>
-                <p>接洽人：张三</p>
-                <p>接洽人电话：18618437566</p>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </body>
-</html>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
 ```
+
+```css
+#box-wrap {
+  width: 800px;
+  height: 400px;
+  margin: 0 auto;
+  background-color: #e4e4e4;
+  font-size: 14px;
+  color: #333;
+  line-height: 24px;
+  font-family: '微软雅黑';
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#box-wrap ul li {
+  position: relative;
+  display: flex;
+  padding: 25px 0 0 50px;
+}
+
+#box-wrap ul li:before {
+  content: '';
+  position: absolute;
+  left: 160px;
+  top: 20px;
+  z-index: 0;
+  width: 1px;
+  height: 100%;
+  background-color: #00b800;
+}
+
+.timeline {
+  position: absolute;
+  left: 150px;
+  top: 50px;
+  z-index: 10;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  background-color: #00b800;
+  color: #5fb878;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.left {
+  width: 150px;
+  margin-top: 20px;
+}
+
+.right {
+  margin-top: 20px;
+}
+
+.right-box {
+  margin-bottom: 20px;
+}
+
+.title {
+  margin-bottom: 10px;
+}
+
+.title img {
+  width: 19px;
+  height: 22px;
+  margin-right: 20px;
+}
+
+.content {
+  padding-left: 36px;
+  font-size: 14px;
+}
+
+.content p {
+  line-height: 1.5;
+}
+```
+
+:::
 
 ## 进度条
 

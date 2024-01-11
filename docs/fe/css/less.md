@@ -6,17 +6,12 @@
 
 ## 变量声明
 
-`@test_width:300px;`
-
-格式：
-@ + 变量名 + : 值 ;
-
-使用:
+格式：`@变量名: 值;`
 
 ```less
-.box1 {
-  width: @test_width;
-}
+@test_width: 300px;
+
+width: @test_width;
 ```
 
 ## 混合(mixin)
@@ -144,9 +139,9 @@
 
 ```html
  <ul>
-    <li><a href="#"><span>1</soan></a></li>
-    <li><a href="#"><span>2</soan></a></li>
-    <li><a href="#"><span>3</soan></a></li>
+    <li><a href="#"><span>1</span></a></li>
+    <li><a href="#"><span>2</span></a></li>
+    <li><a href="#"><span>3</span></a></li>
 </ul>
 ```
 

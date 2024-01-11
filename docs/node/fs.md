@@ -105,7 +105,7 @@ fs.open('./1.txt', 'r', (err, fd) => {
 
 options 有两个参数：`encoding` 和 `flag`。 encoding 代表读取文件的编码格式，如果没有指定 encoding，则返回原始的 Buffer，它的值主要有：
 
-```sh
+```ts
 type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
 ```
 
