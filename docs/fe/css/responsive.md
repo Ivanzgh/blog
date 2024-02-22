@@ -87,7 +87,6 @@ al viewport 和 layout viewport 的关系，就像是我们通过窗户看外面
 不同分辨率下显示的内容大小相同。ideal viewport 其实就是通过修改 layout viewport 的大小，让它等于设备的宽度，这个
 宽度可以理解为是设备独立像素，因此根据 ideal viewport 设计的页面，在不同分辨率的屏幕下，显示应该相同。
 
-
 <https://juejin.cn/post/6844903655045333000>
 
 ## em、rem、px、vw、vh 的区别
@@ -123,7 +122,7 @@ al viewport 和 layout viewport 的关系，就像是我们通过窗户看外面
 
 6、vmax 和 vmin
 
-- 视窗宽度和视窗高度的最大值或最小值
+- 视窗宽度和视窗高度的最大值或最小值，哪个最大或最小就取哪个值，可以考虑用在兼容横屏和竖屏的布局
 
 7、百分比%，相对于父元素
 

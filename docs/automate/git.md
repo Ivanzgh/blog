@@ -206,52 +206,6 @@ git config user.email "youremail"
 git clone 仓库地址
 ```
 
-### 新建分支
-
-```sh
-git branch 分支名称
-```
-
-### 切换分支，并更新工作区
-
-```sh
-git checkout 分支名称
-```
-
-### 新建分支，并切换到该分支
-
-等同于以上两条命令
-
-```sh
-git checkout -b 分支名称
-```
-
-### 基于远程仓库创建新分支
-
-```sh
-# 基于远程仓库创建新分支
-git branch branch_name remote_name/branch
-
-# 基于远程仓库创建新分支并且切换到新分支
-git checkout -b branch_name remote_name/branch
-```
-
-如基于 develop 分支创建开发分支**feture-test**：`git checkout -b feture-test origin/develop`，origin 是远程仓库的别名
-
-这样就可以不用创建本地的 develop 分支
-
-1、在本地创建 develop 分支，基于它创建开发分支，每次提交前拉取最新的 develop 分支，然后合并进开发分支，最后提交
-2、基于远程分支创建新分支，本地不用维护 develop 分支，每次提交前先拉取最新的代码，然后提交。这里执行 git pull 就是拉取远程 develop 分支的代码
-
-```sh
-git add .
-git commit -m '提交信息'
-git pull
-
-# push之前可能需要add commit
-git push
-```
-
 ### rebase
 
 ### 多个 commit 合并提交
@@ -361,56 +315,6 @@ git push
 git push --set-upstream origin 分支名
 ```
 
-### 查看分支
-
-```sh
-# 查看本地分支
-git branch
-
-# 查看远程分支
-git branch -r
-
-# 查看本地远程所有分支
-git branch -a
-
-# 查看本地分支所关联的远程分支
-git branch -vv
-```
-
-### 合并分支
-
-比如你的代码提交之前需要合并最新的 develop 分支，则要做如下操作：
-
-- 切到 develop 分支，git pull 拉一下最新代码
-- 切回开发分支，执行 git merge develop 合并一下 develop 代码
-
-```sh
-git merge 被合并的分支名称
-
-
-## 撤销合并到执行合并以前的状态
-git merge --abort
-
-## 如果合并后的提交还停留在本地Git库，没有被推送到远程
-git reset --hard HEAD
-```
-
-### 删除分支
-
-```sh
-# -d 表示delete，用于已经合并过的分支
-git branch -d 分支名称
-
-# -D 用于强制删除，不管是否合并过
-git branch -D 分支名称
-```
-
-### 分支重命名
-
-```sh
-git branch -m 旧分支名称 新分支名称
-```
-
 ### 查看仓库当前状态
 
 ```sh
@@ -474,6 +378,122 @@ git remote show origin
 git remote -v
 ```
 
+### 撤销、覆盖
+
+```sh
+# 添加所有并推送
+git add -A && git commit -m "提交信息" && git push
+
+# 撤销本地修改并同步
+git reset --hard && git clean -df && git pull
+
+# 强制覆盖本地代码
+git fetch --all &&  git reset --hard origin/master && git pull
+```
+
+### 仓库备份
+
+```sh
+# 添加备份仓库
+git remote set-url --add origin http://192.168.12.2/digsur/digsur-solution.git
+```
+
+## 分支
+
+### 新建分支
+
+```sh
+git branch 分支名称
+```
+
+### 切换分支，并更新工作区
+
+```sh
+git checkout 分支名称
+```
+
+### 新建分支，并切换到该分支
+
+等同于以上两条命令
+
+```sh
+git checkout -b 分支名称
+```
+
+### 基于远程仓库创建新分支
+
+```sh
+# 基于远程仓库创建新分支
+git branch branch_name remote_name/branch
+
+# 基于远程仓库创建新分支并且切换到新分支
+git checkout -b branch_name remote_name/branch
+```
+
+如基于远程 develop 分支创建开发分支**feture-test**：`git checkout -b feture-test origin/develop`，origin 是远程仓库的别名
+
+这样就可以不用创建本地的 develop 分支
+
+1、在本地创建 develop 分支，基于它创建开发分支，每次提交前拉取最新的 develop 分支，然后合并进开发分支，最后提交
+2、基于远程分支创建新分支，本地不用维护 develop 分支，每次提交前先拉取最新的代码，然后提交。这里执行 `git pull` 就是拉取远程 develop 分支的代码
+
+```sh
+git add .
+git commit -m '提交信息'
+git pull
+
+git push
+```
+
+### 查看分支
+
+```sh
+# 查看本地分支
+git branch
+
+# 查看远程分支
+git branch -r
+
+# 查看本地远程所有分支
+git branch -a
+
+# 查看本地分支所关联的远程分支
+git branch -vv
+```
+
+### 合并分支
+
+比如你的代码提交之前需要合并最新的 develop 分支，则要做如下操作：
+
+- 切到 develop 分支，git pull 拉一下最新代码
+- 切回开发分支，执行 `git merge develop` 合并一下 develop 代码
+
+```sh
+git merge 被合并的分支名称
+
+## 撤销合并到执行合并以前的状态
+git merge --abort
+
+## 如果合并后的提交还停留在本地Git库，没有被推送到远程
+git reset --hard HEAD
+```
+
+### 删除分支
+
+```sh
+# -d 表示delete，用于已经合并过的分支
+git branch -d 分支名称
+
+# -D 用于强制删除，不管是否合并过
+git branch -D 分支名称
+```
+
+### 分支重命名
+
+```sh
+git branch -m 旧分支名称 新分支名称
+```
+
 ### 同步本地的远程分支
 
 删除远程已经不存在但本地还存在的远程分支
@@ -497,26 +517,6 @@ git checkout --track origin/dev
 
 ```sh
 git push --set-upstream origin 分支名称
-```
-
-### 撤销、覆盖
-
-```sh
-# 添加所有并推送
-git add -A && git commit -m "提交信息" && git push
-
-# 撤销本地修改并同步
-git reset --hard && git clean -df && git pull
-
-# 强制覆盖本地代码
-git fetch --all &&  git reset --hard origin/master && git pull
-```
-
-### 仓库备份
-
-```sh
-# 添加备份仓库
-git remote set-url --add origin http://192.168.12.2/digsur/digsur-solution.git
 ```
 
 ## tag 标签

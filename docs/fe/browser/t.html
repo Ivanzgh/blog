@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .box {
+        width: 300px;
+        height: 5000px;
+        background-color: #f00;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box"></div>
+    <div class="lazy">
+      <img data-src="https://www.baidu.com/img/bd_logo1.png" class="imglazy" alt="" />
+      <div class="box"></div>
+      <img data-src="https://www.baidu.com/img/bd_logo.png" class="imglazy" alt="" />
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const lazyImages = document.querySelectorAll('.imglazy');
+
+        // 方式一
+        function isElementInViewport(el) {
+          const rect = el.getBoundingClientRect();
+          return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+          );
+        }
+        function lazyLoad() {
+          lazyImages.forEach((el) => {
+            if (isElementInViewport(el)) {
+              el.src = el.dataset.src;
+              el.classList.remove('imglazy');
+            }
+          });
+        }
+        // 这里添加一个节流，避免多次scroll事件
+        // 节流
+        function throttle(fn, delay) {
+          let timer = null;
+          return function () {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+              fn.apply(context, args);
+            }, delay);
+          };
+        }
+
+        window.addEventListener('scroll', throttle(lazyLoad, 500));
+        lazyLoad();
+      });
+    </script>
+  </body>
+</html>

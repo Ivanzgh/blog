@@ -1,12 +1,25 @@
 # AST
 
-抽象语法树（abstract syntax tree，AST）
+## 简介
+
+> 代码的本质就是字符串
+
+抽象语法树（Abstract Syntax Tree，AST）
 
 编译过程：解析、转换、生成
 
 - parse：将源码字符串转换成抽象语法树（AST）
 - transform：遍历 AST，调用插件生成新的 AST
 - generate：将转换后的 AST 生成目标代码，并生成 sourcemap
+
+::: tip
+
+1. 词法分析（Lexical Analysis）：将源代码转换成单词流，称为词法单元（tokens），每个词法单元包含一个标识符和一个属性值，比如变量名、数字、操作符等。
+2. 语法分析（Parsing）：将词法单元流转换成抽象语法树（Abstract Syntax Tree，简称 AST），也就是标记所构成的数据结构，表示源代码的结构和规则。
+3. 语义分析（Semantic Analysis）：在 AST 上执行类型检查、作用域检查等操作，以确保代码的正确性和安全性。
+4. 代码生成（Code Generation）：基于 AST 生成目标代码，包括优化代码结构、生成代码文本、进行代码压缩等。
+
+:::
 
 ## 参考资料
 

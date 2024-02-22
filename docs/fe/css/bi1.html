@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .wrap {
+        display: flex;
+        height: 100vh;
+        background-color: #112da2;
+        overflow: hidden;
+        padding: 0.75rem;
+        box-sizing: border-box;
+        color: #fff;
+      }
+      .box1 {
+        flex: 1 1 0;
+        padding: 0.75rem;
+        margin-right: 0.75rem;
+        background-color: #0e2662;
+      }
+      .box2 {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        padding: 0.75rem;
+        margin-right: 0.75rem;
+        background-color: #0e2662;
+      }
+      .box3 {
+        flex: 1 1 0;
+        padding: 0.75rem;
+        background-color: #0e2662;
+      }
+      .box11,
+      .box12,
+      .box13,
+      .box31,
+      .box32,
+      .box33 {
+        height: 33.3333%;
+      }
+      .box11,
+      .box31 {
+        background-color: #3f5ea8;
+      }
+      .box12,
+      .box32 {
+        background-color: #344a7f;
+      }
+      .box13,
+      .box33 {
+        background-color: #3f5ea8;
+      }
+      .box11,
+      .box12,
+      .box31,
+      .box32 {
+        padding-bottom: 0.5rem;
+      }
+      .box11,
+      .box12,
+      .box13,
+      .box21,
+      .box22,
+      .box31,
+      .box32,
+      .box33 {
+        box-sizing: border-box;
+      }
+
+      .box21 {
+        padding: 0.75rem;
+        background-color: #344a7f;
+        font-size: 2rem;
+      }
+      .box22 {
+        flex: 1 1 0;
+        margin-top: 0.75rem;
+        padding: 0.75rem;
+        background-color: #344a7f;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="box1">
+        <div class="box11">
+          <div>module</div>
+        </div>
+        <div class="box12">
+          <div>module</div>
+        </div>
+        <div class="box13">
+          <div>module</div>
+        </div>
+      </div>
+      <div class="box2">
+        <div class="box21">
+          <div>内容撑开高度</div>
+          <div>内容撑开高度</div>
+          <div>内容撑开高度</div>
+        </div>
+        <div class="box22"><div>module</div></div>
+      </div>
+      <div class="box3">
+        <div class="box31"><div>module</div></div>
+        <div class="box32"><div>module</div></div>
+        <div class="box33"><div>module</div></div>
+      </div>
+    </div>
+  </body>
+</html>

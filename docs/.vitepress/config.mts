@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitepress';
 
+var a = 1
+
 export default defineConfig({
   title: 'CONST',
   description: 'Blog',

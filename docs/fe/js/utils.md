@@ -113,6 +113,29 @@ const arr = [1, 2, 3, 4];
 arrayChunk(arr, 2); // [[1, 2], [3, 4]]
 ```
 
+## 找到数组中连续 n 个元素
+
+从数组中查找元素，获取包括元素在内的 9 个元素
+
+```js
+function getNineElements(arr, targetId) {
+  const targetIndex = arr.findIndex((item) => item.id === targetId);
+
+  if (targetIndex !== -1) {
+    // 如果找到目标元素
+    if (targetIndex >= 8) {
+      // 如果目标元素前面有8个元素
+      return arr.slice(targetIndex - 8, targetIndex + 1);
+    } else {
+      // 如果目标元素前面不足8个元素，从该元素后面取若干元素，总共9个元素
+      return arr.slice(0, 9);
+    }
+  }
+
+  return [];
+}
+```
+
 ## 生成树形结构
 
 ```js

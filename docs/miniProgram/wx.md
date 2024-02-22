@@ -21,6 +21,39 @@ updateData(){
 }
 ```
 
+## 事件
+
+- [事件介绍](https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxml/event.html)
+- [wxs 事件]
+
+不支持 addEventListener
+
+## 使用 wx:if 和 indexOf() 条件判断失效
+
+在 wxml 中不支持的语法：
+
+- Object.keys()
+- toString()
+- indexOf()
+
+创建一个 wxs 后缀的文件，如 utils.wxs 文件
+
+```js
+function indexOf(arr, val) {
+  return arr.indexOf(val) >= 0;
+}
+module.exports.indexOf = indexOf;
+```
+
+在 wxml 文件顶部引入 utils.wxs 文件
+
+```html
+<wxs src="./utils.wxs" module="tools" />
+
+<!-- 使用 -->
+<view wx:if="{{tools.indexOf(['a', 'b', 'c'], 'a')}}"></view>
+```
+
 ## 路由
 
 ### wx.navigateTo
@@ -59,6 +92,93 @@ Page({
 ```
 
 在要使用的页面获取数据：`app.globalData.searchValue`
+
+## 获取 Dom 元素
+
+```js
+wx.createSelectorQuery().select('#screenBody');
+```
+
+## 封装组件
+
+可以在 components 目录下新建一个组件目录，里面创建 4 个文件：`index.wxml`、`index.wxss`、`index.js`、`index.json`
+
+index.js
+
+```js
+Component({
+  properties: {
+    proId: { type: Number, value: 0 }
+  },
+  data: {},
+
+  // 监听 properties 里的值的变化
+  observers: {
+    proId: function (newVal, oldVal) {
+      console.log(newVal);
+    }
+  },
+
+  // 开始加载时
+  attached() {},
+
+  methods: {
+    init() {}
+  }
+});
+```
+
+在需要使用的地方，先在 index.json 里注册，例如有一个封装的组件目录是 pre2，对象的键值就是组件的名称
+
+```json
+{
+  "usingComponents": {
+    "pre2": "../../components/pre2"
+  }
+}
+```
+
+```html
+<pre2 proId="{{proId}}"></pre2>
+```
+
+## 如何放大缩小页面？
+
+可以利用 css 的 transform 属性，设置 scale
+
+```html
+<button bindtap="zoomIn">放大</button>
+<button bindtap="zoomOut">缩小</button>
+
+<view class="screen" style="width: 100%; height: 100%; transform-origin: 0 0; transform: scale({{scale}});">
+  <view>content</view>
+</view>
+```
+
+```js
+Page({
+  data: {
+    scale: 1
+  },
+
+  // 点击放大按钮
+  zoomIn() {
+    console.log(12);
+    let scale = this.data.scale + 0.1;
+    this.setData({
+      scale: scale > 2 ? 2 : scale // 设置最大缩放比例
+    });
+  },
+
+  // 点击缩小按钮
+  zoomOut() {
+    let scale = this.data.scale - 0.1;
+    this.setData({
+      scale: scale < 0.1 ? 0.1 : scale // 设置最小缩放比例
+    });
+  }
+});
+```
 
 ## 图片上传
 
@@ -343,15 +463,29 @@ wx.getRandomValues({
 使用 [echarts-for-weixin](https://github.com/ecomfe/echarts-for-weixin)
 
 ```html
-<ec-canvas id="mychart-dom" canvas-id="mychart-pie" ec="{{ ecZL }}"></ec-canvas>
+<view id="container">
+  <ec-canvas id="mychart-dom" canvas-id="mychart-pie" ec="{{ ecOption }}"></ec-canvas>
+</view>
 ```
+
+在 index.json 中引入组件
+
+```json
+{
+  "usingComponents": {
+    "ec-canvas": "../../components/ec-canvas/ec-canvas"
+  }
+}
+```
+
+index.js
 
 ```js
 import * as echarts from '../../components/ec-canvas/echarts';
 
 Page({
   data: {
-    ecZL: {
+    ecOption: {
       lazyLoad: true // 延迟加载图表,可以在获取数据后再初始化数据
     }
   },
@@ -367,7 +501,8 @@ Page({
   },
 
   initChart(data) {
-    const chartDom = this.selectComponent('#mychart-dom');
+    const that = this;
+    const chartDom = this.selectComponent('#container');
     chartDom.init((canvas, width, height, dpr) => {
       const chart = echarts.init(canvas, null, { width, height, devicePixelRatio: dpr });
       canvas.setChart(chart);
@@ -375,11 +510,38 @@ Page({
         // ....
       };
       chart.setOption(option);
+
+      // 如果需要更新图
+      that.gtChart = chart;
+
       return chart;
     });
+  },
+
+  // 更新图
+  toggle(e) {
+    this.gtChart &&
+      this.gtChart.setOption({
+        series: [
+          {
+            name: 'a',
+            type: 'line',
+            data: this.data.data1
+          },
+          {
+            name: 'b',
+            type: 'line',
+            data: this.data.data2
+          }
+        ]
+      });
   }
 });
 ```
+
+如果需要更新图，可以在初始化时赋值给 this，如`that.gtChart = chart`，这里的 gtChart 不需要在 data 对象里定义
+
+### 在 tab 页签切换时，图表不显示
 
 ## 踩坑记录
 

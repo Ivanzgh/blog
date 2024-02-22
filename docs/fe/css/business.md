@@ -1,5 +1,15 @@
 # 业务效果
 
+## 01-卡片式栏目介绍
+
+[源码](https://github.com/Ivanzgh/beautiful-css/tree/main/src/pages/01-card-column-introduction)
+
+<iframe height="600" style="width: 100%;" scrolling="no" title="Untitled" src="https://codepen.io/ZGHIvan/embed/eYXryvJ?default-tab=html%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/ZGHIvan/pen/eYXryvJ">
+  Untitled</a> by zghIvan (<a href="https://codepen.io/ZGHIvan">@ZGHIvan</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
 ## 纯 CSS 创建三角形
 
 <https://css-tricks.com/the-shapes-of-css/>
@@ -17,6 +27,12 @@ border-color: red transparent transparent transparent;
 ```
 
 ## 星级评估
+
+<iframe height="300" style="width: 100%;" scrolling="no" title="星级评估" src="https://codepen.io/ZGHIvan/embed/PoLegex?default-tab=html%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/ZGHIvan/pen/PoLegex">
+  星级评估</a> by zghIvan (<a href="https://codepen.io/ZGHIvan">@ZGHIvan</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
 
 ::: code-group
 

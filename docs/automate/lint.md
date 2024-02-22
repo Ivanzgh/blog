@@ -207,10 +207,26 @@ pnpm exec prettier . --write
 
 检测代码语法规范和错误
 
-安装 vscode 插件：Eslint
+### 安装
+
+安装 vscode 插件：[Eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)，该扩展使用安装在打开的工作区文件夹中的 ESLint 库
+
+在项目中安装：
 
 ```sh
 pnpm add eslint -D
+```
+
+### 生成配置文件
+
+在 vscode 中打开命令面板（cmd + shift + p），输入：`Create ESLint configuration`，按照提示生成配置文件
+
+### 忽略文件
+
+在项目根目录新建`.eslintignore`文件，写入文件路径，eslint 就会忽略对这些的文件的检查
+
+```
+dist
 ```
 
 ## Stylelint
