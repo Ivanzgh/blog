@@ -752,6 +752,38 @@ function findMostWord(article) {
 }
 ```
 
+## 金额数值格式化为千分位
+
+```js
+function formatNumber(number) {
+  // 判断是否为负数
+  const isNegative = number < 0;
+
+  // 将数字转换成字符串并去掉负号
+  let numStr = Math.abs(number).toString();
+
+  // 分割整数部分和小数部分
+  let parts = numStr.split('.');
+  let intPart = parts[0];
+  let decimalPart = parts[1] || '';
+
+  // 对整数部分添加千分位分隔符
+  let formattedIntPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  // 组合整数部分和小数部分
+  let result = formattedIntPart;
+  if (decimalPart.length > 0) {
+    result += '.' + decimalPart;
+  }
+
+  if (isNegative) {
+    result = '-' + result;
+  }
+
+  return result;
+}
+```
+
 ## 密码强度判断
 
 ```js

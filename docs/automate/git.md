@@ -243,22 +243,41 @@ git reset --hard HEAD^
 
 stash 指令可以把⼯作区的内容全部放在本地的⼀个独⽴的地⽅，它不会被提交和删除。
 
-假设你当前正在开发中，突然需要优先干其他工作，又不想 add 和 commit，这时就可以将当前内容放入临时区，等其他工作干完了，再切换回你的分支，将临时区的内容取出来，
-就可以继续之前的工作了
+假设你当前正在开发中，突然需要优先干其他工作，又不想 add 和 commit，这时就可以将当前内容放入临时区，等其他工作干完了，再切换回你的分支，将临时区的内容取出来，就可以继续之前的工作了
 
 ```sh
-# 放进临时存储区
+# 保存当前工作区的修改
 git stash
+# 保存当前工作区的修改，可以省略 push 参数
+git stash push
+
+# 保存当前工作区的修改，并添加说明信息
+git stash push -m 'message'
+# 已废弃，用于添加说明信息
+git stash save "message"
 
 # 没有被 track 的⽂件，即从来没有被 add 的⽂件不会被 stash
 # 可以加上 -u 参数，它是 --includeuntracked 的简写
 git stash -u
 
-# 取出
-git stash pop
-
 # 查看储存区所有提交列表
 git stash list
+
+# 应用最新的stash，并将其从stash列表中删除
+# git stash push 的逆操作
+git stash pop
+
+# 应用最新的stash，并保留stash的副本
+git stash apply
+
+# 如果有多个stash，想要应用特定的stash，其中n是stash的索引号
+git stash apply stash@{n}
+
+# 从存储条目列表中删除单个存储条目
+git stash drop stash@{n}
+
+# 清空所有的stash
+git stash clear
 ```
 
 ### 暂存区

@@ -104,7 +104,55 @@ console.log(arr); // [1, 2, 3, 4]
 
 ## unshift()
 
-向数组的开头添加一个或更多元素，并返回新的长度。
+向数组的开头添加一个或多个元素，并返回新的长度
+
+```js
+const arr = [1, 2, 3];
+const len = arr.unshift(0, 1, 2);
+console.log(arr); // [0, 1, 2, 1, 2, 3]
+console.log(len); // 6
+```
+
+**手写 unshift 方法**
+
+方式一：使用 splice 方法
+
+```js
+Array.prototype.myUnshift = function () {
+  const len = arguments.length;
+  for (let i = len - 1; i >= 0; i--) {
+    this.splice(0, 0, arguments[i]);
+  }
+  return this.length;
+};
+
+const arr = [1, 2, 3];
+console.log(arr.myUnshift(0, 1, 2));
+console.log(arr);
+```
+
+方式二、移动元素
+
+```js
+Array.prototype.myUnshift = function (...elements) {
+  const len = this.length;
+  // 扩大数组长度以容纳新元素
+  this.length += elements.length;
+  // 从后向前遍历数组，将每个元素向后移动elements.length个位置
+  for (let i = len - 1; i >= 0; i--) {
+    this[i + elements.length] = this[i];
+  }
+  // 将新元素插入到数组开头
+  for (let i = 0; i < elements.length; i++) {
+    this[i] = elements[i];
+  }
+  return this.length;
+};
+
+const arr = [1, 2, 3];
+console.log(arr.myUnshift(0, 1, 2));
+console.log(arr);
+```
 
 ## pop()
 
@@ -158,6 +206,8 @@ console.log(arr2); // [{ a: 9 }]
 
 语法：`array.splice(index, sum, item1, item2, ...)`，sum 表示元素数量，不是结束下标
 
+删除元素，得到新数组：
+
 ```js
 const originalArr = [1, 2, 3, 4, 5];
 const newArr = originalArr.splice(0, 2);
@@ -172,6 +222,22 @@ console.log(originalArr); // [3, 4, 5]
 let arr = ['a', 'b', 'c', 'd'];
 arr.splice(1, 2, 'e', 'f');
 console.log(arr); // ["a","e","f","d"]
+```
+
+向数组中插入元素：
+
+```js
+let arr = ['a', 'b', 'c', 'd'];
+
+// 向数组中间插入元素
+arr.splice(1, 0, 'e', 'f');
+console.log(arr); // ['a', 'e', 'f', 'b', 'c', 'd']
+
+// 向数组开头插入元素
+// arr.splice(0, 0, 'e', 'f');
+
+// 向数组末尾插入元素
+// arr.splice(arr.length, 0, 'e', 'f');
 ```
 
 ## filter()

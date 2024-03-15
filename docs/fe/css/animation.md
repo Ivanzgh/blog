@@ -238,7 +238,7 @@ animation-fill-mode: both;
 
 ## transform-origin
 
-更改元素变形的原点
+设置元素变形的原点
 
 - X 轴：长度单位、百分比、关键字：left、center、right
 - Y 轴：长度单位、百分比、关键字：top、center、bottom
@@ -248,7 +248,7 @@ animation-fill-mode: both;
 
 ## transform-style
 
-规定被子元素如何在 3D 空间中显示，3D 或者平面显示
+设置子元素如何在 3D 空间中显示，3D 或者平面显示
 
 - `flat`：设置元素的子元素位于该元素的平面中
 - `preserve-3d`：设置元素的子元素位于 3D 空间中

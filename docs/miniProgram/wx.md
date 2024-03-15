@@ -54,6 +54,33 @@ module.exports.indexOf = indexOf;
 <view wx:if="{{tools.indexOf(['a', 'b', 'c'], 'a')}}"></view>
 ```
 
+补充：
+
+```js
+function indexOf(arr, val) {
+  return arr.indexOf(val) >= 0;
+}
+
+function includes(arr, val) {
+  return arr.indexOf(val) !== -1;
+}
+function isArray(val) {
+  // 不支持：
+  // 1. Array.isArray(val);
+  // 2. Object.prototype.toString.call(val) === '[object Array]';
+  if (val.constructor && val.constructor == 'Array') {
+    return true;
+  }
+  return false;
+}
+
+module.exports = {
+  indexOf: indexOf,
+  includes: includes,
+  isArray: isArray
+};
+```
+
 ## 路由
 
 ### wx.navigateTo
@@ -128,18 +155,18 @@ Component({
 });
 ```
 
-在需要使用的地方，先在 index.json 里注册，例如有一个封装的组件目录是 pre2，对象的键值就是组件的名称
+在需要使用的地方，先在 index.json 里注册，例如有一个封装的组件目录是 pro，对象的键值就是组件的名称
 
 ```json
 {
   "usingComponents": {
-    "pre2": "../../components/pre2"
+    "pro": "../../components/pro"
   }
 }
 ```
 
 ```html
-<pre2 proId="{{proId}}"></pre2>
+<pro proId="{{proId}}"></pro>
 ```
 
 ## 如何放大缩小页面？
@@ -163,7 +190,6 @@ Page({
 
   // 点击放大按钮
   zoomIn() {
-    console.log(12);
     let scale = this.data.scale + 0.1;
     this.setData({
       scale: scale > 2 ? 2 : scale // 设置最大缩放比例
@@ -845,8 +871,29 @@ export default {
     console.log('取到网页传过来的值', res);
     // res.detail.data 是一个数组，存储着每一次 webview 触发 postMessage 的值
     let data = res.detail.data;
-    //如果要获取最新的 postMessage 的值，取数组最后一个即可
+    // 如果要获取最新的 postMessage 的值，取数组最后一个即可
     let lastData = data[data.length - 1];
     console.log('最新的postMessage的值', lastData);
   }
+```
+
+## 动态设置页面标题
+
+```js
+wx.setNavigationBarTitle({ title: options.isEdit ? '编辑' : '新增' });
+```
+
+## 返回上个页面，并刷新上个页面
+
+```js
+// 获取小程序页面栈
+let pages = getCurrentPages();
+// 获取上个页面的实例对象
+let beforePage = pages[pages.length - 2];
+// 直接修改上个页面的数据，可通过这种方式直接传递参数
+beforePage.setData({ proId: this.data.proId });
+// 调用上个页面的方法
+beforePage.getDetail(this.data.proId);
+// 返回上个页面
+wx.navigateBack({ delta: 1 });
 ```

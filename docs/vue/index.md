@@ -12,11 +12,11 @@ data 声明为对象：
 function VueComponent() {}
 VueComponent.prototype.$options = {
   data: { name: 'Vue' }
-}
-let f1 = new VueComponent()
-f1.$options.data.name = 'React'
-let f2 = new VueComponent()
-console.log(f2.$options.data.name) // React
+};
+let f1 = new VueComponent();
+f1.$options.data.name = 'React';
+let f2 = new VueComponent();
+console.log(f2.$options.data.name); // React
 ```
 
 data 声明为函数：
@@ -25,13 +25,13 @@ data 声明为函数：
 function VueComponent() {}
 VueComponent.prototype.$options = {
   data: () => ({ name: 'Vue' })
-}
-let f11 = new VueComponent()
-let res1 = f11.$options.data()
-res1.name = 'React'
-console.log(res1) // {name: "React"}
-let f22 = new VueComponent()
-console.log(f22.$options.data()) // {name: "Vue"}
+};
+let f11 = new VueComponent();
+let res1 = f11.$options.data();
+res1.name = 'React';
+console.log(res1); // {name: "React"}
+let f22 = new VueComponent();
+console.log(f22.$options.data()); // {name: "Vue"}
 ```
 
 `new Vue()`可以将`data`声明为一个普通对象是因为这个类创建的实例不会被复用，只会 new 一次。
@@ -54,19 +54,19 @@ console.log(f22.$options.data()) // {name: "Vue"}
 <span id="uName"></span>
 
 <script>
-  let obj = {}
+  let obj = {};
   Object.defineProperty(obj, 'username', {
     get() {
-      return this
+      return this;
     },
     set(val) {
-      document.getElementById('uName').innerText = val
+      document.getElementById('uName').innerText = val;
     }
-  })
-  const el = document.getElementById('username')
+  });
+  const el = document.getElementById('username');
   el.addEventListener('keyup', function () {
-    obj.username = event.target.value
-  })
+    obj.username = event.target.value;
+  });
 </script>
 ```
 
@@ -109,28 +109,28 @@ MDN 地址： [Object.defineProperty()
 
 ```js
 function defineReactive(obj, key, val) {
-  let dep = new Dep()
+  let dep = new Dep();
   Object.defineProperty(obj, key, {
     get() {
       //添加订阅者watcher到主题对象Dep
       if (Dep.target) {
         // JS的浏览器单线程特性，保证这个全局变量在同一时间内，只会有同一个监听器使用
-        dep.addSub(Dep.target)
+        dep.addSub(Dep.target);
       }
-      return val
+      return val;
     },
     set(newVal) {
-      if (newVal === val) return
-      val = newVal
+      if (newVal === val) return;
+      val = newVal;
       // 作为发布者发出通知
-      dep.notify() // 通知后dep会循环调用各自的update方法更新视图
+      dep.notify(); // 通知后dep会循环调用各自的update方法更新视图
     }
-  })
+  });
 }
 function observe(obj, vm) {
   Object.keys(obj).forEach((key) => {
-    defineReactive(vm, key, obj[key])
-  })
+    defineReactive(vm, key, obj[key]);
+  });
 }
 ```
 
@@ -141,94 +141,94 @@ compile 的目的就是解析各种指令成为真正的 html
 ```js
 function Compile(node, vm) {
   if (node) {
-    this.$frag = this.nodeToFragment(node, vm)
-    return this.$frag
+    this.$frag = this.nodeToFragment(node, vm);
+    return this.$frag;
   }
 }
 Compile.prototype = {
   nodeToFragment: function (node, vm) {
-    var self = this
-    var frag = document.createDocumentFragment()
-    var child
+    var self = this;
+    var frag = document.createDocumentFragment();
+    var child;
     while ((child = node.firstChild)) {
-      console.log([child])
-      self.compileElement(child, vm)
-      frag.append(child) // 将所有子节点添加到fragment中
+      console.log([child]);
+      self.compileElement(child, vm);
+      frag.append(child); // 将所有子节点添加到fragment中
     }
-    return frag
+    return frag;
   },
   compileElement: function (node, vm) {
-    var reg = /\{\{(.*)\}\}/
+    var reg = /\{\{(.*)\}\}/;
     //节点类型为元素(input元素这里)
     if (node.nodeType === 1) {
-      var attr = node.attributes
+      var attr = node.attributes;
       // 解析属性
       for (var i = 0; i < attr.length; i++) {
         if (attr[i].nodeName == 'v-model') {
           //遍历属性节点找到v-model的属性
-          var name = attr[i].nodeValue // 获取v-model绑定的属性名
+          var name = attr[i].nodeValue; // 获取v-model绑定的属性名
           node.addEventListener('input', function (e) {
             // 给相应的data属性赋值，进而触发该属性的set方法
-            vm[name] = e.target.value
-          })
-          new Watcher(vm, node, name, 'value') //创建新的watcher，会触发函数向对应属性的dep数组中添加订阅者，
+            vm[name] = e.target.value;
+          });
+          new Watcher(vm, node, name, 'value'); //创建新的watcher，会触发函数向对应属性的dep数组中添加订阅者，
         }
       }
     }
     //节点类型为text
     if (node.nodeType === 3) {
       if (reg.test(node.nodeValue)) {
-        var name = RegExp.$1 // 获取匹配到的字符串
-        name = name.trim()
-        new Watcher(vm, node, name, 'nodeValue')
+        var name = RegExp.$1; // 获取匹配到的字符串
+        name = name.trim();
+        new Watcher(vm, node, name, 'nodeValue');
       }
     }
   }
-}
+};
 ```
 
 4.3 watcher 实现
 
 ```js
 function Watcher(vm, node, name, type) {
-  Dep.target = this
-  this.name = name
-  this.node = node
-  this.vm = vm
-  this.type = type
-  this.update()
-  Dep.target = null
+  Dep.target = this;
+  this.name = name;
+  this.node = node;
+  this.vm = vm;
+  this.type = type;
+  this.update();
+  Dep.target = null;
 }
 
 Watcher.prototype = {
   update: function () {
-    this.get()
-    this.node[this.type] = this.value // 订阅者执行相应操作
+    this.get();
+    this.node[this.type] = this.value; // 订阅者执行相应操作
   },
   // 获取data的属性值
   get: function () {
-    console.log(1)
-    this.value = this.vm[this.name] //触发相应属性的get
+    console.log(1);
+    this.value = this.vm[this.name]; //触发相应属性的get
   }
-}
+};
 ```
 
 4.4 实现 Dep 来为每个属性添加订阅者
 
 ```js
 function Dep() {
-  this.subs = []
+  this.subs = [];
 }
 Dep.prototype = {
   addSub: function (sub) {
-    this.subs.push(sub)
+    this.subs.push(sub);
   },
   notify: function () {
     this.subs.forEach(function (sub) {
-      sub.update()
-    })
+      sub.update();
+    });
   }
-}
+};
 ```
 
 ### 5、总结
@@ -249,12 +249,12 @@ Dep.prototype = {
 
 <script src="index.js"></script>
 <script>
-  let obj = {}
-  dataRes({ data: obj, tag: 'view1', dataKey: 'one', selector: '.box1' })
-  dataRes({ data: obj, tag: 'view2', dataKey: 'two', selector: '.box2' })
+  let obj = {};
+  dataRes({ data: obj, tag: 'view1', dataKey: 'one', selector: '.box1' });
+  dataRes({ data: obj, tag: 'view2', dataKey: 'two', selector: '.box2' });
 
-  obj.one = '这是视图一'
-  obj.two = '这是视图二'
+  obj.one = '这是视图一';
+  obj.two = '这是视图二';
 </script>
 ```
 
@@ -265,43 +265,43 @@ const Dep = {
   container: {},
   // 添加订阅
   listen(key, fn) {
-    ;(this.container[key] || (this.container[key] = [])).push(fn)
+    (this.container[key] || (this.container[key] = [])).push(fn);
   },
   // 发布
   trigger() {
     let key = Array.prototype.shift.call(arguments),
-      fns = this.container[key]
+      fns = this.container[key];
     if (!fns || fns.length === 0) {
-      return
+      return;
     }
     for (let i = 0, len = fns.length; i < len; i++) {
-      fns[i].apply(this, arguments)
+      fns[i].apply(this, arguments);
     }
     // for (let i = 0, fn; (fn = fns[i++]); ) {
     //   fn.apply(this, arguments);
     // }
   }
-}
+};
 
 // 数据劫持
 const dataRes = ({ data, tag, dataKey, selector }) => {
   let value = '',
-    el = document.querySelector(selector)
+    el = document.querySelector(selector);
 
   Object.defineProperty(data, dataKey, {
     get() {
-      return value
+      return value;
     },
     set(val) {
-      value = val
-      Dep.trigger(tag, val)
+      value = val;
+      Dep.trigger(tag, val);
     }
-  })
+  });
 
   Dep.listen(tag, (text) => {
-    el.innerHTML = text
-  })
-}
+    el.innerHTML = text;
+  });
+};
 ```
 
 ### 简易版本 Vue3 双向数据绑定
@@ -321,37 +321,37 @@ const dataRes = ({ data, tag, dataKey, selector }) => {
 </div>
 
 <script>
-  const container = [...document.querySelector('#container').children]
+  const container = [...document.querySelector('#container').children];
 
   let proxyObj = new Proxy(
     { text: '', password: '' },
     {
       get(target, property) {
-        return target[property]
+        return target[property];
       },
       set(target, propName, propValue, receiver) {
-        let isCanEdit = true
+        let isCanEdit = true;
         container.forEach((dom) => {
           if (dom.getAttribute('v-bind') === propName) {
-            dom.innerHTML = propValue
+            dom.innerHTML = propValue;
           }
           if (dom.getAttribute('v-model') === propName) {
-            dom.value = propValue
+            dom.value = propValue;
           }
-        })
+        });
 
-        target[propName] = propValue
+        target[propName] = propValue;
       }
     }
-  )
+  );
 
   container.forEach((dom) => {
     if (dom.getAttribute('v-model') in proxyObj) {
       dom.addEventListener('input', function () {
-        proxyObj[this.getAttribute('v-model')] = this.value
-      })
+        proxyObj[this.getAttribute('v-model')] = this.value;
+      });
     }
-  })
+  });
 </script>
 ```
 
@@ -370,17 +370,17 @@ const dataRes = ({ data, tag, dataKey, selector }) => {
 在`/components/selfComponents.js`文件中引入所需要组件
 
 ```js
-import Vue from 'vue'
+import Vue from 'vue';
 
-import Button from './Button.vue'
+import Button from './Button.vue';
 
-Vue.component('st-button', Button)
+Vue.component('st-button', Button);
 ```
 
 在 mian.js 文件中引入
 
 ```js
-import '@/components/selfComponents'
+import '@/components/selfComponents';
 ```
 
 在需要公共组件的界面使用`<st-button />`
@@ -562,7 +562,7 @@ method: {
 }
 ```
 
-### 动态绑定style
+### 动态绑定 style
 
 ```
 // 对象形式
@@ -584,7 +584,98 @@ method: {
 
 data() {
   return{
-    styleObject: { color: '#f00', fontSize: '18px' }  
+    styleObject: { color: '#f00', fontSize: '18px' }
   }
 }
+```
+
+## 环境变量和脚本部署
+
+> 以下操作适用于通过 [Vue CLI](https://cli.vuejs.org/zh/guide/mode-and-env.html) 创建的 vue2 项目
+
+### 环境变量
+
+先在项目根目录下创建三个文件：
+
+`.env.development`：
+
+```
+NODE_ENV = development
+VUE_APP_BASE_API = 'xxx'
+```
+
+`.env.production`：
+
+```
+NODE_ENV = production
+VUE_APP_BASE_API = 'xxx'
+```
+
+`.env.staging`：
+
+```
+NODE_ENV = production
+VUE_APP_BASE_API = 'xxx'
+```
+
+然后在 package.json 中添加如下代码：
+
+```json
+{
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build:prod": "vue-cli-service build",
+    "build:stage": "vue-cli-service build --mode staging"
+  }
+}
+```
+
+当运行 vue-cli-service 命令时，所有的环境变量都从对应的环境文件中载入。对应的脚本如下：
+
+- 开发环境：`pnpm dev`
+- 生产环境：`pnpm build:prod`
+- 测试环境：`pnpm build:stage`
+
+### 脚本部署
+
+```sh
+# 当前目录
+localURL=$(pwd)
+cd ${localURL}
+
+# 拉取最新代码
+git pull
+
+# 设置默认值，如果没有在命令行传入参数，就使用默认值stage
+env=${1:-stage}
+
+if [ "$env" = "prod" ]; then
+    # 生产环境
+    serverURL="root@192.168.12.96"
+    # 执行package.json里配置的脚本命令
+    npm run build:prod
+elif [ "$env" = "stage" ]; then
+    # 测试环境
+    serverURL="root@192.168.12.6"
+    npm run build:stage
+else
+    # 参数错误，退出脚本
+    echo "Unknown parameters: $env"
+    exit 1
+fi
+
+cd ${localURL}/dist/
+zip -q -r 'dist.zip' ./*
+
+scp ${localURL}/dist/dist.zip ${serverURL}:/opt/website/pm/web/
+
+ssh ${serverURL} "pwd;unzip -o /opt/website/pm/web/dist.zip -d /opt/website/pm/web;exit;"
+
+# 删除本地的打包文件dist.zip
+rm -r ${localURL}/dist
+
+# 按任意键退出脚本
+read -n1 -p "Press any key to exit"
+echo
+exit 0
 ```

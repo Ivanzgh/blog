@@ -129,15 +129,39 @@ JSON.stringify({}) === '{}'; // true
 
 ## new 的过程
 
-new 一个对象：
+### new 解析
 
 ```js
-function Person(name, age) {
+function Person(name) {
   this.name = name;
-  this.age = age;
 }
-let person = new Person('zgh', 23);
+let person = new Person('zgh');
+console.log(person.name); // 'zgh'
 ```
+
+在构建函数中显示返回基础类型：
+
+```js
+function Person(name) {
+  this.name = name;
+  return 1;
+}
+let person = new Person('zgh');
+console.log(person.name); // 'zgh'
+```
+
+在构建函数中显示返回引用类型：
+
+```js
+function Person(name) {
+  this.name = name;
+  return { name: 'js' };
+}
+let person = new Person('zgh');
+console.log(person.name); // js
+```
+
+### 流程
 
 1、创建一个空对象 obj
 
@@ -157,7 +181,25 @@ let result = Person.call(obj);
 obj.__proto__ = Person.prototype;
 ```
 
-4、判断 Person 的返回值类型，如果是值类型，返回 obj。如果是引用类型，则返回这个引用类型的对象
+4、判断 Person 的返回值类型，如果是值类型，返回创建的对象 obj。如果是引用类型，则返回这个引用类型的对象
+
+```js
+return result instanceof Object ? result : obj;
+```
+
+### 手写 new
+
+```js
+function myNew(func, ...args) {
+  const obj = {};
+  obj.__proto__ = func.prototype;
+  let result = func.apply(obj, args);
+  // let result = func.call(obj, ...args);
+  return result instanceof Object ? result : obj;
+}
+const p1 = myNew(Person, 'zgh');
+console.log(p1); // Person {name: 'zgh'}
+```
 
 ## 对象继承的方式
 

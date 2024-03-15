@@ -13,12 +13,14 @@ DOM（Document Object Model） 文档对象模型
 ## 节点
 
 ```html
-<a href="http://www.baidu.com">百度</a>
+<div>
+  <p title="title">content</p>
+</div>
 ```
 
-- 整个元素表示元素节点
-- `href="http://www.baidu.com"` 表示属性节点
-- 百度 表示文本节点
+- `div`、`p`表示元素节点
+- `title` 表示属性节点
+- `content` 表示文本节点
 
 ## 操作元素节点
 
@@ -112,11 +114,97 @@ console.log(a.href);
 // a.href = 'xxx'
 ```
 
-::: warning
-属性节点并没有作为节点出现
-:::
+```js
+const div = document.getElementById('id');
+div.setAttribute('class', 'className');
+```
+
+示例：
+
+```js
+const div = document.createElement('div');
+
+const dataAttribute = document.createAttribute('custom');
+dataAttribute.value = '666';
+
+// 将属性节点添加到元素节点上
+div.setAttributeNode(dataAttribute);
+
+// 插入dom
+document.getElementsByTagName('body')[0].appendChild(div);
+```
 
 ## 操作文本节点
+
+### createTextNode
+
+```js
+const content = document.createTextNode('content');
+```
+
+### innerHTML
+
+- 修改 dom 节点的文本内容
+- 通过 html 片段，修改节点内容
+
+```js
+const div = document.createElement('div');
+div.innerHTML = 'hello';
+
+// div.innerHTML = '<p>123</p>';
+```
+
+### innerText
+
+设置文本内容
+
+```js
+const div = document.createElement('div');
+div.innerText = 'hello';
+```
+
+### 修改样式
+
+```js
+const div = document.createElement('div');
+div.innerText = 'hello';
+
+div.style.color = '#f00';
+div.style.fontSize = '20px';
+```
+
+## 获取节点
+
+```js
+// 返回拥有指定id的对象的引用
+document.getElementById('id属性值');
+// 返回拥有指定class的对象集合
+document.getElementsByClassName('class属性值');
+// 返回拥有指定标签名的对象集合
+document.getElementsByTagName('标签名');
+// 返回拥有指定名称的对象集合
+document.getElementsByName('name属性值');
+// 仅返回第一个匹配的元素
+document.element.querySelector('CSS选择器');
+// 返回所有匹配的元素
+document.element.querySelectorAll('CSS选择器');
+// 获取页面中的html标签
+document.documentElement;
+// 获取页面中的body标签
+document.body;
+```
+
+示例：querySelector
+
+```js
+document.querySelector('.element');
+document.querySelector('#element');
+document.querySelector('div');
+document.querySelector('[name="username"]');
+document.querySelector('div + p > span');
+
+const ps = document.querySelectorAll('p');
+```
 
 ## 事件绑定的方式
 
@@ -145,6 +233,13 @@ document.getElementById('demo').onclick = function () {
 用 `addEventListener()` 或 `attachEvent()` 来绑定事件监听函数
 
 IE8.0 及其以下版本不支持`addEventListener()` ，它使用`attachEvent()`来绑定事件监听函数
+
+```js
+const el = document.querySelector('.element');
+el.addEventListener('click', () => {
+  console.log('click');
+});
+```
 
 ## target 和 currentTarget 的区别
 

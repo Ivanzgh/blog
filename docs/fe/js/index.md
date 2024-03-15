@@ -65,6 +65,11 @@ console.log([] instanceof Array); // true
 console.log({} instanceof Object); // true
 console.log((() => {}) instanceof Function); // true
 
+let str1 = new String('xxx');
+console.log(str1 instanceof String); // true
+let str2 = 'xxx';
+console.log(str2 instanceof String); // false
+
 console.log([] instanceof Object); // true
 ```
 
@@ -244,13 +249,11 @@ console.log(person1.constructor === Person); // true
 ### 三个重要组成部分
 
 1. 变量对象（Variable Object，简称 VO）
-
-- 在创建上下文时，会有一个包含了所有在上下文中定义的变量、函数和形参的对象被创建
-- 对于全局上下文，变量对象就是全局对象，如 window
-- 对于函数上下文，变量对象分为两个阶段：
-  - 创建阶段：变量和函数的声明会被存储在变量对象中
-  - 执行阶段：变量被赋值，函数被执行
-
+   1. 在创建上下文时，会有一个包含了所有在上下文中定义的变量、函数和形参的对象被创建
+   2. 对于全局上下文，变量对象就是全局对象，如 window
+   3. 对于函数上下文，变量对象分为两个阶段：
+      1. 创建阶段：变量和函数的声明会被存储在变量对象
+      2. 执行阶段：变量被赋值，函数被执行
 2. 作用域链（Scope Chain）
 3. this 值
 
@@ -969,7 +972,9 @@ console.log(res); // hehe
 
 ### 浅拷贝
 
-如果对象中的属性是引用类型，那么新对象中的对应属性仍然指向同一个引用，这些属性会被共享，对其中一个对象的修改会影响到另一个对象
+如果对象中的属性是基本类型，拷贝的是基本类型的值。如果属性是引用类型，拷贝的是内存地址。即浅拷贝是拷贝一层，深层次的引用类型则共享内存地址
+
+实现一个浅拷贝的方法：
 
 ```js
 function shallowClone(obj) {
@@ -980,6 +985,8 @@ function shallowClone(obj) {
   return newObj;
 }
 ```
+
+使用示例：
 
 ```js
 const obj = {
@@ -1044,7 +1051,7 @@ const newArr = arr.concat();
 
 ### 深拷贝
 
-深拷贝创建了一个新的对象，而且这个新对象和原始对象完全独立
+深拷贝创建了一个新的对象，而且这个新对象和原始对象完全独立，对应两个不同的内存地址
 
 方式一：
 
@@ -1111,7 +1118,7 @@ const deepClone = (obj, cache = new WeakMap()) => {
 };
 ```
 
-#### JSON.parse(JSON.stringify())
+### JSON.parse(JSON.stringify())
 
 `JSON.parse(JSON.stringify())`是有一些局限性的深拷贝
 
@@ -1137,19 +1144,17 @@ obj.self = obj;
 const newObj = JSON.parse(JSON.stringify(obj));
 ```
 
-2、无法拷贝函数
+2、无法拷贝函数、undefined、Symbol
 
 ```js
 const obj = {
-  name: 'zgh',
-  foo: function () {
-    console.log('foo');
-  }
+  name: 'js',
+  a: undefined,
+  b: function () {},
+  c: Symbol('js')
 };
-
 const newObj = JSON.parse(JSON.stringify(obj));
-
-console.log(newObj.foo); // undefined
+console.log(newObj); // {name: "js"}
 ```
 
 3、只会拷贝对象自身的属性，不会拷贝原型链上的属性
@@ -1172,7 +1177,7 @@ console.log(newObj.bar); // undefined
 newObj.foo(); // 报错：newObj.sayHello is not a function
 ```
 
-如何区分深拷贝与浅拷贝？
+### 如何区分深拷贝与浅拷贝？
 
 简单来说，就是假设 B 复制了 A，当修改 A 时，看 B 是否会发生变化，如果 B 也跟着变了，说明这是浅拷贝，如果 B 没变，那就是深拷贝
 
@@ -1326,6 +1331,23 @@ function f(n) {
 console.log(f(3));
 ```
 
+## 高阶函数
+
+通过接收其他函数作为参数，或者返回其他函数的函数
+
+```js
+function foo() {
+  const a = 1;
+  function bar() {
+    console.log(a);
+  }
+  return bar;
+}
+
+const res = foo();
+res();
+```
+
 ## 函数柯里化
 
 柯里化（Currying）是把一个多参数的函数，转变为单一参数的函数
@@ -1377,6 +1399,41 @@ const res = add(1)(2)(3).toString();
 ```
 
 这里的调用链实际上是在执行多次 sum 函数，每次将参数累加到 a 上。最终的返回值是一个函数，该函数的 toString 方法返回累加后的结果
+
+## 函数缓存
+
+函数缓存，就是将函数运行过的结果进行临时缓存，用空间换时间。实现函数缓存主要依靠闭包、高阶函数、柯里化
+
+实现原理：把参数和对应的结果数据存在一个对象中，调用时判断参数对应的结果是否存在，存在则直接返回结果，不存在则计算结果并保存到对象中，再返回结果
+
+```js
+function memoize(fn, context) {
+  let cache = {};
+  context = context || this;
+  return (...key) => {
+    if (!cache[key]) {
+      cache[key] = fn.apply(context, key);
+    }
+    return cache[key];
+  };
+}
+
+const add = (a, b) => {
+  console.log('add被调用了');
+  return a + b;
+};
+const calc = memoize(add);
+const n1 = calc(1, 2);
+const n2 = calc(1, 2);
+console.log(n1, n2);
+```
+
+结果显示 add 函数被调用了 1 次，n2 就是缓存的结果
+
+应用场景：
+
+1. 执行复杂计算的函数
+2. 具有重复输入值的递归函数
 
 ## Event Loop
 

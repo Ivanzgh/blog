@@ -153,6 +153,10 @@
 
 - [js-cookie](https://github.com/js-cookie/js-cookie)
 
+## 处理 js 精度
+
+- [decimal.js](https://github.com/MikeMcl/decimal.js)
+
 ## 右键菜单
 
 - [Vue Contextmenu](https://github.com/GitHub-Laziji/menujs) vue2 版本
