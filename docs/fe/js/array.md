@@ -2,13 +2,97 @@
 
 <iframe id="embed_dom" name="embed_dom" frameborder="0" style="display:block;width:100%; height:900px;" src="https://www.processon.com/embed/64623e6407a1a76bf6d4a33a"></iframe>
 
+## push()
+
+向数组的末尾添加一个或多个元素，并返回新的长度
+
+```js
+let arr = [1, 2, 3];
+let length = arr.push(4);
+console.log(length); // 4
+console.log(arr); // [1, 2, 3, 4]
+```
+
+## unshift()
+
+向数组的开头添加一个或多个元素，并返回新的长度
+
+```js
+const arr = [1, 2, 3];
+const length = arr.unshift(0, 1, 2);
+console.log(arr); // [0, 1, 2, 1, 2, 3]
+console.log(length); // 6
+```
+
+**手写 unshift 方法**
+
+方式一：使用 splice 方法
+
+```js
+Array.prototype.myUnshift = function () {
+  const length = arguments.length;
+  for (let i = length - 1; i >= 0; i--) {
+    this.splice(0, 0, arguments[i]);
+  }
+  return this.length;
+};
+
+const arr = [1, 2, 3];
+console.log(arr.myUnshift(0, 1, 2));
+console.log(arr);
+```
+
+方式二、移动元素
+
+```js
+Array.prototype.myUnshift = function (...elements) {
+  const length = this.length;
+  // 扩大数组长度以容纳新元素
+  this.length += elements.length;
+  // 从后向前遍历数组，将每个元素向后移动elements.length个位置
+  for (let i = length - 1; i >= 0; i--) {
+    this[i + elements.length] = this[i];
+  }
+  // 将新元素插入到数组开头
+  for (let i = 0; i < elements.length; i++) {
+    this[i] = elements[i];
+  }
+  return this.length;
+};
+
+const arr = [1, 2, 3];
+console.log(arr.myUnshift(0, 1, 2));
+console.log(arr);
+```
+
+## pop()
+
+删除并返回数组的最后一个元素
+
+```js
+const arr = [1, 2, 3];
+const item = arr.pop();
+console.log(item); // 3
+console.log(arr); // [1, 2]
+```
+
+## shift()
+
+删除并返回数组的第一个元素
+
+```js
+let arr = [3, 4, 2, 1, 5];
+arr.shift(); // 3
+console.log(arr); // [4, 2, 1, 5]
+```
+
 ## join()
 
 把数组的所有元素放入一个字符串，元素通过指定的分隔符分隔，不影响原数组
 
 ```js
 let arr = [2, 1, 3];
-arr.join(); // '2,1,3'
+let res = arr.join(); // '2,1,3'
 arr.join(''); // '213'
 arr.join('-'); // '2-1-3'
 ```
@@ -86,91 +170,15 @@ arr.sort((a, b) => a.name.localeCompare(b.name))
 把数组中的元素顺序颠倒过来，影响原数组
 
 ```js
-let arr = [2, 1, 3];
-let rs = arr.reverse();
-console.log(rs); // [3, 1, 2]
-```
-
-## push()
-
-向数组的末尾添加一个或更多元素，并返回新的长度。
-
-```js
 let arr = [1, 2, 3];
-let rs = arr.push(4);
-console.log(rs); // 4
-console.log(arr); // [1, 2, 3, 4]
-```
-
-## unshift()
-
-向数组的开头添加一个或多个元素，并返回新的长度
-
-```js
-const arr = [1, 2, 3];
-const len = arr.unshift(0, 1, 2);
-console.log(arr); // [0, 1, 2, 1, 2, 3]
-console.log(len); // 6
-```
-
-**手写 unshift 方法**
-
-方式一：使用 splice 方法
-
-```js
-Array.prototype.myUnshift = function () {
-  const len = arguments.length;
-  for (let i = len - 1; i >= 0; i--) {
-    this.splice(0, 0, arguments[i]);
-  }
-  return this.length;
-};
-
-const arr = [1, 2, 3];
-console.log(arr.myUnshift(0, 1, 2));
-console.log(arr);
-```
-
-方式二、移动元素
-
-```js
-Array.prototype.myUnshift = function (...elements) {
-  const len = this.length;
-  // 扩大数组长度以容纳新元素
-  this.length += elements.length;
-  // 从后向前遍历数组，将每个元素向后移动elements.length个位置
-  for (let i = len - 1; i >= 0; i--) {
-    this[i + elements.length] = this[i];
-  }
-  // 将新元素插入到数组开头
-  for (let i = 0; i < elements.length; i++) {
-    this[i] = elements[i];
-  }
-  return this.length;
-};
-
-const arr = [1, 2, 3];
-console.log(arr.myUnshift(0, 1, 2));
-console.log(arr);
-```
-
-## pop()
-
-删除并返回数组的最后一个元素
-
-## shift()
-
-删除并返回数组的第一个元素
-
-```js
-let arr = [3, 4, 2, 1, 5];
-arr.shift(); // 3
-console.log(arr); // [4, 2, 1, 5]
+let res = arr.reverse();
+console.log(res); // [3, 2, 1]
+console.log(arr); // [3, 2, 1]
 ```
 
 ## slice()
 
-从数组中截取一段元素，组成一个新的数组
+从数组中截取一段元素，组成一个新的数组，不会影响原数组
 
 语法：`array.slice(start[, end])`
 
@@ -204,16 +212,19 @@ console.log(arr2); // [{ a: 9 }]
 
 删除或者添加元素，改变原数组
 
-语法：`array.splice(index, sum, item1, item2, ...)`，sum 表示元素数量，不是结束下标
+语法：`array.splice(index, count, item1, item2, ...)`，count 表示元素数量，不是结束下标。
+
+- 添加元素：传入三个参数，分别是开始位置、0、插入的元素，返回空数组
+- 删除元素：传入两个参数，分别是开始位置、删除元素的数量，返回包含删除元素的数组
 
 删除元素，得到新数组：
 
 ```js
-const originalArr = [1, 2, 3, 4, 5];
-const newArr = originalArr.splice(0, 2);
+const arr = [1, 2, 3, 4, 5];
+const newArr = arr.splice(0, 2);
 
 console.log(newArr); // [1, 2]
-console.log(originalArr); // [3, 4, 5]
+console.log(arr); // [3, 4, 5]
 ```
 
 替换数组中的元素：
@@ -224,7 +235,7 @@ arr.splice(1, 2, 'e', 'f');
 console.log(arr); // ["a","e","f","d"]
 ```
 
-向数组中插入元素：
+向数组中插入元素，count 数量设为 0，返回空数组
 
 ```js
 let arr = ['a', 'b', 'c', 'd'];
@@ -296,7 +307,7 @@ array.filter(Boolean); // [1, 3, 5]
 
 ## indexOf()
 
-返回数组中某个指定的元素位置，可用来判断数组中是否包含指定元素
+返回要查找的元素在数组中的位置，如果没找到则返回 -1，可用来判断数组中是否包含指定元素
 
 语法 `array.indexOf(item, start)`，`item`查找的元素，`start`开始检索的位置(可选，默认是 0)
 
@@ -312,11 +323,7 @@ if (fruits.indexOf('Apple') > -1) {
 }
 ```
 
-如果在数组中没找到指定元素则返回 -1
-
 若查找字符串最后出现的位置，用 `lastIndexOf()` 方法
-
-使用严格相等`===`匹配数组中的元素
 
 ## includes()
 
@@ -334,7 +341,7 @@ arr.includes(2, -1); // false
 
 ## find 和 findIndex
 
-find 用于找出第一个符合条件的数组元素。找不到则是`undefined`。注意，它不会返回多个，只找一个，找到了就返回。
+find 用于找出**第一个**符合条件的数组元素。找不到则是`undefined`
 
 findIndex 返回第一个符合条件的数组元素的索引，找不到则是-1
 

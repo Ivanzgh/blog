@@ -1,7 +1,5 @@
 import { defineConfig } from 'vitepress';
 
-var a = 1
-
 export default defineConfig({
   title: 'CONST',
   description: 'Blog',
@@ -105,42 +103,61 @@ export default defineConfig({
           text: 'React',
           collapsed: false,
           items: [
-            { text: 'React', link: '/react/' },
+            { text: '总览', link: '/react/' },
+            { text: 'JSX', link: '/react/jsx' },
+            { text: '事件机制', link: '/react/event' },
+            { text: '组件', link: '/react/component' },
+            { text: '组件通信', link: '/react/contact' },
+            { text: 'CSS 样式方案', link: '/react/style' },
             { text: 'Hook', link: '/react/hook' },
-            { text: '状态管理', link: '/react/state' },
             { text: 'React-Router', link: '/react/router' },
+            { text: 'Fiber 架构', link: '/react/fiber' },
             {
-              text: '业务',
-              link: '/react/business',
+              text: '状态管理',
+              items: [
+                { text: 'Zustand', link: '/react/state/zustand' },
+                { text: 'Mobx', link: '/react/state/mobx' },
+                { text: 'Redux', link: '/react/state/redux' }
+              ]
+            },
+            { text: '服务端渲染SSR', link: '/react/ssr' },
+            { text: '插件', link: '/react/plugins' },
+            {
+              text: 'Antd生态',
               items: [
                 { text: 'Ant Design', link: '/react/antd/' },
                 { text: 'Ant Design Pro', link: '/react/antd/ant-design-pro' },
                 { text: 'Umi', link: '/react/antd/umi' },
                 { text: 'ProComponents', link: '/react/antd/proComponents' }
               ]
-            }
+            },
+            { text: '业务', link: '/react/business' }
           ]
         },
         {
           text: 'Next.js',
           collapsed: false,
-          items: [{ text: '概览', link: '/react/next/' }]
+          items: [{ text: '总览', link: '/react/next/' }]
         }
       ],
       '/vue/': [
         {
-          text: 'Vue',
+          text: 'Vue2',
           collapsed: false,
           items: [
-            { text: 'Vue', link: '/vue/' },
+            { text: 'Vue2', link: '/vue/vue2' },
             { text: '组件通信', link: '/vue/contact' },
             { text: '业务', link: '/vue/business' },
-            { text: 'vue3', link: '/vue/vue3' },
             { text: 'UI库', link: '/vue/ui' },
             { text: 'vuex', link: '/vue/vuex' },
             { text: 'vue-router', link: '/vue/vue-router' },
             { text: 'vuepress', link: '/vue/vuepress' }
           ]
+        },
+        {
+          text: 'Vue3',
+          collapsed: false,
+          items: [{ text: 'Vue3', link: '/vue/vue3' }]
         }
       ],
       '/node/': [
@@ -317,7 +334,7 @@ function nav() {
         { text: '基础', link: '/fe/js/' },
         { text: 'TypeScript', link: '/fe/ts/' },
         { text: 'React', link: '/react/' },
-        { text: 'Vue', link: '/vue/' },
+        { text: 'Vue', link: '/vue/vue2' },
         { text: 'Node', link: '/node/' },
         { text: '前端工程化', link: '/automate/index' },
         { text: '小程序', link: '/miniProgram/wx' },

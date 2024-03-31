@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # UI 库
 
 ## Ant Design of Vue
@@ -438,4 +442,16 @@ isShowTooltip: false
 mouseOver(event) {
   this.isShowTooltip = event.target.scrollWidth <= event.target.clientWidth
 }
+```
+
+### el-table
+
+#### 单元格样式错位
+
+给 table 绑上`ref="tableRef"`属性，在获取数据后执行 doLayout 方法
+
+```js
+this.$nextTick(() => {
+  this.$refs.tableRef.doLayout();
+});
 ```

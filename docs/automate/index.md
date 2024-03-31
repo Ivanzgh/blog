@@ -75,3 +75,7 @@
 ## 项目管理
 
 - [Monorepo](https://monorepo.tools)
+
+## SWC
+
+SWC 是一个可扩展的基于 Rust 的平台，用于下一代快速开发工具。SWC 在单线程上比 Babel 快 20 倍，在四核上快 70 倍

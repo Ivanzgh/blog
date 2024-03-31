@@ -64,6 +64,93 @@ interval 设置成 0 强制显示所有标签。如果设置为 1，表示『隔
 
 环形饼图
 
+文字居中
+
+```js
+const option = {
+  // 设置饼图分段颜色
+  color: ['#FF8D1A', '#8479FF', '#F1645B', '#4992FF'],
+  title: {
+    text: [`{num|${sum}}{unit|万元}`, `{name|${subtext}}`].join('\n'),
+    textAlign: 'center',
+    top: 'center',
+    left: '25%',
+    textStyle: {
+      fontWeight: 'normal',
+      align: 'center',
+      rich: {
+        num: {
+          color: '#000',
+          fontSize: 18,
+          lineHeight: 40
+        },
+        unit: {
+          color: '#6E6E6E',
+          fontSize: 10
+        },
+        name: {
+          color: '#6E6E6E',
+          fontSize: 10,
+          fontWeight: 'normal',
+          align: 'center'
+        }
+      }
+    }
+  },
+  legend: {
+    orient: 'vertical',
+    top: 'center',
+    left: '50%',
+    icon: 'circle',
+    itemWidth: 8,
+    itemHeight: 8,
+    itemGap: 20,
+    textStyle: {
+      align: 'left',
+      verticalAlign: 'middle',
+      rich: {
+        name: {
+          color: 'rgba(138, 138, 138, 1)',
+          fontSize: 10
+        },
+        value: {
+          color: 'rgba(138, 138, 138, 1)',
+          fontSize: 10
+        }
+      }
+    },
+    data: ['图例1', '图例2', '图例3', '图例4'],
+    formatter: (name) => {
+      if (data.length) {
+        const item = data.filter((item) => item.name === name)[0];
+        return `{name|${name}: }{value|${item.value}万元}`;
+      }
+    }
+  },
+  series: [
+    {
+      type: 'pie',
+      radius: ['55%', '70%'],
+      center: ['25%', '50%'],
+      data: data,
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      },
+      label: {
+        normal: {
+          position: 'inner',
+          show: false
+        }
+      }
+    }
+  ]
+};
+```
+
 ## 动态调整位置大小
 
 监听窗口大小变化，根据窗口大小调整图表的大小。echarts 有一个 resize 方法，可以让图表重新渲染。有些关键配置，如饼图中心点、半径、图例位置等，可以通过变量来动态调整。

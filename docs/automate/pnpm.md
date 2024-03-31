@@ -5,6 +5,9 @@
 ## 安装和升级
 
 ```sh
+# 通过HomeBrew安装
+brew install pnpm
+
 # 通过npm安装
 npm i -g pnpm
 
@@ -16,9 +19,6 @@ npm update -g pnpm
 
 # pnpm升级
 pnpm add -g pnpm
-
-# 通过HomeBrew安装
-brew install pnpm
 ```
 
 如果是通过 npm 安装的 pnpm，后续会提示你使用 `pnpm add -g pnpm` 升级 pnpm，执行后会发现依然还是以前的版本。如果继续通过 npm 卸载 pnpm，执行`pnpm -v`后发现 pnpm 依然存在，并且还是最新的版本。但是以后就不能使用 npm 卸载了，[参考](https://pnpm.io/zh/uninstall)
@@ -78,7 +78,6 @@ Options:
 | pnpm up          | 更新依赖                   |
 | pnpm outdated    | 查看过期的依赖             |
 | pnpm store prune | 从全局中移除不再引用的依赖 |
-
 
 ## 更新依赖
 

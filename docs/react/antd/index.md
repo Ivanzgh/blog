@@ -14,6 +14,39 @@
 
 [定制主题](https://ant.design/docs/react/customize-theme-cn)
 
+在 `ConfigProvider` 中传入 `theme` 属性，可以配置主题
+
+### 修改主题变量
+
+通过 theme 中的 token 属性，可以修改主题变量
+
+```tsx
+import { Button, ConfigProvider } from 'antd';
+
+const App = () => {
+  return (
+    <>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: '#00b96b',
+            borderRadius: 2
+          }
+        }}
+      >
+        <Button type="primary">btn</Button>
+      </ConfigProvider>
+    </>
+  );
+};
+
+export default App;
+```
+
+### 修改组件变量
+
+除了整体的 Design Token，各个组件也会开放自己的 Component Token 来实现针对组件的样式定制能力。
+
 例如修改表格组件的默认样式：
 
 ```tsx

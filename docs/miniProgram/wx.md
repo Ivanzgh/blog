@@ -569,6 +569,10 @@ Page({
 
 ### 在 tab 页签切换时，图表不显示
 
+## 登录流程
+
+<https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html>
+
 ## 踩坑记录
 
 ### 请求失败
@@ -896,4 +900,14 @@ beforePage.setData({ proId: this.data.proId });
 beforePage.getDetail(this.data.proId);
 // 返回上个页面
 wx.navigateBack({ delta: 1 });
+```
+
+## 去除背景色
+
+点击 navigator 和 button 后，会有灰色的背景色，设置`hover-class="none"`可以去掉
+
+```html
+<navigator hover-class="none" url="/pages/foo/index">foo</navigator>
+
+<button hover-class="btn-hover">click</button>
 ```

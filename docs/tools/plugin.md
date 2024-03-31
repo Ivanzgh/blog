@@ -68,6 +68,12 @@
 3. D3.js：用于创建交互式的数据可视化，包括思维导图
 4. GoJS：用于创建交互式的流程图，网络图，思维导图等
 
+## 在线文档
+
+- [Luckysheet](https://github.com/dream-num/Luckysheet)
+- [fortune-sheet](https://github.com/ruilisi/fortune-sheet)
+- [univer](https://github.com/dream-num/univer)
+
 ## Canvas 库
 
 1. Faloric js：功能强大的 Canvas 库，支持对象的拖放、缩放、旋转和编辑
