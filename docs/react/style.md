@@ -113,3 +113,7 @@ pnpm add @emotion/react
 ## Tailwind CSS
 
 CSS 原子化思想
+
+<https://tailwindcss.com>
+
+详见[tailwindcss](/fe/css/tailwindcss)

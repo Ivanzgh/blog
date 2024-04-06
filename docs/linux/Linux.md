@@ -46,7 +46,7 @@ echo "# title" >> README.md
 
 - [Ubuntu 下载](https://ubuntu.com/download)
 - [Vmware 安装 Ubuntu](https://blog.csdn.net/m0_51913750/article/details/131604868)
-
+Vmware 安装 Ubuntu
 ## shell 脚本
 
 ```sh

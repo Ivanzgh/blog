@@ -387,6 +387,7 @@ iframe 能将另一个网页嵌入到当前网页中
 
 - 需要注意跨域 CORS、是否允许嵌入等安全隐患限制
 - 最好是通过 js 动态的给 iframe 添加 src 属性
+- allowFullScreen 属性：允许全屏
 
 缺点：
 

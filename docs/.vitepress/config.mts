@@ -65,7 +65,8 @@ export default defineConfig({
             { text: '视差滚动', link: '/fe/css/parallax-scroller' },
             { text: '业务效果', link: '/fe/css/business' },
             { text: 'Sass', link: '/fe/css/sass' },
-            { text: 'Less', link: '/fe/css/less' }
+            { text: 'Less', link: '/fe/css/less' },
+            { text: 'Tailwindcss', link: '/fe/css/tailwindcss' }
           ]
         },
         {
@@ -122,16 +123,17 @@ export default defineConfig({
             },
             { text: '服务端渲染SSR', link: '/react/ssr' },
             { text: '插件', link: '/react/plugins' },
-            {
-              text: 'Antd生态',
-              items: [
-                { text: 'Ant Design', link: '/react/antd/' },
-                { text: 'Ant Design Pro', link: '/react/antd/ant-design-pro' },
-                { text: 'Umi', link: '/react/antd/umi' },
-                { text: 'ProComponents', link: '/react/antd/proComponents' }
-              ]
-            },
             { text: '业务', link: '/react/business' }
+          ]
+        },
+        {
+          text: 'Antd生态',
+          collapsed: false,
+          items: [
+            { text: 'Ant Design', link: '/react/antd/' },
+            { text: 'Ant Design Pro', link: '/react/antd/ant-design-pro' },
+            { text: 'Umi', link: '/react/antd/umi' },
+            { text: 'ProComponents', link: '/react/antd/proComponents' }
           ]
         },
         {
@@ -231,13 +233,26 @@ export default defineConfig({
       ],
       '/miniProgram/': [
         {
-          text: '小程序',
+          text: '微信小程序',
           collapsed: false,
           items: [
-            { text: '微信小程序', link: '/miniProgram/wx' },
-            { text: 'Taro', link: '/miniProgram/taro' },
-            { text: 'uniapp', link: '/miniProgram/uniapp' }
+            { text: '基础', link: '/miniProgram/wx/index' },
+            { text: '踩坑记录', link: '/miniProgram/wx/fallible' },
+            { text: '路由跳转', link: '/miniProgram/wx/route' },
+            { text: '登录流程', link: '/miniProgram/wx/login' },
+            { text: '嵌套网页', link: '/miniProgram/wx/webView' },
+            { text: '业务', link: '/miniProgram/wx/business' }
           ]
+        },
+        {
+          text: 'uniapp',
+          collapsed: false,
+          items: [{ text: 'uniapp', link: '/miniProgram/uniapp' }]
+        },
+        {
+          text: 'Taro',
+          collapsed: false,
+          items: [{ text: 'Taro', link: '/miniProgram/taro' }]
         }
       ],
       '/tools/': [
@@ -337,7 +352,7 @@ function nav() {
         { text: 'Vue', link: '/vue/vue2' },
         { text: 'Node', link: '/node/' },
         { text: '前端工程化', link: '/automate/index' },
-        { text: '小程序', link: '/miniProgram/wx' },
+        { text: '小程序', link: '/miniProgram/wx/index' },
         { text: '工具', link: '/tools/plugin' }
       ]
     },

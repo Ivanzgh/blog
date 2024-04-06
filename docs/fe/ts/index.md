@@ -1,16 +1,14 @@
+---
+outline: deep
+---
+
 # TypeScript
 
-官网：[https://www.typescriptlang.org/](https://www.typescriptlang.org/)
+- 官网：[https://www.typescriptlang.org](https://www.typescriptlang.org)
+- 中文手册： [https://typescript.bootcss.com](https://typescript.bootcss.com)
+- [《深入理解 TypeScript》](https://jkchao.github.io/typescript-book-chinese/)
 
-中文手册： [https://typescript.bootcss.com/](https://typescript.bootcss.com/)
-
-[《深入理解 TypeScript》](https://jkchao.github.io/typescript-book-chinese/)
-
-::: tip 关于《深入理解 TypeScript》
-注意 typescript 版本问题，当前内容基于`Version 4.0.3`，一切以官方为主
-:::
-
-## 介绍
+## 安装
 
 ::: code-group
 

@@ -276,6 +276,30 @@ console.log(result);
 
 ## 树形节点搜索关键字，返回完整路径
 
+## 获取指定范围内的随机数
+
+```js
+// 1.最大值和最小值都包含在内
+const getRandomNum = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+// 2.包含最大值，不包含最小值
+const getRandomNum = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min + 1;
+};
+
+// 3.包含最小值，不包含最大值
+const getRandomNum = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+// 4.最大值和最小值都不包含在内
+const getRandomNum = (min, max) => {
+  return Math.floor(Math.random() * (max - min - 1)) + min + 1;
+};
+```
+
 ## 生成随机 uuid
 
 ```js

@@ -8,6 +8,9 @@
 # 通过HomeBrew安装
 brew install pnpm
 
+# 通过HomeBrew更新
+brew upgrade pnpm
+
 # 通过npm安装
 npm i -g pnpm
 

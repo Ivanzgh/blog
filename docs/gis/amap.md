@@ -27,6 +27,8 @@ map.destroy();
 
 ## 结合 React 使用
 
+重点就是要使用 `useRef`
+
 ```tsx
 import { useEffect, useRef, useState } from 'react';
 import AMapLoader from '@amap/amap-jsapi-loader';
@@ -436,10 +438,7 @@ const MapContainer = () => {
     const ms = new AMap.current.MouseTool(map.current);
     setMouseTool(ms);
 
-    ms.on('draw', function (e: any) {
-      const data = e.obj.getExtData();
-      onMouseTool(data.type, e);
-    });
+    ms.on('draw', onMouseToolDrawEnd);
   };
 
   useEffect(() => {
@@ -452,8 +451,15 @@ const MapContainer = () => {
     };
   }, []);
 
-  function onMouseTool(type: string, event: any) {
-    const gl = event.obj;
+  function onMouseToolDrawEnd(e: any) {
+    if (circleRadiusTextMarker.current) {
+      map.current.remove(circleRadiusTextMarker.current);
+      circleRadiusTextMarker.current = null;
+    }
+
+    const data = e.obj.getExtData();
+    const type = data.type;
+    const gl = e.obj;
 
     if (type === 'circle') {
       const radius = gl.getRadius();
@@ -638,4 +644,54 @@ const MapContainer = () => {
 return <div id="container" style={{ height: '100vh' }}></div>;
 
 export default MapContainer;
+```
+
+### 绘制圆形实时显示半径和面积
+
+```tsx
+// 1. 定义一个字段存储圆形标记
+const circleRadiusTextMarker = useRef<any>(null);
+
+// 2. 在初始化地图initMap中，添加监听绘制中的事件
+ms.on('drawing', onMouseToolDrawing);
+
+// 3. 绘制drawing事件回调函数
+function onMouseToolDrawing(e: any) {
+  const data = e.obj.getExtData();
+  const type = data.type;
+  const gl = e.obj;
+
+  if (type === 'circle') {
+    const radius = gl.getRadius();
+    if (radius == 0) return;
+
+    const π = 3.1415926;
+    const center = gl.getCenter();
+    const areaM = π * radius * radius;
+    const areaKM = (areaM / 1000000).toFixed(2);
+    const r = (radius / 1000).toFixed(2);
+    const textContent = `<div>范围面积：${areaKM}平方公里</div><div>半径：${r}公里</div>`;
+    if (circleRadiusTextMarker.current) {
+      circleRadiusTextMarker.current.setText(textContent);
+    } else {
+      const textMarker = new AMap.current.Text({
+        position: center,
+        text: textContent,
+        offset: new AMap.current.Pixel(-20, -20),
+        extData: { type: 'circleRadiusTextMarker' }
+      });
+      circleRadiusTextMarker.current = textMarker;
+      map.current.add(textMarker);
+    }
+  }
+}
+
+// 4. 鼠标工具绘制结束，要清除文本标记，并设置为默认值null
+function onMouseToolDrawEnd(e: any) {
+  if (circleRadiusTextMarker.current) {
+    map.current.remove(circleRadiusTextMarker.current);
+    circleRadiusTextMarker.current = null;
+  }
+  // 其他代码省略
+}
 ```

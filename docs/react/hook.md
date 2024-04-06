@@ -123,19 +123,26 @@ export default function Home() {
 }
 ```
 
-使用惰性初始值，避免初始值重复计算。传递计算**函数本身**，而不是函数的计算结果
+## 惰性初始化的值
+
+使用惰性初始值，避免初始值重复计算。传递计算**函数本身**，而不是函数的计算结果。
+
+下面示例中，假如有一个初始值是经过复杂计算得来的，如果直接将计算结果传给 useState，那么在每次点击按钮时，都会重新计算一次初始值。可以在 useState 里传一个函数，这个函数会返回初始值，这样就避免了重复计算
 
 ```jsx
 import { useState } from 'react';
 
-const initialState = () => {
+function initialState(n) {
   console.log(123);
-  return 1 + 2 + 3; // 假设计算很昂贵
-};
+  return n + 1 + 2 + 3; // 假设计算很昂贵
+}
 
 function App() {
-  const [count, setCount] = useState(initialState);
-  // const [count, setCount] = useState(initialState());
+  // 1. 返回函数的计算结果
+  // const [count, setCount] = useState(initialState(0));
+
+  // 2. 返回计算函数本身
+  const [count, setCount] = useState(() => initialState(0));
 
   return (
     <>
@@ -148,33 +155,6 @@ function App() {
 export default App;
 ```
 
-## 惰性初始化的值
-
-下面示例中，假如有一个初始值是经过复杂计算得来的，如果直接将计算结果传给 useState，那么在每次点击按钮时，都会重新计算一次初始值。可以在 useState 里传一个函数，这个函数会返回初始值，这样就避免了重复计算
-
-```jsx
-import { useState } from 'react';
-
-function computed(n) {
-  console.log(123);
-  return n + 1;
-}
-
-function App() {
-  // const [count, setCount] = useState(computed(0));
-  const [count, setCount] = useState(() => computed(0));
-  const handleAdd = () => {
-    setCount(count + 1);
-  };
-  return (
-    <>
-      <div>count: {count}</div>
-      <button onClick={handleAdd}>add</button>
-    </>
-  );
-}
-```
-
 ## immer
 
 [immer](https://github.com/immerjs/use-immer)和 useState 很相似，返回一个状态和一个更新函数。如果感觉更新数组和对象很烦琐、嵌套层级很深，可以使用 immer 编写简洁的代码。
@@ -183,7 +163,7 @@ function App() {
 pnpm add immer use-immer
 ```
 
-### 管理对象或数组类型的状态
+### 1、管理对象或数组类型的状态
 
 示例：有一个输入框，在输入内容时，更新 b.c 的值
 
@@ -261,7 +241,7 @@ export default App;
 
 :::
 
-### 管理基础类型的状态
+### 2、管理基础类型的状态
 
 ```jsx
 import React from 'react';
