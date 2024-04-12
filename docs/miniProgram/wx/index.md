@@ -100,6 +100,8 @@
 
 设计师可以用 iPhone6 作为设计稿的标准，在 iPhone6 上，屏幕宽度为 375px，共有 750 个物理像素，则 750rpx = 375px = 750 物理像素，1rpx = 0.5px = 1 物理像素。
 
+- 当屏幕宽度等于 750px 时，1px = 1rpx
+- 当屏幕宽度等于 375px 时， 1px = 0.5rpx
 - 设计稿宽度如果按照 750px 设计，那么设计稿是多少 px 就写多少 rpx
 - 设计稿宽度如果按照 375px 设计，那么设计稿是多少 px 就写 2 倍的 rpx
 
@@ -487,3 +489,178 @@ wx.setNavigationBarTitle({ title: options.isEdit ? '编辑' : '新增' });
 
 <button hover-class="btn-hover">click</button>
 ```
+
+## 小程序运行机制
+
+![img](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1712758608.png)
+
+### 启动方式
+
+小程序启动方式：冷启动、热启动
+
+- 冷启动：如果用户首次打开，或小程序销毁后被用户再次打开，此时小程序会重新加载启动
+- 热启动：如果用户已经打开过小程序，在一定时间内再次打开时，小程序会直接从内存中加载，不会重新加载启动。此时小程序并未被销毁，只是从后台状态进入前台状态。
+
+### 前台和后台
+
+- 前台：小程序启动后，界面被展示给用户，此时小程序处于前台状态
+- 后台：当用户「关闭」小程序时，小程序并没有真正被关闭，而是进入后台状态，当用户再次进入微信并打开小程序，小程序又会重新进入前台状态
+
+这里的「关闭」是指：小程序顶部右上角的关闭键、手机底部的 home 键等。
+
+**挂起**：小程序进入「后台」状态一段时间后（5 秒），微信停止小程序 JS 线程执行，小程序进入「挂起」状态，当开发者使用了后台播放音乐、后台地理位置等能力时，小程序可以在后台持续运行，不会进入挂起状态
+
+**销毁**：如果用户很久没有使用小程序，或者系统资源紧张，小程序会被销毁，即完全终止运行
+
+1. 当小程序进入后台并被挂起后，如果很长时间（目前是 30 分钟）都未再次进入前台，小程序会被销毁
+2. 当小程序占用系统资源过高，可能会被系统销毁或被微信客户端主动回收
+
+## 小程序更新机制
+
+在访问小程序时，微信会将小程序代码包缓存到本地。
+
+开发者在发布了新的小程序版本以后，微信客户端会检查本地缓存的小程序有没有新版本，并进行小程序代码包的更新。
+
+更新机制有两种：启动时同步更新和异步更新。
+
+- 启动时同步更新：微信运行时，**会定期检查最近使用的小程序是否有更新**。如果有更新，下次小程序启动时会同步进行更新，更新到最新版本后再打开小程序。如果**用户长时间未使用小程序时，会强制同步检查版本更新**。
+- 启动时异步更新：在启动前没有发现更新，小程序每次冷启动时都会异步检查是否有更新版本。如果发现有新版本，将会异步下载新版本的代码包，将新版本的小程序在下一次冷启动进行使用，当前访问使用的依然是本地的旧版本代码。
+
+在启动时异步更新的情况下，如果开发者希望立刻进行版本更新，可以使用`wx.getUpdateManager`进行处理。在有新版本时提示用户重启小程序更新版本。
+
+### 更新代码
+
+[官方文档](https://developers.weixin.qq.com/miniprogram/dev/api/base/update/UpdateManager.html)
+
+在`app.js`中编写：
+
+```js
+App({
+  onLaunch() {
+    // 判断小程序的API，回调，参数，组件等是否在当前版本可用
+    if (wx.canIUse('getUpdateManager')) {
+      // 获取版本更新管理器
+      const updateManager = wx.getUpdateManager();
+
+      // 监听向微信后台请求检查更新结果事件。微信在小程序每次启动（包括热启动）时自动检查更新，不需由开发者主动触发。
+      updateManager.onCheckForUpdate(function (res) {
+        if (res.hasUpdate) {
+          // 监听小程序有版本更新事件。客户端主动触发下载，下载成功后回调
+          updateManager.onUpdateReady(function () {
+            wx.showModal({
+              title: '更新提示',
+              content: '新版本已经准备好，是否重启应用？',
+              success: function (res) {
+                if (res.confirm) {
+                  // 强制小程序重启并使用新版本
+                  updateManager.applyUpdate();
+                }
+              }
+            });
+          });
+          // 监听小程序更新失败事件
+          updateManager.onUpdateFailed(function () {
+            wx.showModal({
+              title: '更新提示',
+              content: '新版本已经上线啦，请您删除当前小程序，重新搜索打开'
+            });
+          });
+        }
+      });
+    } else {
+      wx.showModal({ title: '提示', content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。' });
+    }
+  }
+});
+```
+
+### 模拟更新
+
+在微信开发者工具中，点击顶部中间的「普通编译」，下拉选择「添加编译模式」，勾选上「下次编译时模拟更新」，可选设置编译模式的名称为「强制更新」。点击确定后，点击编译，即可看到更新提示信息。
+
+## 小程序生命周期
+
+- 应用生命周期：应用程序从创建到消亡的整个过程
+- 小程序生命周期：小程序从启动到销毁的整个过程
+
+### 应用生命周期
+
+在 `app.js` 中的`App()`函数中，可以设置一些全局的监听函数，如 onLaunch、onShow、onHide 等。
+
+```js
+App({
+  // 小程序初始化，全局只触发一次
+  onLaunch() {},
+
+  // 小程序启动，或从后台进入前台
+  onShow() {},
+
+  // 小程序从前台进入后台
+  onHide() {}
+});
+```
+
+### 页面生命周期
+
+页面生命周期：小程序页面从加载、运行、销毁的整个过程
+
+页面生命周期函数需要在`Page()`方法进行定义。
+
+访问页面 -> onLoad 监听页面加载 -> onShow 监听页面展示 -> onReady 监听页面初次渲染完成 -> onHide 监听页面隐藏 -> onUnload 监听页面卸载
+
+```js
+Page({
+  // 监听页面加载，一个页面只会调用一次
+  onLoad(options) {
+    console.log('onLoad');
+  },
+
+  // 监听页面显示
+  onShow() {
+    console.log('onShow');
+  },
+
+  // 监听页面初次渲染完成，一个页面只会调用一次
+  onReady() {
+    console.log('onReady');
+  },
+
+  // 监听页面隐藏
+  onHide() {
+    console.log('onHide');
+  },
+
+  // 监听页面卸载
+  onUnload() {
+    console.log('onUnload');
+  }
+});
+```
+
+这里使用 navigator 跳转页面，查看 onUnload 和 onHide 的调用
+
+```html
+<!-- redirect：销毁当前页面，跳转到指定页面，点击后触发 onUnload -->
+<navigator url="/pages/list/index" open-type="redirect">redirect</navigator>
+
+<!-- navigate：保留当前页面，跳转到指定页面，点击后触发 onHide -->
+<navigator url="/pages/list/index" open-type="navigate">navigate</navigator>
+```
+
+::: tip
+
+1. tabBar 页面之间相互切换，页面不会被销毁
+2. 点击左上角，返回上一个页面，会销毁当前页面
+
+:::
+
+### 组件生命周期
+
+## 网络请求
+
+`wx.request({})`
+
+## 本地存储
+
+- 存储方式：`wx.setStorageSync("key", "value");`
+- 获取方式：`wx.getStorageSync("key", "value");`

@@ -409,8 +409,6 @@ import '@/components/selfComponents';
 - 缺点：页面切换慢
   多页面跳转需要刷新所有资源
 
-## 服务端渲染 SSR
-
 ## keep-alive
 
 场景：从列表页进入详情页，返回时要保持以前的搜索条件和页数。即从详情页返回列表页不刷新，从其他菜单页面进入列表页要刷新
@@ -491,14 +489,14 @@ returnPage() {
 ### 匿名插槽
 
 ```vue
-// TestOne.vue
+<!-- TestOne.vue -->
 <template>
   <div>
     <slot></slot>
   </div>
 </template>
 
-// 在别的组件使用
+<!-- 在别的组件使用 -->
 <template>
   <div>
     <TestOne>
@@ -511,10 +509,10 @@ returnPage() {
 ### 具名插槽
 
 ```vue
-// TestTwo.vue
+<!-- TestTwo.vue -->
 <template>
   <div>
-    // 具名插槽
+    <!-- 具名插槽 -->
     <h1>
       <slot name="hName"></slot>
     </h1>
@@ -524,7 +522,7 @@ returnPage() {
   </div>
 </template>
 
-// 在别的组件使用
+<!-- 在别的组件使用 -->
 <template>
   <div>
     <TestTwo>
@@ -679,3 +677,202 @@ read -n1 -p "Press any key to exit"
 echo
 exit 0
 ```
+
+## Mixins
+
+[文档](https://v2.cn.vuejs.org/v2/guide/mixins.html)
+
+> 混入 (Mixins) 是一种在多个组件之间共享可复用功能的方式。
+
+Mixins 允许把一组可复用的方法、生命周期钩子函数、数据属性和计算属性等组合到一个单独的对象中，然后在多个组件中导入并应用这个 mixin。
+
+- 一个混入对象可以包含任意组件选项，如 data、watch、mounted、methods 等
+- 当组件使用混入对象时，所有混入对象的选项将被“混合”进入该组件本身的选项
+
+示例：
+
+::: code-group
+
+```js [foo.js]
+export default {
+  data() {
+    return {
+      a: 1
+    };
+  },
+  computed: {
+    count() {
+      return 1 + 2 + 3;
+    }
+  },
+  watch: {
+    $route(route) {
+      console.log(route);
+    }
+  },
+  mounted() {
+    this.handleClick();
+  },
+  methods: {
+    handleClick() {
+      console.log('click');
+    }
+  }
+};
+```
+
+```vue [Home.vue]
+<template>
+  <div>
+    <h1>mixins</h1>
+    <div>{{ a }}</div>
+    <div>{{ count }}</div>
+  </div>
+</template>
+
+<script>
+import Foo from './mixins/foo';
+
+export default {
+  name: 'Home',
+  mixins: [Foo],
+  data() {
+    return {};
+  }
+};
+</script>
+```
+
+:::
+
+### 选项合并规则
+
+1、数据对象在内部会进行递归合并，并在发生冲突时**以组件数据优先**。
+
+例如，在 mixin 中定义的 data 里的数据，如果组件中定义了同名的 data，那么组件中的 data 会覆盖 mixin 中的 data。
+
+2、同名**钩子函数**将合并为一个数组，都将被调用。混入对象的钩子将在组件自身钩子之前调用。
+
+3、值为对象的选项，例如 methods、components 和 directives，将被合并为同一个对象。两个对象键名冲突时，取**组件对象**的键值对。
+
+### 优势：
+
+1. **代码重用**：可以将通用功能抽象出来，避免代码重复，提高开发效率。
+2. **模块化**：有助于组织代码结构，将特定功能独立封装，便于管理和维护。
+3. **易于扩展**：当需要在多个组件中添加相同功能时，只需要修改 mixin 即可，不影响原有组件结构。
+
+### 劣势：
+
+1. **命名冲突**：当多个 mixins 或组件自身含有同名的数据属性或方法时，可能出现命名冲突。
+2. **难以追踪**：随着项目复杂度增加，当组件依赖多个 mixins 时，源代码的可读性和调试难度可能增大，尤其是当 mixin 中的方法影响组件行为时。
+3. **依赖顺序问题**：有时需要关注 mixin 间的依赖顺序，这可能导致代码维护性降低。
+
+### 使用场景
+
+- **共用的生命周期钩子**：例如，多个组件都需要在 `created` 或 `mounted` 中执行相同的初始化逻辑。
+- **共用的方法**：某些业务逻辑方法如数据请求、数据处理、工具函数等在多个组件中都需要用到。
+- **共用的状态和计算属性**：某些全局的状态和计算逻辑可以抽象到 mixin 中。
+
+### Mixin 与组件的区别
+
+- **组件**是独立模块，具有自己的视图模板、数据、方法、生命周期钩子等，强调的是独立和可复用的界面元素。
+- **Mixin** 更侧重于功能和逻辑的复用，不涉及视图渲染，它可以注入到组件中，增强组件的功能，但不改变组件的基本结构。
+
+## 自定义指令
+
+[文档](https://v2.cn.vuejs.org/v2/guide/custom-directive.html)
+
+Vue 除了内置的指令 (v-model 等)，也允许注册自定义指令。常用于 DOM 操作
+
+有全局注册和局部注册两种方式
+
+```js
+// 全局注册自定义指令
+Vue.directive('my-directive', {
+  // 钩子函数
+  bind: function (el, binding, vnode) {},
+  inserted: function (el, binding, vnode) {},
+  update: function (el, binding, vnode) {},
+  componentUpdated: function (el, binding, vnode) {},
+  unbind: function (el, binding, vnode) {}
+});
+
+// 局部注册自定义指令
+export default {
+  directives: {
+    'my-directive': {
+      // 同样的钩子函数定义
+    }
+  }
+  // ...
+};
+```
+
+示例，在 src 目录下新建一个 directive 目录，集中管理全局的指令，目录结构如下：
+
+```sh
+|-- src
+    |-- directive
+    |   |-- permission         # 权限模块
+    |   |   |-- hasRole.js     # 角色权限处理
+    |   |-- index.js
+    |-- main.js
+```
+
+::: code-group
+
+```js [main.js]
+// 其余内容省略
+import Vue from 'vue';
+
+import directive from './directive';
+
+Vue.use(directive);
+```
+
+```js [index.js]
+import hasRole from './permission/hasRole';
+
+const install = function (Vue) {
+  Vue.directive('hasRole', hasRole);
+  // 注册其他指令
+};
+
+export default install;
+```
+
+```js [hasRole.js]
+import store from '@/store';
+
+export default {
+  inserted(el, binding, vnode) {
+    const { value } = binding;
+    const super_admin = 'admin';
+    const roles = store.getters && store.getters.roles;
+
+    if (value && value instanceof Array && value.length > 0) {
+      const roleFlag = value;
+
+      const hasRole = roles.some((role) => {
+        return super_admin === role || roleFlag.includes(role);
+      });
+
+      if (!hasRole) {
+        el.parentNode && el.parentNode.removeChild(el);
+      }
+    } else {
+      throw new Error(`请设置角色值`);
+    }
+  }
+};
+```
+
+:::
+
+使用方式如下，在组件绑定 `v-hasRole`，数组中的值是角色名称。这里表示只有 admin 角色可以查看
+
+```html
+<el-button v-hasRole="['admin']" type="primary" @click="handleView">查看</el-button>
+```
+
+## 服务端渲染 SSR

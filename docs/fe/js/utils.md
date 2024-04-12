@@ -608,38 +608,6 @@ export const timestampToTime = (timestamp) => {
 };
 ```
 
-## 获取宽高
-
-screen 屏幕
-
-scroll 滚动
-
-### 获取屏幕宽高
-
-```js
-window.screen.width;
-window.screen.height;
-```
-
-### 获取 body 宽高
-
-```js
-//不含边框
-document.body.clientWidth;
-document.body.clientHeight;
-
-//包含边框
-document.body.offsetWidth;
-document.body.offsetHeight;
-```
-
-### 获取网页宽高
-
-```js
-document.body.scrollWidth;
-document.body.scrollHeight;
-```
-
 ## 转义 escape()、encodeURI()和 decodeURI()
 
 ### encodeURI()　　

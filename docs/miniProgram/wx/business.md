@@ -1,16 +1,21 @@
 # 业务
 
-## 封装组件
+## 自定义组件
+
+- [自定义组件文档](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/)
+- [自定义组件 API](https://developers.weixin.qq.com/miniprogram/dev/reference/api/Component.html)
 
 可以在 components 目录下新建一个组件目录，里面创建 4 个文件：`index.wxml`、`index.wxss`、`index.js`、`index.json`
 
-index.js
+::: code-group
 
-```js
+```js [index.js]
 Component({
+  // 组件的属性列表，可以从父组件传递的数据
   properties: {
     proId: { type: Number, value: 0 }
   },
+
   data: {},
 
   // 监听 properties 里的值的变化
@@ -24,10 +29,25 @@ Component({
   attached() {},
 
   methods: {
-    init() {}
+    init() {},
+
+    goBack() {
+      // 触发父组件的 back 事件
+      this.triggerEvent('back', { id: 1 }, {});
+    }
   }
 });
 ```
+
+```html [index.wxml]
+<view>
+  <view bindtap="back">btn</view>
+  <!-- 插槽 -->
+  <slot></slot>
+</view>
+```
+
+:::
 
 在需要使用的地方，先在 index.json 里注册，例如有一个封装的组件目录是 pro，对象的键值就是组件的名称
 
@@ -39,8 +59,10 @@ Component({
 }
 ```
 
+父组件需要用`bind`加上事件名，例如：
+
 ```html
-<pro proId="{{proId}}"></pro>
+<pro proId="{{proId}}" bindback="handleBack"></pro>
 ```
 
 ## 列表通用模板
@@ -55,9 +77,9 @@ Component({
 
 小程序 UI 组件库：[Vant Weapp](https://vant-contrib.gitee.io/vant-weapp/#/home)
 
-index.wxml
+::: code-group
 
-```html
+```html [index.wxml]
 <van-search
   value="{{ searchValue }}"
   placeholder="请输入项目名称"
@@ -76,9 +98,7 @@ index.wxml
 <van-empty wx:else description="暂无数据" />
 ```
 
-index.json
-
-```json
+```json [index.json]
 {
   "navigationBarTitleText": "项目管理",
   "usingComponents": {
@@ -90,9 +110,7 @@ index.json
 }
 ```
 
-index.js
-
-```js
+```js [index.js]
 import { getProjectList } from '../../utils/api.js';
 
 Page({
@@ -125,6 +143,8 @@ Page({
   }
 });
 ```
+
+:::
 
 ### 2、分页返回数据
 
@@ -162,8 +182,9 @@ Page({
   onPullDownRefresh() {
     //启用标题栏显示加载状态
     wx.showNavigationBarLoading();
-    //调用相关方法
+    // 调用相关方法，重置数据
     this.setData({ listData: [], searchValue: '', pageNum: 1, total: 0 });
+    // 重新发起请求
     this.getList(1);
 
     setTimeout(() => {
@@ -195,6 +216,8 @@ Page({
   }
 });
 ```
+
+- 总页数 = Math.ceil(总条数 / 每页显示的条数)
 
 ## 生成随机数
 

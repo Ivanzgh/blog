@@ -284,6 +284,7 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: '设计模式', link: '/base/design-pattern/' },
+            { text: '单例模式', link: '/base/design-pattern/singleton' },
             { text: '策略模式', link: '/base/design-pattern/strategy' },
             { text: '观察者模式', link: '/base/design-pattern/observers' },
             { text: '发布-订阅模式', link: '/base/design-pattern/publisher-subscriber' }

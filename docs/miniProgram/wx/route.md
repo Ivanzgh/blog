@@ -2,7 +2,10 @@
 
 ## wx.navigateTo
 
-在 wxml 中使用：`<navigator url="/pages/list/detail?id=1">点击跳转去详情页</navigator>`
+在 wxml 中使用：
+
+- `<navigator url="/pages/list/detail?id=1">点击跳转去详情页</navigator>`
+- 传递变量参数：`<navigator url="/pages/list/detail?id={{id}}&name={{name}}">点击跳转去详情页</navigator>`
 
 在 js 中使用：`wx.navigateTo({ url: '/pages/list/detail' })`
 

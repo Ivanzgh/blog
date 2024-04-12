@@ -87,6 +87,10 @@ console.log(person1, person2);
 
 可以看出，混合模式共享着对相同方法的引用，又保证了每个实例有自己的私有属性。最大限度的节省了内存
 
+## Object.create
+
+`Object.create()`以一个现有对象作为原型，创建一个新对象。参数接收：`Object`、`null`
+
 ## valueOf
 
 valueOf()方法通常由 js 在后台自动调用，不会显式的出现在代码里

@@ -359,4 +359,73 @@ child.addEventListener('click', function (e) {
 
 ![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418111.png)
 
-## scrollHeight、clientHeight、innerHeight
+## 获取宽高
+
+- screen 屏幕
+- scroll 滚动
+
+### 获取屏幕宽高
+
+显示器的宽高
+
+```js
+window.screen.width;
+window.screen.height;
+```
+
+### 获取 body 宽高
+
+clientHeight 是元素内部高度，包含 padding，不包含 border、margin、水平滚动条高度（如果存在）。
+
+- clientHeight = height + padding - 水平滚动条高度
+- clientWidth = width + padding - 垂直滚动条高度
+
+offsetHeight 包含 padding、border、水平滚动条高度（如果存在）。
+
+- offsetHeight = height + padding + border + 水平滚动条高度
+- offsetWidth = width + padding + border + 垂直滚动条高度
+
+```js
+// 获取body宽高，不含边框
+document.body.clientWidth;
+document.body.clientHeight;
+
+// 获取当前浏览器窗口中HTML文档元素的可视宽高
+document.documentElement.clientWidth;
+document.documentElement.clientHeight;
+
+// 获取body宽高，包含边框
+document.body.offsetWidth;
+document.body.offsetHeight;
+```
+
+- `scrollHeight`：元素内容高度，包括从视图中溢出的不可见的内容
+  - 如果没有垂直滚动条，和 `clientHeight` 相同
+  - 包括 padding，不包括 border、margin
+  - 包括伪元素，如 `::before` 和 `::after`
+- `scrollTop`：滚动条距离顶部的距离
+
+通过`scrollHeight`、`scrollTop`和`clientHeight`做比较，就可以判断是否滚动到底部了。
+
+```js
+document.body.scrollWidth;
+document.body.scrollHeight;
+
+document.documentElement.scrollTop || document.body.scrollTop;
+```
+
+### 获取视口宽高
+
+- `window.innerWidth`：浏览器窗口的视口宽度，包括水平滚动条宽度
+- `window.innerHeight`：浏览器窗口的视口高度，包括垂直滚动条，不包括浏览器顶部的菜单栏、地址栏、工具栏等浏览器 UI 组件的高度
+
+100vh 表示视口高度，和 `window.innerHeight` 一样
+
+- `window.outerWidth`：浏览器窗口的宽度
+- `window.outerHeight`：整个浏览器窗口的高度，包括浏览器的 UI 组件高度
+
+获取浏览器视口高度的兼容写法：
+
+```js
+const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+```

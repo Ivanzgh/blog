@@ -157,7 +157,147 @@ export default App;
 
 ## immer
 
-[immer](https://github.com/immerjs/use-immer)和 useState 很相似，返回一个状态和一个更新函数。如果感觉更新数组和对象很烦琐、嵌套层级很深，可以使用 immer 编写简洁的代码。
+immer 实现了 js 的数据不可变状态。核心实现是利用 ES6 的 proxy
+
+- [文档](https://immerjs.github.io/immer/)
+- [github](https://github.com/immerjs/immer)
+- CDN
+  - `<script src="https://unpkg.com/immer"></script>`
+  - `<script src="https://cdn.jsdelivr.net/npm/immer"></script>`
+
+### 原始数据被修改
+
+先定义一个原始对象，下面有 4 种情况都可以改变原始对象 obj
+
+```js
+const obj = {
+  a: {
+    b: [1, 2, 3]
+  }
+};
+
+// let p1 = obj;
+// p1.a = 1;
+
+// let p2 = { ...obj };
+// p2.a.b = 2;
+
+// let p3 = obj;
+// p3.a.b.push(4);
+
+// function fn(param) {
+//   param.a = 1;
+//   return param;
+// }
+// let p4 = fn(obj);
+
+console.log(obj);
+```
+
+解决对象类型被修改的办法，可能一般都是使用深拷贝来解决。
+
+### 使用 immer.js
+
+```sh
+pnpm add immer
+```
+
+可以先看看 immer 里都有哪些内容：[API](https://immerjs.github.io/immer/zh-CN/api)
+
+```js
+import * as immer from 'immer';
+
+console.log(immer);
+```
+
+现在解决上述问题：
+
+```js
+import { produce } from 'immer';
+
+const obj = {
+  a: {
+    b: [1, 2, 3]
+  }
+};
+
+// 解决 p1 p2
+let p1 = produce(obj, (draft) => {
+  draft.a = 2;
+});
+console.log(p1); // { a: 2 }
+
+// 解决 p3
+let p3 = produce(obj, (draft) => {
+  draft.a.b.push(4);
+});
+console.log(p3); // { a: { b: [ 1, 2, 3, 4 ] } }
+
+// 解决 p4
+function fn(param) {
+  return produce(param, (draft) => {
+    draft.a = 1;
+  });
+}
+const p4 = fn(obj);
+console.log(p4); // { a: 1 }
+```
+
+### immer 相关概念
+
+- `currentState` 被操作对象的**最初状态**
+- `draftState` 根据 currentState 生成的**草稿状态**，它是 currentState 的代理，对 draftState 所做的任何修改都将被记录并用于生成 nextState 。在此过程中，currentState 将不受影响
+- `nextState` 根据 draftState 生成的**最终状态**
+- `produce` 生产，用来生成 nextState 或 producer 的函数
+- `producer` 生产者，通过 produce 生成，用来生产 nextState ，每次执行相同的操作
+- `recipe` 生产机器，用来操作 draftState 的函数
+
+produce 语法：`produce(currentState, recipe: (draftState) => void): nextState`
+
+### produce 和科里化
+
+```js
+import { produce } from 'immer';
+
+const baseState = [
+  { id: 'JavaScript', title: 'Learn TypeScript', done: true },
+  { id: 'Immer', title: 'Try Immer', done: false }
+];
+
+function toggleTodo(state, id) {
+  return produce(state, (draft) => {
+    const todo = draft.find((todo) => todo.id === id);
+    todo.done = !todo.done;
+  });
+}
+
+const nextState = toggleTodo(baseState, 'Immer');
+```
+
+produce 科里化：
+
+```js
+const toggleTodo = produce((draft, id) => {
+  const todo = draft.find((todo) => todo.id === id);
+  todo.done = !todo.done;
+});
+```
+
+### 更新模式
+
+[更新模式](https://immerjs.github.io/immer/zh-CN/update-patterns)，更删改
+
+- 更新对象
+- 更新数组
+- 嵌套数据结构
+
+### immutable-js
+
+[immutable-js](https://github.com/immutable-js/immutable-js/)，也是一个操作不可变数据的库，但是上手复杂
+
+## use-immer
+
+[use-immer](https://github.com/immerjs/use-immer)和 useState 很相似，返回一个状态和一个更新函数。如果感觉更新数组和对象很烦琐、嵌套层级很深，可以使用 immer 编写简洁的代码。
 
 ```sh
 pnpm add immer use-immer
