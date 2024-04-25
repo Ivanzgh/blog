@@ -2,11 +2,11 @@
 
 GeoServer 是一个用于共享地理空间数据的开源服务器
 
-- [GeoServer 官网](geoserver.org)
+- [GeoServer 官网](https://geoserver.org/)
 - [文档](https://docs.geoserver.org/)
 - [GeoServer 用户手册中文版](https://www.osgeo.cn/geoserver-user-manual/index.html)
 
-下载：<http://geoserver.org/release/stable/>
+下载：<https://geoserver.org/release/stable/>
 
 安装解压后运行 `bin` 文件夹下的`startup.bat` （`linux` 为 `startup.sh`）
 
