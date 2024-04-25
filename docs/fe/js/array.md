@@ -502,8 +502,10 @@ console.log(arr); //["$", "$", 3, 4, 5]
 
 ```js
 const arr = [1, 2, 3];
-const res = arr.flatMap((x) => [x, x * 2]);
-console.log(result); // [1, 2, 2, 4, 3, 6]
+const res1 = arr.map((x) => [x * 2]);
+console.log(res1); // [[2], [4], [6]]
+const res2 = arr.flatMap((x) => [x * 2]);
+console.log(res2); // [2, 4, 6]
 ```
 
 ## ...拓展运算符

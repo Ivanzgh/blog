@@ -244,6 +244,8 @@ IFC 指的是行级格式化上下文，布局规则：
 - `:first-child` 父元素的第一个子元素
 - `:last-child` 父元素的最后一个子元素
 - `:nth-child(n)` 父元素的第 n 个子元素
+- `:nth-child(odd)` 父元素下所有奇数索引位置的子元素
+- `:nth-child(even)` 父元素下所有偶数索引位置的子元素
 - `:nth-last-child(n)` 父元素的倒数第 n 个子 元素
 - `:only-child` 父元素的唯一子元素
 - `:first-of-type` 同级同类型元素中第一个元素

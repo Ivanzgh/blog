@@ -6,6 +6,24 @@
 - [微信小程序开发文档](https://developers.weixin.qq.com/miniprogram/dev/framework/)
 - [小程序开发者工具下载](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
 
+其他：
+
+1、开发者需要先申请开发权限。由小程序账号管理员在微信公众平台添加开发者的微信号。注意：各类权限的项目成员，总共最多添加 15 个账号。
+
+2、开发者必须先在微信公众平台获取 AppID，才能创建小程序项目。
+
+- 在项目初始化时，开发者需要填写 AppID
+- 后端服务可以选择「不使用云服务」
+- 模板选择可以选择最简单的「JS-基础模版」，由开发者决定
+
+3、微信小程序对请求的接口有 3 个强制要求：
+
+- 必须是有备案的域名。如果工期短，可以先申请域名备案，工信部审核需要时间
+- 必须是有 SSL 证书（https）
+- 域名不得带端口号
+
+注意：如果是自己做项目，需要买域名 + 工信部备案 + 公安备案 + 小程序备案
+
 ## 创建页面的方式
 
 方式一、在`app.json`中配置`pages`，添加路径后按`cmd + s`保存，会自动生成页面文件
@@ -338,7 +356,21 @@ Page({
   - [wxs 简介](https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxs/)
   - [wxs 语法参考](https://developers.weixin.qq.com/miniprogram/dev/reference/wxs/)
 
-不支持 addEventListener
+不支持 addEventListener。
+
+绑定事件的方式有两种：
+
+第一种方式：`bind:事件名`，bind 后面跟上冒号，冒号后面跟上事件名
+
+```html
+<button bind:tap="handler">按钮</button>
+```
+
+第二种方式：`bind事件名`，bind 后面直接跟上事件名
+
+```html
+<button bindtap="handler">按钮</button>
+```
 
 - `bindtap` 绑定点击事件
 - `catchtap` 阻止事件冒泡
@@ -658,9 +690,311 @@ Page({
 
 ## 网络请求
 
-`wx.request({})`
+[官方文档](https://developers.weixin.qq.com/miniprogram/dev/api/network/request/wx.request.html)
+
+`wx.request({})`请求的服务器域名必须在微信公众平台配置
+
+1. 域名必须是已经备案的
+2. request 合法域名以 https 开头
+
+在开发过程中，如果域名还在备案等影响开发进展的时候，可以跳过校验合法域名：
+
+在微信开发者工具右上角点击详情，打开本地配置，勾选上「不校验合法域名、web-view（业务域名）、TLS 版本以及 HTTPS 证书」。这种方式只适用于开发者工具、小程序的开发版和体验版，项目上线前必须要配置合法域名。
+
+## 界面交互
+
+- `wx.showToast()` 消息提示框
+- `wx.showModal()` 模态对话框
+- `wx.showLoading()` 加载中提示框
+- `wx.hideLoading()` 关闭加载中提示框
+- `wx.showActionSheet()` 弹出操作菜单
+- `wx.showShareMenu()` 显示分享菜单
 
 ## 本地存储
 
-- 存储方式：`wx.setStorageSync("key", "value");`
-- 获取方式：`wx.getStorageSync("key", "value");`
+1、同步 API：
+
+- 存储：`wx.setStorageSync("key", "value");`
+- 获取：`wx.getStorageSync("key", "value");`
+- 删除：`wx.removeStorageSync("key");`
+- 清空：`wx.clearStorageSync();`
+
+2、异步 API：
+
+- 存储：`wx.setStorage("key", "value");`
+- 获取：`wx.getStorage("key", "value");`
+- 删除：`wx.removeStorage("key");`
+- 清空：`wx.clearStorage();`
+
+::: tip
+对象类型的数据，可以直接存储，不用使用`JSON.stringify()`、`JSON.parse()`转换。
+:::
+
+可以在控制台的 Storage 中查看存储的数据。
+
+## 上拉加载、下拉刷新
+
+### 上拉加载
+
+1. 在 app.json 或 page.json 中配置距离页面底部的距离：onReachBottomDistance，默认是 50px
+2. 在页面的 js 中定义 onReachBottom()方法监听用户上拉加载事件
+
+### 下拉刷新
+
+1. 在页面的 index.json 中开启下拉刷新，需要添加：`"enablePullDownRefresh": true`
+2. 在页面的 js 中定义 onPullDownRefresh()方法监听用户下拉刷新事件
+
+### scroll-view 实现上拉加载、下拉刷新
+
+[官方文档](https://developers.weixin.qq.com/miniprogram/dev/component/scroll-view.html)
+
+可滚动视图区域。使用竖向滚动时，需要给 scroll-view 一个固定高度
+
+```html
+<scroll-view
+  class="scroll-y"
+  scroll-y
+  lower-threshold="100"
+  bindscrolltolower="getMore"
+  enable-back-to-top="true"
+  refresher-enabled
+  bindrefresherrefresh="handleRefresh"
+></scroll-view>
+```
+
+```css
+.scroll-y {
+  height: 100vh;
+}
+```
+
+```js
+Page({
+  getMore() {},
+  handleRefresh() {}
+});
+```
+
+## 优化目录结构
+
+创建项目时，可以将小程序源码放到 `miniprogram` 目录下。
+
+目录结构：
+
+```
+- mini
+  - miniprogram
+  - .eslintrc.js
+  - .gitignore
+  - .prettierrc
+  - package-lock.json
+  - package.json
+  - project.config.json
+  - project.private.config.json
+```
+
+配置` project.config.json`：
+
+1. 新建`miniprogram` 目录
+2. 配置 `miniprogramRoot`，指定小程序源码的目录
+3. 配置 `setting.packNpmManually` 为 `true`，开启自定义 node_modules 和 miniprogram_npm 位置的构建 npm 方式
+4. 配置 `setting.packNpmRelationList`，指定 `packageJsonPath` 和 `miniprogramNpmDistDir` 的位置
+   1. packageJsonPath 表示 node_modules 源对应的 package.json
+   2. miniprogramNpmDistDir 表示 node_modules 的构建结果目标位置
+
+```json
+{
+  "miniprogramRoot": "miniprogram/",
+  "setting": {
+    "packNpmManually": true,
+    "packNpmRelationList": [
+      {
+        "packageJsonPath": "./package.json",
+        "miniprogramNpmDistDir": "./miniprogram"
+      }
+    ]
+  },
+  "srcMiniprogramRoot": "miniprogram/"
+}
+```
+
+## npm 支持
+
+在小程序中使用的 npm 依赖包，必须要执行一遍「构建 npm」流程。
+
+打开「工具」，选择「构建 npm」，构建成功后，会在根目录下生成一个 miniprogram_npm 目录，这里是小程序真正使用的包。
+
+例如，如果是新项目，就执行`npm init -y`初始化，然后安装 vant，安装成功后还是不能使用的，需要执行构建 npm。
+
+注意，不是所有的 npm 依赖都能在小程序中使用，小程序依赖于微信的运行环境。
+
+## 登录流程
+
+![img](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1712648730.png)
+
+- <https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html>
+- <https://developers.weixin.qq.com/ebook?action=get_post_info&docid=000cc48f96c5989b0086ddc7e56c0a>
+
+- 临时登录凭证 code 只能使用一次
+
+## getApp()
+
+`getApp()`方法用于获取全局唯一的 App 实例。
+
+在小程序中，App()方法用于注册小程序。在 app.js 中定义 App()方法，添加全局共享的数据和方法。在页面中通过 getApp()方法获取全局唯一的 App 实例，从而实现页面、组件的数据传递。
+
+注意：
+
+1. 不要在`App()`方法中使用`getApp()`方法，可以通过 this 获取实例。
+2. 通过 `getApp()`方法获取全局实例之后，不要调用实例的生命周期函数。
+
+示例：
+
+```js
+App({
+  globalData: {
+    token: ''
+  },
+
+  setToken(token) {
+    this.globalData.token = token;
+  }
+});
+```
+
+假设有一个登录页面 login.wxml
+
+```html
+<button type="primary" plain bindtap="handleLogin">登录</button>
+```
+
+点击登录按钮，调用 setToken()方法，将 token 存储到全局变量中。
+
+```js
+const appInstance = getApp();
+
+Page({
+  data: {},
+
+  handleLogin() {
+    console.log(appInstance);
+    const token = 123456;
+    appInstance.setToken(token);
+  }
+});
+```
+
+在其他页面获取全局数据：
+
+```js
+const appInstance = getApp();
+
+Page({
+  data: {},
+
+  onLoad() {
+    console.log(appInstance.globalData.token);
+  }
+});
+```
+
+## 页面通信
+
+如果一个页面通过 `wx.navigateTo` 打开一个新页面，这两个页面间将建立一条数据通道。
+
+1. 在`wx.navigateTo`的 success 回调中通过`eventChannel`对象发射事件
+2. 被打开的页面可以通过`this.getOpenerEventChannel`方法获取一个 EventChannel 对象，进行监听、发射事件
+3. wx.navigateTo 可以定义 `events` 配置项接收被打开页面发射的事件
+
+::: code-group
+
+```js [home.js]
+Page({
+  handler() {
+    wx.navigateTo({
+      url: '/pages/list/index',
+      events: {
+        currentEvent: (res) => {
+          console.log(res); // { age: 18 }
+        }
+      },
+      success(res) {
+        res.eventChannel.emit('myEvent', { name: 'zgh' });
+      }
+    });
+  }
+});
+```
+
+```html [home.wxml]
+<button type="primary" bindtap="handler">跳转到列表页面</button>
+```
+
+:::
+
+```js [list.js]
+Page({
+  onLoad() {
+    const eventChannel = this.getOpenerEventChannel();
+    eventChannel.on('myEvent', (res) => {
+      console.log(res); // { name: 'zgh' }
+    });
+    eventChannel.emit('currentEvent', { age: 18 });
+  }
+});
+```
+
+- events 对象的 key 表示被打开页面通过 eventChannel 发射的事件，value 是回调函数
+- emit 是发射事件，on 是接收事件
+
+## 事件总线
+
+事件总线是一种常用的跨页面通信方式，是对发布-订阅模式的一种实现。常用于非父子组件和兄弟组件之间的通信。
+
+可以使用第三方库[PubSubJS](https://github.com/mroderick/PubSubJS)
+
+```bash
+npm install pubsub-js
+```
+
+安装完之后要「构建 npm」
+
+示例：实现兄弟组件通信
+
+在 components 中创建两个组件：custom1 和 custom2，并在一个父组件中引入。在 custom1 中调用 sendData 方法发布消息，在 custom2 中监听 myEvent 事件。
+
+::: code-group
+
+```js [custom1.js]
+import PubSub from 'pubsub-js';
+
+Component({
+  data: {
+    name: 'zgh'
+  },
+
+  methods: {
+    sendData() {
+      // 发布自定义事件
+      PubSub.publish('myEvent', this.data.name);
+    }
+  }
+});
+```
+
+```js [custom2.js]
+import PubSub from 'pubsub-js';
+
+Component({
+  lifetimes: {
+    attached() {
+      // 订阅、监听自定义事件
+      PubSub.subscribe('myEvent', (msg, data) => {
+        console.log(msg, data);
+      });
+    }
+  }
+});
+```
+
+:::

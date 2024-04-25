@@ -213,7 +213,19 @@ HTML 实体字符是一种用实体编码表示特殊字符的方式。以下是
 </form>
 ```
 
-name：表单项的字段标识
+- name：表单项的字段标识
+
+### label
+
+label 标签用于定义表单元素的标签文本。
+
+- for 属性用于指定与该标签关联的表单控件的 id 属性
+- 当用户点击 label 标签时，浏览器会自动将焦点转移到与之相关联的表单控件上
+
+```html
+<label for="username">用户名：</label>
+<input type="text" id="username" name="username" />
+```
 
 ## 表单校验
 

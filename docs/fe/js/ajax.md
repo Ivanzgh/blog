@@ -80,6 +80,33 @@ MDN : <https://developer.mozilla.org/zh-CN/docs/Web/Guide/AJAX>
 
 ## axios
 
+> 基于 promise 可以用于浏览器和 node.js 的网络请求库
+>
+> 作用于浏览器端和 node.js
+>
+> 在服务端使用 node.js 的 http 模块，而在浏览器端使用 XMLHttpRequests
+
+### 特性
+
+- 从浏览器创建 XMLHttpRequests
+- 从 node.js 创建 http 请求
+- 支持 Promise API
+- 拦截请求和响应
+- 转换请求和响应数据
+- 取消请求
+- 超时处理
+- 查询参数序列化支持嵌套项处理
+- 自动将请求体序列化为：
+  - JSON (application/json)
+  - Multipart / FormData (multipart/form-data)
+  - URL encoded form (application/x-www-form-urlencoded)
+- 将 HTML Form 转换成 JSON 进行请求
+- 自动转换 JSON 数据
+- 获取浏览器和 node.js 的请求进度，并提供额外的信息（速度、剩余时间）
+- 为 node.js 设置带宽限制
+- 兼容符合规范的 FormData 和 Blob（包括 node.js）
+- 客户端支持防御 XSRF
+
 ### Content-Type
 
 Axios 请求头中的`Content-Type`常见的有三种：
@@ -101,9 +128,11 @@ headers: {
 1、`application/json`是默认的方式，声明了将请求体中的数据以 json 字符串的格式传给后端。
 
 2、`application/x-www-form-urlencoded`声明了请求体中的数据会以键值对（普通表单形式）发送到后端，这种类型是 Ajax 默认的。
-请求体一般是 json 对象，可以使用`qs`库将对象转为 url 参数形式。
+请求体一般是 json 对象，可以使用[qs](https://github.com/ljharb/qs)库将对象转为 url 参数形式。
 
-qs 是 Axios 默认就有的，能将对象和 url 中的参数互相转换
+qs 能将对象和 url 中的参数互相转换
+
+[官方文档 urlencoded](https://axios-http.com/zh/docs/urlencoded)
 
 ```js
 import qs from 'qs';
@@ -117,7 +146,13 @@ const obj = { name: 'zgh', age: 23 };
 console.log(qs.stringify(obj)); // 'name=zgh&age=23'
 ```
 
+::: tip 提示
+最新版本中，已实现了自动序列化。当请求头中的 `content-type` 是 `application/x-www-form-urlencoded` 时，Axios 将自动地将普通对象序列化成 urlencoded 的格式。
+:::
+
 3、`multipart/form-data`一般用来传输文件，数据为二进制格式，也可为键值对格式
+
+[官方文档 form-data](https://axios-http.com/zh/docs/multipart)
 
 ```js
 const fileData = new FormData();
@@ -129,3 +164,9 @@ fileData.append('files', file1);
 fileData.append('files', file2);
 fileData.append('files', file3);
 ```
+
+::: tip 提示
+
+从 v0.27.0 版本开始，当请求头中的 `Content-Type` 是 `multipart/form-data` 时，Axios 支持自动地将普通对象序列化成一个 FormData 对象
+
+:::

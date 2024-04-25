@@ -2,9 +2,8 @@
 
 ## 简介
 
-node 官网下载地址: <https://nodejs.org/en/download/>
-
-中文文档: [http://nodejs.cn/api/](http://nodejs.cn/api/)
+- [官网](https://nodejs.org/en/)
+- [中文文档](http://nodejs.cn/api/)
 
 Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时
 

@@ -8,118 +8,19 @@
   <body>
     <button class="btn">click</button>
     <script>
-      // const s1 = SingDog.getInstance();
-      // const s2 = SingDog.getInstance();
-      // console.log(s1 === s2); // true
-
-      // function Sigleton(name) {
-      //   this.name = name;
-      //   this.instance = null;
-      // }
-      // Sigleton.prototype.getName = function () {
-      //   console.log(this.name);
-      // };
-      // Sigleton.getInstance = function (name) {
-      //   if (!this.instance) {
-      //     this.instance = new Sigleton(name);
-      //   }
-      //   return this.instance;
-      // };
-
-      // function Sigleton(name) {
-      //   this.name = name;
-      // }
-      // Sigleton.getInstance = (function (name) {
-      //   let instance = null;
-      //   return function (name) {
-      //     if (!instance) {
-      //       instance = new Sigleton(name);
-      //     }
-      //     return instance;
-      //   };
-      // })();
-
-      // const s1 = Sigleton.getInstance('zs');
-      // const s2 = Sigleton.getInstance('ls');
-      // console.log(s1 === s2); // true
-      // console.log(s1);
-      // console.log(s2);
-
-      // const CreateDiv = (function () {
-      //   let instance;
-      //   const CreateDiv = function (html) {
-      //     if (instance) {
-      //       return instance;
-      //     }
-      //     this.html = html;
-      //     this.init();
-      //     return (instance = this);
-      //   };
-      //   CreateDiv.prototype.init = function () {
-      //     const div = document.createElement('div');
-      //     div.innerHTML = this.html;
-      //     document.body.appendChild(div);
-      //   };
-      //   return CreateDiv;
-      // })();
-
-      const CreateDiv = function (html) {
-        this.html = html;
-        this.init();
-      };
-      CreateDiv.prototype.init = function () {
-        const div = document.createElement('div');
-        div.innerHTML = this.html;
-        document.body.appendChild(div);
-      };
-
-      const ProxySingletonCreateDiv = (function () {
-        let instance = null;
-        return function (html) {
-          if (!instance) {
-            instance = new CreateDiv(html);
+      const each = function (arr, callback) {
+        for (let i = 0; i < arr.length; i++) {
+          if (callback(arr[i], i) === false) {
+            break;
           }
-          return instance;
-        };
-      })();
-
-      const a = new ProxySingletonCreateDiv('zs');
-      const b = new ProxySingletonCreateDiv('ls');
-      console.log(a === b);
-
-      // const createDialog = (function () {
-      //   let div;
-      //   return function () {
-      //     if (!div) {
-      //       div = document.createElement('div');
-      //       div.innerHTML = 'dialog';
-      //       div.style.display = 'none';
-      //       document.body.appendChild(div);
-      //     }
-      //     return div;
-      //   };
-      // })();
-
-      const getSingle = function (fn) {
-        let result;
-        return function () {
-          return result || (result = fn.apply(this, arguments));
-        };
+        }
       };
 
-      function createDialog() {
-        const div = document.createElement('div');
-        div.innerHTML = 'dialog';
-        div.style.display = 'none';
-        document.body.appendChild(div);
-        return div;
-      }
-
-      const createSingleDialog = getSingle(createDialog);
-
-      document.querySelector('.btn').addEventListener('click', function () {
-        const dialog = createSingleDialog();
-        dialog.style.display = 'block';
+      each([1, 2, 3, 4, 5], (item, index) => {
+        if (item > 3) {
+          return false;
+        }
+        console.log(item);
       });
     </script>
   </body>

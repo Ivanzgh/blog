@@ -1,5 +1,33 @@
 # 路由
 
+## 跳转方式
+
+1. 声明式导航：navigator 组件
+2. 编程式导航：使用小程序提供的 API
+
+编程式导航包含：
+
+- `wx.navigateTo()`：保留当前页面，跳转到另一个页面，不能跳转到 tabbar 页面
+- `wx.redirectTo()`：关闭当前页面，跳转到另一个页面，不能跳转到 tabbar 页面
+- `wx.switchTab()`：跳转到 tabbar 页面，路径后不能带参数
+- `wx.reLaunch()`：关闭所有页面，跳转到另一个页面
+- `wx.navigateBack()`：关闭当前页面，返回上一页面，可以返回多个页面
+
+```js
+wx.navigateTo({ url: '/pages/list/detail' });
+
+// 默认返回上一页
+wx.navigateBack();
+// 返回两个页面，比如 A -> B -> C，从 C 返回到 A
+wx.navigateBack({ delta: 2 });
+```
+
+## 路径传参
+
+参数与路径之间用 `?` 隔开，多个参数用 `&` 隔开。例如`/path?id=1&type=wx`
+
+参数需要在跳转到的页面的 onLoad 中通过形参进行接收。
+
 ## wx.navigateTo
 
 在 wxml 中使用：

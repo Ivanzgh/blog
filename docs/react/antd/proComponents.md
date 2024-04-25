@@ -77,7 +77,7 @@ const onFinish = async (values: any) => {
 
 <https://procomponents.ant.design/components/table>
 
-## 常用列配置
+### 常用列配置
 
 | 属性         | 描述                   | 类型    | 默认值 |
 | ------------ | ---------------------- | ------- | ------ |
@@ -110,6 +110,42 @@ const actionRef = useRef<ActionType>();
       fixed: 'left',
       render: (text, record, index) => `${index + 1}`
     }
+```
+
+### 给 ProTable 的搜索表单设置默认值
+
+调用 `formRef.current.setFieldsValue` 方法来设置表单域的默认值
+
+```tsx
+import { useEffect, useRef } from 'react';
+import { ProTable, FormInstance } from '@ant-design/pro-components';
+
+const Foo = () => {
+  const formRef = useRef<FormInstance>();
+
+  // 初始化时设置默认值
+  useEffect(() => {
+    if (formRef.current) {
+      formRef.current.setFieldsValue({
+        fieldName1: '111',
+        fieldName2: '222'
+      });
+    }
+  }, []);
+
+  return (
+    <ProTable
+      formRef={formRef}
+      request={async (params) => {
+        if (!params.excepArray) {
+          params.excepArray = 'Contract';
+        }
+        // 其余省略
+      }}
+    />
+  );
+};
+export default Foo;
 ```
 
 ## 可展开表格设置默认展开

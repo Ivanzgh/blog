@@ -1,5 +1,11 @@
 # ES6
 
+## 简介
+
+- ES6 是 ECMA 为 JavaScript 制定的第 6 个标准版本
+- ECMAscript 2015 是在 2015 年 6 月发布 ES6 的第一个版本。以此类推，ECMAscript 2016 是 ES6 的第二个版本，也叫 ES7、ES2016。
+- ES6 是一个泛指，含义是 5.1 版本以后的 JavaScript 下一代标准。
+
 ## let 和 const
 
 ### let
@@ -652,7 +658,7 @@ console.log(str); // 'abc'
 
 ### WeakSet 和 Set 的区别
 
-## ...操作符
+## 扩展操作符
 
 `...`可以叫做 spread（扩展）或者 rest（剩余）操作符
 
@@ -662,7 +668,7 @@ console.log(str); // 'abc'
 function Name(x, y, ...z) {
   console.log(x); // a
   console.log(y); // b
-  console.log(z); //["c" "d" "e"]
+  console.log(z); // ["c", "d", "e"]
 }
 Name('a', 'b', 'c', 'd', 'e');
 ```
@@ -680,9 +686,16 @@ const arr3 = [...arr1, ...arr2]; // ["a", "b", "c", "d", "e", "f", "g"]
 const arr4 = arr1.concat(arr2);
 ```
 
+展开对象：
+
 ```js
 const obj1 = { a: 1, b: 2 };
 const obj2 = { ...obj1, c: 3 }; // {a: 1, b: 2, c: 3}
+
+const obj3 = { a: 1, b: 2, c: 3 };
+const { a, ...x } = obj3;
+console.log(a); // 1
+console.log(x); // {b: 2, c: 3}
 ```
 
 使用扩展运算符展开一个新的对象，第二个对象的属性值会覆盖第一个对象的同名属性值
@@ -690,8 +703,7 @@ const obj2 = { ...obj1, c: 3 }; // {a: 1, b: 2, c: 3}
 ```js
 const obj1 = { a: 1, b: 2, c: 3 };
 const obj2 = { b: 30, c: 40, d: 50 };
-const merged = { ...obj1, ...obj2 };
-console.log(merged); // {a: 1, b: 30, c: 40, d: 50}
+const merged = { ...obj1, ...obj2 }; // {a: 1, b: 30, c: 40, d: 50}
 ```
 
 ## Class
@@ -861,201 +873,6 @@ class Foo extends React.Component {
   modalRef = null;
 }
 ```
-
-## Promise
-
-`promise`用同步编程的方式来编写异步代码，解决回调嵌套问题
-
-```js
-new Promise((resolve, reject) => {});
-```
-
-### Promise 的三种状态
-
-- `resolved` 成功
-- `rejected` 失败
-- `pending` 创建 promise 对象实例进行中
-
-#### then 方法
-
-- 分别指定`resolved`状态和`rejected`状态的回调函数，第二个参数可选（不推荐使用）。
-- 返回的是一个新的`Promise`，支持链式调用
-
-```js
-function pro(params) {
-  return new Promise((resolve, reject) => {
-    if (params) {
-      resolve('hahaha');
-    } else {
-      reject('error');
-    }
-  });
-}
-pro(true).then(
-  (res) => {
-    console.log(res);
-  },
-  (err) => console.log(err)
-);
-```
-
-::: warning
-`Promise` 本身是同步的，`then` 方法是异步的
-
-```js
-const p = new Promise((resolve, reject) => {
-  console.log(1);
-  resolve(3);
-});
-p.then((res) => console.log(res));
-console.log(2);
-```
-
-结果是 1、2、3
-:::
-
-#### catch 方法
-
-```js
-function Cat(ready) {
-  return new Promise((resolve, reject) => {
-    if (ready) {
-      resolve('Tom');
-    } else {
-      reject('Kitty');
-    }
-  });
-}
-Cat(false)
-  .then((res) => {
-    console.log(res);
-  })
-  .catch((err) => console.log(err));
-```
-
-`catch`方法可以捕获错误，作用和 `then(onFulfilled, onRejected)` 当中的 `onRejected` 函数类似。
-
-```js
-Cat(false)
-  .then((res) => {
-    console.log(tom);
-  })
-  .catch((err) => console.log(err));
-```
-
-示例未定义变量 tom，如果不使用 catch 会直接报错，终止程序。使用后不会报错，但会将错误信息传递到 catch 方法中，方便处理
-
-::: tip
-将`catch`语句和`try/catch`语句进行比较
-:::
-
-示例：以下代码输出什么？
-
-```js
-try {
-  (async function () {
-    a().b().c();
-  })();
-} catch (e) {
-  console.log(`执行出错：${e.message}`);
-}
-```
-
-答案：`Uncaught (in promise) ReferenceError: a is not defined`
-
-`async`定义了异步任务，而`try catch`无法捕获异步任务，所以无法执行`catch`语句，
-改为同步即可`await (async function() { a().b().c() })()`
-
-#### all 和 race 方法
-
-`Promise.all()`提供并行执行异步操作的能力，将多个实例包装成一个新实例，返回全部实例状态变更后的结果数组(**全部变更再返回**)
-
-`Promise.race()`将多个实例包装成一个新实例，返回全部实例状态优先变更后的结果(**先变更先返回**)
-
-```js
-let p1 = new Promise(function (resolve) {
-  setTimeout(function () {
-    resolve('Hello');
-  }, 3000);
-});
-
-let p2 = new Promise(function (resolve) {
-  setTimeout(function () {
-    resolve('world');
-  }, 1000);
-});
-
-Promise.all([p1, p2]).then((res) => {
-  // 3秒后打印出 ["Hello", "world"]
-  console.log(res);
-});
-
-Promise.race([p1, p2]).then((res) => {
-  // 1秒后打印出 world
-  console.log(res);
-});
-```
-
-结果表明`Promise.all` 方法会按照参数数组里面的顺序将结果返回
-
-`Promise.race`方法则是只要该数组中的`Promise`对象的状态发生变化（无论是`resolve`还是`reject`）该方法都会返回
-
-## async、await
-
-`async`、`await`用来处理异步问题
-
-`async`放置在函数的前面，返回一个`promise`
-
-**await 只能在 async 函数里面使用**，可以让 js 进行等待，直到一个 promise 执行并返回它的结果，js 才会继续往下执行
-
-```js
-async function f() {
-  let res = await axios.get(url);
-  return res.data; //  等待返回请求结果后才执行
-}
-f();
-```
-
-[参考](https://segmentfault.com/a/1190000013292562?utm_source=channel-newest)
-
-## generator
-
-Generator 是一种异步编程解决方案，执行 Generator 函数会返回一个遍历器对象。两个特征：星号\*、`yield`表达式
-
-调用函数返回一个指向内部状态的指针，即遍历器对象。必须调用遍历器的`next`方法，使得指针移向下一个状态。
-`yield`表达式就是暂停标志
-
-```js
-function* g() {
-  yield 'hello';
-  yield 'world';
-  return 'haha';
-}
-const ee = g(); // 函数并不会立即执行
-console.log(ee); // g {<suspended>}
-
-console.log(ee.next()); // {value: "hello", done: false}
-console.log(ee.next()); // {value: "world", done: false}
-console.log(ee.next()); // {value: "haha", done: true}
-console.log(ee.next()); // {value: undefined, done: true}
-```
-
-遍历器对象`{value: "hello", done: false}`表示 value 是`yield`表达式的值，`done: false`表示遍历还没有结束
-
-Generator 函数可以不用`yield`表达式，这时就变成了一个单纯的暂缓执行函数。
-
-```js
-function* gg() {
-  console.log('666');
-}
-const g1 = gg();
-
-setTimeout(() => {
-  g1.next(); // 1s后输出666
-}, 1000);
-```
-
-`yield`表达式只能用在 Generator 函数里面
 
 ## Proxy
 

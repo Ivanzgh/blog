@@ -630,6 +630,8 @@ console.log(arr); // [['name', 'zgh'], ['age',23]]
 
 将键值对数组转为对象
 
+1、将 Map 转化为 Object:
+
 ```js
 const entries = new Map([
   ['name', 'zgh'],
@@ -638,4 +640,16 @@ const entries = new Map([
 
 const obj = Object.fromEntries(entries);
 console.log(obj); // { name: "zgh", age: 23 }
+```
+
+2、将 Array 转化为 Object:
+
+```js
+const arr = [
+  ['0', 'a'],
+  ['1', 'b'],
+  ['2', 'c']
+];
+const obj = Object.fromEntries(arr);
+console.log(obj); // { 0: "a", 1: "b", 2: "c" }
 ```

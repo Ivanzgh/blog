@@ -8,22 +8,26 @@ outline: deep
 
 需要构造函数**具备判断自己是否已经构造过一个实例**的能力。
 
+应用场景：
+
+1. 创建全局事件总线 Event Bus
+2. 管理唯一的弹窗组件
+3. 共享资源池
+
+---
+
 ```js
 function Singleton(name) {
   this.name = name;
 }
 
-const s1 = Singleton.getInstance('zs');
-const s2 = Singleton.getInstance('ls');
+const s1 = new Singleton('zs');
+const s2 = new Singleton('ls');
 ```
 
 上面的实例 s1、s2 是两个相互独立的对象，而单例模式则是无论创建多少次，都返回第一次创建的唯一的实例。
 
-实现方式有函数写法和类写法
-
 ## 简易实现
-
-### 函数写法
 
 方式一、
 
@@ -65,9 +69,7 @@ const s2 = Singleton.getInstance('ls');
 console.log(s1 === s2); // true
 ```
 
-### 类写法
-
-方式一、使用静态方法
+方式三、 使用 class 的静态方法
 
 ```js
 class Singleton {
@@ -87,13 +89,11 @@ const s2 = Singleton.getInstance();
 console.log(s1 === s2); // true
 ```
 
-使用闭包的方式和函数写法一致
-
 ## 透明的单例模式
 
-前面的示例中，使用者需要知道 Singleton 是一个单例类，需要知道使用 `Singleton.getInstance()` 来获取对象，而不是 `new Singleton()`。这就增加了这个类的「不透明性」
+前面的示例中，使用者需要知道 Singleton 是一个单例类，需要知道用 `Singleton.getInstance()` 来获取对象，而不是 `new Singleton()`。这就增加了这个类的「不透明性」
 
-透明性是指单例对象是否可以像其他对象一样被访问。
+> 透明性是指单例对象是否可以像其他对象一样被访问。
 
 示例：创建唯一的 div 节点
 
@@ -155,7 +155,7 @@ console.log(a === b);
 
 ## 惰性单例
 
-「惰性单例」指的是在需要的时候才创建对象实例。
+> 「惰性单例」指的是在需要的时候才创建对象实例。
 
 比如点击按钮后出现一个弹窗，点击后才创建弹窗，而不是页面加载时就创建。
 
@@ -207,6 +207,6 @@ document.querySelector('.btn').addEventListener('click', function () {
 });
 ```
 
-1. 创建对象的方法 fn 作为参数传入 getSingle 函数
-2. getSingle 返回一个新的函数，并且用一个变量 result 来保存 fn 的计算结果。result 变量因为身在闭包中，它不会被销毁。
-3. 把管理单例的职责、创建实例对象的职责分开放在两个方法里，组合在一起就能实现创建唯一实例对象的功能
+1. 创建对象的方法 fn 作为参数传入 getSingle 函数。
+2. getSingle 返回一个新的函数，并且用一个变量 result 来保存 fn 的计算结果。result 变量因为在闭包中，它不会被销毁。
+3. 把管理单例的职责、创建实例对象的职责分开放在两个方法里，组合在一起就能实现创建唯一实例对象的功能。

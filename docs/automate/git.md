@@ -132,6 +132,8 @@ ssh-add -D
 
 终端输入`open ~/.ssh/`，看看有没有 config 文件，文件没有后缀，如果没有就新建一个
 
+新建 config 文件：
+
 ```sh
 cd ~/.ssh
 
@@ -139,6 +141,11 @@ touch config
 ```
 
 然后可以在终端修改`vim config`，也可以直接打开 config 文件修改，Mac 下通过文本编辑打开。
+
+```sh
+cd ~/.ssh
+vim config
+```
 
 ```sh
 Host github
@@ -171,6 +178,8 @@ pbcopy < ~/.ssh/id_rsa.pub
 # gitlab
 # pbcopy < ~/.ssh/id_rsa_gitlab.pub
 ```
+
+查看公钥内容：`vim ~/.ssh/id_rsa.pub`
 
 ### 7、测试连接
 
@@ -708,6 +717,89 @@ Gitflow 工作流(Gitflow Workflow)是目前最流行的 git 团队协作模式
 
 如果是修复测试环境的 bug，例如`fix-login`分支，那么需要合并到对应的 release 分支。release 分支可以有多个版本，如 release1.0.0、release2.0.1 等。
 
+## 如何 fork 仓库
+
+**1、Fork 项目**
+
+在 GitHub 上找到你想研究的项目，点击右上角的"Fork"按钮，将项目复制到你自己的账户下。
+
+**2、克隆到本地**
+
+使用 `git clone` 命令将你 fork 的项目克隆到本地计算机，注意使用的是你的仓库地址而不是原始仓库地址。
+
+**3、设置上游仓库**
+
+进入本地仓库后，添加原始项目作为上游仓库（upstream），以便随时拉取最新更新。
+
+```bash
+git remote add upstream 原始项目地址
+```
+
+然后使用`git remote -v`查看远程仓库地址
+
+**4、保持同步**
+
+方式一、如果没创建新分支，直接在本地主分支上修改的，假设本地主分支是 main
+
+```bash
+# 直接使用该条命令，表示拉取、合并远程仓库的main分支
+git pull upstream main
+```
+
+- `git pull` 命令是 `git fetch` 和 `git merge` 两个操作的组合
+- 如果远程仓库的主分支是 master，那么要使用 `git pull upstream master` 命令
+
+下面的方式也可以：
+
+```bash
+# 将会从原始仓库的远程地址获取最新的变更，但不会将它们合并到你的本地分支中
+git fetch upstream
+
+# 将原始仓库的最新变更合并到本地的 mian 分支中
+git merge upstream/main
+```
+
+如果原始仓库的主分支不是 main，而是 master，那么需要修改 `upstream/main` 为 `upstream/master`
+
+方式二、如果创建了新分支，在新分支上进行更改，假设新分支是 dev
+
+```bash
+# 1、切换到main分支，拉取、合并
+git pull upstream main
+
+# 2、切换到dev分支，合并
+git merge main
+```
+
+下面这种方式能让 dev 分支是最新的，但是 main 分支不是最新的。
+
+```bash
+# 1、切换到main分支，拉取
+git fetch upstream
+
+# 2、切换到dev分支，合并
+git merge upstream/main
+```
+
+::: tip 总结：
+
+- 在主分支修改：执行`git pull upstream main`
+- 在新分支修改：
+  - 在 main 分支执行`git pull upstream main`
+  - 在 dev 分支执行`git merge main`
+
+:::
+
+**5、提交和推送更改**
+
+在进行了自己的修改并同步了上游更新后，将本地更改添加到暂存区，提交，并推送到你自己的 GitHub 仓库。
+
+```bash
+git add .
+git commit -m "描述你所做的更改"
+git push
+```
+
 ## 同步上游仓库
 
 ### 更新 fork 的仓库
@@ -743,12 +835,38 @@ git merge test/master --allow-unrelated-histories
 
 当你在本地仓库中创建一个新的分支时，该分支的历史记录是独立的，并且不包含来自 antd 远程仓库的历史记录。因此当你想将来自 antd 的更新合并到本地分支时，Git 会拒绝合并，因为这些历史记录不相关
 
-## git 上传校验
+## package.json 引入依赖的方式
 
-```sh
-# 关闭commit时的语法检测
-git commit --no-verify -m “xxx”
+在 `package.json` 的依赖项部分，通常是具体的版本号，例如 `"react": "17.0.1"`。但是有时为了指向特定的仓库分支、标签或提交，可以使用非标准格式来指定依赖的来源和版本。
+
+示例：
+
+```json
+{
+  "dependencies": {
+    "@types/react": "17.0.3",
+    "@types/react-dom": "17.0.2",
+    "emoji-mart": "git+https://github.com/oliveryh/emoji-mart.git#v3.1.1",
+    "obsidian": "obsidianmd/obsidian-api#master",
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
+  }
+}
 ```
+
+1. `"emoji-mart": "git+https://github.com/oliveryh/emoji-mart.git#v3.1.1"`
+
+这个写法表示 `emoji-mart` 库不是从 npm 安装，而是直接从 GitHub 拉取的，并且指定了特定的 tag 版本 `v3.1.1`。
+
+2. `"obsidian": "obsidianmd/obsidian-api#master"`
+
+从 GitHub 仓库获取且指定 `master` 分支。这种方式常用于测试尚未发布到 npm 的最新开发版或特定分支功能。
+
+这两种写法主要用于在项目开发阶段尝试使用库的预发布版本或者从源码直接安装，确保能够及时获得最新的更新。
+
+1. 前缀`git+https://github.com/`可以不用添加，推荐使用简介写法。
+
+2. 当需要将某个依赖项指定为来自 GitHub 仓库的特定版本或分支时，需要手动编辑 package.json 文件来添加相应的依赖
 
 ## FAQ
 

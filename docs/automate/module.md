@@ -49,9 +49,9 @@ window.moduleA = {
 
 ### 什么是模块化？
 
-将一个复杂的程序依据一定的规范封装成几个模块，并组合在一起。
+> 将一个复杂的程序依据一定的规范封装成几个模块，并组合在一起。
 
-模块的内部数据、方法是私有的，只是向外部暴露一些接口方法与外部模块通信
+模块的内部数据、方法是私有的，只是向外部暴露一些接口方法与外部模块通信。
 
 ### 为什么要有模块化？
 
@@ -79,19 +79,16 @@ window.moduleA = {
 
 ## CommonJS 规范
 
-CommonJS 规范是一套约定标准，主要内容是模块通过 `module.exports` 导出对外的变量或接口，通过 `require()` 来导入其他模块的输出到当前模块作用域中
-
-`Node.js`遵循的就是`CommonJS`规范
+CommonJS 规范是一套约定标准，主要内容是模块通过 `module.exports` 导出对外的变量或接口，通过 `require()` 来导入其他模块的输出到当前模块作用域中。
 
 - 每个文件就是一个模块，有自己的作用域
 - 在一个文件里面定义的变量、函数、类，都是私有的，对其他文件不可见
 - 可以从 `node_modules` 中引入一个库或者从本地目录引入一个文件
-
-Node.js 从`v13.2.0`之后也引入了规范的`ES Modules`机制，同时兼容早期的`CommonJS`
-
 - 所有代码都运行在模块作用域，不会污染全局作用域
 - 模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了
 - **同步加载**
+
+> Node.js 早期遵循的就是`CommonJS`规范。从`v13.2.0`之后也引入了规范的`ES Modules`机制，同时兼容早期的`CommonJS`
 
 ### 模块的导入导出
 
@@ -236,7 +233,7 @@ const a = () => {};
 export default a;
 
 // 其他文件导入，可以任意命名
-import  from 'default.js';
+import foo from 'default.js';
 ```
 
 还可直接在定义变量时就导出
@@ -269,7 +266,7 @@ console.log(obj.b);
 
 有了模块化和模块化规范，那具体怎么落地实现呢？
 
-开发方式从 JSP、PHP、原生 JavaScript、jQuery，再到 Vue、React、Angular 框架。从 ES5、ES6+，再到 TypeScript，以及 less、scss 等。前端开发变的复杂，会遇到一些问题：
+开发方式从 JSP、PHP、原生 JavaScript、jQuery，再到 Angular、React、 Vue 框架。从 ES5、ES6+，再到 TypeScript，以及 less、scss 等。前端开发变的复杂，会遇到一些问题：
 
 - 需要模块化开发，逻辑复用
 - 使用高级特性来加快开发效率，如 ES6+、sass、less

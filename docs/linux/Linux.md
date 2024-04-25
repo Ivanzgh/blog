@@ -46,10 +46,12 @@ echo "# title" >> README.md
 
 - [Ubuntu 下载](https://ubuntu.com/download)
 - [Vmware 安装 Ubuntu](https://blog.csdn.net/m0_51913750/article/details/131604868)
-Vmware 安装 Ubuntu
+
 ## shell 脚本
 
-```sh
+$$
+
+$$```sh
 #!/bin/bash
 
 echo "执行的脚本名称："$0
@@ -73,7 +75,11 @@ else
     echo "未知参数"
     exit 1
 fi
+
+read -n1 -p "Press any key to exit"
+echo
+exit 0
 ```
 
-- 使用非零的退出码来表示错误状态
+- 使用非零的退出码来表示错误状态，如例子中的「未知参数」
 - 退出码为 0 通常表示成功，一般放在脚本的最后一行

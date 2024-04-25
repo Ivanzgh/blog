@@ -686,28 +686,71 @@ window.onload = function () {
 };
 ```
 
-## B、KB、MB、GB 单位转换
+## 文件大小的单位转换
+
+注意：这里参数 size 的单位是字节 B
+
+下面的两种方式都推荐，区别是对小数部分为 00 的处理方式不同。
+
+- convertFileSize1：四舍五入，保留两位小数，若小数部分为 00 ，也保留。如 10.001 => 10.00B
+- convertFileSize2：四舍五入，保留两位小数，若小数部分为 00 ，不保留，只保留整数。如 10.001 => 10B
 
 ```js
-conver(limit){
-    let size = "";
-    if ( limit < 0.1 * 1024 ){ //如果小于0.1KB转化成B
-        size = limit.toFixed(2) + "B";
-    } else if (limit < 0.1 * 1024 * 1024 ){//如果小于0.1MB转化成KB
-        size = (limit / 1024).toFixed(2) + "KB";
-    } else if(limit < 0.1 * 1024 * 1024 * 1024){ //如果小于0.1GB转化成MB
-        size = (limit / (1024 * 1024)).toFixed(2) + "MB";
-    } else{ //其他转化成GB
-        size = (limit / (1024 * 1024 * 1024)).toFixed(2) + "GB";
-    }
+function convertFileSize1(size) {
+  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+  let index = 0;
 
-    let sizestr = size + "";
-    let len = sizestr.indexOf(".");
-    let dec = sizestr.substr(len + 1, 2);
-    if (dec === "00"){//当小数点后为00时 去掉小数部分
-        return sizestr.substring(0,len) + sizestr.substr(len + 3,2);
-    }
-    return sizestr;
+  while (size >= 1024 && index < units.length - 1) {
+    size /= 1024;
+    index++;
+  }
+
+  const sizeStr = size.toFixed(2) + units[index];
+  const decimalPart = sizeStr.split('.')[1];
+
+  if (decimalPart === '00') {
+    return sizeStr.substring(0, sizeStr.length - 3) + sizeStr.substring(sizeStr.length - 1);
+  }
+
+  return sizeStr;
+}
+
+function convertFileSize2(size) {
+  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+  let index = 0;
+
+  while (size >= 1024 && index < units.length - 1) {
+    size /= 1024;
+    index++;
+  }
+
+  const sizeStr = size % 1 === 0 ? size.toFixed(0) : (Math.round(size * 100) / 100).toString();
+  return sizeStr + units[index];
+}
+```
+
+下面的是反面示例，虽能实现功能，但计算复杂，不推荐。
+
+```js
+function convertFileSize(size) {
+  let size = '';
+  if (size < 0.1 * 1024) {
+    size = size.toFixed(2) + 'B';
+  } else if (size < 0.1 * 1024 * 1024) {
+    size = (size / 1024).toFixed(2) + 'KB';
+  } else if (size < 0.1 * 1024 * 1024 * 1024) {
+    size = (size / (1024 * 1024)).toFixed(2) + 'MB';
+  } else {
+    size = (size / (1024 * 1024 * 1024)).toFixed(2) + 'GB';
+  }
+
+  let sizeStr = size + '';
+  let len = sizeStr.indexOf('.');
+  let dec = sizeStr.substr(len + 1, 2);
+  if (dec === '00') {
+    return sizeStr.substring(0, len) + sizeStr.substr(len + 3, 2);
+  }
+  return sizeStr;
 }
 ```
 

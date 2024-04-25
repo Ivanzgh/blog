@@ -33,6 +33,7 @@ export default defineConfig({
             { text: '数组', link: '/fe/js/array' },
             { text: '对象', link: '/fe/js/object' },
             { text: 'ES6', link: '/fe/js/es6' },
+            { text: '异步编程', link: '/fe/js/promise' },
             { text: 'DOM', link: '/fe/js/dom' },
             { text: 'JSON', link: '/fe/js/json' },
             { text: 'AJAX', link: '/fe/js/ajax' },
@@ -239,7 +240,9 @@ export default defineConfig({
             { text: '基础', link: '/miniProgram/wx/index' },
             { text: '踩坑记录', link: '/miniProgram/wx/fallible' },
             { text: '路由跳转', link: '/miniProgram/wx/route' },
-            { text: '登录流程', link: '/miniProgram/wx/login' },
+            { text: '自定义组件', link: '/miniProgram/wx/component' },
+            { text: '开放功能', link: '/miniProgram/wx/open' },
+            { text: '分包加载', link: '/miniProgram/wx/subPackages' },
             { text: '嵌套网页', link: '/miniProgram/wx/webView' },
             { text: '业务', link: '/miniProgram/wx/business' }
           ]
@@ -286,6 +289,8 @@ export default defineConfig({
             { text: '设计模式', link: '/base/design-pattern/' },
             { text: '单例模式', link: '/base/design-pattern/singleton' },
             { text: '策略模式', link: '/base/design-pattern/strategy' },
+            { text: '代理模式', link: '/base/design-pattern/proxy' },
+            { text: '迭代器模式', link: '/base/design-pattern/proxy' },
             { text: '观察者模式', link: '/base/design-pattern/observers' },
             { text: '发布-订阅模式', link: '/base/design-pattern/publisher-subscriber' }
           ]
