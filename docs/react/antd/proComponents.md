@@ -73,6 +73,14 @@ const onFinish = async (values: any) => {
 />;
 ```
 
+去掉时分秒，只保留年月日：
+
+```js
+if (date) {
+  date = dayjs(date).format('YYYY-MM-DD');
+}
+```
+
 ## ProTable
 
 <https://procomponents.ant.design/components/table>
@@ -103,13 +111,15 @@ const actionRef = useRef<ActionType>();
 ### 添加序号
 
 ```tsx
-    {
-      title: '序号',
-      width: 50,
-      hideInSearch: true,
-      fixed: 'left',
-      render: (text, record, index) => `${index + 1}`
-    }
+const columns = [
+  {
+    title: '序号',
+    width: 50,
+    hideInSearch: true,
+    fixed: 'left',
+    render: (text, record, index) => `${index + 1}`
+  }
+];
 ```
 
 ### 给 ProTable 的搜索表单设置默认值
@@ -146,6 +156,41 @@ const Foo = () => {
   );
 };
 export default Foo;
+```
+
+### 搜索表单设置时间范围
+
+```tsx
+const columns = [
+  {
+    title: '创建时间',
+    dataIndex: 'beginDate',
+    valueType: 'dateRange',
+    hideInTable: true,
+    search: {
+      transform: (value) => {
+        return { beginDate: value[0], endDate: value[1] };
+      }
+    }
+  }
+];
+```
+
+### a 标签字体颜色丢失
+
+给 columns 的某一项配置`ellipsis: true`后，a 标签就丢失了字体蓝色
+
+```js
+const columns = [
+  {
+    title: '文件名称',
+    dataIndex: 'fileName',
+    ellipsis: true,
+    render: (text, record) => {
+      return <a>{text}</a>;
+    }
+  }
+];
 ```
 
 ## 可展开表格设置默认展开
@@ -361,4 +406,239 @@ const AuthRoleForm = (props: AuthRoleFormProps) => {
 };
 
 export default AuthRoleForm;
+```
+
+## EditableProTable 可编辑表格
+
+[文档](https://procomponents.ant.design/components/editable-table)
+
+序号自增：
+
+```tsx
+const columns = [
+  {
+    title: '序号',
+    editable: false,
+    width: '50px',
+    render: (text, record, index) => `${index + 1}`
+  }
+];
+```
+
+columns 配置：
+
+`editable: false || (_: any, record: any, index: number) => Boolean`, 默认这一行都可以编辑。
+
+示例 1：在弹窗里实现一个可编辑表格，初始数据由父组件传递过来
+
+```tsx
+import type { ProColumns } from '@ant-design/pro-components';
+import { EditableProTable } from '@ant-design/pro-components';
+import { Modal, Popconfirm } from 'antd';
+import React, { useState } from 'react';
+
+type DataSourceType = {
+  id: number;
+  name: string;
+  notes: string;
+};
+
+type Props = {
+  title: string;
+  open: boolean;
+  values: Array<DataSourceType>;
+  onSubmit: () => void;
+  onCancel: () => void;
+};
+
+const EditableTable = (props: Props) => {
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
+  const [dataSource, setDataSource] = useState<readonly DataSourceType[]>([]);
+
+  const columns: ProColumns<DataSourceType>[] = [
+    {
+      title: '序号',
+      width: '50px',
+      editable: false,
+      render: (text, record, index) => `${index + 1}`
+    },
+    {
+      title: '姓名',
+      dataIndex: 'name',
+      width: '30%',
+      formItemProps: () => ({ rules: [{ required: true, message: '此项为必填项' }] })
+    },
+    { title: '备注', dataIndex: 'notes', width: '50%' },
+    {
+      title: '操作',
+      valueType: 'option',
+      width: 120,
+      render: (text, record, _, action) => [
+        <a
+          key="editable"
+          onClick={() => {
+            action?.startEditable?.(record.id);
+          }}
+        >
+          编辑
+        </a>,
+        <Popconfirm
+          key="delete"
+          title="删除此项？"
+          onConfirm={() => {
+            setDataSource(dataSource.filter((item) => item.id !== record.id));
+          }}
+          onCancel={() => {}}
+          okText="确 定"
+          cancelText="取 消"
+        >
+          <a>删除</a>
+        </Popconfirm>
+      ]
+    }
+  ];
+
+  const handleOk = () => {
+    props.onSubmit();
+  };
+  const handleCancel = () => {
+    props.onCancel();
+  };
+
+  return (
+    <Modal width={1200} title={props.title} open={props.open} destroyOnClose onOk={handleOk} onCancel={handleCancel}>
+      <EditableProTable<DataSourceType>
+        rowKey="id"
+        scroll={{ x: 960 }}
+        recordCreatorProps={{
+          position: 'bottom',
+          record: () => ({ id: (Math.random() * 1000000).toFixed(0) })
+        }}
+        loading={false}
+        columns={columns}
+        request={async () => ({
+          data: props.values,
+          total: props.values.length,
+          success: true
+        })}
+        value={dataSource}
+        onChange={setDataSource}
+        editable={{
+          type: 'multiple',
+          editableKeys,
+          onChange: setEditableRowKeys
+        }}
+      />
+    </Modal>
+  );
+};
+
+export default EditableTable;
+```
+
+示例 2：和表单一起使用
+
+```tsx
+import React, { useRef, useState } from 'react';
+import type { EditableFormInstance, ProFormInstance, ProColumns } from '@ant-design/pro-components';
+import { EditableProTable, ProForm } from '@ant-design/pro-components';
+import { Form, Modal, Popconfirm, message } from 'antd';
+
+type DataSourceType = {
+  id: React.Key;
+  name: string;
+  notes: string;
+};
+
+const EditableTable = (props: any) => {
+  const [form] = Form.useForm();
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() => []);
+  const formRef = useRef<ProFormInstance<any>>();
+  const editorFormRef = useRef<EditableFormInstance<DataSourceType>>();
+  const columns: ProColumns<DataSourceType>[] = [
+    {
+      title: '序号',
+      width: '50px',
+      editable: false,
+      render: (text, record, index) => `${index + 1}`
+    },
+    {
+      title: '姓名',
+      dataIndex: 'name',
+      width: '30%',
+      formItemProps: () => ({ rules: [{ required: true, message: '此项为必填项' }] })
+    },
+    { title: '备注', dataIndex: 'notes', width: '50%' },
+    {
+      title: '操作',
+      valueType: 'option',
+      width: 120,
+      render: (text, record, _, action) => [
+        <a
+          key="editable"
+          onClick={() => {
+            action?.startEditable?.(record.id);
+          }}
+        >
+          编辑
+        </a>,
+        <Popconfirm
+          key="delete"
+          title="删除此项？"
+          onConfirm={() => {
+            const tableDataSource = formRef.current?.getFieldValue('table') as DataSourceType[];
+            formRef.current?.setFieldsValue({
+              table: tableDataSource.filter((item) => item.id !== record.id)
+            });
+          }}
+          onCancel={() => {}}
+          okText="确 定"
+          cancelText="取 消"
+        >
+          <a>删除</a>
+        </Popconfirm>
+      ]
+    }
+  ];
+
+  const handleOk = () => {
+    form.submit();
+  };
+  const handleCancel = () => {
+    props.onCancel();
+  };
+  const handleFinish = async (values: Record<string, any>) => {
+    const tableData = editorFormRef.current?.getRowsData?.();
+    if ((Array.isArray(tableData) && tableData.length === 0) || !tableData) {
+      message.error('请添加信息');
+      return;
+    }
+    props.onSubmit({ ...props.values, ...values });
+  };
+
+  return (
+    <Modal width={900} title={props.title} open={props.open} destroyOnClose onOk={handleOk} onCancel={handleCancel}>
+      <ProForm formRef={formRef} form={form} submitter={false} onFinish={handleFinish}>
+        <EditableProTable<DataSourceType>
+          rowKey="id"
+          editableFormRef={editorFormRef}
+          headerTitle="可编辑表格"
+          name="table"
+          recordCreatorProps={{
+            position: 'bottom',
+            record: () => ({ id: (Math.random() * 1000000).toFixed(0) })
+          }}
+          columns={columns}
+          editable={{
+            type: 'multiple',
+            editableKeys,
+            onChange: setEditableRowKeys
+          }}
+        />
+      </ProForm>
+    </Modal>
+  );
+};
+
+export default EditableTable;
 ```

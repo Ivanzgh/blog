@@ -1,7 +1,5 @@
 # BI
 
-引导 BI 规范化快速实现
-
 ## 快速开发流程
 
 1. 确定适配方案
@@ -9,6 +7,12 @@
    - vw、vh，占满屏幕
 2. 使用 Flex 或者 Gird 布局，先占满九宫格屏幕
 3. 在每个格子里填充图表，图表要跟随格子大小变化
+
+---
+
+- 尽量不要用 px 单位，除非是数值很小的值，或者影响不大的值
+- 优先使用的单位： vw、vh、%
+- 字体大小可以控制媒体查询控制，也可以根据 fitChartSize 工具函数换算
 
 ## 适配痛点
 
@@ -281,9 +285,19 @@ module.exports = defineConfig({
 }
 ```
 
-### echarts 图表字体换算
+## rem
 
-在配置 echarts 时不能使用 vw、vh 函数，那么可以封装一个 js 方法转换。在`src/utils/index.js`里定义换算函数
+根据屏幕宽高比例来设置 html 根元素的 `font-size` 值的大小，通常还是和 16:9 来比较
+
+## Echarts 图表适配
+
+### 常见效果
+
+- [立体柱状图](https://www.makeapie.cn/echarts_content/xH0E6KFMcG.html)
+
+### 图表字体换算
+
+在配置 echarts 时不能使用 vw、vh 函数，那么可以封装一个 js 方法转换。在`src/utils/index.js`里定义换算函数：
 
 ```js
 /* Echarts图表字体、间距自适应 */
@@ -304,11 +318,201 @@ import { fitChartSize } from '@/utils';
 const option = {
   axisLabel: {
     show: true,
-    textStyle: { color: '#00c7ff', fontSize: fitChartSize(16) }
+    textStyle: { fontSize: fitChartSize(16) }
   }
 };
 ```
 
-## rem
+### 饼图
 
-根据屏幕宽高比例来设置 html 根元素的 `font-size` 值的大小，通常还是和 16:9 来比较
+1、设置饼图的半径 radius 和中心点 center 时，可以用变量控制大小，监听屏幕宽度改变，重新设置半径和中心点。
+
+示例：发光、有间隔的圆环饼图，右侧是多个图例。图例并未设置 type 为 scroll，而是根据屏幕宽度改变大小和间距。
+
+::: details
+
+```tsx
+import { useEffect, useRef } from 'react';
+import * as echarts from 'echarts';
+import { TypeProps } from './NumberBar';
+import { evaluateFormats, moduleTitle } from '@/config/title';
+import { fitChartSize } from '@/utils';
+
+const ProportionPie = ({ data }: TypeProps) => {
+  const pieRef = useRef<HTMLDivElement>(null);
+  const legendData = ['商业', '办公', '医疗', '酒店', '停车场', '仓库', '基站', '驿站', '充电桩'];
+
+  let pieRadius = ['60%', '63%'];
+  let pieCenter = ['25%', '50%'];
+  let legendItemGap = 10;
+  let legendWidth = 10;
+  let legendHeight = 10;
+
+  useEffect(() => {
+    setPieSize();
+    const pie = initPie();
+    const handleResize = () => {
+      setPieSize();
+      pie?.resize();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const setPieSize = () => {
+    const widthScreen = document.body.clientWidth;
+    if (widthScreen > 1600) {
+      pieRadius = ['60%', '63%'];
+      pieCenter = ['25%', '50%'];
+      legendItemGap = 10;
+      legendWidth = 10;
+      legendHeight = 10;
+    } else if (widthScreen > 1536 && widthScreen <= 1600) {
+    } else if (widthScreen > 1440 && widthScreen <= 1536) {
+    } else if (widthScreen > 1366 && widthScreen <= 1440) {
+    } else if (widthScreen > 1280 && widthScreen <= 1366) {
+    } else if (widthScreen > 1200 && widthScreen <= 1280) {
+    } else {
+      pieRadius = ['52%', '55%'];
+      pieCenter = ['26%', '50%'];
+      legendItemGap = 3;
+      legendWidth = 3;
+      legendHeight = 3;
+    }
+  };
+
+  const initPie = () => {
+    if (!pieRef.current) return;
+
+    const pieInstance = echarts.init(pieRef.current);
+
+    const trafficWay = [
+      { value: data.trade, name: '商业' },
+      { value: data.work, name: '办公' },
+      { value: data.medicalCare, name: '医疗' },
+      { value: data.pub, name: '酒店' },
+      { value: data.parkingLots, name: '停车场' },
+      { value: data.warehouse, name: '仓库' },
+      { value: data.baseStation, name: '基站' },
+      { value: data.postStation, name: '驿站' },
+      { value: data.chargingStation, name: '充电桩' }
+    ];
+
+    const pieData = [];
+    const color = ['#00ffff', '#F39800', '#009944', '#FFF100', '#00A0E9', '#7D5CF1', '#E856F4', '#E68058', '#1ED7FE'];
+    for (let i = 0; i < trafficWay.length; i++) {
+      pieData.push(
+        {
+          value: trafficWay[i].value,
+          name: trafficWay[i].name,
+          itemStyle: {
+            borderWidth: 5,
+            shadowBlur: 20,
+            borderColor: color[i],
+            shadowColor: color[i]
+          }
+        },
+        {
+          value: 2,
+          name: '',
+          itemStyle: {
+            normal: {
+              label: { show: false },
+              labelLine: { show: false },
+              color: 'rgba(0, 0, 0, 0)',
+              borderColor: 'rgba(0, 0, 0, 0)',
+              borderWidth: 0
+            }
+          }
+        }
+      );
+    }
+
+    const option = {
+      color: color,
+      title: {
+        text: '业态占比',
+        top: '45%',
+        textAlign: 'center',
+        left: '25%',
+        textStyle: {
+          color: '#fff',
+          fontSize: fitChartSize(16),
+          fontWeight: '400'
+        }
+      },
+      tooltip: {
+        show: false
+      },
+      legend: {
+        icon: 'circle',
+        data: legendData,
+        orient: 'vertical',
+        top: 'middle',
+        right: 0,
+        itemGap: legendItemGap,
+        itemWidth: legendWidth,
+        itemHeight: legendHeight,
+        formatter: function (name: string) {
+          let total = 0;
+          let target: any;
+          for (let i = 0; i < trafficWay.length; i++) {
+            total += trafficWay[i].value;
+            if (trafficWay[i].name === name) {
+              target = trafficWay[i].value;
+            }
+          }
+          const arr = ['{a|' + name + ' :}{b|' + ((target / total) * 100).toFixed(2) + '%}'];
+          return arr.join('\n');
+        },
+        textStyle: {
+          color: '#fff',
+          rich: {
+            a: {
+              fontSize: fitChartSize(14),
+              align: 'left',
+              padding: [0, 0, 0, 10]
+            },
+            b: {
+              fontSize: fitChartSize(16),
+              fontFamily: 'YouSheBiaoTiHei',
+              align: 'right',
+              padding: [0, 0, 0, fitChartSize(20)],
+              lineHeight: 25
+            }
+          }
+        }
+      },
+      toolbox: { show: false },
+      series: [
+        {
+          name: '',
+          type: 'pie',
+          clockWise: false,
+          radius: pieRadius,
+          center: pieCenter,
+          hoverAnimation: false,
+          itemStyle: {
+            normal: {
+              label: { show: false },
+              labelLine: { show: false }
+            }
+          },
+          data: pieData
+        }
+      ]
+    };
+
+    pieInstance.setOption(option);
+    return pieInstance;
+  };
+
+  return <div ref={pieRef} className="h-full"></div>;
+};
+
+export default ProportionPie;
+```
+
+:::

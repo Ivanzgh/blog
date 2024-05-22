@@ -31,6 +31,7 @@ export default defineConfig({
             { text: '基础', link: '/fe/js/' },
             { text: '字符串', link: '/fe/js/string' },
             { text: '数组', link: '/fe/js/array' },
+            { text: '原型/继承/构造函数/类', link: '/fe/js/class' },
             { text: '对象', link: '/fe/js/object' },
             { text: 'ES6', link: '/fe/js/es6' },
             { text: '异步编程', link: '/fe/js/promise' },
@@ -88,15 +89,16 @@ export default defineConfig({
           text: 'TypeScript',
           collapsed: false,
           items: [
-            { text: '介绍', link: '/fe/ts/' },
-            { text: '接口', link: '/fe/ts/interface' },
-            { text: '断言', link: '/fe/ts/assertion' },
-            { text: '索引签名', link: '/fe/ts/index-signatures' },
-            { text: '枚举', link: '/fe/ts/enum' },
-            { text: '函数', link: '/fe/ts/function' },
+            { text: '基础', link: '/fe/ts/' },
+            { text: '接口类型', link: '/fe/ts/interface' },
+            { text: '函数类型', link: '/fe/ts/function' },
+            { text: '类型断言', link: '/fe/ts/assertion' },
             { text: '类', link: '/fe/ts/class' },
+            { text: '泛型', link: '/fe/ts/generic' },
+            { text: '枚举', link: '/fe/ts/enum' },
+            { text: '装饰器', link: '/fe/ts/decorator' },
             { text: 'tsconfig.json', link: '/fe/ts/config' },
-            { text: '泛型', link: '/fe/ts/generic' }
+            { text: 'FAQ', link: '/fe/ts/faq' }
           ]
         }
       ],
@@ -194,7 +196,8 @@ export default defineConfig({
             { text: 'AST', link: '/automate/ast' },
             { text: 'Babel', link: '/automate/babel' },
             { text: '测试', link: '/automate/test' },
-            { text: 'CI/CD', link: '/automate/cicd' }
+            { text: 'CI/CD', link: '/automate/cicd' },
+            { text: 'Menorepo', link: '/automate/monorepo' }
           ]
         },
         {
@@ -263,8 +266,8 @@ export default defineConfig({
           text: '🧰 工具箱',
           collapsed: false,
           items: [
-            { text: 'plugin', link: '/tools/plugin' },
-            { text: 'vscode', link: '/tools/vscode' },
+            { text: '插件', link: '/tools/plugin' },
+            { text: 'Chrome', link: '/tools/chrome' },
             { text: 'iTerm2', link: '/tools/iTerm2' },
             { text: '部署', link: '/tools/deploy' }
           ]
@@ -290,7 +293,7 @@ export default defineConfig({
             { text: '单例模式', link: '/base/design-pattern/singleton' },
             { text: '策略模式', link: '/base/design-pattern/strategy' },
             { text: '代理模式', link: '/base/design-pattern/proxy' },
-            { text: '迭代器模式', link: '/base/design-pattern/proxy' },
+            { text: '迭代器模式', link: '/base/design-pattern/iterator' },
             { text: '观察者模式', link: '/base/design-pattern/observers' },
             { text: '发布-订阅模式', link: '/base/design-pattern/publisher-subscriber' }
           ]
@@ -374,8 +377,8 @@ function nav() {
       text: '计算机基础',
       items: [
         { text: '计算机网络', link: '/base/network/' },
-        { text: '数据结构', link: '/base/data-structure/' },
         { text: '设计模式', link: '/base/design-pattern/' },
+        { text: '数据结构', link: '/base/data-structure/' },
         { text: '算法', link: '/base/algorithm/' },
         { text: '操作系统', link: '/base/os/' },
         { text: '计算机组成原理', link: '/base/computer-organization/' }

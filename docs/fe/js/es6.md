@@ -706,174 +706,6 @@ const obj2 = { b: 30, c: 40, d: 50 };
 const merged = { ...obj1, ...obj2 }; // {a: 1, b: 30, c: 40, d: 50}
 ```
 
-## Class
-
-通过 `class` 关键字，可以定义**类**。class 可以看作只是一个**语法糖**，
-它的绝大部分功能，ES5 都可以做到，新的 class 写法让对象原型的写法更加清晰、更像面向对象编程的语法
-
-```js
-// ES5 中使用面向对象
-function Person(name, age) {
-  this.name = name;
-  this.age = age;
-  this.say = function () {
-    console.log('hello');
-  };
-}
-let obj = new Person('zgh', 22);
-obj.say();
-
-// ES6 中使用面向对象
-class Person {
-  constructor(name, age) {
-    this.name = name;
-    this.age = age;
-  }
-  say() {
-    console.log('hello');
-  }
-}
-let obj = new Person('zgh', 22);
-obj.say();
-```
-
-上面代码定义了一个**类**，里面有一个`constructor`方法，这就是构造方法，而`this`关键字则代表实例对象。即 ES5 的构造函数 `Person`，
-对应 ES6 的 `Person` 类的构造方法。
-
-Person 类除了构造方法，还定义了一个`say`方法。注意，定义“类”的方法的时候，前面不需要加上`function`这个关键字，直接把函数定义放进去了就可以了。
-另外，方法之间不需要逗号分隔，否则会报错。
-
-```js
-function Foo() {}
-Foo.prototype.constructor === Foo; // true
-
-const fo = new Foo();
-fo.constructor === Foo; // true
-```
-
-`Foo.prototype`默认有一个公有且不可枚举的`construetor`属性，这个属性引用的是对象关联的函数（上例中是 Foo）。
-**构造函数**调用`new Foo()`创建的对象在`__proto__`上也有`construetor`属性，指向**创建这个对象的函数**
-
-<https://segmentfault.com/a/1190000023516545>
-
-### Class 继承
-
-```js
-class NBAPlayer {
-  constructor(name, age, height) {
-    this.name = name;
-    this.age = age;
-    this.height = height;
-  }
-  say() {
-    console.log(`我是${this.name},${this.age}岁,身高${this.height}cm`);
-  }
-}
-class MVP extends NBAPlayer {
-  constructor(name, age, height, year) {
-    super(name, age, height);
-    this.year = year;
-  }
-  showMVP() {
-    console.log(`我是${this.name},在${this.year}获得MVP!`);
-  }
-}
-let r1 = new NBAPlayer('Jack', '39', '198');
-r1.say();
-let r2 = new MVP('Jack', '39', '198', '2010');
-r2.showMVP();
-```
-
-`extends`关键字用于实现类之间的继承。子类继承父类的所有属性和方法，使用`super`可以调用父类的方法。
-
-### 静态方法、静态属性
-
-类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前加上`static`关键字，则这个方法**不会被实例继承**，
-而是直接通过类来调用，这就是静态方法。
-
-```js
-class Foo {
-  static f() {
-    return '666';
-  }
-}
-Foo.f(); // '666'
-let person = new Foo();
-person.f(); // TypeError: person.f is not a function
-```
-
-父类的静态方法**可以被子类继承**
-
-```js
-class Foo {
-  static f() {
-    return '666';
-  }
-}
-
-class Bar extends Foo {}
-Bar.f(); // "666"
-```
-
-静态方法也可以被`super`对象调用
-
-```js
-class Foo {
-  static f() {
-    return '666';
-  }
-}
-class Bar extends Foo {
-  static g() {
-    return super.f();
-  }
-}
-Bar.g(); // "666"
-```
-
-#### 类的静态属性
-
-```js
-// es6写法
-class Foo {}
-Foo.prop = 1;
-
-// es7写法，推荐这一种写法
-class Bar {
-  static prop = 1;
-  constructor() {
-    console.log(Bar.prop);
-  }
-}
-```
-
-#### 类的实例属性
-
-类的实例属性可以用等式，写入类的定义之中
-
-```js
-class Foo {
-  state = { value: 1 };
-  constructor() {
-    console.log(this.state.value); // 1
-  }
-}
-```
-
-再看看 react 类组件写法，以前定义类的实例属性只能在`constructor`里面，现在可以写在外面
-
-```js
-class Foo extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      count: 0
-    };
-  }
-  modalRef = null;
-}
-```
-
 ## Proxy
 
 外界对目标对象的访问可以被 Proxy 拦截，进行过滤和改写，意为“代理器”
@@ -957,12 +789,14 @@ console.log(proxyAccount.num); // Uncaught TypeError: The num is not an number
 
 ## 空值合并运算符
 
-写法：`a ?? b`，如果第一个参数是`null/undefined`，则`??`返回第一个参数，否则返回第二个参数。
-效果等同于`(a !== null && a !== undefined) ? a : b`
+- 写法：`a ?? b`
+- 如果左侧参数是`null`或`undefined`，则`??`返回其右侧参数，否则返回其左侧参数
+- 效果等同于`(a !== null && a !== undefined) ? a : b`
 
 ```js
-let a;
-let b = a ?? 1; // 1
+const a = null ?? 'hi'; // hi
+
+const b = 0 ?? 42; // 0
 ```
 
 - `??`运算符的优先级非常低，仅略高于 `?` 和 `=`，使用时要考虑是否添加括号
@@ -971,7 +805,7 @@ let b = a ?? 1; // 1
 ### 与`||`的区别
 
 - `||` 返回第一个真值，`??` 返回第一个已定义的值
-- `||` 无法区分 `false`、`0`、空字符串`""`、`NaN`和`null/undefined`
+- `||` 无法区分 `false`、`0`、空字符串`""`、`NaN`、`null`、`undefined`
 
 ```js
 let a = 0;
@@ -1001,7 +835,7 @@ a ?? 1; // 0
 !!''; // false
 ```
 
-## 可选链和双问号
+## 可选链
 
 当位于 `?.` 前面的值为 `undefined` 或 `null` 时，会立即阻止代码的执行，并返回 `undefined`
 
@@ -1021,7 +855,7 @@ obj?.a;
 - 当 left 是：0、''、false，会返回 left 的值
 - 当 left 是 null、undefined，会返回 right 的值
 
-`||`与双问号的区别是：当 left 是 0、''、false 时，会返回 right 的值
+`||`与`??`的区别是：当 left 是 0、''、false 时，会返回 right 的值
 
 ## 逻辑运算符和赋值运算符
 

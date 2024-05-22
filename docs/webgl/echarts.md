@@ -47,6 +47,63 @@ const option = {
 
 interval 设置成 0 强制显示所有标签。如果设置为 1，表示『隔一个标签显示一个标签』，如果值为 2，表示隔两个标签显示一个标签，以此类推
 
+### 设置折线颜色
+
+线堆叠
+
+```js
+const option = {
+  series: [
+    {
+      name: 'apple',
+      type: 'line',
+      stack: 'Total',
+      data: data.currentYear,
+      lineStyle: {
+        normal: {
+          color: '#9BFB94'  // 设置线的颜色
+        }
+      },
+      itemStyle: {
+        normal: {
+          color: '#9BFB94' // 设置线上点的颜色、图例的颜色
+        }
+      },
+      areaStyle: {  // 设置线条下面区域的渐变色
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            { offset: 0, color: 'red' },
+            { offset: 1, color: 'orange' }
+          ],
+          global: false
+        }
+      }
+    },
+    {
+      name: 'orange',
+      type: 'line',
+      stack: 'Total',
+      data: data.lastYear,
+      lineStyle: {
+        normal: {
+          color: '#5781FC'
+        }
+      },
+      itemStyle: {
+        normal: {
+          color: '#5781FC'
+        }
+      }
+    }
+  ]
+};
+```
+
 ## 饼图
 
 设置饼图位置
@@ -188,3 +245,79 @@ const option = {
 
 - [设置图例的形状](https://echarts.apache.org/zh/option.html#legend.icon)
 - 图例的宽高：`itemWidth: 10, itemHeight: 10`
+- 图例的间距：`itemGap: 10`
+
+## 水球图
+
+需要安装插件：<https://github.com/ecomfe/echarts-liquidfill>
+
+```js
+const data = 66;
+const fillData = [data / 100, data / 100]; // 水球波纹值，小数
+
+const option = {
+  xAxis: {
+    show: false
+  },
+  yAxis: {
+    show: false
+  },
+  grid: {
+    top: '2.5%',
+    right: '40',
+    bottom: '2.5%',
+    left: 0
+  },
+  title: {
+    text: `${data}{a|%}`,
+    textStyle: {
+      fontSize: 30,
+      color: '#fff',
+      rich: {
+        a: {
+          fontSize: 18
+        }
+      }
+    },
+    x: 'center',
+    y: 'center'
+  },
+  graphic: [
+    {
+      type: 'group',
+      left: 'center',
+      top: '60%'
+    }
+  ],
+  series: [
+    {
+      type: 'liquidFill',
+      radius: '70%',
+      center: ['50%', '50%'],
+      data: fillData,
+
+      outline: {
+        show: true,
+        borderDistance: 8,
+        itemStyle: {
+          borderWidth: 5,
+          borderColor: '#08B5F7',
+          shadowBlur: 10,
+          shadowColor: '#08B5F7'
+        }
+      },
+      color: ['#08B5F7', '#4FCBFA50'],
+      backgroundStyle: {
+        borderWidth: 0,
+        borderColor: '#ffffff00',
+        color: '#ffffff00'
+      },
+      label: {
+        normal: {
+          formatter: ''
+        }
+      }
+    }
+  ]
+};
+```

@@ -1,90 +1,49 @@
 # 接口
 
+作用：
+
+- 描述对象的形状
+- 对类的一部分行为进行抽象
+
+规则：
+
+- 接口一般首字母大写
+- 接口只支持声明对象类型
+
+示例：
+
 ```ts
-function add(param: { one: number; two: number }): number {
-  return param.one + param.two;
-}
-const total = add({ one: 1, two: 2 });
-```
-
-注解表示`param`参数是一个对象，有参数`one、two`且类型是`number`，返回值是`number`
-
-也可以使用解构赋值
-
-```typescript
-function add({ one, two }: { one: number; two: number }): number {
-  return one + two;
-}
-```
-
-使用接口
-
-```typescript
 interface Person {
-  first: string;
-  last: string;
+  name: string;
+  age: number;
 }
 
-function greeter(person: Person): string {
-  return 'hello,' + person.first + 'and' + person.last;
-}
-
-let user = { first: 'zgh', last: 'ivan' };
-greeter(user);
+let user: Person = {
+  name: 'Ivan',
+  age: 25
+};
 ```
 
-类型检查器会检查`greeter`的调用，greeter 有一个参数，并要求这个对象参数有名称为`first`和`last`、类型为`string`的属性，
-属性的顺序不会检查
-
-::: tip
-`interface`只支持声明对象类型，可以合并扩展
-
-```typescript
-interface Person {
-  first: string;
-}
-interface Person {
-  last: string;
-}
-const user = {} as Person;
-console.log(user.first);
-console.log(user.last);
-```
-
-:::
+这样就约束了 user 的形状必须和接口 Person 一致。
 
 ## 可选属性
 
-接口里的属性并不都是必需的
+在接口属性名称后面加`?`即表示非必需。
 
-```typescript
-interface SquareConfig {
-  color?: string;
-  width?: number;
+```ts
+interface Person {
+  name: string;
+  age?: number;
 }
 
-function createSquare(config: SquareConfig): { color: string; area: number } {
-  let newSquare = { color: 'blue', area: 100 };
-  if (config.color) {
-    newSquare.color = config.color;
-  }
-  if (config.width) {
-    newSquare.area = config.width * config.width;
-  }
-  return newSquare;
-}
-let square = createSquare({ color: 'red' });
+let user: Person = {
+  name: 'lolo'
+};
 ```
-
-在接口属性名称后面加`?`即表示非必需
-
-::: tip
-createSquare()后面的`{ color: string; area: number }`表示返回值类型
-:::
 
 ## 只读属性
 
-一些对象属性只能在对象刚刚创建的时候修改其值，使用`readonly`指定只读属性
+一些对象属性只能在对象刚刚创建的时候修改其值，使用`readonly`指定只读属性。
 
 ```typescript
 interface User {
@@ -101,7 +60,7 @@ my.age = 23; // Error
 
 ## 任意属性
 
-当一个接口中有可选属性和只读属性时，还希望允许有其他的任意属性，可以用**索引签名**实现
+当一个接口中有可选属性和只读属性时，还希望允许有其他的任意属性，可以用**索引签名**实现。
 
 ```typescript
 interface User {
@@ -112,11 +71,33 @@ interface User {
 let my: User = { name: 'zgh', age: 24, height: 183 };
 ```
 
-`[propName: string]: any`表示属性名称是字符串类型，值是任意类型
+`[propName: string]: any`表示属性名称是字符串类型，值是任意类型。
+
+注意：一旦定义了任意属性，那么确定类型和可选类型都必须是它的类型的子集。
+
+```ts
+interface Person {
+  name: string;
+  age?: number; // 报错
+  [x: string]: string;
+}
+```
+
+这里任意属性是 string 类型，但是 age 属性是 number 类型，number 不是 string 的子集，所以报错。
+
+将任意属性的类型设为 any 类型即可：
+
+```ts
+interface Person {
+  name: string;
+  age?: number;
+  [x: string]: any;
+}
+```
 
 ## 函数类型
 
-接口也可以描述函数类型，给接口定义一个调用签名，包括参数列表和返回值类型
+接口也可以描述函数类型，给接口定义一个调用签名，包括参数列表和返回值类型。
 
 ```typescript
 interface Fun {
@@ -128,7 +109,7 @@ let myFun: Fun = function (name: string, age: number) {
 myFun('zgh', 23);
 ```
 
-对于函数类型的类型检查来说，函数的参数名不需要与接口里定义的名字相匹配
+对于函数类型的类型检查来说，函数的参数名不需要与接口里定义的名字相匹配。
 
 ```typescript
 interface Fun {
@@ -139,7 +120,19 @@ let myFun: Fun = function (n: string, a: number): boolean {
 };
 ```
 
-函数的参数会逐个进行检查，要求对应位置上的参数类型是兼容的
+函数的参数会逐个进行检查，要求对应位置上的参数类型是兼容的。
+
+函数类型的另一种写法：
+
+```ts
+interface Fun {
+  say: (name: string, age: number) => boolean;
+}
+```
+
+在这个例子中，Fun 接口描述了一个对象，该对象需要有一个名为 say 的属性，这个属性是一个函数，接受两个参数：一个类型为 string 的 name 和一个类型为 number 的 age，并返回一个 boolean 类型的值。
+
+它定义了一个具有单个属性 say 的**对象类型**，其中 say 是一个函数类型，而不是直接定义一个函数类型本身。
 
 ## 可索引类型
 
@@ -162,14 +155,11 @@ console.log(re); // 'green'
 如果你不想写接口，可以直接使用内联类型注解。但是在多处使用相同注解时，建议使用接口
 
 ```typescript
-let user: {
-  name: string;
-  age: number;
-};
-user = {
-  name: 'zgh',
-  age: 23
-};
+let user: { name: string; age: number };
+user = { name: 'zgh', age: 23 };
+
+// 或者在声明时初始化
+let user: { name: string; age: number } = { name: 'zgh', age: 23 };
 ```
 
 ## 方法
@@ -194,4 +184,40 @@ const user = {
   }
 };
 getInfo2(user);
+```
+
+## 接口合并
+
+接口中的属性会合并到一个接口中，同名属性类型必须一致。
+
+```ts
+interface Person {
+  name: string;
+}
+interface Person {
+  age: number;
+}
+```
+
+相当于：
+
+```ts
+interface Person {
+  name: string;
+  age: number;
+}
+```
+
+接口中的函数合并就是函数重载。
+
+## 接口继承
+
+```ts
+interface FooProps {
+  name: string;
+}
+
+interface BarProps extends FooProps {
+  age: number;
+}
 ```

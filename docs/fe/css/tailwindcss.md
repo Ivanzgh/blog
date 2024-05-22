@@ -29,6 +29,7 @@ npm i -D prettier prettier-plugin-tailwindcss
 - `w-full`：100%
 - `w-1/2`：50%
 - `w-[50px]`：自定义宽度为 50px
+- `w-calc[100%-50px]`：使用 calc 计算宽度，不要有空格，或者用下划线代替空格
 
 ### 设置权重
 

@@ -44,6 +44,8 @@ function getInfo3(info: string, msg?: string) {}
 function getInfo4(info: string = 'success') {}
 ```
 
+可选参数必须接在必需参数后面
+
 ## 返回值注解
 
 通常不需要给函数返回值添加注解，编译器会推断出来
@@ -63,9 +65,24 @@ getUser('zgh');
 
 ## 函数重载
 
-函数根据传入不同的参数而返回不同类型的数据
+函数根据传入不同的参数而返回不同类型的数据。
 
-```typescript
+假设有一个函数 f，如果传入参数是 string 类型，就返回 string 类型；如果是 number 类型，就返回 number 类型。利用联合类型，可以实现：
+
+```ts
+function f(x: string | number): string | number {
+  if (typeof x === 'string') {
+    return x;
+  } else if (typeof x === 'number') {
+    return x + 1;
+  }
+  return 0;
+}
+```
+
+这样有一个缺点，就是定义不够精确，传入什么类型，输出也该是什么类型。如果只看`function f(x: string | number): string | number {}`这部分，我们无法知道`f`函数返回的是`string`还是`number`。这时就需要用到函数重载了。
+
+```ts
 function f(x: string): string;
 function f(x: number): number;
 function f(x: string | number): string | number {
@@ -76,8 +93,7 @@ function f(x: string | number): string | number {
   }
   return 0;
 }
-
-console.log(f(1));
+f(1);
 ```
 
 这样改变后，重载的 f 函数在调用的时候会进行正确的类型检查。

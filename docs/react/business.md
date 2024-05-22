@@ -538,3 +538,29 @@ const treeData = useMemo(() => {
   return filterTree(defaultData);
 }, [searchValue, defaultData]);
 ```
+
+## 使用本地字体
+
+1. 将字体包放到项目的 `src/assets/fonts` 目录下，若没有 fonts 目录就新建一个。
+2. 在`src/index.css` 全局样式中引入字体包：
+
+```css
+@font-face {
+  font-family: 'YouSheBiaoTiHei';
+  src: url(@/assets/font/YouSheBiaoTiHei.ttf);
+}
+```
+
+3. 使用字体：
+
+```css
+.box {
+  font-family: YouSheBiaoTiHei;
+}
+```
+
+还有一种方式是在 fonts 目录下新建 font.css，内容同第 2 步，然后在 main.js 中引入：
+
+```tsx
+import '@/assets/font/font.css';
+```

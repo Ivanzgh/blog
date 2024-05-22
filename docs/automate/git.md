@@ -785,8 +785,8 @@ git merge upstream/main
 
 - 在主分支修改：执行`git pull upstream main`
 - 在新分支修改：
-  - 在 main 分支执行`git pull upstream main`
-  - 在 dev 分支执行`git merge main`
+  1. 在 main 分支执行`git pull upstream main`
+  2. 在 dev 分支执行`git merge main`
 
 :::
 

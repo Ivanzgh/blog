@@ -1,7 +1,5 @@
 # 对象
 
-[原型/继承/构造函数/类](/fe/js/class)
-
 ## 创建对象的方式
 
 ### 1、直接创建
@@ -87,9 +85,25 @@ console.log(person1, person2);
 
 可以看出，混合模式共享着对相同方法的引用，又保证了每个实例有自己的私有属性。最大限度的节省了内存
 
-## Object.create
+## Object.create()
 
 `Object.create()`以一个现有对象作为原型，创建一个新对象。参数接收：`Object`、`null`
+
+```js
+const user = {
+  age: 24,
+  say() {
+    console.log(`My name is ${this.name}. ${this.age} years old`);
+  }
+};
+
+const me = Object.create(user);
+me.name = 'zgh';
+me.age = 23;
+me.say(); // My name is zgh. 23 years old
+```
+
+创建一个新对象`{name: "zgh", age: 23}`，在这个对象的`__proto__`上有 `user` 对象
 
 ## valueOf
 
@@ -131,235 +145,9 @@ Object.keys(obj).length === 0; // true
 JSON.stringify({}) === '{}'; // true
 ```
 
-## new 的过程
-
-### new 解析
-
-```js
-function Person(name) {
-  this.name = name;
-}
-let person = new Person('zgh');
-console.log(person.name); // 'zgh'
-```
-
-在构建函数中显示返回基础类型：
-
-```js
-function Person(name) {
-  this.name = name;
-  return 1;
-}
-let person = new Person('zgh');
-console.log(person.name); // 'zgh'
-```
-
-在构建函数中显示返回引用类型：
-
-```js
-function Person(name) {
-  this.name = name;
-  return { name: 'js' };
-}
-let person = new Person('zgh');
-console.log(person.name); // js
-```
-
-### 流程
-
-1、创建一个空对象 obj
-
-```js
-let obj = {};
-```
-
-2、使用 `call` 将构造函数 Person 中的 this 指向刚创建的 obj 对象
-
-```js
-let result = Person.call(obj);
-```
-
-3、设置原型链，将创建的 obj 的`__proto__`指向构造函数 Person 的`prototype`
-
-```js
-obj.__proto__ = Person.prototype;
-```
-
-4、判断 Person 的返回值类型，如果是值类型，返回创建的对象 obj。如果是引用类型，则返回这个引用类型的对象
-
-```js
-return result instanceof Object ? result : obj;
-```
-
-### 手写 new
-
-```js
-function myNew(func, ...args) {
-  const obj = {};
-  obj.__proto__ = func.prototype;
-  let result = func.apply(obj, args);
-  // let result = func.call(obj, ...args);
-  return result instanceof Object ? result : obj;
-}
-const p1 = myNew(Person, 'zgh');
-console.log(p1); // Person {name: 'zgh'}
-```
-
-## 对象继承的方式
-
-### 1、原型链继承
-
-通过将一个对象的原型指向另一个原型，实现继承关系，子类的原型是父类的一个实例对象
-
-```js
-function Parent() {
-  this.name = 'Parent';
-  this.nums = [1, 2, 3];
-}
-function Child() {
-  this.name = 'Child';
-}
-
-Child.prototype = new Parent();
-
-const demo = new Child();
-console.log(demo.name);
-```
-
-这种方式的缺点是子类共享了父类的原型对象，可能会导致意外的属性修改。如下更改`demo1`后`demo2`也随着改变了
-
-```js
-const demo1 = new Child();
-const demo2 = new Child();
-demo1.nums.push(4);
-console.log(demo1.nums); // [1, 2, 3, 4]
-console.log(demo2.nums); // [1, 2, 3, 4]
-```
-
-### 2、构造函数继承
-
-通过在子类构造函数中调用父类构造函数，实现属性的继承。缺点是无法继承父类原型上的方法
-
-```js
-function Parent() {
-  this.name = 'Parent';
-  this.nums = [1, 2, 3];
-}
-Parent.prototype.foo = function () {
-  console.log(this.nums);
-};
-
-function Child() {
-  Parent.call(this);
-  this.name = 'Child';
-}
-
-const childObj = new Child();
-console.log(childObj.nums);
-
-console.log(childObj.foo()); // childObj.foo is not a function
-```
-
-### 3、组合继承
-
-组合继承结合了原型链继承和构造函数继承的优点，既能继承原型链上的方法，又能避免属性共享的问题
-
-这种方式的缺点是会调用两次父类构造函数，可能会导致性能问题
-
-```js
-function Parent() {
-  this.name = 'Parent';
-  this.nums = [1, 2, 3];
-}
-Parent.prototype.foo = function () {
-  console.log(this.nums);
-};
-
-function Child() {
-  Parent.call(this);
-  this.name = 'Child';
-}
-
-Child.prototype = new Parent();
-Child.prototype.constructor = Child; // 修复 constructor 指向
-
-const childObj1 = new Child();
-console.log(childObj1.foo()); // [1, 2, 3]
-console.log(childObj1.constructor);
-
-childObj1.nums.push(4);
-console.log(childObj1.nums); // [1, 2, 3, 4]
-
-const childObj2 = new Child();
-console.log(childObj2.nums); // [1, 2, 3]
-```
-
-### 4、原型式继承
-
-通过将一个对象作为另一个对象的基础，创建一个新的对象
-
-```js
-const parentObj = { name: 'Parent', nums: [1, 2, 3] };
-const childObj = Object.create(parentObj);
-childObj.name = 'Child';
-
-console.log(childObj.nums); // [1, 2, 3]
-```
-
-这种方式会创建一个新的对象，它的原型链指向了 parentObj，从而实现了继承
-
-### 5、寄生式继承
-
-在原型式继承的基础上，对新对象进行了增强
-
-```js
-function createChild(obj) {
-  const child = Object.create(obj);
-  child.say = function () {
-    console.log('Hello');
-  };
-  return child;
-}
-
-const parentObj = { name: 'Parent', nums: [1, 2, 3] };
-const childObj = createChild(parentObj);
-
-childObj.say(); // 'Hello'
-```
-
-### 6、寄生组合式继承
-
-寄生组合式继承是对组合继承进行了优化，避免了调用两次父类构造函数
-
-```js
-function inheritPrototype(Child, Parent) {
-  const prototype = Object.create(Parent.prototype);
-  prototype.constructor = Child;
-  Child.prototype = prototype;
-}
-
-function Parent() {
-  this.name = 'Parent';
-  this.nums = [1, 2, 3];
-}
-
-function Child() {
-  Parent.call(this);
-  this.name = 'Child';
-}
-
-inheritPrototype(Child, Parent);
-
-const childObj = new Child();
-```
-
-### 7、class 继承
-
-ES6+提出的对象继承方式
-
 ## Object.keys()
 
-返回对象中属性名称组成的数组
+返回对象中属性名称组成的数组。`Object.keys()` 只会返回对象自身的可枚举属性名，而不会返回对象从原型链继承的属性名。
 
 ```js
 const obj = { a: 1, b: 2 };
@@ -412,26 +200,6 @@ assign 实现了浅复制，会把原型上的属性也复制了，但是不能�
 ::: warning
 `Object.assign`不会在 source 对象值为 `null` 或 `undefined` 的时候抛出错误。
 :::
-
-## Object.create()
-
-`Object.create()`方法创建一个新对象，使用现有的对象来提供新创建的对象的`__proto__`
-
-```js
-const user = {
-  age: 24,
-  say() {
-    console.log(`My name is ${this.name}. ${this.age} years old`);
-  }
-};
-
-const me = Object.create(user);
-me.name = 'zgh';
-me.age = 23;
-me.say(); // My name is zgh. 23 years old
-```
-
-创建一个新对象`{name: "zgh", age: 23}`，在这个对象的`__proto__`上有 `user` 对象
 
 ## hasOwnProperty()
 

@@ -4,7 +4,7 @@
 
 [官网](https://babeljs.io/)
 
-babel 是 JavaScript 编译器
+babel 是 JavaScript 编译器。
 
 用途：
 
@@ -97,7 +97,7 @@ babal src/a.js -o lib/a.js
 
 ## Plugins
 
-plugins 就是 js 程序，让 Babel 如何对代码进行转换
+plugins 就是 js 程序，让 Babel 如何对代码进行转换。
 
 例如在`src/index.js`中使用了箭头函数，需要将其转为 ES5 代码
 
@@ -137,7 +137,7 @@ export default function ({ types: t }) {
 
 ## Presets
 
-Presets 是一组 Plugins 的集合，代替预先设定的一组插件，避免逐一添加所需的插件
+Presets 是一组 Plugins 的集合，代替预先设定的一组插件，避免逐一添加所需的插件。
 
 例如，env 这个 preset 包括支持 ES6+的所有插件
 
@@ -179,7 +179,7 @@ npm install -D @babel/preset-typescript
 
 ## 配置
 
-在终端手动输入很长的命令不太方便，所以更偏向于使用配置文件。在项目的根目录创建一个`babel.config.json`文件，需要 Babel v7.8.0 或更高版本
+在终端手动输入很长的命令不太方便，所以更偏向于使用配置文件。在项目的根目录创建一个`babel.config.json`文件，需要 Babel v7.8.0 或更高版本。
 
 ```json
 {
@@ -213,11 +213,11 @@ module.exports = { presets };
 
 上方配置使用了 env 这个 preset，且只会为目标浏览器中没有的功能加载转换插件。
 
-如配置了`chrome: '80'`表示转换完之后的代码支持到 chrome80 版本。执行脚本后发现`lib/index.js`里面到代码没有变化，这是因为 chrome80 版本已经支持了示例中的 ES6+ 代码（箭头函数、let、const、求幂运算），所以就没有必要将其转换了。如果更改为`chrome: '30'`会发现发生变化了，代码全部被转换为 ES5 代码
+如配置了`chrome: '80'`表示转换完之后的代码支持到 chrome80 版本。执行脚本后发现`lib/index.js`里面到代码没有变化，这是因为 chrome80 版本已经支持了示例中的 ES6+ 代码（箭头函数、let、const、求幂运算），所以就没有必要将其转换了。如果更改为`chrome: '30'`会发现发生变化了，代码全部被转换为 ES5 代码。
 
 ## Polyfill
 
-Polyfill 翻译为**垫片**，意为兜底的东西，是对执行环境或者其他功能的补充，让新的语法和方法也能在低版本浏览器里运行
+Polyfill 翻译为**垫片**，意为兜底的东西，是对执行环境或者其他功能的补充，让新的语法和方法也能在低版本浏览器里运行。
 
 修改`src/index.js`，添加了 `Array.prototype.includes` 方法
 
@@ -247,9 +247,9 @@ var b = [1, 2, 3].includes(1);
 ```
 
 useBuiltIns 是`@babel/env`提供的参数，默认值是 false。`useBuiltIns: 'usage'`的作用是只加载所需要的 polyfill，即按需加载。
-如果用了插件`@babel/plugin-transform-runtime`，就不能设置这个选项
+如果用了插件`@babel/plugin-transform-runtime`，就不能设置这个选项。
 
-执行脚本时在终端有一段警告
+执行脚本时在终端有一段警告：
 
 ```sh
 WARNING (@babel/preset-env): We noticed you're using the `useBuiltIns` option without declaring a core-js version. Currently, we assume version 2.x when no version is passed. Since this default version will likely change in future versions of Babel, we recommend explicitly setting the core-js version you are using via the `corejs` option.
@@ -279,7 +279,7 @@ You should also be sure that the version you pass to the `corejs` option matches
 
 推荐使用 `core-js@3` + `@babel/preset-env`，然后设置`@babel/preset-env`的`corejs` 选项为 3
 
-`@babel/polyfill`也可以实现，但是在 Babel7.4.0 以上已经不被推荐使用
+`@babel/polyfill`也可以实现，但是在 Babel7.4.0 以上已经不被推荐使用。
 
 Q：既然 Plugins 能将新特性转换成目标浏览器支持的 js，那么为什么还需要 Polyfill 呢？
 

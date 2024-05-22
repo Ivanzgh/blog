@@ -10,26 +10,40 @@ outline: deep
 
 应用场景：
 
+- 当一个类的对象需要在全局系统中共享时
+- 在需要控制实例的创建数量时
+
+例如：
+
 1. 创建全局事件总线 Event Bus
 2. 管理唯一的弹窗组件
-3. 共享资源池
-
----
-
-```js
-function Singleton(name) {
-  this.name = name;
-}
-
-const s1 = new Singleton('zs');
-const s2 = new Singleton('ls');
-```
-
-上面的实例 s1、s2 是两个相互独立的对象，而单例模式则是无论创建多少次，都返回第一次创建的唯一的实例。
 
 ## 简易实现
 
-方式一、
+方式一、使用闭包（推荐）
+
+```js
+const Singleton = (function () {
+  let instance = null;
+  function Singleton(name) {
+    this.name = name;
+  }
+  return {
+    getInstance: function (name) {
+      if (!instance) {
+        instance = new Singleton(name);
+      }
+      return instance;
+    }
+  };
+})();
+
+const s1 = Singleton.getInstance('zs');
+const s2 = Singleton.getInstance('ls');
+console.log(s1 === s2); // true
+```
+
+方式二、定义一个静态方法 getInstance
 
 ```js
 function Singleton(name) {
@@ -42,27 +56,6 @@ Singleton.getInstance = function (name) {
   }
   return this.instance;
 };
-
-const s1 = Singleton.getInstance('zs');
-const s2 = Singleton.getInstance('ls');
-console.log(s1 === s2); // true
-```
-
-方式二、使用闭包
-
-```js
-function Singleton(name) {
-  this.name = name;
-}
-Singleton.getInstance = (function (name) {
-  let instance = null;
-  return function (name) {
-    if (!instance) {
-      instance = new Singleton(name);
-    }
-    return instance;
-  };
-})();
 
 const s1 = Singleton.getInstance('zs');
 const s2 = Singleton.getInstance('ls');

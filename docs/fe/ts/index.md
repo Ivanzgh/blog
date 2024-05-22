@@ -5,8 +5,18 @@ outline: deep
 # TypeScript
 
 - 官网：[https://www.typescriptlang.org](https://www.typescriptlang.org)
-- 中文手册： [https://typescript.bootcss.com](https://typescript.bootcss.com)
-- [《深入理解 TypeScript》](https://jkchao.github.io/typescript-book-chinese/)
+- [在线体验](https://www.typescriptlang.org/play/)
+
+TypeScript 是一种由微软开发的开源编程语言，它是 JS 的一个**超集**，设计目的在于增强 JS 的开发效率和维护性。
+
+TS 在 JS 的基础上添加了**静态类型**，使得开发者能在编码阶段就发现类型错误，提高了代码的健壮性和可维护性。
+
+特性：
+
+1. 静态类型系统：允许在编译时进行类型检查
+2. 增强面向对象特性：支持类、接口、模块、泛型等
+
+不支持直接在浏览器运行，需要先编译成 js 代码。
 
 ## 安装
 
@@ -22,13 +32,13 @@ pnpm add -D typescript
 
 :::
 
-验证
+验证：
 
 ```sh
 tsc -v
 ```
 
-如果是局部安装的，需要使用 npx 运行
+如果是局部安装的，需要使用 npx 运行：
 
 ```sh
 npx tsc -v
@@ -65,7 +75,7 @@ ts-node helloworld.ts
 
 ## 类型
 
-```typescript
+```ts
 const isDone: boolean = false; // 布尔
 const num: number = 6; // 数字
 const str: string = 'zgh'; // 字符串
@@ -75,53 +85,66 @@ const u: undefined = undefined;
 const n: null = null;
 ```
 
+`undefined` 和 `null` 是所有类型的子类型
+
 ### 数组类型
 
-```typescript
-const list1: number[] = [1, 2, 3]; // 由数字组成的数组
+数组类型的表示方法：
 
-const list2: Array<number> = [4, 5, 6]; // 数组泛型
+1. 类型 + 方括号：`number[]`、`string[]`
+2. 数组泛型：`Array<T>`
+3. `interface`，较复杂，一般不用
 
-const list3: [string, number] = ['1', 2]; // 元组Tuple，表示一个已知元素数量和类型的数组
+```ts
+const arr1: number[] = [1, 2, 3];
 
-const list4: (number | string)[] = [1, 'a', 'b', 2]; // 不知道元素数量，类型已知
+const arr2: Array<number> = [4, 5, 6];
 
-const list5: [string, number] = ['ha', 666];
-const [ha, info] = list5; // 解构赋值
+interface NumberArray {
+  [x: number]: number;
+}
+let arr3: NumberArray = [1, 2, 3];
 ```
 
-对象数组的类型注解
+对象数组的类型注解：
 
-```typescript
+```ts
 const arr: { name: string; age: number }[] = [
   { name: 'tom', age: 18 },
   { name: 'jack', age: 19 }
 ];
 ```
 
-如果有同样类型的数组，可以用 **类型别名**
+如果有同样类型的数组，可以用 **类型别名**，或者使用 **类**
 
-```typescript
-type user = { name: string; age: number };
+```ts
+type Person = {
+  name: string;
+  age: number;
+};
 
-const arr: user[] = [
+class User {
+  name: string;
+  age: number;
+}
+
+const arr: Person[] = [
   { name: 'tom', age: 18 },
   { name: 'jack', age: 19 }
 ];
 ```
 
-也可以使用 **类**
+### tuple 元组类型
 
-```typescript
-class user {
-  name: string;
-  age: number;
-}
+元组 Tuple，表示一个已知元素数量和类型的数组
 
-const arr: user[] = [
-  { name: 'tom', age: 18 },
-  { name: 'jack', age: 19 }
-];
+```ts
+const arr1: [string, number] = ['1', 2];
+
+const arr2: (number | string)[] = [1, 'a', 'b', 2]; // 不知道元素数量，类型已知
+
+const arr3: [string, number] = ['ha', 666];
+const [ha, info] = arr3; // 解构赋值
 ```
 
 ### `Symbol`类型
@@ -208,36 +231,34 @@ function infiniteLoop(): never {
 }
 ```
 
-### 联合类型
+## 索引签名
 
-以`|`为标记，若希望属性为多个类型中的一个，可以使用联合类型。下面的例子表示函数参数接受一个数字类型的数组或者一个字符串
+索引签名可以定义对象内的属性、值的类型
 
-```typescript
-let union = function (item: number[] | string) {
-  if (typeof item === 'string') {
-    return 'string';
-  }
-  return item;
-};
-union('sss');
+```ts
+interface Foo {
+  [propName: string]: number;
+}
 ```
+
+## 高级类型
 
 ### 类型别名
 
 使用`type`定义一个类型别名
 
-```typescript
+```ts
 // 此处直接注解name是一个string类型
 let name: string;
 
 // 此处定义一个别名age
 type age = string | number;
-let user: age;
-user = 123;
-user = 'he';
+
+let user1: age = 23;
+let user2: age = '23';
 ```
 
-类型别名和接口的区别
+类型别名和接口的区别：
 
 ```typescript
 type name = string;
@@ -252,243 +273,151 @@ interface user2 {
 
 类型别名可以直接注解字符串、数字等类型，而接口只能注解对象
 
-## 高级类型
+### 类型索引
 
-### Record
-
-构建一个类型，包含指定的属性且必填
+`keyof`，类似 `Object.keys()`
 
 ```ts
-type Props = Record<'x' | 'y', number>;
-
-// 等同于
-// type Props = {
-//   x: number;
-//   y: number;
-// };
-
-export type Props = Record<string, unknown>;
-
-// 等同于
-// type Props = {
-//     [x: string]: unknown;
-// }
-```
-
-### Omit<T, K exdends keyof any>
-
-排除接口中指定的属性（除了某些项，其余的全部都要），第一个参数表示要继承的类型，第二个参数表示要省略的属性，多个属性用竖线隔开
-
-```ts
-export interface UserProps {
-  name: string;
-  age: number;
-  sex: string;
+interface Button {
+  type: string;
+  text: string;
 }
 
-export type UserProps1 = Omit<UserProps, 'age'>;
+type ButtonType = keyof Button; // "type" | "text"
 
-// 等同于
-// type UserProps1 = {
-//   name: string;
-//   sex: string;
-// }
-
-export type UserProps2 = Omit<UserProps, 'age' | 'sex'>;
-
-// 等同于
-// type UserProps2 = {
-//   name: string;
-// }
+type NameType = Button['text']; // string
 ```
 
-### Pick
+### typeof
 
-选取类型中的指定类型（除了某些项，其余的都不要）
+`typeof` 获取一个变量或对象的类型。
 
 ```ts
-export type UserProps3 = Pick<UserProps, 'age' | 'sex'>;
+let str: string = 'hello';
 
-// type UserProps3 = {
-//   age: number;
-//   sex: string;
-// }
+type StrType = typeof str; // string
 ```
 
-### Partial
-
-将类型的所有属性变为可选
+一般和 keyof 一起使用：
 
 ```ts
-export type UserProps4 = Partial<UserProps>;
-
-// 等同于
-// type UserProps4 = {
-//   name?: string | undefined;
-//   age?: number | undefined;
-//   sex?: string | undefined;
-// };
+type unionType = keyof typeof T;
 ```
 
-### Readonly
+### 条件类型
 
-将类型的所有属性变为只读
+允许基于某个条件选择不同的类型。运用三元运算符，即`T extends U ? X : Y`，如果`T`是`U`的子类型，则返回`X`，否则返回`Y`。
 
 ```ts
-export type UserProps5 = Readonly<UserProps>;
+type IsString<T> = T extends string ? true : false;
 
-// 等同于
-// type UserProps5 = {
-//   readonly name: string;
-//   readonly age: number;
-//   readonly sex: string;
-// };
+type Test1 = IsString<string>; // true
+type Test2 = IsString<number>; // false
 ```
 
-### Required
+### 类型映射
 
-将类型的所有属性变为必填
-
-```ts
-export type UserProps6 = Required<{ x: number; y?: number }>;
-
-// 等同于
-// type UserProps6 = {
-//   x: number;
-//   y: number;
-// };
-```
-
-### Exclude(T, U)
-
-排除联合类型中指定的子类型
+可以基于现有类型创建新的类型。例如将 User 接口变成只读类型：
 
 ```ts
-export type UserProps7 = Exclude<string | number | boolean, number>;
+type ReadOnly<T> = {
+  readonly [K in keyof T]: T[K];
+};
 
-// 等同于
-// type UserProps7 = string | boolean
-```
-
-### Extract(T, U)
-
-提取联合类型中的指定类型，如果存在则返回该类型，不存在则返回 never
-
-```ts
-export type UserProps8 = Extract<string | number | boolean, number>;
-export type UserProps9 = Extract<string | number | boolean, []>;
-
-// 等同于
-// type UserProps8 = number;
-// type UserProps9 = never;
-```
-
-### NonNullable
-
-过滤联合类型中的 null 和 undefined 类型
-
-```ts
-export type UserProps9 = NonNullable<string | null | undefined>;
-
-// 等同于
-// type UserProps9 = string;
-```
-
-### Parameters<T extends (...args: any) => any>
-
-获取函数的所有参数类型
-
-```ts
-type Fun = (a: string, b: number) => void;
-export type Props = Parameters<Fun>;
-
-// 等同于
-// type Props = [a: string, b: number]
-
-const F1 = (a: string, b: number) => a + b;
-export type Props = Parameters<typeof F1>;
-```
-
-### ReturnType
-
-获取函数的返回值类型
-
-```ts
-type Fun = (a: number, b: number) => number;
-const F1 = (a: number, b: number) => a + b;
-
-export type Props1 = ReturnType<Fun>;
-export type Props2 = ReturnType<typeof F1>;
-
-// 等同于
-// type Props = number;
-```
-
-### ConstructorParameters
-
-获取构造函数的参数类型
-
-```ts
-class Person {
+interface User {
   name: string;
   age: number;
-  constructor(name: string, age: number) {
-    this.name = name;
-    this.age = age;
+}
+
+type ReadOnlyUser = ReadOnly<User>;
+```
+
+结果就是：
+
+```ts
+type ReadOnlyUser = {
+  readonly name: string;
+  readonly age: number;
+};
+```
+
+### 类型约束
+
+通过 `extends` 约束。
+
+示例中，约束 fn 的参数只能是 BaseType 类型
+
+```ts
+type BaseType = string | number;
+
+function fn<T extends BaseType>(value: T): T {
+  return value;
+}
+
+fn(1);
+```
+
+类型约束一般和类型索引一起使用，例如通过对象的键名获取值：
+
+```ts
+function getValue<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+```
+
+### 联合类型
+
+以`|`为标记，声明类型为多个类型中的一个。
+
+```ts
+type PropType1 = number | string;
+
+type PropType2 = 'a' | 'b' | 'c';
+```
+
+示例中的'a'、'b'、'c'被称为字面量类型，用来**约束取值**只能是某几个值中的一个。
+
+### 交叉类型
+
+交叉类型是将多个类型合并为一个类型，用`&`将多个类型合并在一起。
+
+```ts
+type A = { a: number };
+type B = A & { b: number };
+
+let obj: B = { a: 1, b: 1 };
+```
+
+1、同名的基础类型的属性合并
+
+如果有同名的属性，且是基础类型，如`type A = { a: number; b: string };`里也有 b 属性，结果会报错，不存在覆盖现象。
+
+因为合并后 b 的类型为 `string & number`，很明显这种类型是不存在的，所以 b 的类型为 `never`。
+
+2、同名的引用类型的属性合并
+
+```ts
+interface A {
+  x: { a: boolean };
+}
+interface B {
+  x: { b: string };
+}
+interface C {
+  x: { c: number };
+}
+
+type ABC = A & B & C;
+
+let abc: ABC = {
+  x: {
+    a: true,
+    b: 'ts',
+    c: 6
   }
-}
-
-export type Props = ConstructorParameters<typeof Person>;
-
-// 等同于
-// type Props = [name: string, age: number]
+};
 ```
 
-### InstanceType
+可以合并成功，因为 x 属性的类型为`{ a: boolean } & { b: string } & { c: number }`，合并后为`{ a: boolean; b: string; c: number }`。
 
-获取构造函数的返回值类型
-
-```ts
-interface EntityConstructor {
-  new (a: boolean, b: string): string;
-}
-
-export type P1 = InstanceType<EntityConstructor>;
-
-// 等同于
-// type P1 = string;
-```
-
-### ThisParameterType
-
-获取函数中 this 的数据类型，没有就返回 unknown
-
-```ts
-interface Foo {
-  x: number;
-}
-function fn(this: Foo) {
-  console.log(this);
-}
-
-export type Test = ThisParameterType<typeof fn>;
-
-// 等同于
-// type Props = Foo;
-```
-
-### OmitThisParameter
-
-移除函数中 this 的数据类型
-
-```ts
-interface Foo {
-  x: number;
-}
-type Fn = (this: Foo) => void;
-
-export type NonReturnFn = OmitThisParameter<Fn>;
-
-// 等同于
-// type NonReturnFn = () => void
-```
+注意，如果 x 属性里面的属性是同名的，如`{ a: boolean } & { a: string } & { a: number }`，则结果依然是 never。

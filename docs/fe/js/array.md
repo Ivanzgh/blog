@@ -414,6 +414,13 @@ let rs = arr.map((item) => {
 console.log(rs); // [11, 12, 13]
 ```
 
+map 支持链式调用：
+
+```js
+const arr = [1, 2, 3];
+const sum = arr.map((e) => e * 2).reduce((prev, next) => prev + next, 0);
+```
+
 ## reduce()
 
 不断地将前一项和后一项的值进行运算，把前一轮运算的结果作为当前运算的前一项。具体规则由回调函数决定，每次的运算会涉及两项

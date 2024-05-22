@@ -4,12 +4,20 @@
 
 在 JSX 中写注释不能单独使用`//`，需要这么写 `{/* 注释 */}`
 
-### htmlFor
+## htmlFor
 
 `label`标签不能使用`for`，要用`htmlFor`
 
 ```jsx
 <label htmlFor="zgh"></label>
+```
+
+## className
+
+为了防止和 js 中的`class`类名冲突，需要将`class`写成`className`，小驼峰命名
+
+```jsx
+<input className="input" />
 ```
 
 ## 循环遍历
@@ -70,3 +78,7 @@ function List() {
 注意：`{0 && <div>react</div>}`会渲染出 0
 
 在 JSX 的大括号中不会渲染的值：布尔值、空字符、null、undefined、对象、函数
+
+## 原理
+
+Babel 编译，[@babel/plugin-transform-react-jsx](https://babeljs.io/docs/babel-plugin-transform-react-jsx)

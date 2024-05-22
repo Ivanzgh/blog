@@ -194,37 +194,83 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
 ## 受控组件和非受控组件
 
-- 受控组件：通过`props`控制的组件
-- 非受控组件：通过`state`控制的组件
+在对表单进行处理时，需要考虑：
 
-React 表单内置了受控组件的行为：
+- 非受控组件：由用户控制 value
+- 受控组件：由代码控制 value
 
-1. value + onChange
-2. checked + onChange
+非受控组件：代码可以设置表单的初始值 defaultValue，能改变 value 的只有用户，代码通过 onChange 事件监听用户输入。
 
-```jsx
-import { useState } from 'react';
+```tsx
+import { ChangeEvent, useState } from 'react';
 
 function App() {
-  const [inputValue, setInputValue] = useState('');
-  const [checked, setChecked] = useState(false);
-  const handleChange = (e) => {
-    // 如果不更新inputValue，在页面上input是不能输入的
-    setInputValue(e.target.value);
+  console.log('render');
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
   };
-  const handleCheckedChange = (e) => {
-    setChecked(e.target.checked);
-  };
-  return (
-    <>
-      <input type="text" value={inputValue} onChange={handleChange} />
-      <input type="checkbox" checked={checked} onChange={handleCheckedChange} />
-    </>
-  );
+
+  return <input type="text" defaultValue={'hello'} onChange={handleChange} />;
 }
+
+export default App;
 ```
 
-input 的值是通过`inputValue`控制的，当输入框的值发生变化时，会触发`onChange`事件，然后通过`setInputValue`更新`inputValue`的值，这样就实现了受控组件
+受控组件：由代码改变 value 的值。如下示例，input 的值是通过`inputValue`控制的，在 onChange 事件中通过`setInputValue`更新`inputValue`的值，这样就实现了受控组件。如果将`setInputValue(e.target.value)`注释掉，在输入时，会发现控制台打印的是最新的值，但是页面上 input 是不能输入的。
+
+```tsx
+import { ChangeEvent, useState } from 'react';
+
+function App() {
+  const [inputValue, setInputValue] = useState('hello');
+
+  console.log('render');
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    setInputValue(e.target.value);
+  };
+
+  return <input type="text" value={inputValue} onChange={handleChange} />;
+}
+
+export default App;
+```
+
+React 表单内置的受控组件的行为：
+
+1. value + onChange，如`<input type="text" value={inputValue} onChange={handleChange} />`
+2. checked + onChange，如`<input type="checkbox" checked={checked} onChange={handleCheckedChange} />`
+
+### 受控组件的使用场景
+
+运行前面的示例时，可以发现，非受控组件在初始打印一次 render，在输入时则不会打印，但是受控组件在输入时也会打印，说明受控组件会引起组件重新渲染。
+
+受控组件的使用场景：
+
+1. 要处理输入的值
+2. 实时同步状态值到父组件
+
+比如，在输入时，将输入的值转换为大写，如下示例：
+
+```tsx
+import { ChangeEvent, useState } from 'react';
+
+function App() {
+  const [inputValue, setInputValue] = useState('hello');
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value.toUpperCase());
+  };
+
+  return <input type="text" value={inputValue} onChange={handleChange} />;
+}
+
+export default App;
+```
+
+ant design 这些组件库都是支持受控和非受控的方式，如果要使用受控组件，则使用`value`属性，如果要使用非受控组件，则使用`defaultValue`属性。在组件内部通过判断 value 的值是否是 undefined 来判断是否受控。
 
 ## 组件嵌套
 

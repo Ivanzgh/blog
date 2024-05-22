@@ -1,6 +1,10 @@
 # React
 
-github：<https://github.com/facebook/react>
+- [官网](https://react.dev)
+- [github](https://github.com/facebook/react)
+
+- [React 19 beat 测试版](https://react.dev/blog/2024/04/25/react-19)
+- [React 19 Beta 升级指南](https://react.dev/blog/2024/04/25/react-19-upgrade-guide)
 
 ## 结合 TypeScript
 

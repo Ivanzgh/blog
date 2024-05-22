@@ -1608,12 +1608,131 @@ Math.floor(c); // 3
 
 ## for 循环
 
+### 返回值
+
+- for 没有返回值，或返回 undefined
+- forEach 没有返回值，或返回 undefined
+- map 会返回一个新数组
+
+### 中断循环、跳出循环
+
+**中断循环**：停止当前循环并进入下一次循环。由`continue`实现，会跳过当前循环体剩余的部分，然后进入下一次迭代。
+
+```js
+for (let i = 0; i < 10; i++) {
+  if (i % 2 === 0) {
+    continue; // 当前迭代被中断，直接进入下一次迭代
+  }
+  console.log(i); // 只会打印奇数
+}
+```
+
+**跳出循环**：完全退出整个循环。由`break`实现，会终止循环并跳出循环体，执行循环体后面的代码。
+
+```js
+for (let i = 0; i < 10; i++) {
+  if (i === 3) {
+    break; // 跳出循环
+  }
+  console.log(i); // 只会打印 0 1 2
+}
+```
+
+- for 可以在循环中使用`break`和`continue`
+- forEach 和 map，不能被 break 或 continue 中断
+
+如果在 forEach 中使用 `return`，只会停止当前回调函数的执行，继续下一次回调。
+
+```js
+const arr = [1, 2, 3];
+arr.forEach((e) => {
+  if (e === 2) {
+    console.log('ok');
+    return;
+  }
+  console.log(e);
+});
+```
+
+如果在 map 中使用 `return`，会影响新的数组中对应元素的值，会返回 undefined
+
+```js
+const arr = [1, 2, 3];
+const newArr = arr.map((e) => {
+  if (e === 2) {
+    return;
+  }
+  return e * 2;
+});
+
+console.log(newArr); // [2, undefined, 6]
+```
+
+forEach 和 map 无法跳出循环，除非使用 try/catch 捕获抛出的异常来跳出循环
+
+```js
+try {
+  arr.forEach((value) => {
+    if (value === 2) {
+      throw new Error('Break');
+    }
+    console.log(value);
+  });
+} catch (e) {
+  throw e;
+}
+```
+
+### 是否改变原始数组
+
+for 循环本身不会改变原始数组，但如果在循环体内修改了数组元素，则原始数组会被改变。
+
+```js
+let arr = [1, 2, 3, 4];
+for (let i = 0; i < arr.length; i++) {
+  arr[i] *= 2;
+}
+console.log(arr); // [2, 4, 6, 8]
+```
+
+对于基础数据类型，forEach 和 map 不会改变原始数组，但是如果在回调函数内修改了原始数组的元素，原始数组会被改变
+
+```js
+const arr1 = [1, 2, 3];
+const a = arr1.forEach((e, i, array) => {
+  e = e + 1;
+  // array[i] = e + 1;
+});
+console.log(a); // undefined
+console.log(arr1); // [1, 2, 3]
+
+const arr2 = [1, 2, 3];
+const b = arr2.map((e, i, array) => {
+  // array[i] *= 2; // 修改了原始数组的元素
+  return e * 2;
+});
+console.log(b); // [2, 4, 6]
+console.log(arr2); // [1, 2, 3]
+```
+
+对于引用类型，forEach 和 map 都会改变原始数组
+
+```js
+const arr = [
+  { a: 'foo', b: 1 },
+  { a: 'bar', b: 2 }
+];
+arr.forEach((item) => {
+  if (item.a === 'foo') {
+    item.b = 3;
+  }
+});
+console.log(arr);
+```
+
 ### 遍历数组
 
-- `for` 循环，数组下标的类型是`number`
-- `forEach`，没有返回值
-- `map`
-- `for of`，推荐
+`for` 循环、`forEach`、`map`、`for of`
 
 ```js
 let arr = ['zgh', 22, 180, 125];
@@ -1621,12 +1740,6 @@ let arr = ['zgh', 22, 180, 125];
 for (let i = 0, len = arr.length; i < len; i++) {}
 
 for (let m of arr) {
-}
-
-// 不推荐
-for (let k in arr) {
-  console.log(k); // 0 1 2 3，返回的是数组下标
-  console.log(typeof k); // string
 }
 ```
 
@@ -1637,6 +1750,13 @@ for (let k in arr) {
 `for`循环 无法用于循环对象，获取不到`obj.length`
 
 `for in`循环遍历对象的属性时，原型链上的所有属性都将被访问，可以使用`hasOwnProperty`方法过滤或`Object.keys`会返回自身可枚举属性组成的数组
+
+```js
+for (let k in arr) {
+  console.log(k); // 0 1 2 3，返回的是数组下标
+  console.log(typeof k); // string
+}
+```
 
 ### while
 
