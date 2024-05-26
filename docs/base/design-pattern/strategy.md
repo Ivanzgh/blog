@@ -205,5 +205,5 @@ const C = function (count) {
 const calculateResult = function (fn, count) {
   return fn(count);
 };
-calculateResult(S, 10000);
+calculateResult(A, 10000);
 ```

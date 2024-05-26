@@ -721,31 +721,6 @@ module.exports = {
 npm run build:analyze
 ```
 
-## 项目生成目录结构
-
-```sh
-npm install mddir
-```
-
-进入目录：`cd node_modules/mddir/src`
-
-执行：`node mddir '../../../src`，这里是只生成 src 目录下的结构，如果要生成全部的目录就去掉 src
-
-执行之后得到一个`directoryList.md`文件，在`node_modules/mddir/src`路径下，
-拷贝内容之后记得删除依赖
-
-```sh
-npm install mddir
-```
-
-如果需要忽略特定文件，可以在忽略规则中指定文件路径，例如：
-
-```sh
-node mddir -- ignore "node_modules|dist|/src/api/"
-```
-
-上面的命令将忽略`node_modules`、`dist`、`/src/api`目录下的文件
-
 ## webpack 构建过程
 
 1. Compiler

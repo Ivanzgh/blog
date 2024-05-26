@@ -203,3 +203,110 @@ document.querySelector('.btn').addEventListener('click', function () {
 1. 创建对象的方法 fn 作为参数传入 getSingle 函数。
 2. getSingle 返回一个新的函数，并且用一个变量 result 来保存 fn 的计算结果。result 变量因为在闭包中，它不会被销毁。
 3. 把管理单例的职责、创建实例对象的职责分开放在两个方法里，组合在一起就能实现创建唯一实例对象的功能。
+
+## 题目
+
+1、实现单例对象 Storage，基于 localStorage 进行封装，实现 setItem(key,value) 和 getItem(key)
+
+::: code-group
+
+```js [静态方法版]
+class Storage {
+  static getInstance() {
+    if (!Storage.instance) {
+      Storage.instance = new Storage();
+    }
+    return Storage.instance;
+  }
+  getItem(key) {
+    return localStorage.getItem(key);
+  }
+  setItem(key, value) {
+    localStorage.setItem(key, value);
+  }
+}
+const obj1 = Storage.getInstance();
+obj1.setItem('name', 'zhangsan');
+const obj2 = Storage.getInstance();
+
+console.log(obj1 === obj2); // true
+```
+
+```js [闭包版]
+const Storage = (function () {
+  let instance = null;
+  function myStorage() {}
+  myStorage.prototype.getItem = (key) => localStorage.getItem(key);
+  myStorage.prototype.setItem = (key, value) => localStorage.setItem(key, value);
+  return {
+    getInstance() {
+      if (!instance) {
+        instance = new myStorage();
+      }
+      return instance;
+    }
+  };
+})();
+const obj1 = Storage.getInstance();
+obj1.setItem('name', 'zhangsan');
+const obj2 = Storage.getInstance();
+
+console.log(obj1 === obj2); // true
+```
+
+:::
+
+2、实现唯一的弹窗
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #modal {
+        height: 200px;
+        width: 200px;
+        line-height: 200px;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px solid black;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="open">打开弹框</button>
+    <button id="close">关闭弹框</button>
+    <script>
+      class Modal {
+        static getInstance() {
+          if (!Modal.instance) {
+            Modal.instance = document.createElement('div');
+            Modal.instance.id = 'modal';
+            Modal.instance.innerHTML = '<div>我是弹框</div>';
+            Modal.instance.style.display = 'none';
+            document.body.appendChild(Modal.instance);
+          }
+          return Modal.instance;
+        }
+        static open() {
+          Modal.getInstance().style.display = 'block';
+        }
+        static close() {
+          Modal.getInstance().style.display = 'none';
+        }
+      }
+
+      const openBtn = document.getElementById('open');
+      const closeBtn = document.getElementById('close');
+      openBtn.addEventListener('click', () => Modal.open());
+      closeBtn.addEventListener('click', () => Modal.close());
+    </script>
+  </body>
+</html>
+```

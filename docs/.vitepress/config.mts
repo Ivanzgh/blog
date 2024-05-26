@@ -80,7 +80,8 @@ export default defineConfig({
             { text: '浏览器安全', link: '/fe/browser/safety' },
             { text: 'Window对象', link: '/fe/browser/window' },
             { text: '兼容性', link: '/fe/browser/compatibility' },
-            { text: '调试', link: '/fe/browser/debug' }
+            { text: '调试', link: '/fe/browser/debug' },
+            { text: '性能优化', link: '/fe/browser/performance' },
           ]
         }
       ],
@@ -291,6 +292,9 @@ export default defineConfig({
           items: [
             { text: '设计模式', link: '/base/design-pattern/' },
             { text: '单例模式', link: '/base/design-pattern/singleton' },
+            { text: '工厂模式', link: '/base/design-pattern/factory' },
+            { text: '装饰器模式', link: '/base/design-pattern/decorator' },
+            { text: '适配器模式', link: '/base/design-pattern/adapter' },
             { text: '策略模式', link: '/base/design-pattern/strategy' },
             { text: '代理模式', link: '/base/design-pattern/proxy' },
             { text: '迭代器模式', link: '/base/design-pattern/iterator' },

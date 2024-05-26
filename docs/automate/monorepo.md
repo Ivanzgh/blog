@@ -25,6 +25,41 @@ outline: deep
 
 - https://monorepo.tools
 
+## Monorepo 和 Multirepo
+
+Monorepo（单仓库）和 Multirepo（多仓库）是两种不同的代码组织和管理策略。
+
+一般大型开源库都会选择使用 Monorepo，例如 Babal、Vue3 等，而业务项目中通常会选择 Multirepo。
+
+### Monorepo
+
+特点：
+
+1. 统一代码规范、构建流程、发布流程，所有的包都在一个仓库里
+2. 代码复用和共享依赖：跨项目共享代码和资源，所有项目共享相同的依赖和版本。将复用逻辑提取到公共包，如`packages/shared`
+3. 团队协作和权限管理：各个包功能独立，便于职责划分。代码权限控制划分不方便，开发者要严格遵守代码规范、提交规范等
+4. 项目体积大小：单仓库的代码体积较大，可能造成构建和发布时间过长
+
+适用场景：
+
+- 大型组织和项目，尤其是高度相互依赖的项目
+- 需要频繁跨项目复用代码和组件的团队
+- 强调代码一致性和集中控制的环境
+
+### Multirepo
+
+特点：
+
+1. 分散管理：每个项目拥有自己的独立仓库
+2. 独立性：项目间相互隔离，各自拥有独立的生命周期和版本控制
+3. 灵活性：团队可以根据项目需求自由选择技术和工具链，易于管理权限和访问控制
+4. 快速迭代：适合快速变化、独立部署的中小型项目。
+
+适用场景：
+
+- 项目间关联性较弱，团队规模较小或项目独立性要求高的情况
+- 对于希望保持项目高度自主权和快速迭代速度的团队
+
 ## Workspaces
 
 Workspaces 是包管理器提供的原生功能。包管理器的 workspaces 文档：
@@ -196,6 +231,17 @@ import fn from '@monorepo1/foo';
 fn();
 ```
 
+分别给 foo 和 bar 的 package.json 添加如下内容：
+
+```json
+{
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  }
+}
+```
+
 2. 进入 bar 目录，在 bar 里添加依赖。执行内容如下，表示在 bar 里添加 foo 的依赖，这样`import fn from '@monorepo1/foo';`就可以使用了
 
 ```sh
@@ -212,6 +258,20 @@ pnpm -F @monorepo1/bar add @monorepo1/foo
     "@monorepo1/foo": "workspace:*"
   }
 }
+```
+
+如果一直安装报错 ERR_PNPM_FETCH_404，就需要手动添加依赖。在 bar 的 package.json 添加前面的配置，然后执行：
+
+```bash
+pnpm add @monorepo1/foo --filter @monorepo1/bar
+```
+
+这里的指令只是和前面的写法不同，实际一致。
+
+3. 运行 bar 中的代码，验证是否成功引入 foo 包
+
+```bash
+pnpm --filter @monorepo1/bar run start
 ```
 
 ### 管理包版本和发布
@@ -269,5 +329,3 @@ pnpm changeset pre exit
 ```
 
 4. 查看 npm
-
-<https://www.bilibili.com/video/BV1Aj411h7F2>

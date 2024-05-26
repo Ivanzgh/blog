@@ -6,22 +6,94 @@
     <title>Document</title>
   </head>
   <body>
-    <button class="btn">click</button>
     <script>
-      const each = function (arr, callback) {
-        for (let i = 0; i < arr.length; i++) {
-          if (callback(arr[i], i) === false) {
-            break;
-          }
+      // 定义发布者类
+      class Publisher {
+        constructor() {
+          this.observers = [];
+          console.log('Publisher created');
         }
-      };
+        // 增加订阅者
+        add(observer) {
+          console.log('add');
+          this.observers.push(observer);
+        }
+        // 移除订阅者
+        remove(observer) {
+          console.log('remove');
+          this.observers.forEach((item, index) => {
+            if (item === observer) {
+              this.observers.splice(index, 1);
+            }
+          });
+        }
+        // 通知所有订阅者
+        notify() {
+          console.log('notify');
+          this.observers.forEach((observer) => {
+            observer.update(this);
+          });
+        }
+      }
 
-      each([1, 2, 3, 4, 5], (item, index) => {
-        if (item > 3) {
-          return false;
+      // 定义订阅者类
+      class Observer {
+        constructor() {
+          console.log('Observer created');
         }
-        console.log(item);
-      });
+        update() {
+          console.log('update');
+        }
+      }
+
+      // 定义一个具体的发标发布类
+      class BidPublisher extends Publisher {
+        constructor() {
+          super();
+          this.bidState = null;
+          this.observers = [];
+        }
+        getState() {
+          return this.bidState;
+        }
+        setState(state) {
+          this.bidState = state;
+          this.notify();
+        }
+      }
+      // 定义发标的订阅者类
+      class BidObserver extends Observer {
+        constructor() {
+          super();
+          this.bidState = {};
+        }
+        update(publisher) {
+          this.bidState = publisher.getState();
+          this.work();
+        }
+        // 工作函数
+        work() {
+          console.log(this.bidState);
+        }
+      }
+
+      // 创建订阅者：供应商
+      const supplier1 = new BidObserver();
+      const supplier2 = new BidObserver();
+      const supplier3 = new BidObserver();
+
+      // 创建发布者：采购方
+      const owner = new BidPublisher();
+      // 标书信息
+      const tenderInfo = {};
+
+      // 添加订阅者
+      owner.add(supplier1);
+      owner.add(supplier2);
+      owner.add(supplier3);
+
+      // 发标
+      owner.setState(tenderInfo);
     </script>
   </body>
 </html>
