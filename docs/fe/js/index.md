@@ -1,28 +1,24 @@
 # JavaScript
 
-## 学习资源
-
-- [MDN](https://developer.mozilla.org/zh-CN/)
-- [javascript.info](https://javascript.info/)、[中文版](https://zh.javascript.info/)
-- [ES6](https://es6.ruanyifeng.com/)
-
 ## 数据类型
 
 ![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666417923.png)
 
-基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
+### 1. 分类
 
-引用类型： `Object`，如`Array`、`Function`、`RegExp`、`Date`、`Math`
+- 基本数据类型：`Number`、`String`、`Boolean`、`Null`、`Undefined`、`Symbol`、`BigInt`
+- 引用类型： `Object`，如`Array`、`Function`、`RegExp`、`Date`、`Math`
 
-引申一点：null 音标是 `/nʌl/`，可读作 ‘闹’，不要读成 ‘怒儿’、‘浪’
+> null 音标是 `/nʌl/`，可读作 ‘闹’，不要读成 ‘怒儿’、‘浪’
 
-基本数据类型将数据名和值存储在**栈**中
+### 2. 存储位置
 
-引用类型在栈中存入地址，该地址指向**堆**内存，将具体值存储在堆中。访问时先从栈中获取地址，再从堆中获取相应值
+- 基本数据类型将数据名和值存储在**栈**中
+- 引用类型在栈中存入地址，该地址指向**堆**内存，将具体值存储在堆中。访问时先从栈中获取地址，再从堆中获取相应值。
 
 ![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1666418036.png)
 
-闭包中的变量并不保存在栈中，而是保存在堆中
+闭包中的变量并不保存在栈中，而是保存在堆中。
 
 ```js
 let a = 1; // 在内存中开辟一块空间存储a的值 1
@@ -40,7 +36,7 @@ console.log(d); // { x: 4 }
 
 ## 类型判断
 
-### `typeof`
+### 1. `typeof`
 
 ```js
 typeof 'js'; // 'string'
@@ -56,9 +52,11 @@ typeof (() => {}); // 'function'
 
 可以看出`typeof null`结果是`object`，对于数组无法精确判断
 
-### `instanceof`
+### 2. `instanceof`
 
-通过`instanceof`操作符可以对引用数据类型进行判定，不能正确判断基本数据类型，其原理就是**测试构造函数的`prototype`是否出现在被检测对象的原型链上**
+- 用于判断实例和构造函数的对应关系
+- 可判定引用数据类型，不能正确判断基本数据类型
+- 原理：**测试构造函数的`prototype`是否出现在被检测对象的原型链上**
 
 ```js
 console.log([] instanceof Array); // true
@@ -67,6 +65,7 @@ console.log((() => {}) instanceof Function); // true
 
 let str1 = new String('xxx');
 console.log(str1 instanceof String); // true
+
 let str2 = 'xxx';
 console.log(str2 instanceof String); // false
 
@@ -78,15 +77,15 @@ console.log([] instanceof Object); // true
 `[].__proto__ === Array.prototype`、`Array.prototype.__proto__ === Object.prototype`二者的结果都是 true，
 因此 `Object` 构造函数在 `[]` 的原型链上
 
-### `Array.isArray()`
+### 3. `Array.isArray()`
 
 可以判断参数是否是数组
 
-### `isNaN()`
+### 4. `isNaN()`
 
 可以判断 NaN
 
-### `Object.prototype.toString.call()`
+### 5. `Object.prototype.toString.call()`
 
 全类型都可判断，推荐使用该方法
 
@@ -123,7 +122,7 @@ const isType = (target, type) => `[object ${type}]` === Object.prototype.toStrin
 
 ## 类型转换
 
-### 强制类型转换
+### 1. 强制类型转换
 
 1、Number()
 
@@ -170,7 +169,7 @@ parseFloat('1.23'); // 1.23
 
 除了 `undefined`、`null`、`' '`、`NaN`、`0`、`false` 转换出来是 false，其他都是 true
 
-### 隐式类型转换
+### 2. 隐式类型转换
 
 ```js
 '1' + 1 // '11'   string 字符串连接
@@ -200,55 +199,51 @@ null == ''    // false
 
 ## 原型和原型链
 
-![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1697463743.png)
+每一个 JS 对象（除了`null`）在创建时都有一个与之关联的对象，这个对象被称为它的原型。
 
-- 每个函数都有一个`prototype`属性，这个属性指向函数的原型对象
+当访问一个对象的属性或方法时，会先在对象自身中寻找，如果找不到则在原型中寻找，如果还找不到，则继续在原型的原型中寻找，以此类推，直到找到为止，若找不到则返回`undefined`，这就是原型链。
+
+访问原型的方式：
+
+- `Object.getPrototypeOf(obj)`
+- `obj.__proto__`，不推荐
+
+![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1719062279.png)
+
 - 每个对象（null 除外）都有一个`__proto__`属性，这个属性指向该对象的原型
+- 每个构造函数都有一个`prototype`属性，这个属性指向函数的原型对象
 - 每个原型都有一个`constructor`属性，指向关联的构造函数
 - 原型也是一个对象，所以也有原型
 
-当访问一个对象的属性或方法时，会先在对象自身中寻找，如果找不到则在原型中寻找，如果还找不到，则继续在原型的原型中寻找，以此类推，直到找到为止，若找不到则返回`undefined`，这就是原型链
+```js
+function Person() {}
 
-构造器原型`Object.prototype`的原型是`null`，说明原型链后面已经没有节点了，原型链并不是无限长的。
+const person1 = new Person();
 
-函数也有`__proto__`属性
+person1.__proto__ === Person.prototype; // true
+
+Person.prototype.constructor === Person; // true
+
+// 实例对象person1自身没有constructor属性，就去原型对象上找
+person1.constructor === Person; // true
+
+person1.constructor.prototype === person1.__proto__; // true
+
+Object.getPrototypeOf(person1) === person1.__proto__; // true
+```
+
+函数也有`__proto__`属性：
 
 ```js
-let fn = function () {};
+function fn() {}
 fn.__proto__ === Function.prototype; // true
 ```
 
-```js
-let obj = {};
-console.log(obj.constructor.prototype === obj.__proto__); // true
-
-let arr = [];
-console.log(arr);
-
-function Person(name) {
-  this.name = name;
-}
-Person.prototype.age = 23;
-
-let person1 = new Person('zgh');
-console.log(person1.age); // 23
-
-console.log(person1.__proto__ === Person.prototype); // true
-
-console.log(Person.prototype.constructor === Person); // true
-
-console.log(person1.constructor === Person); // true
-```
-
-要获取原型推荐使用`Object.getPrototypeOf()`，不要使用`__proto__`
-
-`Object.getPrototypeOf(obj) === obj.__proto__`为 true
-
 ## 执行上下文
 
-执行上下文可看作是一个包含了当前代码执行状态的环境对象
+执行上下文可看作是一个包含了当前代码执行状态的环境对象。
 
-### 三个重要组成部分
+### 1. 三个重要组成部分
 
 1. 变量对象（Variable Object，简称 VO）
    1. 在创建上下文时，会有一个包含了所有在上下文中定义的变量、函数和形参的对象被创建
@@ -259,7 +254,7 @@ console.log(person1.constructor === Person); // true
 2. 作用域链（Scope Chain）
 3. this 值
 
-### 执行上下文的类型
+### 2. 执行上下文的类型
 
 1. 全局执行上下文
    1. 只有一个全局执行上下文
@@ -269,17 +264,17 @@ console.log(person1.constructor === Person); // true
    2. 每个函数都有自己的作用域链、变量对象和 this 值
 3. eval 函数执行上下文
 
-### 执行上下文栈
+### 3. 执行上下文栈
 
-执行上下文栈（Execution Context Stack，简称 ECS），栈的特点是**后进先出**（LIFO）
+执行上下文栈（Execution Context Stack，简称 ECS），栈的特点是**后进先出**（LIFO）。
 
-当执行代码时，会首先创建全局上下文并将其推入栈中。在函数调用时会创建一个新的函数上下文，并将其推入栈中。当函数执行完成后，函数上下文从栈中弹出
+当执行代码时，会首先创建全局上下文并将其推入栈中。在函数调用时会创建一个新的函数上下文，并将其推入栈中。当函数执行完成后，函数上下文从栈中弹出。
 
 ![image](https://zghimg.oss-cn-beijing.aliyuncs.com/blog/1698157359.png)
 
-### 变量对象
+### 4. 变量对象
 
-每个执行上下文都有一个关联的变量对象，其包括这个执行上下文中定义的所有变量和函数
+每个执行上下文都有一个关联的变量对象，其包括这个执行上下文中定义的所有变量和函数。
 
 在执行上下文的**创建阶段**会生成变量对象，生成变量对象主要有三个过程：
 
@@ -296,7 +291,7 @@ VO = {
 }
 ```
 
-当执行上下文进入执行阶段后，变量对象变为**活动对象**（简称 AO），此时原先声明的变量会被赋值
+当执行上下文进入执行阶段后，变量对象变为**活动对象**（简称 AO），此时原先声明的变量会被赋值。
 
 ```js
 AO = {
@@ -307,7 +302,7 @@ AO = {
 }
 ```
 
-变量对象和活动对象都是指向同一个对象，只是处于执行上下文的不同阶段
+变量对象和活动对象都是指向同一个对象，只是处于执行上下文的不同阶段。
 
 代码说明：
 
@@ -356,7 +351,31 @@ f_ECS = {
 
 ## arguments
 
-arguments 是一个类数组对象，用于获取传递给函数的所有参数
+### 类数组对象
+
+示例：arrLike 就是一个类数组对象
+
+```js
+let arr = [1, 2, 3];
+
+let arrLike = {
+  0: 1,
+  1: 2,
+  2: 3,
+  length: 3
+};
+
+console.log(arr.length);
+console.log(arrLike.length);
+
+arr.push(4);
+// 这样是错误的：arrLike.push(4)
+Array.prototype.push.call(arrLike, 4);
+```
+
+### arguments
+
+arguments 是一个类数组对象，用于获取传递给函数的所有参数。
 
 - 可通过索引访问参数，如`arguments[0]`
 - 获取 length，`arguments.length`
@@ -368,7 +387,7 @@ function fun(a, b, c) {
 fun(1, 2, 3);
 ```
 
-arguments 对象中的值在非严格模式下会与函数中的命名参数保持同步
+arguments 对象中的值在非严格模式下会与函数中的命名参数保持同步。
 
 ```js
 function fun(a, b) {
@@ -380,7 +399,9 @@ function fun(a, b) {
 fun(1, 2);
 ```
 
-推荐使用 ES6 的扩展运算符处理参数
+推荐使用 ES6 的扩展运算符处理参数。
+
+可通过 `Array.from()` 方法将 arguments 对象转换为数组。
 
 ## 变量提升、函数提升
 
@@ -451,16 +472,16 @@ var m = function () {
 
 ## 作用域
 
-作用域指变量的有效范围
+作用域指变量的有效范围。
 
-### 词法作用域、动态作用域
+### 1. 词法作用域、动态作用域
 
 - 词法作用域，也称为静态作用域，作用域在定义时确定的
 - 动态作用域，作用域在调用时确定的
 
-js 是词法作用域
+> js 是词法作用域
 
-1、案例 1：
+示例 1：
 
 ```js
 const value = 1;
@@ -474,9 +495,16 @@ function bar() {
 bar();
 ```
 
+::: details
 打印结果是 1
 
-2、案例 2：
+- js 是词法作用域，意味着函数的作用域是在函数定义时决定的，而不是在函数调用时决定的
+- foo 函数是在全局作用域中定义的，所以它的词法环境包含对全局作用域的引用
+- foo 函数内部没有局部变量 value，所以它会向上查找，查早它的词法环境，即全局作用域
+
+:::
+
+示例 2：
 
 ```js
 // case 1
@@ -502,20 +530,24 @@ function checkScope() {
 checkScope()();
 ```
 
-打印结果都是 local scope
+::: details
 
-### 全局作用域
+执行结果都是 local scope
+
+:::
+
+### 2. 全局作用域
 
 在全局作用域中：
 
 - 创建的变量都会作为`window`对象的属性保存
 - 创建的函数都会作为`window`对象的方法保存
 
-### 局部作用域
+### 3. 局部作用域
 
 局部作用域在函数中创建，局部变量只能在函数中被访问
 
-### 块级作用域
+### 4. 块级作用域
 
 变量只在所在的代码块内有效。ES6 增加的`let`、`const`可以声明块级作用域，可在 for 循环和 if 中使用
 
@@ -541,7 +573,7 @@ for (let i = 0; i < 3; i++) {
 console.log(d); // ReferenceError: d is not defined
 ```
 
-### 作用域链
+### 5. 作用域链
 
 作用域链是指当前执行上下文和上层执行上下文的一系列变量对象组成的层级链，它决定了各级执行上下文中的代码在访问变量和函数时的顺序。
 

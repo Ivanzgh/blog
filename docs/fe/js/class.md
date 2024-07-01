@@ -6,7 +6,7 @@ outline: deep
 
 ## 如何生成一个对象？
 
-### 1、工厂函数
+### 1. 工厂函数
 
 首先生成一个简单的对象：
 
@@ -37,7 +37,7 @@ const user2 = User('lisi', 30);
 
 这个函数就是**工厂函数**
 
-### 2、Object.create
+### 2. Object.create
 
 前面创建对象的方式，每次实例化一个 User 时，都需要重新分配内存去创建一遍 say 方法。可能想到的优化方式是将 User 对象里的方法都提取出去，如下：
 
@@ -87,7 +87,7 @@ user1.song();
 
 假如在一个对象里找某个属性或方法，没找到，那么 js 就会继续往这个对象的原型里找，找不到就继续往这个对象原型的原型里找，直到找到或者返回 undefined，这个就是[原型链](/fe/js/#原型和原型链)。
 
-### 3、函数的 prototype
+### 3. 函数的 prototype
 
 前面的 User 函数还需要配合 userMethods 对象使用，能不能省掉这步？
 
@@ -125,7 +125,7 @@ User.prototype.song = function () {
 const user1 = User('zhangsan', 20);
 ```
 
-### 4、构造函数
+### 4. 构造函数
 
 js 引入了**构造函数**，将方法挂载到函数的 prototype 属性上是一种优雅的设计选择。
 在构造函数前面加上 `new` 关键字，就可以构造对象了。
@@ -281,51 +281,40 @@ g.a();
 
 ## new 指令
 
-### 1、new 解析
+### 1. new 解析
 
-new 关键字用于创建一个对象实例。
+> new 操作符用于创建一个对象实例。
 
 ```js
 function Person(name) {
   this.name = name;
 }
+Person.prototype.say = function () {};
+
 let instance = new Person('zgh');
-console.log(instance.name); // 'zgh'
-```
-
-如果构造函数有一个原型对象，则新创建的对象将继承原型对象上的属性和方法。
-
-```js
-function Person(name) {
-  this.name = name;
-}
-Person.prototype.say = function () {
-  console.log(`${this.name} said hello world`);
-};
-
-const instance = new Person('zgh');
+console.log(instance.name);
 instance.say();
 ```
 
-::: tip
+::: tip 构造函数的返回值：
 
-1. 如果函数体不返回值或者返回原始数据类型，则返回新对象
-2. 如果函数体返回对象，则返回该对象，而不是新创建的对象
+- 如果返回一个对象，如普通对象、数组、函数等，则返回该对象，而不是新创建的对象
+- 如果不返回值或者返回原始数据类型，则忽略这些返回值，并返回新创建的对象
 
 :::
 
-1、在构建函数中显示返回基础类型：
+1、在构建函数中返回基础类型：
 
 ```js
 function Person(name) {
   this.name = name;
-  return 1;
+  return null;
 }
 let instance = new Person('zgh');
 console.log(instance.name); // 'zgh'
 ```
 
-2、在构建函数中显示返回引用类型：
+2、在构建函数中返回引用类型：
 
 ```js
 function Person(name) {
@@ -336,59 +325,47 @@ let instance = new Person('zgh');
 console.log(instance.name); // js
 ```
 
-### 2、new 的过程
+### 2. new 的过程
 
 ::: info 过程如下：
 
-1. 创建一个新的空对象
-2. 将 this 指向新对象
-3. 执行函数体内的代码
-4. 返回新对象
+1. 创建一个新对象，继承构造函数的原型对象
+2. 将构造函数的 this 指向新创建的对象，并执行构造函数
+3. 如果构造函数返回一个对象，则直接返回该对象，否则返回新创建的对象
 
 :::
 
-1、创建一个空对象 obj
+1、创建一个空对象 obj，并继承构造函数的原型对象
 
 ```js
-let obj = {};
+const obj = Object.create(Person.prototype);
 ```
 
-2、使用 `call` 将构造函数 Person 中的 this 指向刚创建的 obj 对象
+2、使用 `apply` 将构造函数中的 this 指向刚创建的 obj 对象，执行构造函数
 
 ```js
-let result = Person.call(obj);
+const result = Person.apply(obj);
 ```
 
-3、设置原型链，将创建的 obj 的`__proto__`指向构造函数 Person 的`prototype`
+3、判断 Person 的返回值类型，如果是基础类型，返回创建的对象 obj。如果是引用类型，则返回这个引用类型的对象
 
 ```js
-obj.__proto__ = Person.prototype;
+return result instanceof Object && result !== null ? result : obj;
 ```
 
-4、判断 Person 的返回值类型，如果是值类型，返回创建的对象 obj。如果是引用类型，则返回这个引用类型的对象
-
-```js
-return result instanceof Object ? result : obj;
-```
-
-### 3、手写 new
+### 3. 手写 new
 
 ```js
 function myNew(constructor, ...args) {
-  // 检查构造函数是否为函数类型
   if (typeof constructor !== 'function') {
     throw new TypeError('Constructor must be a function');
   }
 
   const obj = Object.create(constructor.prototype);
   const result = constructor.apply(obj, args);
-  return result instanceof Object && result !== null ? result : obj;
+  return result !== null && result instanceof Object ? result : obj;
 }
 ```
-
-1. 创建一个新对象，继承构造函数的原型对象
-2. 将构造函数的 this 指向新创建的对象，并执行构造函数
-3. 如果构造函数返回一个对象，则直接返回该对象，否则返回新创建的对象
 
 myNew 函数接收两个参数：构造函数、参数列表，使用方式如下：
 

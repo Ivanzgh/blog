@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="text" id="input" />
+      <p id="output"></p>
+    </div>
+
+    <script>
+      const input = document.getElementById('input');
+      const output = document.getElementById('output');
+
+      // 数据对象
+      const data = {
+        message: 'Hello, World!'
+      };
+
+      // 响应式数据劫持
+      function defineReactive(obj, key) {
+        let value = obj[key];
+        Object.defineProperty(obj, key, {
+          get() {
+            return value;
+          },
+          set(newValue) {
+            value = newValue;
+            // 更新视图
+            input.value = newValue;
+            output.textContent = newValue;
+          }
+        });
+      }
+
+      // 初始化响应式数据
+      defineReactive(data, 'message');
+
+      // 初始化视图
+      input.value = data.message;
+      output.textContent = data.message;
+
+      // 监听输入框的输入事件，更新数据对象
+      input.addEventListener('input', function (e) {
+        data.message = e.target.value;
+      });
+    </script>
+  </body>
+</html>

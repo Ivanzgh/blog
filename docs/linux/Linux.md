@@ -1,6 +1,6 @@
 # Linux
 
-```sh
+```bash
 # 创建文件夹，此处创建一个叫linux的文件夹
 mkdir linux
 
@@ -35,9 +35,17 @@ clear
 history
 ```
 
-```sh
+```bash
 # 创建一个README.md文件，并写入内容：# title
 echo "# title" >> README.md
+```
+
+```bash
+# 创建src/utils文件夹
+mkdir src/utils
+
+# 创建index.js文件
+touch src/utils/index.js
 ```
 
 ## Vmware
@@ -49,9 +57,7 @@ echo "# title" >> README.md
 
 ## shell 脚本
 
-$$
-
-$$```sh
+```bash
 #!/bin/bash
 
 echo "执行的脚本名称："$0

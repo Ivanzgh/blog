@@ -170,7 +170,7 @@ pnpm init
 
 ### 配置 pnpm Workspaces
 
-1. 在根目录创建 `pnpm-workspace.yaml` 文件：
+1. 在根目录新建 `pnpm-workspace.yaml` 文件，内容如下：
 
 ```yaml
 packages:
@@ -196,23 +196,23 @@ pnpm init
 pnpm add -Dw eslint typescript
 ```
 
-如果要安装局部依赖，只需要在子包目录下执行即可。例如：
+如果要安装局部依赖，第一种方式是进入子包目录下执行安装命令，例如：
 
 ```bash
 cd packages/foo
 pnpm add lodash
 ```
 
-补充：
-
-- `-r` 表示在 workspace 工作区执行命令
-- `--filter xxx` 表示指定在哪个包下执行指令
-
-例如：表示在 foo 中安装 lodash 包
+第二种方式是在 workspace 根目录下执行安装命令，如下命令表示在子包 foo 中安装 lodash 包
 
 ```bash
 pnpm add lodash -r --filter @monorepo1/foo
 ```
+
+- `-r` 表示在 workspace 工作区执行命令
+- `--filter xxx` 表示指定在哪个包下执行指令，`--filter`可简写成`-F`
+
+`-F`或者`--filter`是[过滤选择器](https://pnpm.io/zh/filtering)，表示让 pnpm 在特定包下执行指令。
 
 ### 链接本地包
 
@@ -248,9 +248,7 @@ fn();
 pnpm -F @monorepo1/bar add @monorepo1/foo
 ```
 
-`-F`或者`--filter`是[过滤选择器](https://pnpm.io/zh/filtering)，表示让 pnpm 在特定包下执行指令。
-
-执行之后，会在 bar 的`node_modules`里看到 foo，并且在 bar 的 package.json 里可以看到：
+执行之后，会在 bar 的`node_modules`里看到 foo，并且在 bar 的 package.json 中里可以看到：
 
 ```json
 {
@@ -266,7 +264,7 @@ pnpm -F @monorepo1/bar add @monorepo1/foo
 pnpm add @monorepo1/foo --filter @monorepo1/bar
 ```
 
-这里的指令只是和前面的写法不同，实际一致。
+这里的指令只是和前面的写法不同，实际作用一致。
 
 3. 运行 bar 中的代码，验证是否成功引入 foo 包
 
@@ -328,4 +326,4 @@ pnpm changeset publish
 pnpm changeset pre exit
 ```
 
-4. 查看 npm
+4. 去 npm 查看发布情况

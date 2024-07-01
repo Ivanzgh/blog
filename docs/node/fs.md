@@ -106,7 +106,17 @@ fs.open('./1.txt', 'r', (err, fd) => {
 options 有两个参数：`encoding` 和 `flag`。 encoding 代表读取文件的编码格式，如果没有指定 encoding，则返回原始的 Buffer，它的值主要有：
 
 ```ts
-type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
+type BufferEncoding =
+  | 'ascii'
+  | 'utf8'
+  | 'utf-8'
+  | 'utf16le'
+  | 'ucs2'
+  | 'ucs-2'
+  | 'base64'
+  | 'latin1'
+  | 'binary'
+  | 'hex';
 ```
 
 文件系统标志 flag 常用的值主要有：
@@ -327,14 +337,34 @@ const params = { src: './src/beijing', dest: './src/shanghai' };
 copyFile(params);
 ```
 
-方式一、readFlie
+### 方式一、readFlie
+
+- 使用 `fs.readFileSync` 从源路径读取文件内容，并使用 `fs.writeFileSync` 将文件内容写入目标路径
+- 这种方式适合复制小文件，因为会一次性把文件内容读到内存中，如果是大文件会爆内存
+
+例如：已有`./src/foo/index.js`，想将其复制到`./src/bar/index.js`里
 
 ```js
-const data = fs.readFileSync('./index.mp4');
-fs.writeFileSync('index2.mp4', data);
+const fs = require('fs');
+const path = require('path');
+
+function copyFile(src, target) {
+  const data = fs.readFileSync(path.resolve(src));
+  fs.writeFileSync(path.resolve(target), data);
+}
+
+copyFile('./src/foo/index.js', './src/bar/index.js');
 ```
 
-方式二、流式写入
+关于路径参数：
+
+- 文件夹不存在会报错，如没有 bar 目录会报错
+- 路径最后一级必须是具体的文件，若是文件夹会报错，如 './src/bar'
+- 如果存在同名的文件，会覆盖原来的文件
+
+### 方式二、流式写入
+
+对文件读一点就写一点，直到完成复制。
 
 ```js
 const rs = fs.createReadStream('./index.mp4');
@@ -344,12 +374,14 @@ rs.on('data', (chunk) => {
 });
 ```
 
-流式写入比 readFile 更好
+流式写入比 readFile 更好。
 
 1. 因为 readFile 会把整个文件读取到内存当中，如果文件很大会占很多内存空间
-2. fs.createReadStream()在理想状态下只会占据 64kb 的内存空间。为什么是理想状态？因为文件读取比文件写入更快，当读取到内存中的一个 64kb 的数据还没有完全写入另一个文件中时，后面多个 64kb 的数据可能已经被读取到内存中了
+2. fs.createReadStream()在理想状态下只会占据 64kb 的内存空间。为什么是理想状态？因为文件读取比文件写入更快，当读取到内存中的一个 64kb 的数据还没有完全写入另一个文件中时，后面多个 64kb 的数据可能已经被读取到内存中了。
 
 ## 更改文件名称
+
+### 更改单个文件名称
 
 ```js
 fs.rename('./index1.txt', 'index2.txt', (err) => {
@@ -358,27 +390,66 @@ fs.rename('./index1.txt', 'index2.txt', (err) => {
 });
 ```
 
-```js
-let path = require('path');
-let fs = require('fs');
+### 批量更改文件名称
 
-// 要更改的文件夹、要更改的源文件名、要更改的目标文件名
-function rename({ dest, from, to }) {
+例如，有一个目录结构如下：
+
+```
+src
+├── bar
+│   └── index.js
+├── foo
+│   └── index.js
+├── aa.js
+└── bb.js
+```
+
+需求：
+
+1. 替换文件夹名称
+2. 替换文件名称或者后缀
+
+```js
+const fs = require('fs');
+const path = require('path');
+
+function renameFiles({ dest, toReplace, replacement = '' }) {
   fs.readdir(path.resolve(dest), (err, files) => {
     if (err) throw err;
+
     files.forEach((item) => {
       let oldName = path.resolve(dest, item);
-      let newName = oldName.replace(from, to);
+      let newFileName = path.basename(item).replace(new RegExp(toReplace, 'g'), replacement);
+      let newName = path.join(path.dirname(oldName), newFileName);
+
       fs.rename(oldName, newName, (renameErr) => {
         if (renameErr) throw renameErr;
-        console.log(oldName + '文件名称改为:' + newName);
+        console.log(`名称: ${oldName} 改为 ${newName}`);
       });
     });
   });
 }
 
-const params = { dest: './src/docs', from: 'a', to: 'b' };
-rename(params);
+const params = {
+  dest: './src',
+  toReplace: '.js',
+  replacement: '.ts'
+};
+
+renameFiles(params);
+```
+
+也可以添加一个判断，如果文件不包含要替换的部分，则不进行替换：
+
+```js
+if (newFileName !== path.basename(item)) {
+  fs.rename(oldName, newName, (renameErr) => {
+    if (renameErr) throw renameErr;
+    console.log(`名称: ${oldName} 改为 ${newName}`);
+  });
+} else {
+  console.log(`无需改变: ${oldName}`);
+}
 ```
 
 ## 移动文件

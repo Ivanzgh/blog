@@ -81,7 +81,7 @@ export default defineConfig({
             { text: 'Window对象', link: '/fe/browser/window' },
             { text: '兼容性', link: '/fe/browser/compatibility' },
             { text: '调试', link: '/fe/browser/debug' },
-            { text: '性能优化', link: '/fe/browser/performance' },
+            { text: '性能优化', link: '/fe/browser/performance' }
           ]
         }
       ],
@@ -172,9 +172,11 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: '简介', link: '/node/' },
+            { text: 'path 路径', link: '/node/path' },
             { text: 'Buffer 缓冲区', link: '/node/buffer' },
             { text: 'fs 文件系统', link: '/node/fs' },
-            { text: 'Http', link: '/node/http' }
+            { text: 'Http', link: '/node/http' },
+            { text: 'Process 进程', link: '/node/process' }
           ]
         },
         {

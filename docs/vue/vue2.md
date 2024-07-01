@@ -1,10 +1,48 @@
 # Vue2
 
+## 版本历史
+
+Vue2 的最后一个版本是 2.7.16
+
+2.7 系列的版本包含了对 Vue 3 的一些特性的兼容性改进，同时也保持了与 Vue 2 生态系统的兼容性。
+
+2.6.14 是 Vue2 最后一个用 JS 写的版本。
+
+工具库与 Vue2 的兼容性：
+
+- Vue CLI：应使用 4.4.6 或更低版本的 @vue/cli
+- Vuex：应使用 Vuex 3.x，https://v3.vuex.vuejs.org/zh/
+- Vue Router：通常是 3.x 系列，https://v3.router.vuejs.org/zh/
+
+## 单页面应用和多页面应用的优缺点
+
+### 单页应用 SPA
+
+- 优点：页面切换快
+  页面每次切换跳转时，页面局部刷新，JS、CSS 等公共资源仅加载一次
+- 缺点：
+  - 首屏时间慢
+    首屏时需要请求 HTML，要加载公共资源
+  - SEO 效果差
+    搜索引擎只认识 HTML 里的内容，不认识 JS 的内容，而单页应用的内容都是靠 JS 渲染生成出来的，搜索引擎不识别这部分内容
+
+### 多页应用 MPA
+
+- 优点：
+
+  - 首屏时间快
+    访问页面的时候，发送一个 HTTP 请求返回一个 HTML，页面就会展示出来
+  - SEO 效果好
+    搜索引擎通过识别 HTML 内容来给网页排名
+
+- 缺点：页面切换慢
+  多页面跳转需要刷新所有资源
+
 ## data 为何声明为函数
 
-因为组件可能被用来创建多个实例，若 data 声明为对象则所有的实例将共享引用同一个数据对象
+因为组件可能被用来创建多个实例，若 data 声明为对象则所有的实例将共享引用同一个数据对象。
 
-data 声明为函数则每次创建一个新实例后，调用 data 函数会返回初始数据的一个全新副本数据对象
+data 声明为函数则每次创建一个新实例后，调用 data 函数会返回初始数据的一个全新副本数据对象。
 
 data 声明为对象：
 
@@ -26,12 +64,12 @@ function VueComponent() {}
 VueComponent.prototype.$options = {
   data: () => ({ name: 'Vue' })
 };
-let f11 = new VueComponent();
-let res1 = f11.$options.data();
-res1.name = 'React';
-console.log(res1); // {name: "React"}
-let f22 = new VueComponent();
-console.log(f22.$options.data()); // {name: "Vue"}
+let f1 = new VueComponent();
+let res = f1.$options.data();
+res.name = 'React';
+console.log(res); // {name: "React"}
+let f2 = new VueComponent();
+console.log(f2.$options.data()); // {name: "Vue"}
 ```
 
 `new Vue()`可以将`data`声明为一个普通对象是因为这个类创建的实例不会被复用，只会 new 一次。
@@ -39,33 +77,61 @@ console.log(f22.$options.data()); // {name: "Vue"}
 
 ## v-if 和 v-show 区别
 
-`v-if`是真正的条件渲染，会有性能开销，每次插入或者移除元素时都必须要生成元素内部的 DOM 树
-
-`v-show`则不管条件是什么都会渲染元素，基于`display:none`显示隐藏
+- `v-if`是真正的条件渲染，会有性能开销，每次插入或者移除元素时都必须要生成元素内部的 DOM 树
+- `v-show`则不管条件是什么都会渲染元素，基于`display:none`显示隐藏
 
 一般来说，`v-if` 有更高的切换开销，而 `v-show` 有更高的初始渲染开销。
 因此，如果需要非常频繁地切换，则使用 `v-show` 较好；如果在运行时条件很少改变，则使用 `v-if` 较好
 
+扩展：
+
+`v-html`会将绑定的数据作为 HTML 代码插入到元素的 `inneerHTML` 中。可以动态插入 HTML，但是可能会导致 XSS 攻击。
+
 ## v-model 原理
 
+v-model 的作用是实现表单控件的双向数据绑定，即在视图和数据模型之间同步更新。
+
+原理：使用`Object.defineProperty()`实现响应式数据劫持，监听事件触发视图更新。
+
 ```html
-<input placeholder="请输入" id="username" />
-内容：
-<span id="uName"></span>
+<input type="text" id="input" />
+<p id="output"></p>
 
 <script>
-  let obj = {};
-  Object.defineProperty(obj, 'username', {
-    get() {
-      return this;
-    },
-    set(val) {
-      document.getElementById('uName').innerText = val;
-    }
-  });
-  const el = document.getElementById('username');
-  el.addEventListener('keyup', function () {
-    obj.username = event.target.value;
+  const input = document.getElementById('input');
+  const output = document.getElementById('output');
+
+  // 数据对象
+  const data = {
+    message: 'hello'
+  };
+
+  // 响应式数据劫持
+  function defineReactive(obj, key) {
+    let value = obj[key];
+    Object.defineProperty(obj, key, {
+      get() {
+        return value;
+      },
+      set(newValue) {
+        value = newValue;
+        // 更新视图
+        input.value = newValue;
+        output.textContent = newValue;
+      }
+    });
+  }
+
+  // 初始化响应式数据
+  defineReactive(data, 'message');
+
+  // 初始化视图
+  input.value = data.message;
+  output.textContent = data.message;
+
+  // 监听输入框的输入事件，更新数据对象
+  input.addEventListener('input', function (e) {
+    data.message = e.target.value;
   });
 </script>
 ```
@@ -385,29 +451,373 @@ import '@/components/selfComponents';
 
 在需要公共组件的界面使用`<st-button />`
 
-## 单页面应用和多页面应用的优缺点
+## 插槽 slot
 
-### 单页应用 SPA
+插槽 slot 是 vue 的**内容分发机制**，组件内部的模板引擎使用 `<slot>` 元素作为承载分发内容的出口。
 
-- 优点：页面切换快
-  页面每次切换跳转时，页面局部刷新，JS、CSS 等公共资源仅加载一次
-- 缺点：
-  - 首屏时间慢
-    首屏时需要请求 HTML，要加载公共资源
-  - SEO 效果差
-    搜索引擎只认识 HTML 里的内容，不认识 JS 的内容，而单页应用的内容都是靠 JS 渲染生成出来的，搜索引擎不识别这部分内容
+- slot 是子组件的一个模板标签元素，由父组件决定是否显示、如何显示
+- slot 分为三类：默认插槽、具名插槽、作用域插槽
 
-### 多页应用 MPA
+> 在 2.6.0 中，具名插槽和作用域插槽引入了一个新的统一的语法 (即 v-slot 指令)。它取代了 `slot` 和 `slot-scope` 这两个目前已被废弃但未被移除的属性。
 
-- 优点：
+### 默认插槽
 
-  - 首屏时间快
-    访问页面的时候，发送一个 HTTP 请求返回一个 HTML，页面就会展示出来
-  - SEO 效果好
-    搜索引擎通过识别 HTML 内容来给网页排名
+又称匿名插槽，slot 没有指定 name 属性，一个组件内只能有一个匿名插槽。
 
-- 缺点：页面切换慢
-  多页面跳转需要刷新所有资源
+```vue
+<!-- TestOne.vue -->
+<template>
+  <div>
+    <slot></slot>
+  </div>
+</template>
+
+<!-- 在别的组件使用 -->
+<template>
+  <div>
+    <TestOne>
+      <h1>可以放任意内容</h1>
+    </TestOne>
+  </div>
+</template>
+```
+
+实际渲染：
+
+```html
+<div>
+  <h1>可以放任意内容</h1>
+</div>
+```
+
+slot 元素中也可以设置默认内容，如`<slot>默认内容</slot>`，当父组件不提供插槽内容时，就显示默认内容。
+
+### 具名插槽
+
+带有具体名字的插槽，slot 有 name 属性，一个组件内可以有多个具名插槽。
+
+在 2.6.0 中，用法是在`<template>`元素上使用`v-slot`指令，缩写语法是 `#`
+
+```vue
+<!-- TestTwo.vue -->
+<template>
+  <div>
+    <h1>
+      <slot name="hName"></slot>
+    </h1>
+    <span>
+      <slot name="spanName"></slot>
+    </span>
+  </div>
+</template>
+
+<!-- 在别的组件使用 -->
+<template>
+  <div>
+    <TestTwo>
+      <!-- <template v-slot:hName>111</template> -->
+      <template #hName>111</template>
+      <template #spanName>222</template>
+    </TestTwo>
+  </div>
+</template>
+```
+
+2.6.0 以前的写法：`<template slot="header">111</template>`
+
+### 作用域插槽
+
+将子组件内部的数据传递给父组件，父组件根据传递过来的数据决定如何渲染插槽。
+
+例如：子组件默认显示某个值，父组件想改变这个值，但是父组件无法访问子组件内部作用域的值。使用作用域插槽如下：
+
+子组件 Child.vue
+
+```vue
+<template>
+  <div>
+    <slot :user="user">{{ user.lastName }}</slot>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      user: {
+        lastName: '张三',
+        firstName: '李四'
+      }
+    };
+  }
+};
+</script>
+```
+
+父组件：
+
+```vue
+<template>
+  <div>
+    <Child>
+      <template #default="slotProps">
+        {{ slotProps.user.firstName }}
+      </template>
+    </Child>
+  </div>
+</template>
+
+<script>
+import Child from './Child';
+export default {
+  components: { Child }
+};
+</script>
+```
+
+将`v-slot`简写后：`<template v-slot:default="slotProps"></template>`
+
+1. 子组件将 user 作为 slot 元素的一个属性绑定上去
+2. 父组件通过`v-slot`接收，可以自定义插槽 prop 的名字，如 slotProps
+
+2.6.0 以前的作用域插槽的写法：
+
+```html
+<slot-example>
+  <template slot-scope="slotProps">{{ slotProps.msg }}</template>
+</slot-example>
+```
+
+这里的 `slot-scope` 声明了被接收的 prop 对象会作为 slotProps 变量存在于 `<template>` 作用域中。在操作表格时会经常使用，用于获取当前行的数据。
+
+## 过滤器
+
+自定义过滤器，用于文本格式化，放在`|`后面。
+
+适用的地方：
+
+- 双花括号插值：`{{ name | filterName }}`
+- `v-bind`表达式：`<div v-bind:id="proId | formatId"></div>`
+
+例如：
+
+```vue
+<template>
+  <h1>{{ money | filterPrice }}</h1>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      money: 100
+    };
+  },
+  filters: {
+    filterPrice(price) {
+      return price ? '￥' + price : '-';
+    }
+  }
+};
+</script>
+```
+
+## Mixins
+
+[文档](https://v2.cn.vuejs.org/v2/guide/mixins.html)
+
+> 混入 (Mixins) 是一种在多个组件之间共享可复用功能的方式。
+
+Mixins 允许把一组可复用的方法、生命周期钩子函数、数据属性和计算属性等组合到一个单独的对象中，然后在多个组件中导入并应用这个 mixin。
+
+- 一个混入对象可以包含任意组件选项，如 data、watch、mounted、methods 等
+- 当组件使用混入对象时，所有混入对象的选项将被“混合”进入该组件本身的选项
+
+示例：
+
+::: code-group
+
+```vue [Home.vue]
+<template>
+  <div>
+    <h1>mixins</h1>
+    <div>{{ a }}</div>
+    <div>{{ count }}</div>
+  </div>
+</template>
+
+<script>
+import Foo from './mixins/foo';
+
+export default {
+  name: 'Home',
+  mixins: [Foo],
+  data() {
+    return {};
+  }
+};
+</script>
+```
+
+```js [foo.js]
+export default {
+  data() {
+    return {
+      a: 1
+    };
+  },
+  computed: {
+    count() {
+      return 1 + 2 + 3;
+    }
+  },
+  watch: {
+    $route(route) {
+      console.log(route);
+    }
+  },
+  mounted() {
+    this.handleClick();
+  },
+  methods: {
+    handleClick() {
+      console.log('click');
+    }
+  }
+};
+```
+
+:::
+
+### 选项合并规则
+
+1、数据对象在内部会进行递归合并，并在发生冲突时**以组件数据优先**。
+
+例如，在 mixin 中定义的 data 里的数据，如果组件中定义了同名的 data，那么组件中的 data 会覆盖 mixin 中的 data。
+
+2、同名**钩子函数**将合并为一个数组，都将被调用。混入对象的钩子将在组件自身钩子之前调用。
+
+3、值为对象的选项，例如 methods、components 和 directives，将被合并为同一个对象。两个对象键名冲突时，取**组件对象**的键值对。
+
+### 优势：
+
+1. **代码重用**：可以将通用功能抽象出来，避免代码重复，提高开发效率。
+2. **模块化**：有助于组织代码结构，将特定功能独立封装，便于管理和维护。
+3. **易于扩展**：当需要在多个组件中添加相同功能时，只需要修改 mixin 即可，不影响原有组件结构。
+
+### 劣势：
+
+1. **命名冲突**：当多个 mixins 或组件自身含有同名的数据属性或方法时，可能出现命名冲突。
+2. **难以追踪**：随着项目复杂度增加，当组件依赖多个 mixins 时，源代码的可读性和调试难度可能增大，尤其是当 mixin 中的方法影响组件行为时。
+3. **依赖顺序问题**：有时需要关注 mixin 间的依赖顺序，这可能导致代码维护性降低。
+
+### 使用场景
+
+- **共用的生命周期钩子**：例如，多个组件都需要在 `created` 或 `mounted` 中执行相同的初始化逻辑。
+- **共用的方法**：某些业务逻辑方法如数据请求、数据处理、工具函数等在多个组件中都需要用到。
+- **共用的状态和计算属性**：某些全局的状态和计算逻辑可以抽象到 mixin 中。
+
+### Mixin 与组件的区别
+
+- **组件**是独立模块，具有自己的视图模板、数据、方法、生命周期钩子等，强调的是独立和可复用的界面元素。
+- **Mixin** 更侧重于功能和逻辑的复用，不涉及视图渲染，它可以注入到组件中，增强组件的功能，但不改变组件的基本结构。
+
+## 自定义指令
+
+[文档](https://v2.cn.vuejs.org/v2/guide/custom-directive.html)
+
+Vue 除了内置的指令 (v-model 等)，也允许注册自定义指令。常用于 DOM 操作
+
+有全局注册和局部注册两种方式
+
+```js
+// 全局注册自定义指令
+Vue.directive('my-directive', {
+  // 钩子函数
+  bind: function (el, binding, vnode) {},
+  inserted: function (el, binding, vnode) {},
+  update: function (el, binding, vnode) {},
+  componentUpdated: function (el, binding, vnode) {},
+  unbind: function (el, binding, vnode) {}
+});
+
+// 局部注册自定义指令
+export default {
+  directives: {
+    'my-directive': {
+      // 同样的钩子函数定义
+    }
+  }
+  // ...
+};
+```
+
+示例，在 src 目录下新建一个 directive 目录，集中管理全局的指令，目录结构如下：
+
+```sh
+|-- src
+    |-- directive
+    |   |-- permission         # 权限模块
+    |   |   |-- hasRole.js     # 角色权限处理
+    |   |-- index.js
+    |-- main.js
+```
+
+::: code-group
+
+```js [main.js]
+// 其余内容省略
+import Vue from 'vue';
+
+import directive from './directive';
+
+Vue.use(directive);
+```
+
+```js [index.js]
+import hasRole from './permission/hasRole';
+
+const install = function (Vue) {
+  Vue.directive('hasRole', hasRole);
+  // 注册其他指令
+};
+
+export default install;
+```
+
+```js [hasRole.js]
+import store from '@/store';
+
+export default {
+  inserted(el, binding, vnode) {
+    const { value } = binding;
+    const super_admin = 'admin';
+    const roles = store.getters && store.getters.roles;
+
+    if (value && value instanceof Array && value.length > 0) {
+      const roleFlag = value;
+
+      const hasRole = roles.some((role) => {
+        return super_admin === role || roleFlag.includes(role);
+      });
+
+      if (!hasRole) {
+        el.parentNode && el.parentNode.removeChild(el);
+      }
+    } else {
+      throw new Error(`请设置角色值`);
+    }
+  }
+};
+```
+
+:::
+
+使用方式如下，在组件绑定 `v-hasRole`，数组中的值是角色名称。这里表示只有 admin 角色可以查看
+
+```html
+<el-button v-hasRole="['admin']" type="primary" @click="handleView">查看</el-button>
+```
 
 ## keep-alive
 
@@ -457,81 +867,46 @@ returnPage() {
 
 方式二、将参数传递给详情页，返回时将参数带回列表页
 
-```js
-// listQuery是查询参数
-intoDetail(row) {
-  this.$router.push({ name: 'detail', params: { id: row.id, ...this.listQuery } })
-},
-```
+::: code-group
 
-```js
-created() {
-  if (Object.keys(this.$route.params).length > 0) {
-    this.listQuery = this.$route.params.listQuery
+```vue [list.vue]
+<script>
+export default {
+  created() {
+    if (Object.keys(this.$route.params).length > 0) {
+      this.queryParams = this.$route.params.queryParams;
+    }
+    this.getList();
+  },
+  methods: {
+    intoDetail(row) {
+      this.$router.push({
+        name: 'detail',
+        params: { id: row.id, ...this.queryParams }
+      });
+    }
   }
-  this.getList()
-},
+};
+</script>
 ```
 
-详情页
-
-```js
-returnPage() {
-  delete this.$route.params.id
-  this.$router.push({ name: 'list', params: { listQuery: this.$route.params } })
-}
+```vue [detail.vue]
+<script>
+export default {
+  methods: {
+    returnPage() {
+      delete this.$route.params.id;
+      this.$router.push({
+        name: 'list',
+        params: { queryParams: this.$route.params }
+      });
+    }
+  }
+};
+</script>
 ```
 
-## 插槽 slot
-
-在组件中用来分发内容，简单说就是在组件内部可以扩展内容
-
-### 匿名插槽
-
-```vue
-<!-- TestOne.vue -->
-<template>
-  <div>
-    <slot></slot>
-  </div>
-</template>
-
-<!-- 在别的组件使用 -->
-<template>
-  <div>
-    <TestOne>
-      <h1>可以放任意内容</h1>
-    </TestOne>
-  </div>
-</template>
-```
-
-### 具名插槽
-
-```vue
-<!-- TestTwo.vue -->
-<template>
-  <div>
-    <!-- 具名插槽 -->
-    <h1>
-      <slot name="hName"></slot>
-    </h1>
-    <span>
-      <slot name="spanName"></slot>
-    </span>
-  </div>
-</template>
-
-<!-- 在别的组件使用 -->
-<template>
-  <div>
-    <TestTwo>
-      <template #hName>111</template>
-      <template #spanName>222</template>
-    </TestTwo>
-  </div>
-</template>
-```
+:::
 
 ## 动态绑定样式
 
@@ -678,201 +1053,69 @@ echo
 exit 0
 ```
 
-## Mixins
+## 服务端渲染 SSR
 
-[文档](https://v2.cn.vuejs.org/v2/guide/mixins.html)
+## watch 和 computed 的区别
 
-> 混入 (Mixins) 是一种在多个组件之间共享可复用功能的方式。
+computed 是一个计算属性，基于其依赖进行**缓存**，当依赖的数据发生变化时，会重新计算属性的值。
 
-Mixins 允许把一组可复用的方法、生命周期钩子函数、数据属性和计算属性等组合到一个单独的对象中，然后在多个组件中导入并应用这个 mixin。
+- 支持缓存
+- 不支持异步，当 computed 中有异步操作时，无法监听数据的变化
+- 依赖的数据包括：组件的 `data` 和父组件传入的 `props`
 
-- 一个混入对象可以包含任意组件选项，如 data、watch、mounted、methods 等
-- 当组件使用混入对象时，所有混入对象的选项将被“混合”进入该组件本身的选项
-
-示例：
-
-::: code-group
-
-```js [foo.js]
-export default {
-  data() {
-    return {
-      a: 1
-    };
+```js
+new Vue({
+  el: '#app',
+  data: {
+    a: 1,
+    b: 2
   },
   computed: {
-    count() {
-      return 1 + 2 + 3;
+    sum() {
+      return this.a + this.b;
+    }
+  }
+});
+```
+
+watch 是一个**监听**数据的变化，当数据发生变化时，会执行相应的回调函数。
+
+- 不支持缓存
+- 可以处理异步操作，如请求数据
+
+```js
+new Vue({
+  el: '#app',
+  data: {
+    name: '',
+    queryParams: {
+      pageSize: 10,
+      pageNum: 1
     }
   },
   watch: {
-    $route(route) {
-      console.log(route);
-    }
-  },
-  mounted() {
-    this.handleClick();
-  },
-  methods: {
-    handleClick() {
-      console.log('click');
+    name(newValue, oldValue) {},
+
+    queryParams: {
+      handler(newValue, oldValue) {},
+      immediate: true,
+      deep: true
     }
   }
-};
-```
-
-```vue [Home.vue]
-<template>
-  <div>
-    <h1>mixins</h1>
-    <div>{{ a }}</div>
-    <div>{{ count }}</div>
-  </div>
-</template>
-
-<script>
-import Foo from './mixins/foo';
-
-export default {
-  name: 'Home',
-  mixins: [Foo],
-  data() {
-    return {};
-  }
-};
-</script>
-```
-
-:::
-
-### 选项合并规则
-
-1、数据对象在内部会进行递归合并，并在发生冲突时**以组件数据优先**。
-
-例如，在 mixin 中定义的 data 里的数据，如果组件中定义了同名的 data，那么组件中的 data 会覆盖 mixin 中的 data。
-
-2、同名**钩子函数**将合并为一个数组，都将被调用。混入对象的钩子将在组件自身钩子之前调用。
-
-3、值为对象的选项，例如 methods、components 和 directives，将被合并为同一个对象。两个对象键名冲突时，取**组件对象**的键值对。
-
-### 优势：
-
-1. **代码重用**：可以将通用功能抽象出来，避免代码重复，提高开发效率。
-2. **模块化**：有助于组织代码结构，将特定功能独立封装，便于管理和维护。
-3. **易于扩展**：当需要在多个组件中添加相同功能时，只需要修改 mixin 即可，不影响原有组件结构。
-
-### 劣势：
-
-1. **命名冲突**：当多个 mixins 或组件自身含有同名的数据属性或方法时，可能出现命名冲突。
-2. **难以追踪**：随着项目复杂度增加，当组件依赖多个 mixins 时，源代码的可读性和调试难度可能增大，尤其是当 mixin 中的方法影响组件行为时。
-3. **依赖顺序问题**：有时需要关注 mixin 间的依赖顺序，这可能导致代码维护性降低。
-
-### 使用场景
-
-- **共用的生命周期钩子**：例如，多个组件都需要在 `created` 或 `mounted` 中执行相同的初始化逻辑。
-- **共用的方法**：某些业务逻辑方法如数据请求、数据处理、工具函数等在多个组件中都需要用到。
-- **共用的状态和计算属性**：某些全局的状态和计算逻辑可以抽象到 mixin 中。
-
-### Mixin 与组件的区别
-
-- **组件**是独立模块，具有自己的视图模板、数据、方法、生命周期钩子等，强调的是独立和可复用的界面元素。
-- **Mixin** 更侧重于功能和逻辑的复用，不涉及视图渲染，它可以注入到组件中，增强组件的功能，但不改变组件的基本结构。
-
-## 自定义指令
-
-[文档](https://v2.cn.vuejs.org/v2/guide/custom-directive.html)
-
-Vue 除了内置的指令 (v-model 等)，也允许注册自定义指令。常用于 DOM 操作
-
-有全局注册和局部注册两种方式
-
-```js
-// 全局注册自定义指令
-Vue.directive('my-directive', {
-  // 钩子函数
-  bind: function (el, binding, vnode) {},
-  inserted: function (el, binding, vnode) {},
-  update: function (el, binding, vnode) {},
-  componentUpdated: function (el, binding, vnode) {},
-  unbind: function (el, binding, vnode) {}
 });
-
-// 局部注册自定义指令
-export default {
-  directives: {
-    'my-directive': {
-      // 同样的钩子函数定义
-    }
-  }
-  // ...
-};
 ```
 
-示例，在 src 目录下新建一个 directive 目录，集中管理全局的指令，目录结构如下：
+- `immediate`：组件加载立即触发回调函数
+- `deep`：深度监听，发现数据内部的变化，在复杂数据类型中使用
 
-```sh
-|-- src
-    |-- directive
-    |   |-- permission         # 权限模块
-    |   |   |-- hasRole.js     # 角色权限处理
-    |   |-- index.js
-    |-- main.js
-```
+## Vue 模版编译原理
 
-::: code-group
+vue 中的模版无法被浏览器解析，因为 template 不是 html 标签，需要将其编译成 js 函数，将其执行后渲染出 html 元素。
 
-```js [main.js]
-// 其余内容省略
-import Vue from 'vue';
+vue 的模版编译是将模板字符串转换为渲染函数的过程，主要有三步：
 
-import directive from './directive';
+1. 解析（parse）：将模版字符串转换为 AST 抽象语法树。使用正则表达式对 template 字符串进行解析，将标签、指令、属性等转化为 AST
+2. 优化（optimize）：标记静态节点，便于后续的渲染优化。具体是遍历 AST，找到静态节点并标记，在页面重渲染进行 diff 比较时，跳过这些静态节点，优化 runtime 的性能
+3. 生成代码（generate）：将 AST 转换为 render 渲染函数
 
-Vue.use(directive);
-```
-
-```js [index.js]
-import hasRole from './permission/hasRole';
-
-const install = function (Vue) {
-  Vue.directive('hasRole', hasRole);
-  // 注册其他指令
-};
-
-export default install;
-```
-
-```js [hasRole.js]
-import store from '@/store';
-
-export default {
-  inserted(el, binding, vnode) {
-    const { value } = binding;
-    const super_admin = 'admin';
-    const roles = store.getters && store.getters.roles;
-
-    if (value && value instanceof Array && value.length > 0) {
-      const roleFlag = value;
-
-      const hasRole = roles.some((role) => {
-        return super_admin === role || roleFlag.includes(role);
-      });
-
-      if (!hasRole) {
-        el.parentNode && el.parentNode.removeChild(el);
-      }
-    } else {
-      throw new Error(`请设置角色值`);
-    }
-  }
-};
-```
-
-:::
-
-使用方式如下，在组件绑定 `v-hasRole`，数组中的值是角色名称。这里表示只有 admin 角色可以查看
-
-```html
-<el-button v-hasRole="['admin']" type="primary" @click="handleView">查看</el-button>
-```
-
-## 服务端渲染 SSR
+可以查看源码：`src/compiler`

@@ -189,6 +189,11 @@
 
 - [vue-clipboard2](https://github.com/Inndy/vue-clipboard2)
 
+## 五彩纸屑
+
+- [js-confetti](https://github.com/loonywizard/js-confetti)
+- [canvas-confetti](https://github.com/catdad/canvas-confetti)
+
 ## 二维码生成器
 
 - [QRCode.js](https://github.com/davidshimjs/qrcodejs)

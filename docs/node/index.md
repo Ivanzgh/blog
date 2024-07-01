@@ -5,11 +5,9 @@
 - [官网](https://nodejs.org/en/)
 - [中文文档](http://nodejs.cn/api/)
 
-Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时
+Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行时。
 
 简单说，node 就是一个可以运行 js 代码的环境，不是一门编程语言，可以做服务器端开发
-
-node 和 node-sass 对应版本: <https://www.npmjs.com/package/node-sass>
 
 > 1. node 运行的 js 是指 ECMAScript，不能运行 BOM 和 DOM 的 API（如`window`、`document`等对象），可以使用 console 和定时器等
 > 2. node 中的顶级对象是`global`，也可以使用`globalThis`（是 ES2020 支持的）
@@ -25,13 +23,13 @@ node 和 node-sass 对应版本: <https://www.npmjs.com/package/node-sass>
 
 事件驱动，是指在持续事务管理过程中，进行决策的一种策略，即跟随当前时间点上出现的事件，调动可用资源，执行相关任务，使不断出现的问题得以解决，防止事务堆积
 
-## node 命令
+## Node 命令
 
 ```sh
 # 查看node版本
 node -v
 
-# 查看npm版本，
+# 查看npm版本
 npm -v
 
 # 查看node安装目录
@@ -43,7 +41,9 @@ npm view node versions
 
 ## 管理 node 版本
 
-在维护一些老项目时通常需要降低 node 的版本，如遇到 node-gyp 报错、node-sass 报错等
+在维护一些老项目时通常需要降低 node 的版本，如遇到 node-gyp 报错、node-sass 报错等。
+
+node 和 node-sass 对应版本: <https://www.npmjs.com/package/node-sass>
 
 ### 使用 n 模块管理
 
@@ -83,8 +83,8 @@ sudo npm uninstall n -g
 
 Node.js 默认是使用`CommonJS`规范
 
-- require 方法 用来载入模块的
-- moule.exports 用来导出模块的
+- `require` 方法用来载入模块的
+- `moule.exports` 用来导出模块的
 
 载入系统模块和第三方模块不需要写路径，直接写名称即可，但是载入自定义模块需要写路径
 
@@ -107,51 +107,3 @@ require 加载第三方包的机制：
 - [randomjson](https://www.npmjs.com/package/randomjson) 生成随机 JSON 数据
 - [http-proxy-agent](https://www.npmjs.com/package/http-proxy-agent) HTTP(s) 代理 HTTP.Agent 实现 HTTP
 - [multiparty](https://www.npmjs.com/package/multiparty) 解析具有`multipart/form-data`类型的 HTTP 请求，如解析上传文件
-
-## process 模块
-
-`process.argv` 可以获得命令行调用的信息，以空格分隔。假设执行一个脚本 test.js，运行`node test.js`，
-那么`process.argv`的结果是`['node', 'test.js']`
-
-## path 模块
-
-可以操作路径
-
-- `path.resolve` 拼接规范的绝对路径
-- `path.sep` 获取操作系统的路径分隔符
-- `path.parse` 解析路径并返回对象
-- `path.basename` 获取路径的基础名称
-- `path.dirname` 获取路径的目录名
-- `path.extname` 获取路径的扩展名
-
-```js
-const path = require('path');
-
-// 结果：Windows下是反斜杠 \ ，linux下是正斜杠 /
-console.log(path.sep);
-
-console.log(path.resolve(__dirname, '1.txt')); // 结果：/Users/zgh/code/blog/1.txt
-
-const pathName = '/Users/zgh/code/blog/1.txt';
-console.log(path.parse(pathName));
-
-console.log(path.basename(pathName)); // 1.txt
-
-console.log(path.dirname(pathName)); // 结果：/Users/zgh/code/blog
-
-console.log(path.extname(pathName)); // .txt
-```
-
-`path.resolve()`这里第二个参数可以写`'1.txt'`或者`'./1.txt'`，但是不能写`'/index'`，即可以写相对路径
-
-上面`path.parse(pathName)`的打印结果如下：
-
-```js
-{
-  root: '/',
-  dir: '/Users/zgh/code/blog',
-  base: '1.txt',
-  ext: '.txt',
-  name: '1'
-}
-```

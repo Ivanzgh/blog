@@ -138,7 +138,7 @@
             }, delay);
           };
         }
-        
+
         // 这里使用节流，避免多次触发scroll事件
         window.addEventListener('scroll', throttle(lazyLoad, 500));
         lazyLoad();
@@ -168,3 +168,5 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 ```
+
+##

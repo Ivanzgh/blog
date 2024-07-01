@@ -7,93 +7,51 @@
   </head>
   <body>
     <script>
-      // 定义发布者类
-      class Publisher {
+      class EventBus {
         constructor() {
-          this.observers = [];
-          console.log('Publisher created');
+          this.handlers = {};
+
+          // this.handlers = {
+          //   eventName1: [fn]
+          // };
         }
-        // 增加订阅者
-        add(observer) {
-          console.log('add');
-          this.observers.push(observer);
+
+        on(eventName, fn) {
+          if (!this.handlers[eventName]) {
+            this.handlers[eventName] = [];
+          }
+          this.handlers[eventName].push(fn);
         }
-        // 移除订阅者
-        remove(observer) {
-          console.log('remove');
-          this.observers.forEach((item, index) => {
-            if (item === observer) {
-              this.observers.splice(index, 1);
+
+        emit(eventName, ...args) {
+          if (this.handlers[eventName]) {
+            const handlers = this.handlers[eventName].slice();
+            handlers.forEach((fn) => fn(...args));
+          }
+        }
+
+        off(eventName, fn) {
+          if (this.handlers[eventName]) {
+            const callbacks = this.handlers[eventName]
+            const index = callbacks.indexOf(fn)
+            if (index > -1) {
+              callbacks.splice(index, 1)
             }
-          });
+          }
         }
-        // 通知所有订阅者
-        notify() {
-          console.log('notify');
-          this.observers.forEach((observer) => {
-            observer.update(this);
-          });
+
+        once(eventName, fn) {
+          const wrapper = (...args) => {
+            fn(...args)
+            this.off(eventName, wrapper)
+          }
+          this.on(eventName, wrapper)
         }
       }
 
-      // 定义订阅者类
-      class Observer {
-        constructor() {
-          console.log('Observer created');
-        }
-        update() {
-          console.log('update');
-        }
-      }
-
-      // 定义一个具体的发标发布类
-      class BidPublisher extends Publisher {
-        constructor() {
-          super();
-          this.bidState = null;
-          this.observers = [];
-        }
-        getState() {
-          return this.bidState;
-        }
-        setState(state) {
-          this.bidState = state;
-          this.notify();
-        }
-      }
-      // 定义发标的订阅者类
-      class BidObserver extends Observer {
-        constructor() {
-          super();
-          this.bidState = {};
-        }
-        update(publisher) {
-          this.bidState = publisher.getState();
-          this.work();
-        }
-        // 工作函数
-        work() {
-          console.log(this.bidState);
-        }
-      }
-
-      // 创建订阅者：供应商
-      const supplier1 = new BidObserver();
-      const supplier2 = new BidObserver();
-      const supplier3 = new BidObserver();
-
-      // 创建发布者：采购方
-      const owner = new BidPublisher();
-      // 标书信息
-      const tenderInfo = {};
-
-      // 添加订阅者
-      owner.add(supplier1);
-      owner.add(supplier2);
-      owner.add(supplier3);
-
-      // 发标
-      owner.setState(tenderInfo);
+      const bus = new EventBus();
+      bus.on('eventName', () => {});
+      bus.emit('eventName', 1);
     </script>
   </body>
 </html>

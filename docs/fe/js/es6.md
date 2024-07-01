@@ -117,7 +117,7 @@ console.log(str.endsWith('!')); // true
 
 ## 解构赋值
 
-### 数组的解构赋值
+### 1. 数组的解构赋值
 
 可以从数组中提取值，按照对应位置，对变量赋值。这种写法属**模式匹配**，只要等号两边的模式相同，左边的变量就会被赋予对应的值
 
@@ -171,7 +171,7 @@ const { 1: name, 2: sex, 0: age } = str.split(',');
 console.log(name, sex, age); // zgh boy 23
 ```
 
-### 对象的解构赋值
+### 2. 对象的解构赋值
 
 ```js
 let { name, age } = { name: 'zgh', age: 22 };
@@ -185,7 +185,7 @@ console.log(name, age); // zgh 22
 
 :::
 
-### 函数参数的解构赋值
+### 3. 函数参数的解构赋值
 
 ```js
 let f = ([a, b]) => a + b;
@@ -213,39 +213,39 @@ Person('Jack', 20);
 
 ### 箭头函数
 
-#### ES6 允许使用“箭头”（=>）定义函数
+ES6 允许使用箭头`=>`定义函数
 
 ```js
-//1.不带参数
+// 1.不带参数
 let sum = () => 1 + 2;
-//等同于
+// 等同于
 let sum = function () {
   return 1 + 2;
 };
 
-//2.带一个参数
+// 2.带一个参数
 let sum = (a) => a;
-//等同于
+// 等同于
 let sum = function (a) {
   return a;
 };
 
-//3.带多个参数,需要使用小括号将参数括起来
+// 3.带多个参数,需要使用小括号将参数括起来
 let sum = (a, b) => a + b;
-//等同于
+// 等同于
 let sum = function (a, b) {
   return a + b;
 };
 
-//4.代码块部分多于一条语句需要用大括号将其括起来，并且使用return语句返回。
+// 4.代码块部分多于一条语句需要用大括号将其括起来，并且使用return语句返回。
 let sum = (a, b) => {
   let c = a + b;
   return c;
 };
 
-//5.返回对象，就必须用小括号把该对象括起来
+// 5.返回对象，就必须用小括号把该对象括起来
 let person = (name) => ({ name: 'zgh', age: 22 });
-//等同于
+// 等同于
 let person = function (name) {
   return { name: 'zgh', age: 22 };
 };
@@ -253,7 +253,7 @@ let person = function (name) {
 
 #### 箭头函数的 this 指向
 
-箭头函数本身是没有`this`和`arguments`的，在箭头函数中引用 this 实际上是调用的是定义时的父执行上下文的 this。简单对象（非函数）是没有执行上下文的。
+箭头函数本身是没有`this`和`arguments`的，在箭头函数中引用 this 实际上是调用的是定义时的父执行上下文的 this。
 
 - 使用`call，apply，bind`都不能改变 this 指向
 - 箭头函数没有原型属性`prototype`
@@ -266,14 +266,9 @@ let obj = {
     f1();
   }
 };
-let rs = obj.say;
-rs(); // f1执行时，say函数指向window，所以f1中的this指向window
+let res = obj.say;
+res(); // f1执行时，say函数指向window，所以f1中的this指向window
 obj.say(); // f1执行时，say函数指向obj，所以f1中的this指向obj
-
-// 下面写法错误！
-let Person = (name) => {
-  this.name = name;
-};
 ```
 
 ## 对象扩展
@@ -315,10 +310,10 @@ let obj = {
 
 ## Map
 
-类似于对象，可以用来存储键值对的集合
+Map 是一种用来存储**键值对**的数据结构。类似于对象
 
 ```js
-// 创建一个Map对象
+// 创建一个Map实例
 let myMap = new Map();
 
 // 添加键值对
@@ -355,14 +350,14 @@ myMap.forEach((value, key) => {
 ### Map 和 Object 有什么不同?
 
 - 二者都属于键值对结构
-- Object 中的键名只能是`String`或者`Symbol`类型，而 Map 的键可以是任意值
-- Object 可以从原型链继承属性和方法，而 Map 不具备继承性
+- 对象的键名只能是`String`或者`Symbol`类型，而 Map 的键可以是任意类型的值
+- 对象可以从原型链继承属性和方法，而 Map 不具备继承性
 
 ### Map 的使用场景
 
 1、**缓存**
 
-Map 可以用来缓存一些计算结果，避免重复计算。比如缓存斐波那契数列的结果
+Map 可以用来缓存一些计算结果，避免重复计算。比如缓存斐波那契数列的结果。
 
 ```js
 const fibCache = new Map();
@@ -383,7 +378,7 @@ console.log(fibonacci(6)); // 8
 
 2、**数据结构**
 
-Map 可以用作一些数据结构的基础，比如字典、哈希表等。例如实现哈希表时，可以使用 Map 来存储键值对
+Map 可以用作一些数据结构的基础，比如字典、哈希表等。例如实现哈希表时，可以使用 Map 来存储键值对。
 
 ```js
 class HashTable {
@@ -566,17 +561,33 @@ mapFromArray(
 
 ## WeakMap
 
-## Set
+WeakMap 是一种键必须是对象的 Map。WeakMap 的键是弱引用的，如果键所引用的对象被垃圾回收，则键值对会被自动删除。
 
-`Set`对象是一组不重复的、无序的值的集合，可以往里面添加、删除、查询数据。
+特点：
 
-`Set`本身是一个构造函数，用来生成`Set`数据结构
-
-`Set()`接受具有`iterable`可迭代接口的数据结构作为参数，如数组、类数组、字符串等。
-不能接受对象结构，否则报错`Uncaught TypeError: object is not iterable (cannot read property Symbol(Symbol.iterator))`
+- 键必须是对象，值可以是任意类型
+- 键是弱引用，键所引用的对象可以被垃圾回收
+- 没有 clear 方法，不能遍历其中的键值对
 
 ```js
-// 声明一个Set对象
+let weakMap = new WeakMap();
+let obj = {};
+weakMap.set(obj, 'value');
+
+console.log(weakMap);
+console.log(weakMap.get(obj)); // 'value'
+
+obj = null; // obj 被垃圾回收，weakMap 会自动清除该键值对
+```
+
+## Set
+
+Set 是一种存储唯一值的数据结构。类似于数组
+
+`Set()`接受具有`iterable`可迭代接口的数据结构作为参数，如数组、类数组、字符串等。不能接受对象结构，否则报错。
+
+```js
+// 声明一个Set实例
 let mySet = new Set();
 let mySet2 = new Set([1, 2, 3]);
 
@@ -608,7 +619,7 @@ set2.add({});
 set2.size; // 2
 ```
 
-遍历操作
+遍历操作：
 
 ```js
 let mySet = new Set(['a', 'b', 'c']);
@@ -635,7 +646,7 @@ for (let i of mySet.values()) {
 }
 ```
 
-`Set`只存储唯一值，可用来数组去重
+Set 只存储唯一值，可给数组去重：
 
 ```js
 let arr = [1, 1, 2, 2, 3, 3];
@@ -645,7 +656,7 @@ let res1 = [...new Set(arr)]; // [1, 2, 3]
 let res2 = Array.from(new Set(arr)); // [1, 2, 3]
 ```
 
-也可以用来字符串去重
+也可以给字符串去重：
 
 ```js
 const str = [...new Set('ababbc')].join('');
@@ -654,9 +665,22 @@ console.log(str); // 'abc'
 
 ## WeakSet
 
-### 使用场景
+WeakSet 是一种类似于 Set 的数据结构，但是其成员必须是对象，并且这些对象都是弱引用的。
 
-### WeakSet 和 Set 的区别
+特点：
+
+- 成员必须是对象
+- 成员是弱引用，成员对象可以被垃圾回收
+- 没有 clear 方法，不能遍历其中的成员
+
+```js
+let weakSet = new WeakSet();
+let obj = {};
+weakSet.add(obj);
+
+console.log(weakSet.has(obj)); // true
+obj = null; // obj 被垃圾回收，weakSet 会自动清除该成员
+```
 
 ## 扩展操作符
 

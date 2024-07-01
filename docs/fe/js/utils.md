@@ -136,6 +136,52 @@ function getNineElements(arr, targetId) {
 }
 ```
 
+## 处理数组以生成特定的 ECharts 数据结构
+
+```js
+const data = [
+  { name: '收入', year: 2018, value: 99535.4681 },
+  { name: '支出', year: 2018, value: 78761.4833 },
+  { name: '收入', year: 2019, value: 43018.8192 },
+  { name: '支出', year: 2019, value: 36920.0656 },
+  { name: '收入', year: 2020, value: 78180.2619 },
+  { name: '支出', year: 2020, value: 31246.8656 },
+  { name: '收入', year: 2021, value: 60299.8414 },
+  { name: '支出', year: 2021, value: 51657.13 },
+  { name: '收入', year: 2022, value: 811298.0807 },
+  { name: '支出', year: 2022, value: 8556.9949 },
+  { name: '收入', year: 2023, value: 62680.3691 },
+  { name: '支出', year: 2023, value: 36.82 },
+  { name: '收入', year: 2024, value: 24753.8608 },
+  { name: '支出', year: 2024, value: 50 },
+  { name: '收入', year: 2025, value: 80 },
+  { name: '支出', year: 2025, value: 65 }
+];
+
+// 1. 获取所有的 year 字段值并去重、根据年份排序
+const years = Array.from(new Set(data.map((item) => item.year))).sort((a, b) => a - b);
+
+console.log('Years:', years);
+
+// 2. 拿到 inputData 和 outputData 数组，并根据年份排序
+const inputData = years.map((year) => {
+  const item = data.find((d) => d.year === year && d.name === '收入');
+  return item ? item.value : 0; // 如果没有找到对应年份的数据，则返回 0
+});
+
+const outputData = years.map((year) => {
+  const item = data.find((d) => d.year === year && d.name === '支出');
+  return item ? item.value : 0;
+});
+
+console.log('收入金额数据:', inputData);
+console.log('支出金额数据:', outputData);
+
+// Years: [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+// 申报金额数据: [99535.4681, 43018.8192, 78180.2619, 60299.8414, 811298.0807, 62680.3691, 24753.8608, 80]
+// 评审金额数据: [78761.4833, 36920.0656, 31246.8656, 51657.13, 8556.9949, 36.82, 50, 65]
+```
+
 ## 生成树形结构
 
 ```js

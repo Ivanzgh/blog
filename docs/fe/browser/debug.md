@@ -8,7 +8,7 @@
 
 恢复执行（Resume）是指在调试器暂停执行后，通过点击恢复执行按钮，让代码继续执行到**下一个断点或程序结束处**。这相当于取消断点并让程序继续执行，直到下一个断点或程序结束。
 
-单步执行（Step Over、Step Into、Step Out）则是在调试器暂停执行后，以不同的方式**逐行执行**代码
+单步执行则是在调试器暂停执行后，以不同的方式**逐行执行**代码
 
 单步执行的三种方式：
 
@@ -20,11 +20,29 @@
 
 ## VsCode 调试
 
-点击 Debug 窗口的 `create a launch.json file` 可以快速创建调试的配置文件
+1. 点击 Debug 窗口的 `Run and Debug` 或者 `create a launch.json file` 可以快速创建调试的配置文件，选择调试平台
 
-调试就是把浏览器跑起来，访问目标网页，这时候会有一个 ws 的调试服务，我们用 frontend 的 ws 客户端连接上这个 ws 服务，就可以进行调试了
+2. 生成的 launch.json 如下。如果 url 不一致，需要修改 url
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}
+```
 
 创建 Chrome Debug 配置有两种方式：launch、attach
 
 - launch：把 url 对应的网页跑起来，指定调试端口，然后 frontend 自动 attach 到这个端口
 - attach：如果已经有一个在调试模式跑的浏览器了，那直接连接上就行
+
+3. 点击左上角的小三角形启动调试，会弹出一个浏览器窗口，一般在 vscode 的左上方会出现一排调试按钮
+4. 在代码里添加 debugger 断点，然后点击 Restart 调试按钮，就可以看到代码的运行过程了

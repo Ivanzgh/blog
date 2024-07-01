@@ -2,7 +2,7 @@
 
 ## Husky
 
-husky 可以在执行 git 命令时，执行自定义的程序脚本，可以理解成一个能运行脚本的平台。用于在项目里添加 git hooks，在 commit 前校验代码规范、commit 信息规范等
+husky 可以在执行 git 命令时，执行自定义的程序脚本，可以理解成一个能运行脚本的平台。用于在项目里添加 git hooks，在 commit 前校验代码规范、commit 信息规范等。
 
 - 文档：<https://typicode.github.io/husky/getting-started.html>
 - github： <https://github.com/typicode/husky>
@@ -22,7 +22,7 @@ npm pkg set scripts.prepare="husky install"
 
 ## lint-staged
 
-对暂存区执行脚本（git add）
+> 对暂存区执行脚本（git add）
 
 github：<https://github.com/lint-staged/lint-staged>
 
@@ -30,28 +30,23 @@ github：<https://github.com/lint-staged/lint-staged>
 # 安装
 pnpm add -D lint-staged
 
-# 添加
+# 向husky中添加lint-staged
 npx husky add .husky/pre-commit 'npx lint-staged'
 ```
 
 配置 lint-staged 可以在`package.json`中，或者创建`.lintstagedrc`文件
 
-1. 在`package.json`文件中配置
+1. 在`package.json`文件中配置：
 
 ```json
 {
   "scripts": {
-    "prepare": "husky install"
+    "lint-staged": "lint-staged",
+    "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx"
   },
   "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
     "**/*.{js,jsx,tsx,ts,less,md,json}": ["prettier --write"]
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^18.2.0",
-    "@commitlint/config-conventional": "^18.1.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^14.0.1",
-    "prettier": "3.0.3"
   }
 }
 ```
@@ -64,7 +59,7 @@ npx husky add .husky/pre-commit 'npx lint-staged'
   "scripts": {
     "lint": "npm run lint:js && npm run lint:prettier && npm run tsc",
     "lint-staged": "lint-staged",
-    "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx ",
+    "lint-staged:js": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src ",
     "lint:js": "eslint --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src",
     "lint:prettier": "prettier -c --write \"**/**.{js,jsx,tsx,ts,less,md,json}\" --end-of-line auto",
@@ -83,7 +78,8 @@ npx husky add .husky/pre-commit 'npx lint-staged'
 
 ```json
 {
-  "*": "your-cmd"
+  "**/*.{js,jsx,ts,tsx}": "npm run lint-staged:js",
+  "**/*.{js,jsx,tsx,ts,less,md,json}": ["prettier --write"]
 }
 ```
 

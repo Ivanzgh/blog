@@ -126,7 +126,7 @@ loadScript('1.js', function (error, script) {
 
 ## Promise
 
-`promise`用同步编程的方式来编写异步代码，解决回调嵌套问题
+`promise`用同步编程的方式来编写异步代码，解决回调嵌套问题。
 
 ```js
 new Promise((resolve, reject) => {});
@@ -134,13 +134,15 @@ new Promise((resolve, reject) => {});
 
 ### Promise 的三种状态
 
-- `resolved` 成功
-- `rejected` 失败
-- `pending` 创建 promise 对象实例进行中
+- `pending` 待定
+- `fulfilled` 已完成
+- `rejected` 已拒绝
+
+`pending` 是初始状态，最终状态是`fulfilled`并返回一个值，或者是`rejected`并返回一个原因。
 
 ### then 方法
 
-- 分别指定`resolved`状态和`rejected`状态的回调函数，第二个参数可选（不推荐使用）。
+- 分别指定`fulfilled`状态和`rejected`状态的回调函数，第二个参数可选（不推荐使用）。
 - 返回的是一个新的`Promise`，支持链式调用
 
 ```js
@@ -162,6 +164,7 @@ pro(true).then(
 ```
 
 ::: warning
+
 `Promise` 本身是同步的，then、catch 和 finally 都是异步的
 
 ```js
@@ -546,3 +549,77 @@ setTimeout(() => {
 ```
 
 `yield`表达式只能用在 Generator 函数里面
+
+## Promise/A+ 规范
+
+[Promise/A+ 规范](https://promisesaplus.com/)
+
+### 状态
+
+- promise 有 3 种状态：`pending`、`fulfilled`、`rejected`
+- 初始状态是`pending`
+- `pending`状态可以转化为`fulfilled`或者`rejected`状态
+- 状态不可逆
+
+### then 方法
+
+---
+
+promise 特性：
+
+- 执行了 `resolve` 函数，promise 状态变为`fulfilled`
+- 执行了`reject`函数，状态变为`rejected`
+- promise 中有 `throw` 语句，状态变为`rejected`
+- promise 有 3 种状态：`pending`、`fulfilled`、`rejected`
+- 初始状态是`pending`
+- `pending`状态可以转化为`fulfilled`或者`rejected`状态
+- 状态不可逆
+- `then`接收两个回调函数：`onFulfilled`、`onRejected`
+- fulfilled 状态执行 onFulfilled，rejected 状态执行 onRejected
+- 如果存在定时器，需要在定时器结束之后执行 then
+- then 支持链式调用，下一个 then 接收上一个 then 的返回值
+
+```js
+const p1 = new Promise((resolve, reject) => {});
+
+const p2 = new Promise((resolve, reject) => {
+  resolve('success');
+});
+
+// 抛出异常
+const p3 = new Promise((resolve, reject) => {
+  throw 'error';
+});
+
+// 延迟执行，1s之后才打印结果
+const p4 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('success');
+  }, 1000);
+}).then(
+  (res) => console.log(res),
+  (err) => console.log(err)
+);
+
+// 链式调用
+const p5 = new Promise((resolve, reject) => {
+  resolve(100);
+})
+  .then(
+    (res) => res * 2,
+    (err) => console.log(err)
+  )
+  .then(
+    (res) => console.log(res),
+    (err) => console.log(err)
+  );
+```
+
+## 练习题目
+
+```js
+const p1 = new Promise((resolve, reject) => {
+  console.log(1);
+});
+console.log(2);
+```

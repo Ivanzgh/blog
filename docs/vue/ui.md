@@ -455,3 +455,29 @@ this.$nextTick(() => {
   this.$refs.tableRef.doLayout();
 });
 ```
+
+### el-modal
+
+#### 弹窗无法关闭
+
+场景：弹窗中有 tab 页签，点击弹窗的右上角关闭图标，页面卡死无反应。
+
+解决方案：去掉 el-dialog 的`:destroy-on-close="true"`。如果保留这个属性，el-tab-pane 里不能有任何内容。
+
+```vue
+<el-dialog
+  title="项目总概况"
+  :visible.sync="proOpen"
+  width="90%"
+  append-to-body
+  :before-close="handleModalClose"
+  :close-on-click-modal="false"
+  :close-on-press-escape="false"
+>
+  <div class="wrap">
+    <el-tabs v-model="activeTab">
+      <el-tab-pane label="项目概况" name="home"></el-tab-pane>
+    </el-tabs>
+  </div>
+</el-dialog>
+```
