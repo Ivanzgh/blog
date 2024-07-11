@@ -695,3 +695,78 @@ function onMouseToolDrawEnd(e: any) {
   // 其他代码省略
 }
 ```
+
+## 点标记的 label 切换显示隐藏
+
+场景：初始隐藏点标记的 label，点击某个按钮后，可以切换显示隐藏 label，label 的位置在 marker 的右侧。
+
+如果出现第一次显示时，label 的位置在 marker 的上方，后续点击按钮切换又正常显示在右侧，可以使用如下方式解决：
+
+1. 在初始化 marker 时，设置 label 占位，内容隐藏、尺寸大小和展示时一致
+2. 设置高德地图自带的 marker 样式
+3. 在切换时，使用 `marker.setLabel()`重设 label 的样式
+
+```js
+const map = new AMap.Map('container');
+let visible = false;
+
+const marker = new AMap.Marker({
+  position: [116.39, 39.9],
+  offset: new AMap.Pixel(-13, -30),
+  icon: new AMap.Icon({
+    size: new AMap.Size(30, 50),
+    image: 'xxx.png',
+    imageSize: new AMap.Size(30, 50),
+    imageOffset: new AMap.Pixel(0, 0)
+  }),
+  label: {
+    offset: new AMap.Pixel(2, 0),
+    content: `<div class='label-init'>666</div>`,
+    direction: 'right'
+  }
+});
+map.add(marker);
+
+document.getElementById('btn').onclick = function () {
+  visible = !visible;
+  toggleShowParcel();
+};
+
+function toggleShowParcel() {
+  const allMarkers = map.getAllOverlays('marker');
+  let content = '';
+  allMarkers.forEach((e) => {
+    content = visible ? `<div class='label-visible'><span>666</span></div>` : '';
+    const labelOptions = {
+      offset: new AMap.Pixel(2, 0),
+      content,
+      direction: 'right'
+    };
+    e.setLabel(labelOptions);
+  });
+}
+```
+
+```css
+.label-visible {
+  border: 1px solid #00a8ff;
+  background: rgba(0, 168, 255, 0.7);
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 8px;
+}
+.label-init {
+  border: none;
+  background: transparent;
+  opacity: 0;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 8px;
+}
+.amap-marker-label {
+  padding: 0;
+  border: none;
+  background: none;
+}
+```

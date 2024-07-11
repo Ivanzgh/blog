@@ -508,7 +508,7 @@ outline: none;
 
 ## background 背景
 
-<https://developer.mozilla.org/zh-CN/docs/Web/CSS/background>
+[https://developer.mozilla.org/zh-CN/docs/Web/CSS/background](https://developer.mozilla.org/zh-CN/docs/Web/CSS/background)
 
 1. `background-color`：背景颜色
 2. `background-image`：背景图片

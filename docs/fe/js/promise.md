@@ -8,7 +8,7 @@ outline: deep
 
 ### 基于回调的异步编程
 
-有一些异步行为的示例，例如加载脚本和模块
+有一些异步行为的例子，例如加载脚本和模块：
 
 ::: code-group
 
@@ -33,9 +33,9 @@ function foo() {
 
 :::
 
-示例的打印顺序是 1、2。这说明脚本 foo.js 会在 loadScript 函数执行完成后才运行。如果 loadScript 函数后面有其他代码，它们不会等到脚本加载完成后再执行。
+打印顺序是 1、2。这说明脚本 foo.js 会在 loadScript 函数执行完成后才运行。如果 loadScript 函数后面有其他代码，它们不会等到脚本加载完成后再执行。
 
-如果我想在脚本加载后立即使用脚本里的 `foo` 函数，直接调用会报错。
+如果我想在脚本加载后立即使用脚本里的 `foo` 函数，直接调用会报错：
 
 ```js
 loadScript('./foo.js');
@@ -62,7 +62,7 @@ loadScript('./foo.js', (script) => {
 
 这就是基于回调的异步编程。异步执行某项功能的函数应该提供一个 callback 参数，并在相应事件完成时调用。
 
-如果需要多个异步操作，可以嵌套回调函数。
+如果需要多个异步操作，可以嵌套回调函数：
 
 ```js
 loadScript('1.js', function (script) {
@@ -100,7 +100,7 @@ callback 函数里接收两个参数，加载成功时调用`callback(null, scri
 
 ### 回调地狱
 
-如果有多个异步操作，回调函数会嵌套在回调函数里，导致代码难以阅读和理解，这就是“回调地狱”。
+如果有多个异步操作，回调函数会嵌套在回调函数里，导致代码难以阅读和理解，这就是「回调地狱」。
 
 ```js
 loadScript('1.js', function (error, script) {
@@ -124,6 +124,45 @@ loadScript('1.js', function (error, script) {
 });
 ```
 
+### 改造 loadScript
+
+使用`Promise`改造前面的示例，假设有 3 个脚本需要加载
+
+```js
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = () => resolve(script);
+    script.onerror = () => reject(new Error(`Script load error for ${src}`));
+    document.head.append(script);
+  });
+}
+
+loadScript('./1.js')
+  .then(() => loadScript('./2.js'))
+  .then(() => loadScript('./3.js'))
+  .then(() => {
+    foo1();
+    foo2();
+    foo3();
+  });
+```
+
+注意：下面是没有使用链式调用的写法，会有和使用回调函数一样的问题。
+
+```js
+loadScript('./1.js').then(() => {
+  loadScript('./2.js').then(() => {
+    loadScript('./3.js').then(() => {
+      foo1();
+      foo2();
+      foo3();
+    });
+  });
+});
+```
+
 ## Promise
 
 `promise`用同步编程的方式来编写异步代码，解决回调嵌套问题。
@@ -132,13 +171,18 @@ loadScript('1.js', function (error, script) {
 new Promise((resolve, reject) => {});
 ```
 
-### Promise 的三种状态
+### 三种状态
 
-- `pending` 待定
-- `fulfilled` 已完成
-- `rejected` 已拒绝
+- `pending` 进行中
+- `fulfilled` 成功
+- `rejected` 失败
 
-`pending` 是初始状态，最终状态是`fulfilled`并返回一个值，或者是`rejected`并返回一个原因。
+特性：
+
+- 初始状态是`pending`
+- `pending`状态可以转化为`fulfilled`或者`rejected`状态
+- 状态不可逆
+- 最终状态是`fulfilled`并返回一个值，或者是`rejected`并返回一个原因。
 
 ### then 方法
 
@@ -435,7 +479,7 @@ Promise.allSettled 等待所有的 promise 都被 settle，**无论结果如何*
 Promise.allSettled 和 Promise.all 的区别：
 
 - 如果任意的 promise 出现 reject，则 Promise.all 整个将会 reject
-- Promise.allSettled 会等待所有传入的 Promise **无论成功还是失败** 都完成（settled）。即使某个 Promise 失败（reject）了，也不会提前终止
+- Promise.allSettled 会等待所有传入的 Promise **无论成功还是失败** 都完成（settled）。即使某个 Promise 失败（reject）了，也不会提前终止。
 
 ```js
 let urls = ['https://api.github.com/users/iliakan', 'https://api.github.com/users/remy', 'https://no-such-url'];
@@ -454,116 +498,9 @@ Promise.allSettled(urls.map((url) => fetch(url))).then((results) => {
 });
 ```
 
-## 改造 loadScript
-
-使用`Promise`改造前面的示例，假设有 3 个脚本需要加载
-
-```js
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.onload = () => resolve(script);
-    script.onerror = () => reject(new Error(`Script load error for ${src}`));
-    document.head.append(script);
-  });
-}
-
-loadScript('./1.js')
-  .then(() => loadScript('./2.js'))
-  .then(() => loadScript('./3.js'))
-  .then(() => {
-    foo1();
-    foo2();
-    foo3();
-  });
-```
-
-注意：下面是没有使用链式调用的写法，会有和使用回调函数一样的问题。
-
-```js
-loadScript('./1.js').then(() => {
-  loadScript('./2.js').then(() => {
-    loadScript('./3.js').then(() => {
-      foo1();
-      foo2();
-      foo3();
-    });
-  });
-});
-```
-
-## async、await
-
-`async`、`await`用来处理异步问题。
-
-`async`放置在函数的前面，返回一个`promise`。
-
-**await 只能在 async 函数里面使用**，可以让 js 进行等待，直到一个 promise 执行并返回它的结果，js 才会继续往下执行。
-
-```js
-async function f() {
-  let res = await axios.get(url);
-  return res.data; //  等待返回请求结果后才执行
-}
-f();
-```
-
-[参考](https://segmentfault.com/a/1190000013292562?utm_source=channel-newest)
-
-## generator
-
-Generator 是一种异步编程解决方案，执行 Generator 函数会返回一个遍历器对象。两个特征：星号\*、`yield`表达式
-
-调用函数返回一个指向内部状态的指针，即遍历器对象。必须调用遍历器的`next`方法，使得指针移向下一个状态。
-`yield`表达式就是暂停标志
-
-```js
-function* g() {
-  yield 'hello';
-  yield 'world';
-  return 'haha';
-}
-const ee = g(); // 函数并不会立即执行
-console.log(ee); // g {<suspended>}
-
-console.log(ee.next()); // {value: "hello", done: false}
-console.log(ee.next()); // {value: "world", done: false}
-console.log(ee.next()); // {value: "haha", done: true}
-console.log(ee.next()); // {value: undefined, done: true}
-```
-
-遍历器对象`{value: "hello", done: false}`表示 value 是`yield`表达式的值，`done: false`表示遍历还没有结束
-
-Generator 函数可以不用`yield`表达式，这时就变成了一个单纯的暂缓执行函数。
-
-```js
-function* gg() {
-  console.log('666');
-}
-const g1 = gg();
-
-setTimeout(() => {
-  g1.next(); // 1s后输出666
-}, 1000);
-```
-
-`yield`表达式只能用在 Generator 函数里面
-
 ## Promise/A+ 规范
 
 [Promise/A+ 规范](https://promisesaplus.com/)
-
-### 状态
-
-- promise 有 3 种状态：`pending`、`fulfilled`、`rejected`
-- 初始状态是`pending`
-- `pending`状态可以转化为`fulfilled`或者`rejected`状态
-- 状态不可逆
-
-### then 方法
-
----
 
 promise 特性：
 
@@ -577,7 +514,11 @@ promise 特性：
 - `then`接收两个回调函数：`onFulfilled`、`onRejected`
 - fulfilled 状态执行 onFulfilled，rejected 状态执行 onRejected
 - 如果存在定时器，需要在定时器结束之后执行 then
-- then 支持链式调用，下一个 then 接收上一个 then 的返回值
+- then 支持链式调用，下一个 then 接收上一个 then 的返回值，返回值可以是常量、promise、函数
+- 优先执行同步任务，后执行 promise.then()
+- 其他方法：all、race、any、allSettled
+
+使用示例：
 
 ```js
 const p1 = new Promise((resolve, reject) => {});
@@ -613,6 +554,380 @@ const p5 = new Promise((resolve, reject) => {
     (res) => console.log(res),
     (err) => console.log(err)
   );
+
+const p6 = new Promise((resolve, reject) => {
+  resolve(100);
+})
+  .then(
+    (res) =>
+      new Promise((resolve, reject) => {
+        resolve(res * 3);
+      }),
+    (err) => console.log(err)
+  )
+  .then((res) => console.log(res));
+
+const p7 = new Promise((resolve, reject) => {
+  resolve(100);
+})
+  .then(
+    (res) => () => res * 5,
+    (err) => console.log(err)
+  )
+  .then(
+    (res) => {
+      let d = res();
+      console.log(d);
+    },
+    (err) => console.log(err)
+  );
+
+const p8 = Promise.resolve(100).then((res) => console.log(res));
+```
+
+## 手写 Promise
+
+```js
+const PENDING = 'pending';
+const FULFILLED = 'fulfilled';
+const REJECTED = 'rejected';
+
+class MyPromise {
+  constructor(executor) {
+    this.initValue();
+    this.initBind();
+
+    try {
+      // executor是一个执行器，立即执行
+      executor(this.resolve, this.reject);
+    } catch (error) {
+      this.reject(error);
+    }
+  }
+  initValue() {
+    // 状态
+    this.PromiseState = PENDING;
+    // 成功或者失败的结果
+    this.PromiseResult = null;
+    // 存储成功回调函数
+    this.onFulfilledCallbacks = [];
+    // 存储失败回调函数
+    this.onRejectedCallbacks = [];
+  }
+  initBind() {
+    this.resolve = this.resolve.bind(this);
+    this.reject = this.reject.bind(this);
+  }
+  resolve(value) {
+    // 状态不可逆，不能直接变换状态，必须先在pending状态
+    if (this.PromiseState !== PENDING) return;
+    this.PromiseState = FULFILLED;
+    this.PromiseResult = value;
+
+    while (this.onFulfilledCallbacks.length) {
+      // Array.shift() 删除数组第一个元素并返回该元素，直到清空数组
+      this.onFulfilledCallbacks.shift()(value);
+    }
+  }
+  reject(reason) {
+    if (this.PromiseState !== PENDING) return;
+    this.PromiseState = REJECTED;
+    this.PromiseResult = reason;
+
+    while (this.onRejectedCallbacks.length) {
+      this.onRejectedCallbacks.shift()(reason);
+    }
+  }
+  then(onFulfilled, onRejected) {
+    // 格式校验，处理then的可选参数
+    onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : (value) => value;
+    onRejected =
+      typeof onRejected === 'function'
+        ? onRejected
+        : (reason) => {
+            throw reason;
+          };
+
+    var thenPromise = new MyPromise((resolve, reject) => {
+      const resolvePromise = (cb) => {
+        // 添加setTimeout，为了优先执行同步任务
+        setTimeout(() => {
+          try {
+            const x = cb(this.PromiseResult);
+            if (x && x === thenPromise) {
+              // 避免循环调用
+              throw new Error('不能返回自身');
+            }
+            if (x instanceof MyPromise) {
+              // 返回promise
+              x.then(resolve, reject);
+            } else {
+              // 返回普通值
+              resolve(x);
+            }
+          } catch (error) {
+            reject(error);
+            throw new Error(error);
+          }
+        });
+      };
+
+      if (this.PromiseState === FULFILLED) {
+        resolvePromise(onFulfilled);
+      } else if (this.PromiseState === REJECTED) {
+        resolvePromise(onRejected);
+      } else if (this.PromiseState === PENDING) {
+        // 不知道后面的状态变化，先把成功回调和失败回调存储起来
+        this.onFulfilledCallbacks.push(onFulfilled.bind(this));
+        this.onRejectedCallbacks.push(onRejected.bind(this));
+      }
+    });
+    return thenPromise;
+  }
+
+  // resolve 静态方法
+  static resolve(value) {
+    if (value instanceof MyPromise) {
+      return value;
+    }
+    return new MyPromise((resolve) => {
+      resolve(value);
+    });
+  }
+
+  // reject 静态方法
+  static reject(reason) {
+    return new MyPromise((resolve, reject) => {
+      reject(reason);
+    });
+  }
+
+  static all(promises) {
+    const result = [];
+    let count = 0;
+    return new MyPromise((resolve, reject) => {
+      const addData = (index, value) => {
+        result[index] = value;
+        count++;
+        if (count === promises.length) {
+          resolve(result);
+        }
+      };
+      promises.forEach((promise, index) => {
+        if (promise instanceof MyPromise) {
+          promise.then(
+            (res) => {
+              addData(index, res);
+            },
+            (err) => {
+              reject(err);
+            }
+          );
+        } else {
+          addData(index, promise);
+        }
+      });
+    });
+  }
+  static allSettled(promises) {
+    const result = [];
+    let count = 0;
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise, index) => {
+        const addData = (status, index, value) => {
+          result[index] = { status, value };
+          count++;
+          if (count === promises.length) {
+            resolve(result);
+          }
+        };
+        if (promise instanceof MyPromise) {
+          promise.then(
+            (res) => {
+              addData(FULFILLED, index, res);
+            },
+            (err) => {
+              addData(REJECTED, index, err);
+            }
+          );
+        } else {
+          addData(FULFILLED, index, promise);
+        }
+      });
+    });
+  }
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise) => {
+        if (promise instanceof MyPromise) {
+          promise.then(
+            (res) => {
+              resolve(res);
+            },
+            (err) => {
+              reject(err);
+            }
+          );
+        } else {
+          resolve(promise);
+        }
+      });
+    });
+  }
+  static any(promises) {
+    const errors = [];
+    let count = 0;
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise, index) => {
+        if (promise instanceof MyPromise) {
+          promise.then(
+            (res) => {
+              resolve(res);
+            },
+            (err) => {
+              errors[index] = err;
+              count++;
+              if (count === promises.length) {
+                reject(new AggregateError(errors, 'All promises were rejected'));
+              }
+            }
+          );
+        } else {
+          resolve(promise);
+        }
+      });
+    });
+  }
+
+  catch(onRejected) {
+    return this.then(null, onRejected);
+  }
+
+  finally(callback) {
+    return this.then(
+      (value) => {
+        callback();
+        return value;
+      },
+      (reason) => {
+        callback();
+        throw reason;
+      }
+    );
+  }
+}
+```
+
+### 测试
+
+Promise/A+ 规范提供了一个测试库
+
+1. 安装
+
+```bash
+npm i -D promises-aplus-tests
+```
+
+2. 在测试文件中添加 deferred：
+
+```js
+MyPromise {
+  // 省略
+}
+
+MyPromise.deferred = function () {
+  var result = {};
+  result.promise = new MyPromise(function (resolve, reject) {
+    result.resolve = resolve;
+    result.reject = reject;
+  });
+
+  return result;
+}
+module.exports = MyPromise;
+```
+
+3. 在 package.json 中配置测试命令，后面的是测试文件路径
+
+```json
+{
+  "scripts": {
+    "test": "promises-aplus-tests src/promise/myPromise"
+  }
+}
+```
+
+4. 运行测试：`npm run test`
+
+## async、await
+
+`async`、`await`用同步的方式来处理异步问题。
+
+`async`放置在函数的前面，返回一个 Promise。
+
+**await 只能在 async 函数里面使用**，可以让 js 进行等待。
+
+```js
+async function f() {
+  let res = await axios.get(url);
+  return res.data; //  等待返回请求结果后才执行
+}
+f();
+```
+
+## generator
+
+Generator 是一种异步编程解决方案，执行 Generator 函数会返回一个遍历器对象。两个特征：星号`*`、`yield`表达式
+
+- 调用函数返回一个遍历器对象，具有 `Symbol.iterator` 属性
+- 通过`next()`方法才能遍历到下一个状态，可以传递参数
+- `yield`表达式就是暂停标志，只能用在 Generator 函数里面
+- `yield`后面还可以是函数、Promise
+
+```js
+function* foo() {
+  yield 'hello';
+  yield 'world';
+  return 'haha';
+}
+const g = foo(); // 函数并不会立即执行
+console.log(g); // foo {<suspended>}
+
+console.log(g[Symbol.iterator]() === g); // true
+
+console.log(g.next()); // {value: "hello", done: false}
+console.log(g.next()); // {value: "world", done: false}
+console.log(g.next()); // {value: "haha", done: true}
+console.log(g.next()); // {value: undefined, done: true}
+```
+
+`{value: "hello", done: false}`表示 value 是`yield`表达式的值，`done: false`表示遍历未完成
+
+```js
+function* foo() {
+  yield 'hello';
+  yield () => 'world';
+  yield 1;
+}
+const res = foo();
+
+console.log(res.next()); // { value: "hello", done: false }
+console.log(res.next().value()); // world
+console.log(res.next()); // { value: 1, done: false }
+console.log(res.next()); // { value: undefined, done: true }
+```
+
+Generator 函数可以不用`yield`表达式，这时就变成了一个单纯的暂缓执行函数。
+
+```js
+function* gg() {
+  console.log('666');
+}
+const g1 = gg();
+
+setTimeout(() => {
+  g1.next(); // 1s后输出666
+}, 1000);
 ```
 
 ## 练习题目

@@ -46,3 +46,36 @@
 
 3. 点击左上角的小三角形启动调试，会弹出一个浏览器窗口，一般在 vscode 的左上方会出现一排调试按钮
 4. 在代码里添加 debugger 断点，然后点击 Restart 调试按钮，就可以看到代码的运行过程了
+
+## 调试 vue2 项目
+
+在 vue.config.js 配置 source-map：
+
+```js
+configureWebpack: {
+   devtool: process.env.NODE_ENV !== "production" ? "source-map" : '',
+ }
+```
+
+配置 launch.json：
+
+```json
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:1024",
+      "webRoot": "${workspaceFolder}",
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${workspaceFolder}/src/*"
+      }
+    }
+  ]
+}
+```

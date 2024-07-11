@@ -2,33 +2,103 @@
 
 ## XMLHttpRequest
 
-<https://juejin.im/post/58e4a174ac502e006c1e18f4#heading-0>
-
-<https://www.jianshu.com/p/918c63045bc3>
-
-<https://blog.csdn.net/z550449054/article/details/80538623>
-
 ```js
-// <div id="hehe"></div>
-
 const xhr = new XMLHttpRequest();
-//请求方式，路径，是否异步
+
+// 请求方式，路径，是否异步
 xhr.open('GET', 'https://www.easy-mock.com/mock/5c94518744e20f337dc3c58c/test/zgh/zghivan', false);
-//设置xhrt对象不发送数据到服务器
+
+// 设置xhrt对象不发送数据到服务器
 xhr.send(null);
-console.log(xhr);
+
 if (xhr.status == 200) {
   const data = xhr.responseText;
-  console.log(data);
-  document.getElementById('hehe').innerText = data;
+  document.getElementById('contont').innerText = data;
 }
 ```
 
-## ajax 获取数据
+### 封装 ajax
 
-数据交互的几种方式：
+调用方式：
 
-<http://www.cnblogs.com/zxt-17862802783/p/7787258.html>
+```js
+ajax({
+  type: 'GET',
+  url: 'http://localhost:3000/posts',
+  timeout: 5000,
+  data: {},
+  success: (res) => {
+    console.log('success', res);
+  },
+  error: (err) => {
+    console.log('error', err);
+  }
+});
+```
+
+实现代码：
+
+```js
+const ajax = (options) => {
+  const objToString = (data) => {
+    // 加个时间戳，避免缓存
+    data.t = new Dat().getTime();
+    let res = [];
+    for (let key in data) {
+      // url里不能有中文
+      res.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
+    }
+    return res.join('&');
+  };
+
+  let str = objToString(options.data || {});
+
+  // 1. 创建一个xhr对象
+  var xhr, timer;
+  if (window.XMLHttpRequest) {
+    xhr = new XMLHttpRequest();
+  } else {
+    // 兼容IE
+    xhr = new ActiveXObject('Microsoft.XMLHTTP');
+  }
+
+  // 2. 设置请求方式，路径，是否异步
+  if (options.type.toUpperCase() === 'GET') {
+    xhr.open(options.type, options.url + '?=' + str, options.async || true);
+    xhr.send(null);
+  }
+
+  if (options.type.toUpperCase() === 'POST') {
+    xhr.open(options.type, options.url, options.async || true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.send(options.data);
+  }
+
+  // 3. 监听状态改变
+  xhr.onreadystatechange = function () {
+    clearInterval(timer);
+    if (xhr.readyState == 4) {
+      if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+        options.success(xhr.responseText);
+      } else {
+        options.error(xhr.responseText);
+      }
+    }
+  };
+
+  // 4. 设置超时时间
+  if (options.timeout) {
+    timer = setInterval(() => {
+      xhr.abort(); // 中断请求
+      clearInterval(timer);
+    }, options.timeout);
+  }
+};
+```
+
+准备 json 数据，使用 [json-server](https://github.com/typicode/json-server) 搭建一个本地服务器，开始验证。
+
+## jquery 中的 ajax
 
 ```html
 <button id="btn">click!</button>
@@ -41,8 +111,8 @@ if (xhr.status == 200) {
       type: 'get',
       dataType: 'json',
       async: true,
-      //post请求可以传递数据
-      //data: {id : 1},
+      // post请求可以传递数据
+      // data: {id : 1},
       success: function (data) {
         console.log(data);
       },
@@ -54,37 +124,35 @@ if (xhr.status == 200) {
 </script>
 ```
 
-jquery 中的\$.ajax()常用参数：
+jquery 中的`$.ajax()`常用参数：
 
-```sh
-url 请求地址
+| 参数        | 说明                       |
+| ----------- | -------------------------- |
+| url         | 请求地址                   |
+| async       | 是否异步                   |
+| data        | 发送到服务器的数据         |
+| contentType | 发送到服务器的数据编码类型 |
+| type        | 请求类型                   |
+| success     | 请求成功的回调函数         |
+| error       | 请求失败的回调函数         |
 
-async 是否异步
+若为 get 请求可直接在 url 中使用`?`拼接
 
-data 发送到服务器的数据
+## fetch
 
-contentType  发送信息至服务器时内容编码类型
-
-type  请求类型
-
-success 请求成功的回调函数
-
-error  请求失败的回调函数
+```js
+fetch('http://localhost:3000/posts')
+  .then((res) => res.json())
+  .then((data) => console.log(data))
+  .catch((err) => console.log(err));
 ```
-
-若为 get 请求可直接在 url 中使用?拼接
-
-推荐： <http://louiszhai.github.io/2016/11/02/ajax/>
-
-MDN : <https://developer.mozilla.org/zh-CN/docs/Web/Guide/AJAX>
 
 ## axios
 
-> 基于 promise 可以用于浏览器和 node.js 的网络请求库
->
-> 作用于浏览器端和 node.js
->
-> 在服务端使用 node.js 的 http 模块，而在浏览器端使用 XMLHttpRequests
+基于 Promise 可以用于浏览器和 node.js 的网络请求库
+
+- 作用于浏览器端和 node.js
+- 在服务端使用 node.js 的 http 模块，而在浏览器端使用 XMLHttpRequests
 
 ### 特性
 
@@ -112,9 +180,7 @@ MDN : <https://developer.mozilla.org/zh-CN/docs/Web/Guide/AJAX>
 Axios 请求头中的`Content-Type`常见的有三种：
 
 - Content-Type: `application/json`
-
 - Content-Type: `application/x-www-form-urlencoded`
-
 - Content-Type: `multipart/form-data`
 
 请求头配置：

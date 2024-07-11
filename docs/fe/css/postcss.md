@@ -1,7 +1,7 @@
 # postcss
 
-- 官网：<https://postcss.org>
-- github：<https://github.com/postcss/postcss>
+- 官网：[https://postcss.org](https://postcss.org)
+- github：[https://github.com/postcss/postcss](https://github.com/postcss/postcss)
 
 使用 JavaScript 转换 CSS 的工具
 
@@ -118,7 +118,7 @@ module.exports = {
 
 ## 配置 postcss-pxtorem
 
-<https://github.com/cuth/postcss-pxtorem>
+[https://github.com/cuth/postcss-pxtorem](https://github.com/cuth/postcss-pxtorem)
 
 ```sh
 pnpm add -D postcss-pxtorem

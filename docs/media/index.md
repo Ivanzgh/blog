@@ -5,11 +5,12 @@
 用于播放视频或直播流，可以通过 JS HTMLVideoElement 对象访问
 
 ```html
-<video controls width="250" src="/media/test.mp4"></video>
+<video width="250" controls src="/media/test.mp4"></video>
 
-<video controls width="250">
+<video width="250" controls>
   <source src="/media/test.webm" type="video/webm" />
   <source src="/media/test.mp4" type="video/mp4" />
+  <source src="video.ogg" type="video/ogg" />
   当前浏览器不支持video标签
 </video>
 ```
@@ -20,16 +21,144 @@
 - `height` 视频显示区域的高度
 - `controls` 控制面板，允许用户控制视频的音量、跨帧、暂停/恢复播放
 - `loop` 是否循环播放
+- `autoplay` 是否自动播放
 - `muted` 是否设置初始静音
 - `src` 视频链接，可选，可使用`video`块内的`<source>`元素代替
 - `poster` 视频封面
 
-`<source>` 标签放在 `<audio>` 或者 `<video>` 内部，以指定播放的媒体源，可以添加多个不同格式、大小、分辨率的媒体源，
-通过 JS HTMLSourceElement 对象访问
+`<source>` 标签放在 `<audio>` 或者 `<video>` 内部，以指定播放的媒体源，可以添加多个不同格式、大小、分辨率的媒体源，通过 JS HTMLSourceElement 对象访问。
+
+### 使用视频作为背景
+
+1. 视频铺满屏幕：
+
+- 视频流不可扭曲拉伸
+- 视频充满屏幕且不变形：`object-fit: cover;`
+- 如果视频下方出现白色横线，可以对 video 标签设置`display: block;`
+- 如果有溢出，使用`overflow: hidden;`
+
+2. 适配移动端：保证视频是居中的，只显示居中的部分，两边裁剪掉
+
+::: code-group
+
+```html
+<div class="video-box">
+  <video
+    class="video-background"
+    preload="auto"
+    loop
+    playsinline
+    autoplay
+    src="https://lf3-static.bytednsdoc.com/obj/eden-cn/ha_lm_lswvlw/ljhwZthlaukjlkulzlp/portal/campus/2022-landing-page.mp4"
+    tabindex="-1"
+    muted="muted"
+  ></video>
+  <div class="layer">
+    <img src="bytedance.svg" alt="bytedance" />
+    <div class="slogan">
+      <div class="subtitle">字节跳动招聘</div>
+      <div class="title">激发创造，丰富生活</div>
+      <div class="btn">立即投递</div>
+    </div>
+  </div>
+</div>
+<div class="content">content</div>
+```
+
+```css
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.video-box {
+  position: relative;
+  height: 100vh;
+  background-color: #c1cff7;
+  /*进行视频裁剪*/
+  overflow: hidden;
+}
+
+.video-box .video-background {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /*保证视频内容始终居中*/
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  /* 保证视频充满屏幕 */
+  object-fit: cover;
+  min-height: 800px;
+}
+
+.layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  /* 蒙板背景 */
+  background: rgba(19, 60, 154, 0.2);
+}
+
+.layer img {
+  margin-top: 15px;
+  margin-left: 100px;
+}
+
+.slogan {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 684px;
+  color: white;
+  text-align: center;
+}
+
+.slogan .subtitle {
+  font-weight: 550;
+  font-size: 20px;
+  letter-spacing: 10px;
+  margin: 0 0 16px;
+}
+
+.slogan .title {
+  font-weight: 550;
+  font-size: 56px;
+  margin: 0 0 16px;
+}
+
+.slogan .btn {
+  position: relative;
+  left: 50%;
+  width: 156px;
+  height: 54px;
+  line-height: 54px;
+  margin-top: 40px;
+  margin-left: -78px;
+  color: #3370ff;
+  background: white;
+  text-align: center;
+  border-radius: 100px;
+  font-weight: 600;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+```
+
+:::
 
 ## audio 标签
 
-播放音频，可以通过 JS HTMLAudioElement 对象访问
+播放音频，可以通过 JS HTMLAudioElement 对象访问。
 
 ```html
 <audio controls>
@@ -177,7 +306,7 @@ video::cue(.red) {
 借助显卡硬件进行解码工作，优点是功耗低，解码速度快。
 但目前 H.265 编码在浏览器中的硬件解码支持情况并不普及，而且硬件解码需要用户的显卡支持
 
-- 软解码，通过CPU运行解码软件来进行解码
+- 软解码，通过 CPU 运行解码软件来进行解码
   - 一种是基于`Flash`的`H.265`解码方案
   - 主流方案是使用 [WebAssembly](https://webassembly.org/) 技术将金山云自研的高性能解码器编译为`wasm`库，`wasm`文件是以二进制形式存在的，其中包含平台无关的虚拟指令（类似汇编指令）
   - 在 WEB 端是绘制到 canvas 上

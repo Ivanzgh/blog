@@ -14,7 +14,7 @@ npx tailwindcss init -p
 npm i -D prettier prettier-plugin-tailwindcss
 ```
 
-更好的 TailwindCss 排序：<https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted>
+[更好的 TailwindCss 排序](https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted)
 
 ## 插件推荐
 

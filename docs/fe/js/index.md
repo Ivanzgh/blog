@@ -1006,35 +1006,25 @@ console.log(res); // hehe
 
 ### 浅拷贝
 
-如果对象中的属性是基本类型，拷贝的是基本类型的值。如果属性是引用类型，拷贝的是内存地址。即浅拷贝是拷贝一层，深层次的引用类型则共享内存地址
+如果对象中的属性是基本类型，拷贝的是基本类型的值。如果属性是引用类型，拷贝的是内存地址。即浅拷贝是拷贝一层，深层次的引用类型则共享内存地址。
 
 实现一个浅拷贝的方法：
 
 ```js
 function shallowClone(obj) {
-  const newObj = {};
+  if (obj === null || typeof obj !== 'object') {
+    throw new TypeError('Expected an object');
+  }
+
+  const newObj = Array.isArray(obj) ? [] : {};
   for (let i in obj) {
-    newObj[i] = obj[i];
+    // 如果要过滤继承属性
+    if (obj.hasOwnProperty(i)) {
+      newObj[i] = obj[i];
+    }
   }
   return newObj;
 }
-```
-
-使用示例：
-
-```js
-const obj = {
-  foo: 'zgh',
-  bar: { a: 1 }
-};
-
-const newObj = shallowClone(obj);
-
-newObj.bar.a = 2;
-console.log(obj.bar.a); // 2
-
-obj.foo = 'copy';
-console.log(newObj.foo); // zgh
 ```
 
 其他几种方法实现浅拷贝：
@@ -1085,32 +1075,29 @@ const newArr = arr.concat();
 
 ### 深拷贝
 
-深拷贝创建了一个新的对象，而且这个新对象和原始对象完全独立，对应两个不同的内存地址
+深拷贝创建了一个新的对象，而且这个新对象和原始对象完全独立，对应两个不同的内存地址。
 
-方式一：
+方式一：递归
 
 ```js
-const deepClone = (obj) => {
-  // 如果是基本类型或 null，则直接返回
-  if (typeof obj !== 'object' || obj === null) {
-    return obj;
+const deepClone = (data) => {
+  if (typeof data !== 'object' || data === null) {
+    return data;
   }
-  const newObj = Array.isArray(obj) ? [] : {};
-  for (let key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      // typeof null === 'object'
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
-        newObj[key] = deepClone(obj[key]);
-      } else {
-        newObj[key] = obj[key];
-      }
+  const newData = Array.isArray(data) ? [] : {};
+  for (let key in data) {
+    const value = data[key];
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      newData[key] = typeof value === 'object' && value !== null ? deepClone(value) : value;
     }
   }
-  return newObj;
+  return newData;
 };
 ```
 
-方式一可以适应大部分场景，但是没有考虑处理循环引用的情况，可能会导致栈溢出错误
+注意：`typeof null === 'object'`
+
+方式一可以适应大部分场景，但是没有考虑处理循环引用的情况，可能会导致栈溢出错误。
 
 ```js
 const obj = {
@@ -1126,35 +1113,31 @@ const copiedObj = deepClone(obj);
 方式二、使用 WeakMap 来存储已经处理过的对象
 
 ```js
-const deepClone = (obj, cache = new WeakMap()) => {
-  // 如果是基本类型或 null，则直接返回
-  if (typeof obj !== 'object' || obj === null) {
-    return obj;
+const deepClone = (data, cache = new WeakMap()) => {
+  if (typeof data !== 'object' || data === null) {
+    return data;
   }
   // 处理循环引用
-  if (cache.has(obj)) {
-    return cache.get(obj);
+  if (cache.has(data)) {
+    return cache.get(data);
   }
 
-  const newObj = Array.isArray(obj) ? [] : {};
-  cache.set(obj, newObj);
+  const newData = Array.isArray(data) ? [] : {};
+  cache.set(data, newData);
 
-  for (let key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
-        newObj[key] = deepClone(obj[key], cache);
-      } else {
-        newObj[key] = obj[key];
-      }
+  for (let key in data) {
+    const value = data[key];
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      newData[key] = typeof value === 'object' && value !== null ? deepClone(value, cache) : value;
     }
   }
-  return newObj;
+  return newData;
 };
 ```
 
 ### JSON.parse(JSON.stringify())
 
-`JSON.parse(JSON.stringify())`是有一些局限性的深拷贝
+`JSON.parse(JSON.stringify())`是有一些局限性的深拷贝。
 
 ```js
 const arr = [1, 2, { name: 'zgh' }];
@@ -1213,9 +1196,9 @@ newObj.foo(); // 报错：newObj.sayHello is not a function
 
 ### 如何区分深拷贝与浅拷贝？
 
-简单来说，就是假设 B 复制了 A，当修改 A 时，看 B 是否会发生变化，如果 B 也跟着变了，说明这是浅拷贝，如果 B 没变，那就是深拷贝
+简单来说，就是假设 B 复制了 A，当修改 A 时，看 B 是否会发生变化，如果 B 也跟着变了，说明这是浅拷贝，如果 B 没变，那就是深拷贝。
 
-区别：浅拷贝只复制对象的自身属性、深拷贝可以对对象的属性进行递归复制
+区别：浅拷贝只复制对象的自身属性，深拷贝可以对对象的属性进行递归复制。
 
 ## 防抖和节流
 
@@ -1471,38 +1454,54 @@ console.log(n1, n2);
 
 ## Event Loop
 
+JavaScript 是单线程的。
+
+1. 调用栈
+
+用于执行函数调用的栈结构，遵循「后进先出」的原则。每当一个函数被调用时，它会被推入调用栈顶；当函数执行完毕后，它会从栈顶弹出。
+
+2. 消息队列
+
+存储了待处理的消息。每个消息都关联了一个回调函数，这些回调函数会在将来的某个时间点被执行。
+
+3. 事件循环
+
+主要任务是协调调用栈和消息队列之间的工作：
+
+- 检查调用栈：事件循环会不断检查调用栈是否为空。如果调用栈不为空，则继续执行栈中的函数。
+- 处理消息队列：如果调用栈为空，事件循环会从消息队列中取出第一个消息，并将其回调函数推入调用栈，开始执行。
+
 ### 宏任务
 
-宏任务（Macro Task）是指由 JavaScript 主线程执行的任务，它包括但不限于以下情况：
+常见的宏任务有：
 
 - script 脚本
-- 浏览器事件（如 click、mouseover 等）
 - 定时器任务（setTimeout、setInterval、setImmediate(Node.js 环境)）
+- I/O 操作
+- 浏览器事件（如 click、mouseover 等）
 - 页面渲染（如 回流或重绘）
-- 事件回调（如 I/O、点击事件等）
 - 网络请求
-- requestAnimationFrame
 
-setTimeout 并不是直接把回调函数放进异步队列中去，而是在定时器的时间到了之后才放进去。如果此时这个队列已经有很多任务了，那就排在它们的后面
+setTimeout 并不是直接把回调函数放进异步队列中去，而是在定时器的时间到了之后才放进去。如果此时这个队列已经有很多任务了，那就排在它们的后面。
 
 ### 微任务
 
-微任务（Micro Task）
+常见的微任务有：
 
 - Promise 的`then/catch/finally`方法
 - `process.nextTick` (Node.js 环境)
-- MutaionOberver（浏览器环境）
+- `MutaionOberver`
 
-`new Promise()`是同步任务
+注意：`new Promise()`是同步任务
 
 ### 事件循环机制
 
 1. 首先开始执行主线，从上往下执行所有的同步代码
 2. 在执行过程中如果遇到宏任务就存放到宏任务队列中，遇到微任务加入微任务队列，然后主线往下执行，直到主线执行完毕
 3. 查看微任务队列中是否存在微任务，如果存在，则将所有微任务也按主线方式执行完成，然后清空微任务队列
-4. 开始将宏任务队列中的第一个宏任务设置为主线继续执行，执行完一个宏任务，会去查看微任务队列，接着立即执行所有的微任务，然后再进行下一个宏任务，直到所有的宏任务队列执行清空完成
+4. 开始将宏任务队列中的第一个宏任务设置为主线继续执行，执行完一个宏任务，会去查看微任务队列，接着**立即执行**所有的微任务，直到微任务队列为空。然后再进行下一个宏任务，直到清空所有的宏任务队列
 
-每个宏任务之后，引擎会立即执行微任务队列中的所有任务，然后再执行其他的宏任务
+每个宏任务之后，引擎会立即执行微任务队列中的所有任务，然后再执行其他的宏任务。
 
 示例 1：
 
@@ -1640,13 +1639,87 @@ Math.floor(c); // 3
 
 ## for 循环
 
-### 返回值
+### 1. 遍历数组
 
-- for 没有返回值，或返回 undefined
-- forEach 没有返回值，或返回 undefined
-- map 会返回一个新数组
+遍历数组的方式：`for` 循环、`forEach`、`map`、`for of`
 
-### 中断循环、跳出循环
+```js
+let arr = [1, 2, 3];
+
+for (let i = 0, len = arr.length; i < len; i++) {}
+
+for (let m of arr) {
+}
+```
+
+`for in`遍历数组下标的类型是`string`，不要使用这种方式遍历数组！
+
+```js
+for (let k in arr) {
+  console.log(k); // 0 1 2 3，返回的是数组下标
+  console.log(typeof k); // string
+}
+```
+
+### 2. 遍历对象
+
+- `Object.keys()` 返回对象的键名组成的数组
+- `Object.values()` 返回对象的键值组成的数组
+- `Object.entries()` 返回对象的键名、键值组成的二维数组
+
+```js
+const obj = { name: 1, age: 2 };
+
+console.log(Object.keys(obj)); // [ 'name', 'age' ]
+console.log(Object.values(obj)); // [ 1, 2 ]
+console.log(Object.entries(obj)); // [ [ 'name', 1 ], [ 'age', 2 ] ]
+```
+
+`for in` 循环遍历键名，仅适用于遍历普通对象的 key。在循环遍历对象的属性时，原型链上的所有属性都将被访问，可以使用`hasOwnProperty`方法过滤。
+
+```js
+const obj = { name: { a: 1 }, age: 2 };
+
+for (const iterator in obj) {
+  console.log(iterator); // name age
+}
+```
+
+`for`循环 无法用于循环对象，获取不到`obj.length`
+
+注意：不能用`for of`遍历对象，因为普通对象没有`Symbol(Symbol.iterator)`方法
+
+```js
+const obj = { name: 1 };
+
+for (let iterator of obj) {
+  console.log(iterator); // TypeError: obj is not iterable
+}
+```
+
+### 3. while
+
+只要条件为 true，while 会一直循环执行代码块
+
+```js
+let i = 0;
+while (i < 10) {
+  console.log(i);
+  i++;
+}
+```
+
+`do/while` 循环，会先执行一次 do 里面的代码块，如果条件为真，会继续循环执行
+
+```js
+let i = 0;
+do {
+  console.log(i);
+  i++;
+} while (i < 10);
+```
+
+### 4. 中断循环、跳出循环
 
 **中断循环**：停止当前循环并进入下一次循环。由`continue`实现，会跳过当前循环体剩余的部分，然后进入下一次迭代。
 
@@ -1715,7 +1788,7 @@ try {
 }
 ```
 
-### 是否改变原始数组
+### 5. 是否改变原始数组
 
 for 循环本身不会改变原始数组，但如果在循环体内修改了数组元素，则原始数组会被改变。
 
@@ -1762,55 +1835,11 @@ arr.forEach((item) => {
 console.log(arr);
 ```
 
-### 遍历数组
+### 6. 是否有返回值
 
-`for` 循环、`forEach`、`map`、`for of`
-
-```js
-let arr = ['zgh', 22, 180, 125];
-
-for (let i = 0, len = arr.length; i < len; i++) {}
-
-for (let m of arr) {
-}
-```
-
-### 遍历对象
-
-`for in` 循环遍历键名，遍历数组下标的类型是`string`，不要使用这种方式遍历数组！仅适用于遍历普通对象的 key
-
-`for`循环 无法用于循环对象，获取不到`obj.length`
-
-`for in`循环遍历对象的属性时，原型链上的所有属性都将被访问，可以使用`hasOwnProperty`方法过滤或`Object.keys`会返回自身可枚举属性组成的数组
-
-```js
-for (let k in arr) {
-  console.log(k); // 0 1 2 3，返回的是数组下标
-  console.log(typeof k); // string
-}
-```
-
-### while
-
-只要条件为 true，while 会一直循环执行代码块
-
-```js
-let i = 0;
-while (i < 10) {
-  console.log(i);
-  i++;
-}
-```
-
-do/while 循环，会先执行一次 do 里面的代码块，如果条件为真，会继续循环执行
-
-```js
-let i = 0;
-do {
-  console.log(i);
-  i++;
-} while (i < 10);
-```
+- for 没有返回值，或返回 undefined
+- forEach 没有返回值，或返回 undefined
+- map 会返回一个新数组
 
 ## not defined 和 undefined
 

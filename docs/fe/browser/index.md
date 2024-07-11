@@ -6,7 +6,7 @@ outline: deep
 
 ## 浏览器的工作原理
 
-<https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/>
+[https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/](https://www.html5rocks.com/zh/tutorials/internals/howbrowserswork/)
 
 ## 浏览器缓存机制
 
@@ -54,9 +54,8 @@ outline: deep
 - 使用 `visibility: hidden` 替换 `display: none`
 - 使用 requestAnimationFrame 作为动画帧。动画速度越快，回流次数越多
 
-
 ## Chrome 历史版本下载
 
-<https://www.chromedownloads.net/chrome64osx>
+[https://www.chromedownloads.net/chrome64osx](https://www.chromedownloads.net/chrome64osx)
 
 [chrome 80 版本下载地址](https://www.chromedownloads.net/chrome64osx-stable/989.html)，使用的时候关掉新版浏览器

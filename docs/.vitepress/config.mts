@@ -3,7 +3,6 @@ import { defineConfig } from 'vitepress';
 export default defineConfig({
   title: 'CONST',
   description: 'Blog',
-  base: '/blog/',
   lastUpdated: true,
   cleanUrls: true,
   head: [['link', { rel: 'icon', href: '/blog/img/logo.png' }]],

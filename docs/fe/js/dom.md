@@ -232,14 +232,27 @@ document.getElementById('demo').onclick = function () {
 
 用 `addEventListener()` 或 `attachEvent()` 来绑定事件监听函数
 
-IE8.0 及其以下版本不支持`addEventListener()` ，它使用`attachEvent()`来绑定事件监听函数
+IE8.0 及其以下版本不支持`addEventListener()` ，它使用`attachEvent()`来绑定事件监听函数，使用`detachEvent()`解绑事件。
 
 ```js
-const el = document.querySelector('.element');
-el.addEventListener('click', () => {
+const btn = document.querySelector('.btn');
+btn.addEventListener('click', () => {
   console.log('click');
 });
 ```
+
+事件移除：`removeEventListener()`
+
+```js
+let fn = function () {};
+
+btn.removeEventListener('click', fn);
+
+// 这种匿名函数无法销毁
+btn.removeEventListener('click', function () {});
+```
+
+addEventListener 还有第三个参数 useCapture，类型是 boolean 类型，默认是 false，true 表示在捕获阶段执行监听函数。
 
 ## target 和 currentTarget 的区别
 
@@ -277,7 +290,7 @@ el.addEventListener('click', () => {
 </div>
 ```
 
-事件冒泡示例
+事件冒泡示例：
 
 ```js
 const parent = document.querySelector('#parent');

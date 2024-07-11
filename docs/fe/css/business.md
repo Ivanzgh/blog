@@ -12,9 +12,8 @@
 
 ## 纯 CSS 创建三角形
 
-<https://css-tricks.com/the-shapes-of-css/>
-
-<https://www.cnblogs.com/monozxy/p/7903019.html>
+- [https://css-tricks.com/the-shapes-of-css/](https://css-tricks.com/the-shapes-of-css/)
+- [https://www.cnblogs.com/monozxy/p/7903019.html](https://www.cnblogs.com/monozxy/p/7903019.html)
 
 将元素的宽高设为 0，只设置 border，任意三条边隐藏（颜色设为 transparent），即可画出小三角
 
@@ -74,7 +73,7 @@ border-color: red transparent transparent transparent;
 
 ## 更改复选框样式
 
-<https://blog.csdn.net/qq_34182808/article/details/79992465>
+[https://blog.csdn.net/qq_34182808/article/details/79992465](https://blog.csdn.net/qq_34182808/article/details/79992465)
 
 ::: code-group
 
@@ -178,7 +177,7 @@ body {
 
 :::
 
-<https://www.cnblogs.com/ghost-xyx/p/5677168.html>
+[https://www.cnblogs.com/ghost-xyx/p/5677168.html](https://www.cnblogs.com/ghost-xyx/p/5677168.html)
 
 ## 时光轴
 
@@ -305,9 +304,8 @@ body {
 
 ## 进度条
 
-<https://www.cnblogs.com/xiaofeixiang/p/5036154.html>
-
-<https://blog.csdn.net/weixin_40687883/article/details/80388420>
+- [https://www.cnblogs.com/xiaofeixiang/p/5036154.html](https://www.cnblogs.com/xiaofeixiang/p/5036154.html)
+- [https://blog.csdn.net/weixin_40687883/article/details/80388420](https://blog.csdn.net/weixin_40687883/article/details/80388420)
 
 ## img 加载失败显示默认图片
 

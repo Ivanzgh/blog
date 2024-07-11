@@ -58,36 +58,21 @@ ppi 指的是每英寸的物理像素的密度，ppi 越大，屏幕的分辨率
 </html>
 ```
 
-如果把移动设备上浏览器的可视区域设为 viewport 的话，某些网站就会因为 viewport 太窄而显示错乱，所以这些浏览器就决定
-默认情况下把 viewport 设为一个较宽的值，比如 980px，这样的话即使是那些为桌面设计的网站也能在移动浏览器上正常显示了。
-ppk 把这个浏览器默认的 viewport 叫做 layout viewport。
+移动端的三个 viewport 的概念
 
-layout viewport 的宽度是大于浏览器可视区域的宽度的，所以我们还需要一个 viewport 来代表浏览器可视区域的大小，ppk 把
-这个 viewport 叫做 visual viewport。
+1. 布局视口
 
-ideal viewport 是最适合移动设备的 viewport，ideal viewport 的宽度等于移动设备的屏幕宽度，只要在 css 中把某一元
-素的宽度设为 ideal viewport 的宽度（单位用 px），那么这个元素的宽度就是设备屏幕的宽度了，也就是宽度为 100%的效果。i
-deal viewport 的意义在于，无论在何种分辨率的屏幕下，那些针对 ideal viewport 而设计的网站，不需要用户手动缩放，也
-不需要出现横向滚动条，都可以完美的呈现给用户。
+移动端浏览器提供了一个 layout viewport 布局视口的概念，使用这个视口来对页面进行布局展示，一般 layout viewport 的大小为 980px，因此页面布局不会有太大的变化，我们可以通过拖动和缩放来查看到这个页面。
 
----
+2. 视觉视口
 
-移动端一共需要理解三个 viewport 的概念的理解。
+visual viewport 指的是移动设备上我们可见的区域的视口大小，一般为屏幕的分辨率的大小。visual viewport 和 layout viewport 的关系，就像是我们通过窗户看外面的风景，视觉视口就是窗户，而外面的风景就是布局视口中的网页内容。
 
-第一个视口是布局视口，在移动端显示网页时，由于移动端的屏幕尺寸比较小，如果网页使用移动端的屏幕尺寸进行布局的话，那么整
-个页面的布局都会显示错乱。所以移动端浏览器提供了一个 layout viewport 布局视口的概念，使用这个视口来对页面进行布局展
-示，一般 layout viewport 的大小为 980px，因此页面布局不会有太大的变化，我们可以通过拖动和缩放来查看到这个页面。
+3. 理想视口
 
-第二个视口指的是视觉视口，visual viewport 指的是移动设备上我们可见的区域的视口大小，一般为屏幕的分辨率的大小。visu
-al viewport 和 layout viewport 的关系，就像是我们通过窗户看外面的风景，视觉视口就是窗户，而外面的风景就是布局视口
-中的网页内容。
+由于 layout viewport 一般比 visual viewport 要大，所以想要看到整个页面必须通过拖动和缩放才能实现。所以又提出了 ideal viewport 的概念，ideal viewport 下用户不用缩放和滚动条就能够查看到整个页面，并且页面在不同分辨率下显示的内容大小相同。ideal viewport 其实就是通过修改 layout viewport 的大小，让它等于设备的宽度，这个宽度可以理解为是设备独立像素，因此根据 ideal viewport 设计的页面，在不同分辨率的屏幕下，显示应该相同。
 
-第三个视口是理想视口，由于 layout viewport 一般比 visual viewport 要大，所以想要看到整个页面必须通过拖动和缩放才
-能实现。所以又提出了 ideal viewport 的概念，ideal viewport 下用户不用缩放和滚动条就能够查看到整个页面，并且页面在
-不同分辨率下显示的内容大小相同。ideal viewport 其实就是通过修改 layout viewport 的大小，让它等于设备的宽度，这个
-宽度可以理解为是设备独立像素，因此根据 ideal viewport 设计的页面，在不同分辨率的屏幕下，显示应该相同。
-
-<https://juejin.cn/post/6844903655045333000>
+[https://juejin.cn/post/6844903655045333000](https://juejin.cn/post/6844903655045333000)
 
 ## em、rem、px、vw、vh 的区别
 
@@ -207,9 +192,11 @@ window.removeEventListener('resize', listener);
 
 弹性布局，使用相对单位，结合 flex 或 grid 布局
 
+## 移动端适配方案
+
 ### rem + 弹性布局
 
-可以使用 vscode 插件将 px 转为 rem，[地址](https://marketplace.visualstudio.com/items?itemName=cipchk.cssrem)
+设置根元素 html 的 `font-size`，根据屏幕宽度动态计算 rem 值。
 
 ```css
 html {
@@ -223,12 +210,52 @@ html {
 ```js
 function setRootFontSize() {
   const baseFontSize = 16;
+  const designWidth = 1920;
   const screenWidth = window.innerWidth;
-  const newSize = (screenWidth / 1920) * 16;
+  const newSize = (screenWidth / designWidth) * baseFontSize;
   document.documentElement.style.fontSize = newSize + 'px';
 }
 window.addEventListener('load', setRootFontSize);
 window.addEventListener('resize', setRootFontSize);
 ```
 
-## 移动端适配
+编写代码时依然使用 px。接下来将其他元素的 px 转为 rem。
+
+自动转换的方式：
+
+- 使用 PostCSS 插件：[postcss-pxtorem](https://github.com/cuth/postcss-pxtorem)
+- 使用 vscode 插件：[px to rem & rpx & vw (cssrem)](https://marketplace.visualstudio.com/items?itemName=cipchk.cssrem)
+
+例如，使用 PostCSS 插件自动将 px 转为 rem：
+
+1. 安装 [postcss-pxtorem](https://github.com/cuth/postcss-pxtorem)
+
+```bash
+npm install postcss-pxtorem -D
+```
+
+2. 配置 `postcss.config.js`
+
+```js
+// postcss.config.cjs
+module.exports = {
+  plugins: {
+    'postcss-pxtorem': {
+      rootValue: 16, // 基准值，对应于根元素的 font-size
+      unitPrecision: 5, // 保留小数点位数
+      propList: ['*', '!min-width', '!max-width'], // 排除 min-width 和 max-width 属性
+      selectorBlackList: [], // 忽略的选择器
+      replace: true, // 替换而不是添加备用属性
+      mediaQuery: false, // 允许在媒体查询中转换 px
+      minPixelValue: 0 // 最小的转换数值
+    }
+  }
+};
+
+// 在vite中使用
+export default defineConfig({
+  css: {
+    postcss: './postcss.config.cjs'
+  }
+});
+```

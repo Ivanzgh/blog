@@ -67,7 +67,7 @@ console.log(window.b); // undefined
 
 :::
 
-<https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/133>
+[https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/133](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/133)
 
 ## 模板字符串
 

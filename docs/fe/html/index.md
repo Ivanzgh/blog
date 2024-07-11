@@ -357,34 +357,6 @@ function validateInput(inputElement) {
 }
 ```
 
-## 多媒体
-
-深入了解如何嵌入音频、视频和其他多媒体内容，以及不同浏览器之间的兼容性问题
-
-### video 视频
-
-```js
-<video width="320" height="240" controls>
-  <source src="video.mp4" type="video/mp4" />
-  <source src="video.ogg" type="video/ogg" />
-  Your browser does not support the video tag
-</video>
-```
-
-1、controls 属性指定是否显示媒体控件
-
-2、poster 提供预览图
-
-```js
-<video src="index.mp4" poster="pos.img"></video>
-```
-
-3、autoplay 自动播放
-
-4、loop 是否循环播放
-
-### audio 音频
-
 ## iframe 嵌入
 
 iframe 能将另一个网页嵌入到当前网页中

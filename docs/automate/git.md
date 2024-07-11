@@ -223,8 +223,7 @@ git clone 仓库地址
 
 ### 修复最新提交的错误
 
-在提交时，如果加上 --amend 参数，则不会在当前 commit 上增加 commit，⽽是会把当前 commit ⾥的内容和暂存区（stageing area）⾥的内容合并起来后
-创建⼀个新的 commit，⽤这个新的 commit 把当前 commit 替换掉，对最新⼀条 commit 进⾏修正
+在提交时，如果加上 --amend 参数，则不会在当前 commit 上增加 commit，⽽是会把当前 commit ⾥的内容和暂存区（stageing area）⾥的内容合并起来后创建⼀个新的 commit，⽤这个新的 commit 把当前 commit 替换掉，对最新⼀条 commit 进⾏修正
 
 ```sh
 git commit --amend
@@ -252,7 +251,7 @@ git reset --hard HEAD^
 
 stash 指令可以把⼯作区的内容全部放在本地的⼀个独⽴的地⽅，它不会被提交和删除。
 
-假设你当前正在开发中，突然需要优先干其他工作，又不想 add 和 commit，这时就可以将当前内容放入临时区，等其他工作干完了，再切换回你的分支，将临时区的内容取出来，就可以继续之前的工作了
+假设你当前正在开发中，突然需要优先干其他工作，又不想 add 和 commit，这时就可以将当前内容放入临时区，等其他工作干完了，再切换回你的分支，将临时区的内容取出来，就可以继续之前的工作了。
 
 ```sh
 # 保存当前工作区的修改
@@ -279,7 +278,7 @@ git stash pop
 # 应用最新的stash，并保留stash的副本
 git stash apply
 
-# 如果有多个stash，想要应用特定的stash，其中n是stash的索引号
+# 如果有多个stash，想要应用特定的stash，其中n是stash的索引号，下标从0开始
 git stash apply stash@{n}
 
 # 从存储条目列表中删除单个存储条目
@@ -287,6 +286,25 @@ git stash drop stash@{n}
 
 # 清空所有的stash
 git stash clear
+```
+
+常用的命令：
+
+```bash
+# 放进去
+git stash
+
+# 放进去，并添加说明信息
+git stash push -m 'message'
+
+# 取出来，并从列表中删除
+git stash pop
+
+# 如果有多个，要取指定的
+git stash pop stash@{n}
+
+# 查看列表
+git stash list
 ```
 
 ### 暂存区
@@ -406,24 +424,11 @@ git remote show origin
 git remote -v
 ```
 
-### 撤销、覆盖
-
-```sh
-# 添加所有并推送
-git add -A && git commit -m "提交信息" && git push
-
-# 撤销本地修改并同步
-git reset --hard && git clean -df && git pull
-
-# 强制覆盖本地代码
-git fetch --all &&  git reset --hard origin/master && git pull
-```
-
 ### 仓库备份
 
 ```sh
 # 添加备份仓库
-git remote set-url --add origin http://192.168.12.2/digsur/digsur-solution.git
+git remote set-url --add origin http://xxx.git
 ```
 
 ## 分支
@@ -462,8 +467,8 @@ git checkout -b branch_name remote_name/branch
 
 这样就可以不用创建本地的 develop 分支
 
-1、在本地创建 develop 分支，基于它创建开发分支，每次提交前拉取最新的 develop 分支，然后合并进开发分支，最后提交
-2、基于远程分支创建新分支，本地不用维护 develop 分支，每次提交前先拉取最新的代码，然后提交。这里执行 `git pull` 就是拉取远程 develop 分支的代码
+1. 在本地创建 develop 分支，基于它创建开发分支，每次提交前拉取最新的 develop 分支，然后合并进开发分支，最后提交
+2. 基于远程分支创建新分支，本地不用维护 develop 分支，每次提交前先拉取最新的代码，然后提交。这里执行 `git pull` 就是拉取远程 develop 分支的代码
 
 ```sh
 git add .
@@ -493,8 +498,8 @@ git branch -vv
 
 比如你的代码提交之前需要合并最新的 develop 分支，则要做如下操作：
 
-- 切到 develop 分支，git pull 拉一下最新代码
-- 切回开发分支，执行 `git merge develop` 合并一下 develop 代码
+1. 切到 develop 分支，git pull 拉一下最新代码
+2. 切回开发分支，执行 `git merge develop` 合并一下 develop 代码
 
 ```sh
 git merge 被合并的分支名称
