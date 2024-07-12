@@ -1,3 +1,3 @@
 # Blog
 
-笔记
+website: [zghong.top](zghong.top)
